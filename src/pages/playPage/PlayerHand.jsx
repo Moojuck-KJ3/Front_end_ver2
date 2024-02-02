@@ -1,8 +1,8 @@
 import Card from "./Card";
 
-const PlayerHand = ({ cards, playerName, playerScore, avatarUrl }) => {
+const PlayerHand = ({ cards, playerName, avatarUrl }) => {
   return (
-    <div className="w-2/3 h-[150px] absolute -bottom-8 flex justify-center bg-white border-1 border-gray-200 shadow-md rounded-lg mx-10">
+    <div className="w-2/3 h-[150px] absolute -bottom-14 flex justify-center bg-white border-1 border-gray-200 shadow-md rounded-lg mx-10">
       <div className="w-full bg-gray-100  border-2 m-2 rounded-md shadow-inner justify-center items-center flex ">
         {/* Container for trump indicator and cards */}
         <div className="flex items-center z-10">
