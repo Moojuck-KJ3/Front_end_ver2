@@ -6,6 +6,10 @@ import ModeSetButton from "../../components/button/ModeSetButton";
 import RandomPlaceTags from "./modeTwo/RandomPlaceTags";
 import PlaceCombineArea from "./modeThree/card/PlaceCombineArea";
 import ImageSilderBg from "./modeFour/ImageSilderBg";
+import GameArea from "./GameArea";
+import PlayerHand from "./PlayerHand";
+import Card from "./Card";
+import PlayRoomContainer from "./PlayRoomContainer";
 
 const MODE = {
   MODE1: "MODE_NUMBER_ONE",
@@ -13,6 +17,8 @@ const MODE = {
   MODE3: "MODE_NUMBER_THREE",
   MODE4: "MODE_NUMBER_FOUR",
 };
+
+const playerCards = ["A", "8", "7", "A"];
 
 const PlayRoomPage = () => {
   const [isFoodTagRecording, setIsFoodTagRecording] = useState(false);
@@ -38,57 +44,63 @@ const PlayRoomPage = () => {
   };
 
   return (
-    <div className=" min-h-screen text-gray-900 flex justify-center">
-      <div className="m-12 max-w-screen-xl sm-m-10 bg-white shadow-lg sm:rounded-lg flex justify-center flex-1 animate-fade-up">
-        <div className="flex flex-col w-full h-full p-6 sm:p-12 m-auto">
-          <div className="mt-5 flex flex-col justify-center items-center border shadow-xl rounded-md">
-            <h1 className="font-bold text-2xl w-2/3 py-2 text-center">
-              5초 동안 먹고 싶은 음식을 말해주세요.
-            </h1>
-            <ModeSetButton setRoomMode={setRoomMode} />
-          </div>
-          {roomMode === MODE.MODE1 && (
-            <div className="mt-5 w-full h-full flex flex-col justify-center items-center border shadow-xl rounded-md">
-              {!isFoodTagRecording ? (
-                <FoodTagVoiceRecoder
-                  onRecord={setIsFoodTagRecording}
-                  isRecording={isFoodTagRecording}
-                />
-              ) : (
-                <div className="flex flex-col">
-                  <div className="flex gap-5">
-                    <VoiceRecoder />
-                    <VoiceRecoder />
-                  </div>
-                  <div className="flex justify-center">
-                    <button className="p-2 m-3 w-32 bg-green-400 shadow-xl rounded-2xl hover:scale-105 transition-all">
-                      선택 완료
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-          {roomMode === MODE.MODE2 && (
-            <div className="mt-5 w-full h-full flex flex-col justify-center items-center border shadow-xl rounded-md">
-              <RandomPlaceTags />
-            </div>
-          )}
-          {roomMode === MODE.MODE3 && (
-            <div className="mt-5 w-full h-full flex flex-col justify-center items-center border shadow-xl rounded-md">
-              <PlaceCombineArea />
-            </div>
-          )}
-          {roomMode === MODE.MODE4 && (
-            <div className="mt-5 w-full h-full flex flex-col justify-center items-center border shadow-xl rounded-md">
-              <ImageSilderBg />
-            </div>
-          )}
-        </div>
+    <PlayRoomContainer>
+      <div className="mt-5 flex flex-col justify-center items-center border shadow-xl rounded-xl">
+        <h1 className="font-bold text-2xl w-2/3 py-2 text-center">
+          오늘은 어떤 음식을 먹고 싶으세요?
+        </h1>
+        <ModeSetButton setRoomMode={setRoomMode} />
       </div>
-
-      <VideoContainer />
-    </div>
+      {roomMode === MODE.MODE1 && (
+        <GameArea>
+          <div className=" absolute -right-16">
+            <VideoContainer />
+          </div>
+          <div className="absolute -left-16 ">
+            <VideoContainer />
+          </div>
+          <PlayerHand
+            cards={[
+              { suit: "hearts", rank: "A" },
+              { suit: "hearts", rank: "8" },
+            ]}
+            playerName="마찬옥 님"
+            playerScore={[6, 6]}
+            avatarUrl="./avatar.png" // Replace with the actual path to John's avatar
+          />
+          <div className="text-center">
+            {!isFoodTagRecording ? (
+              <FoodTagVoiceRecoder
+                onRecord={setIsFoodTagRecording}
+                isRecording={isFoodTagRecording}
+              />
+            ) : (
+              <div className="w-full flex flex-col">
+                <div className="flex gap-5">
+                  <VoiceRecoder />
+                  <VoiceRecoder />
+                </div>
+              </div>
+            )}
+          </div>
+        </GameArea>
+      )}
+      {roomMode === MODE.MODE2 && (
+        <GameArea>
+          <RandomPlaceTags />
+        </GameArea>
+      )}
+      {roomMode === MODE.MODE3 && (
+        <GameArea>
+          <PlaceCombineArea />
+        </GameArea>
+      )}
+      {roomMode === MODE.MODE4 && (
+        <GameArea>
+          <ImageSilderBg />
+        </GameArea>
+      )}
+    </PlayRoomContainer>
   );
 };
 

@@ -4,11 +4,7 @@ import { useLocalCameraStream } from "./useLocalCameraStream";
 const VideoContainer = () => {
   const { localStream } = useLocalCameraStream();
 
-  return (
-    <div className="fixed bottom-5 right-5">
-      <VideoFeed clas mediaStream={localStream} isMuted={true} />
-    </div>
-  );
+  return <VideoFeed clas mediaStream={localStream} isMuted={true} />;
 };
 
 export default VideoContainer;
