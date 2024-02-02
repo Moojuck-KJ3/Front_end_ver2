@@ -1,12 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import InputWithLabel from "../../components/InputWithLable";
 import { useNavigate } from "react-router-dom";
 import CreateRoomModal from "./modal/CreateRoomModal";
+import { connectionStart } from "../../realtimeComunication/socket";
 
 const CreateRoomPage = () => {
   const navigator = useNavigate();
   const [isModal, setIsModal] = useState(false);
   const [roomNumber, setRoomNumber] = useState("");
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const userDetails = localStorage.getItem("user");
+
+    if (userDetails) {
+      const username = JSON.parse(userDetails).username;
+      setUserName(username);
+    }
+    connectionStart(userDetails);
+  }, []);
 
   const handleRoomCreate = () => {
     console.log("handleRoomCreate");
@@ -25,7 +37,7 @@ const CreateRoomPage = () => {
             <h1 className="font-bold text-2xl">방 생성</h1>
             <div className="w-full flex-1 mt-8">
               <div className="mx-auto max-w-xs">
-                <h1>안녕하세요. "유저 이름"님</h1>
+                <h1>안녕하세요. {userName}님</h1>
                 <button
                   className="mt-5 tracking-wide font-semibold bg-blue-400 text-gray-100 w-full py-2 rounded-lg hover:bg-blue-500 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                   onClick={handleRoomCreate}
