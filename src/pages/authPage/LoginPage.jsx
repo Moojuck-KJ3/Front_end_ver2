@@ -1,15 +1,27 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { json, useNavigate } from "react-router-dom";
 import InputWithLabel from "../../components/InputWithLable";
+import { login } from "../../api";
 
 const LoginPage = () => {
   const navigator = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     // TOOD 로그인 관련 로직 여기에 추가
-    navigator("/entry");
+    const userDetails = {
+      email,
+      password,
+    };
+
+    const response = await login(userDetails);
+    if (!response.error) {
+      localStorage.setItem("user", JSON.stringify(response));
+      navigator("/entry");
+    } else {
+      console.log(response);
+    }
   };
   return (
     <div className=" min-h-screen text-gray-900 flex justify-center">
