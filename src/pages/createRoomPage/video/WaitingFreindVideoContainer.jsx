@@ -1,14 +1,10 @@
-const WaitingFreindVideoContainer = ({ localStream }) => {
+const WaitingFreindVideoContainer = ({ localStream, remoteStrem }) => {
   return (
     <div className="grid grid-cols-2 gap-10">
       <div className="justify-center items-center">
         <video
           className=" w-36 h-36 items-center border rounded-full object-cover"
-          ref={(ref) => {
-            if (ref) {
-              ref.srcObject = localStream;
-            }
-          }}
+          ref={localStream}
           autoPlay={true}
           muted={true}
         />
@@ -19,11 +15,7 @@ const WaitingFreindVideoContainer = ({ localStream }) => {
       <div className="justify-center items-center">
         <video
           className=" w-36 h-36 items-center border rounded-full object-cover"
-          ref={(ref) => {
-            if (ref) {
-              ref.srcObject = localStream;
-            }
-          }}
+          ref={remoteStrem}
           autoPlay={true}
           muted={true}
         />
