@@ -6,7 +6,7 @@ export const setRoomId = (roomId) => ({
 });
 
 const initialState = {
-  roomId: "", // 초기값은 빈 문자열로 설정
+  roomId: "0000", // 초기값은 빈 문자열로 설정
 };
 
 const roomReducer = (state = initialState, action) => {
