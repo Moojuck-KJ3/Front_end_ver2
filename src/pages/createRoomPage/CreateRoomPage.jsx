@@ -12,7 +12,7 @@ let socket = null;
 const CreateRoomPage = () => {
   const navigate = useNavigate();
   const [isModal, setIsModal] = useState(false);
-  const [roomNumber, setRoomNumber] = useState("");
+  const [roomId, setRoomId] = useState("");
   const [userName, setUserName] = useState("");
   const [location, setLocation] = useState({
     START_NAME,
@@ -32,7 +32,16 @@ const CreateRoomPage = () => {
     socket.on("create-room-response", (response) => {
       if (response) {
         const { roomId } = response;
-        navigate(`/waiting-friends/${roomId}`);
+        navigate(`/waiting-friends/${roomId}`, { state: name });
+      } else {
+        console.error(response.error);
+      }
+    });
+
+    socket.on("join-room-response", (response) => {
+      if (response) {
+        const roomId = response;
+        navigate(`/waiting/${roomId}`);
       } else {
         console.error(response.error);
       }
@@ -49,19 +58,13 @@ const CreateRoomPage = () => {
 
   const handleRoomCreate = async (event) => {
     event.preventDefault();
-    socket.emit("create-room", (response) => {
-      console.log("handleRoomCreate");
-      if (response.success) {
-        const roomID = response.roomID;
-        navigate(`/waiting-friends/${roomID}`);
-      } else {
-        console.error(response.error);
-      }
-    });
+    socket.emit("create-room", { location });
     setIsModal(false);
   };
 
-  const handleRoomJoin = () => {};
+  const handleRoomJoin = () => {
+    socket.emit("join-Room", { roomId });
+  };
 
   return (
     <div className=" min-h-screen text-gray-900 flex justify-center">
@@ -81,8 +84,8 @@ const CreateRoomPage = () => {
 
                 <InputWithLabel
                   type="roomNumber"
-                  value={roomNumber}
-                  setValue={setRoomNumber}
+                  value={roomId}
+                  setValue={setRoomId}
                   placeholder={"방 ID"}
                 />
                 <button
