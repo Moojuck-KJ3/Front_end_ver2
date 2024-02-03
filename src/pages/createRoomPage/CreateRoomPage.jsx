@@ -28,6 +28,19 @@ const CreateRoomPage = () => {
       setUserName(username);
     }
     socket = connectionStart(userDetails);
+
+    socket.on("create-room-response", (response) => {
+      if (response.success) {
+        const roomID = response.roomeID;
+        navigate(`/waiting/${roomID}`, { state: name });
+      } else {
+        console.error(response.error);
+      }
+    });
+
+    return () => {
+      socket.off("create-room-response");
+    };
   }, []);
 
   const handleOpenModal = () => {
@@ -38,7 +51,7 @@ const CreateRoomPage = () => {
     setIsModal(false);
     event.preventDefault();
 
-    socket.emit("createRoom", (response) => {
+    socket.emit("create-room", (response) => {
       if (response.success) {
         const roomID = response.roomID;
         navigate(`/waiting-friends/${roomID}`);
