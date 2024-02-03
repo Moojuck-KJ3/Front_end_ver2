@@ -9,35 +9,57 @@ import GameArea from "./GameArea";
 import PlayerHand from "./PlayerHand";
 import PlayRoomContainer from "./PlayRoomContainer";
 import ModeOneExpainModal from "../../components/modal/ModeOneExpainModal";
-
-const MODE = {
-  MODE1: "MODE_NUMBER_ONE",
-  MODE2: "MODE_NUMBER_TWO",
-  MODE3: "MODE_NUMBER_THREE",
-  MODE4: "MODE_NUMBER_FOUR",
-};
+import SelectModeButtons from "./modeThree/SelectModeButtons";
 
 const PlayRoomPage = () => {
   const [showModal, setShowModal] = useState(false);
-  const [isSelectDone, setIsSelectDone] = useState(false);
   const [roomMode, setRoomMode] = useState(MODE.MODE1);
-  console.log(roomMode);
+  const [modeThreeContent, setModeThreeContent] = useState(
+    MODEThree_Content.Content1
+  );
+  const [playerHand, setPlayerHand] = useState({
+    foodTag: ["일식", "중식", "한식"],
+    placeTag: ["분위기 좋은", "운치있는", "조용한"],
+    selectedTag: [],
+  });
 
-  const handleSelectionDone = () => {
-    if (roomMode === MODE.MODE1) {
-      setRoomMode(MODE.MODE2);
-    }
-    if (roomMode === MODE.MODE2) {
-      setRoomMode(MODE.MODE3);
-    }
+  const handleChangeContent = (contentNum) => {
+    console.log(contentNum);
+    switch (contentNum) {
+      case MODEThree_Content.Content1:
+        return setModeThreeContent(1);
 
-    if (roomMode === MODE.MODE3) {
-      setRoomMode(MODE.MODE4);
-    }
+      case MODEThree_Content.Content2:
+        return setModeThreeContent(2);
 
-    if (roomMode === MODE.MODE4) {
-      setRoomMode(MODE.MODE5);
+      case MODEThree_Content.Content3:
+        return setModeThreeContent(3);
     }
+  };
+
+  const updatePlayerHand = (cardType, cardValue) => {
+    console.log(cardValue);
+    setPlayerHand((prevHand) => {
+      // Copy previous state to avoid direct mutation
+      const newHand = { ...prevHand };
+
+      // Determine the action based on the mode and card type
+      switch (cardType) {
+        case "foodTag":
+          newHand.foodTag.push(cardValue);
+          break;
+        case "placeTag":
+          newHand.placeTag.push(cardValue);
+          break;
+        case "selectedTag":
+          newHand.selectedTag.push(cardValue);
+          break;
+        default:
+          break;
+      }
+
+      return newHand;
+    });
   };
 
   return (
@@ -56,6 +78,7 @@ const PlayRoomPage = () => {
       </div>
       {roomMode === MODE.MODE1 && (
         <GameArea>
+          {/* 설명 모달 */}
           <div className="text-center">
             {!showModal ? (
               <ModeOneExpainModal
@@ -64,6 +87,7 @@ const PlayRoomPage = () => {
               />
             ) : (
               <div className="w-full flex flex-col">
+                {/* 컨텐츠 */}
                 <div className="flex gap-5">
                   <VoiceRecoder />
                   <VoiceRecoder />
@@ -71,33 +95,54 @@ const PlayRoomPage = () => {
               </div>
             )}
           </div>
+
+          {/* 플레이어 핸드 */}
           <PlayerHand
-            cards={[
-              { suit: "hearts", rank: "A" },
-              { suit: "hearts", rank: "8" },
-            ]}
-            playerName="마찬옥 님"
+            Hands={playerHand}
+            playerName="마찬옥님"
             avatarUrl="./avatar.png" // Replace with the actual path to John's avatar
           />
         </GameArea>
       )}
       {roomMode === MODE.MODE2 && (
         <GameArea>
-          <RandomPlaceTags />
+          {/* 컨텐츠 */}
+          <RandomPlaceTags
+            onCardClick={(cardType, cardValue) =>
+              updatePlayerHand(cardType, cardValue)
+            }
+          />
+
+          {/* 플레이어 핸드 */}
           <PlayerHand
-            cards={[
-              { suit: "hearts", rank: "A" },
-              { suit: "hearts", rank: "8" },
-            ]}
-            playerName="마찬옥 님"
-            playerScore={[6, 6]}
+            Hands={playerHand}
+            playerName="마찬옥님"
             avatarUrl="./avatar.png" // Replace with the actual path to John's avatar
           />
         </GameArea>
       )}
       {roomMode === MODE.MODE3 && (
         <GameArea>
-          <PlaceCombineArea />
+          {/* 버튼 */}
+          <SelectModeButtons onClick={handleChangeContent} />
+
+          {/* 컨텐츠 */}
+          <div className="w-3/4 flex border-1 shadow-md rounded-lg mx-10 bg-white justify-center ">
+            <div className="w-full bg-gray-100 m-3 rounded-md shadow-md justify-center items-center flex ">
+              <PlaceCombineArea
+                contentNumber={modeThreeContent}
+                onCardClick={(cardType, cardValue) =>
+                  updatePlayerHand(cardType, cardValue)
+                }
+              />
+            </div>
+          </div>
+          {/* 플레이어 핸드 */}
+          <PlayerHand
+            Hands={playerHand}
+            playerName="마찬옥님"
+            avatarUrl="./avatar.png" // Replace with the actual path to John's avatar
+          />
         </GameArea>
       )}
       {roomMode === MODE.MODE4 && (
@@ -107,6 +152,19 @@ const PlayRoomPage = () => {
       )}
     </PlayRoomContainer>
   );
+};
+
+const MODE = {
+  MODE1: "MODE_NUMBER_ONE",
+  MODE2: "MODE_NUMBER_TWO",
+  MODE3: "MODE_NUMBER_THREE",
+  MODE4: "MODE_NUMBER_FOUR",
+};
+
+const MODEThree_Content = {
+  Content1: 1,
+  Content2: 2,
+  Content3: 3,
 };
 
 export default PlayRoomPage;

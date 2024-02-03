@@ -72,8 +72,7 @@ const DUMMY_PLACE1 = [
   },
 ];
 
-const PlaceCombineArea = () => {
-  const [openModal, setOpenModal] = useState(false);
+const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
   const [draggedTagA, setDraggedTagA] = useState(null);
   const [draggedTagB, setDraggedTagB] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -94,13 +93,6 @@ const PlaceCombineArea = () => {
     }
   }, [draggedTagA, draggedTagB]);
 
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
-
-  const handleCombine = () => {
-    handleOpenModal();
-  };
   const handleDragOver = (event) => {
     event.preventDefault();
     setIsDragging(true);
@@ -124,103 +116,89 @@ const PlaceCombineArea = () => {
     setIsDragging(false);
   };
 
-  const handleDragStart = (event) => {
-    event.dataTransfer.setData("id", event.currentTarget.id);
-    setIsDragging(true);
-  };
 
   const handleResetTarget = () => {
     setDraggedTagA(null);
     setDraggedTagB(null);
   };
 
-  const handleClick = () => {};
-  return (
-    <div className="flex flex-col m-10 p-2 w-full h-full justify-center gap-20 items-center">
-      {showContent ? (
-        <div onDragOver={handleResetTarget}>
-          <ResultCardLists />
-        </div>
-      ) : (
-        <div className="flex ">
-          <div
-            className={`w-48 juitems-center py-1 bg-white shadow-lg border-dashed border-2 min-h-40 border-black ${
-              isDragging ? "" : ""
-            }`}
-            onDragOver={handleDragOver}
-            onDrop={(event) => handleDrop(event, "A")}
-          >
-            {draggedTagA && <BigPlaceCard img={draggedTagA.imgUrl} />}
-          </div>
+  const handleCardClick = (type, card) => {
+    onCardClick(type, card);
+  };
 
-          <div className=" flex justify-center items-center mt-2 ">
-            <div>
-              <MoreHorizIcon fontSize="large" />
-            </div>
-            <button
-              className={`hover:scale-105 text-gray-800 font-semibold rounded-full p-2 
-              px-2 ${isSpining && "animate-spin animate-infinite"}`}
-              onClick={handleCombine}
-            >
-              {isSpining ? <LoopIcon /> : <HelpIcon />}
-            </button>
-            <MoreHorizIcon fontSize="large" />
-          </div>
-
-          {/* USER B Target Area */}
-          <div
-            className={`w-48 items-center py-1 bg-white shadow-lg border-dashed border-2 min-h-40 border-black ${
-              isDragging ? "" : ""
-            }`}
-            onDragOver={handleDragOver}
-            onDrop={(event) => handleDrop(event, "B")}
-          >
-            {draggedTagB && <BigPlaceCard img={draggedTagB.imgUrl} />}
-          </div>
-        </div>
-      )}
-      {/* USER A Target Area */}
-      <div className="flex gap-40">
-        <div>
-          <h1 className=" text-xl font-bold text-center">
-            마찬옥 님의 분석 결과
-          </h1>
-          <ul className="flex gap-3 justify-center">
+  switch (contentNumber) {
+    case 1:
+      return (
+        <div className="flex flex-col">
+          <ul className="flex gap-14 justify-center">
             {DUMMY_PLACE.map((place, index) => (
               <li
                 key={index}
                 id={place.id}
-                draggable={true}
-                onDragStart={handleDragStart}
+                onClick={() => handleCardClick("selectedTag", place)}
               >
                 <PlaceCard imgUrl={place.imgUrl} />
               </li>
             ))}
           </ul>
-          <TastyTag />
         </div>
+      );
+    case 2:
+      return (
+        <div className="flex flex-col m-10 p-2 w-full h-full justify-center gap-20 items-center">
+          {showContent ? (
+            <div onDragOver={handleResetTarget}>
+              <ResultCardLists />
+            </div>
+          ) : (
+            <div className="flex ">
+              <div
+                className={`w-48 juitems-center py-1 bg-white shadow-lg border-dashed border-2 min-h-40 border-black ${
+                  isDragging ? "" : ""
+                }`}
+                onDragOver={handleDragOver}
+                onDrop={(event) => handleDrop(event, "A")}
+              >
+                {draggedTagA && <BigPlaceCard img={draggedTagA.imgUrl} />}
+              </div>
+
+              <div className=" flex justify-center items-center mt-2 ">
+                <div>
+                  <MoreHorizIcon fontSize="large" />
+                </div>
+                <button
+                  className={`hover:scale-105 text-gray-800 font-semibold rounded-full p-2
+              px-2 ${isSpining && "animate-spin animate-infinite"}`}
+                >
+                  {isSpining ? <LoopIcon /> : <HelpIcon />}
+                </button>
+                <MoreHorizIcon fontSize="large" />
+              </div>
+
+              {/* USER B Target Area */}
+              <div
+                className={`w-48 items-center py-1 bg-white shadow-lg border-dashed border-2 min-h-40 border-black ${
+                  isDragging ? "" : ""
+                }`}
+                onDragOver={handleDragOver}
+                onDrop={(event) => handleDrop(event, "B")}
+              >
+                {draggedTagB && <BigPlaceCard img={draggedTagB.imgUrl} />}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    case 3:
+      return (
         <div>
-          <h1 className=" text-xl font-bold text-center">
-            천지영 님의 분석 결과
-          </h1>
-          <ul className="flex gap-3 justify-center">
-            {DUMMY_PLACE1.map((place, index) => (
-              <li
-                key={index}
-                id={place.id}
-                draggable={true}
-                onDragStart={handleDragStart}
-                onClick={handleClick}
-              >
-                <PlaceCard imgUrl={place.imgUrl} />
-              </li>
-            ))}
-          </ul>
-          <TastyTag1 />
+          {/* Content for case 3 */}
+          상대방에게 제안하면 어떨까?
         </div>
-      </div>
-    </div>
-  );
+      );
+    default:
+      return null;
+  }
 };
 
 export default PlaceCombineArea;
