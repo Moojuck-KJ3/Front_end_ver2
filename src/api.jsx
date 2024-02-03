@@ -132,6 +132,44 @@ export const getMainData = async () => {
 // 2. get 요청엔 response가 있음
 // 3. post 요청엔 response가 없음 (socket.io로 통신하고 해당 방의 모든 유저에게 브로드캐스트하는 방식)
 
+// 방생성 modal에서 목적지의 이름과 {경도,위도}를 전달하고
+// roomId를 세팅할 목적
+export const createRoom = async (data) => {
+  try {
+    const response = await apiClient.post(`/rooms/create-room/`, data);
+
+    const responseData = {
+      roomId: response.data.roomId,
+    };
+
+    return responseData;
+  } catch (exception) {
+    checkResponseCode(exception);
+    return {
+      error: true,
+      exception,
+    };
+  }
+};
+
+// roomId로 친구 방에 참가
+export const joinRoom = async (roomId) => {
+  try {
+    const response = await apiClient.post(`/rooms/join-room`, roomId);
+
+    const responseData = {
+      isSuccess: response.data.isSuccess,
+    };
+    return responseData;
+  } catch (exception) {
+    checkResponseCode(exception);
+    return {
+      error: true,
+      exception,
+    };
+  }
+};
+
 // 음식 종류 수집 페이지에서 유저가 말한 음식 종류를 서버에 전달한다
 // data : {userSpeech : string}
 export const sendFoodCategorySpeech = async (roomId, data) => {

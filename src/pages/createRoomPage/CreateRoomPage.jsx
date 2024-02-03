@@ -27,7 +27,9 @@ const CreateRoomPage = () => {
     // navigator("/waiting-friends");
   };
 
-  const handleRoomJoin = () => {};
+  const handleRoomJoin = () => {
+    // 성공한 경우, 입력한 roomId를 redux에 저장해야 한다
+  };
 
   return (
     <div className=" min-h-screen text-gray-900 flex justify-center">

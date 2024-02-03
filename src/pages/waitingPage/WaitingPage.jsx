@@ -1,17 +1,22 @@
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { VideoFeed } from "../../components/video/VideoFeed";
 import WaitingFreindVideoContainer from "../createRoomPage/video/WaitingFreindVideoContainer";
 import CreateRoomPageFooter from "../createRoomPage/CreateRoomPageFooter";
 
 import { useLocalCameraStream } from "../../components/video/useLocalCameraStream";
-import { useChatConnection } from "../../realtimeComunication/useChatConnection";
 
 const WaitingPage = () => {
   const { localStream } = useLocalCameraStream();
-  useChatConnection();
   const navigator = useNavigate();
+  const roomId = useParams().roomId;
+
+  useEffect(() => {
+    console.log("roomId", roomId);
+  }, []);
 
   const handleStartGame = () => {
-    navigator("/play-room");
+    navigator(`/play-room/${roomId}`);
   };
   return (
     <div className=" min-h-screen text-gray-800 flex justify-center items-center">
