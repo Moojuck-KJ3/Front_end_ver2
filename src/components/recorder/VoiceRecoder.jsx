@@ -28,9 +28,8 @@ const VoiceRecoder = () => {
 
     // Event handler for speech recognition results
     recognitionRef.current.onresult = (event) => {
-      const { tempScript } = event.results[event.results.length - 1][0];
+      const tempScript = event.results[event.results.length - 1][0].transcript;
       // Log the recognition results and update the transcript state
-      console.log("results : ", event.results);
       console.log("tempScript : ", tempScript);
       setTranscript(tempScript);
     };
@@ -78,7 +77,17 @@ const VoiceRecoder = () => {
       userSpeech: transcript,
     };
 
-    sendFoodCategorySpeech(roomId, data);
+    const sendFoodCategoryData = async (roomId, data) => {
+      const response = sendFoodCategorySpeech(roomId, data);
+      if (response.error) {
+        console.log(response.exception);
+      } else {
+        // 서버에 전달 성공
+        // 추가적인 처리 시 이 부분 작성
+      }
+    };
+
+    sendFoodCategoryData(roomId, data);
   };
 
   const onTimerTimeout = () => {
