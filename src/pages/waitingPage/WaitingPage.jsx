@@ -1,18 +1,16 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { VideoFeed } from "../../components/video/VideoFeed";
 import WaitingFreindVideoContainer from "../createRoomPage/video/WaitingFreindVideoContainer";
 import CreateRoomPageFooter from "../createRoomPage/CreateRoomPageFooter";
 import { useLocalCameraStream } from "../../components/video/useLocalCameraStream";
+import socket from "../../realtimeComunication/socket";
 
 const WaitingPage = () => {
   const { localStream } = useLocalCameraStream();
   const navigator = useNavigate();
   const roomId = useParams();
 
-  useEffect(() => {
-    console.log("roomId", roomId);
-  }, []);
+  useEffect(() => {}, []);
 
   const handleStartGame = () => {
     navigator(`/play-room/${roomId}`);
