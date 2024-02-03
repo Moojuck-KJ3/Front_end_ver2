@@ -4,8 +4,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
 
 import { createRoom } from "../../../api";
-import { useDispatch } from "react-redux";
-import { setRoomId } from "../../../redux_states/rooms";
 
 const API_KEY = "33d3165b1407ac3d92203219d067a088";
 const JS_KEY = "fa77f847dc1c042e320456f1f78748ad";
@@ -27,7 +25,6 @@ const CreateRoomModal = ({ onSetting }) => {
     START_LNG,
   ]);
   const [purPoseName, setPurposeName] = useState(START_NAME);
-  const dispatch = useDispatch();
 
   const handleCreateRoom = () => {
     // 방 생성 로직 여기
@@ -41,8 +38,8 @@ const CreateRoomModal = ({ onSetting }) => {
       if (response.error) {
         console.log(response.exception);
       } else {
-        dispatch(setRoomId(response.roomId));
-        navigate("/waiting-friends");
+        const roomId = response.roomId;
+        navigate(`/waiting-friends${roomId}`);
       }
     };
 

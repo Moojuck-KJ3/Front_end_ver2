@@ -34,11 +34,11 @@ const router = createBrowserRouter([
         element: <CreateRoomPage />,
       },
       {
-        path: "/waiting-friends",
+        path: "/waiting-friends/:roomId",
         element: <WaitingPage />,
       },
       {
-        path: "/play-room",
+        path: "/play-room/:roomId",
         element: <PlayRoomPage />,
       },
     ],

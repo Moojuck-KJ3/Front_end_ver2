@@ -3,11 +3,11 @@ import TagCard from "./TagCard";
 import { tagNames } from "./tagName";
 
 import { getMoodKeyword, postMoodKeywordButton } from "../../../../api";
-import { useSelector } from "react-redux";
+import { useParams } from "react-router";
 
 const RandomPlaceTags = ({ onCardClick }) => {
   const [tags, setTags] = useState([]);
-  const roomId = useSelector((state) => state.roomId);
+  const { roomId } = useParams();
 
   const handleCardClick = (type, card) => {
     onCardClick(type, card);

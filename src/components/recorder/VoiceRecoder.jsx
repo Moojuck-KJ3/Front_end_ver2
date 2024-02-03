@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import VoiceRecoderContainer from "./VoiceRecoderContainer";
 import Timer from "./Timer";
 
+import { sendFoodCategorySpeech } from "../../api";
+import { useParams } from "react-router";
+
 const VoiceRecoder = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
@@ -10,6 +13,8 @@ const VoiceRecoder = () => {
   const [onReady, setOnReady] = useState(false);
   // Reference to store the SpeechRecognition instance
   const recognitionRef = useRef(null);
+
+  const { roomId } = useParams();
 
   // Function to start recording
   const startRecording = () => {
@@ -23,11 +28,11 @@ const VoiceRecoder = () => {
 
     // Event handler for speech recognition results
     recognitionRef.current.onresult = (event) => {
-      const { transcript } = event.results[event.results.length - 1][0];
-
+      const { tempScript } = event.results[event.results.length - 1][0];
       // Log the recognition results and update the transcript state
-      console.log(event.results);
-      setTranscript(transcript);
+      console.log("results : ", event.results);
+      console.log("tempScript : ", tempScript);
+      setTranscript(tempScript);
     };
 
     // Start the speech recognition
@@ -68,6 +73,12 @@ const VoiceRecoder = () => {
 
   const sendTranscriptToServer = () => {
     console.log("Sending transcript to server:", transcript);
+
+    const data = {
+      userSpeech: transcript,
+    };
+
+    sendFoodCategorySpeech(roomId, data);
   };
 
   const onTimerTimeout = () => {
