@@ -31,7 +31,7 @@ const CreateRoomPage = () => {
 
     socket.on("create-room-response", (response) => {
       if (response) {
-        const{ roomId }= response;
+        const { roomId } = response;
         navigate(`/waiting-friends/${roomId}`, { state: name });
       } else {
         console.error(response.error);

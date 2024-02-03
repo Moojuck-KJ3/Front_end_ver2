@@ -8,7 +8,7 @@ import { useLocalCameraStream } from "../../components/video/useLocalCameraStrea
 const WaitingPage = () => {
   const { localStream } = useLocalCameraStream();
   const navigator = useNavigate();
-  const roomId = useParams().roomId;
+  const roomId = useParams();
 
   useEffect(() => {
     console.log("roomId", roomId);
