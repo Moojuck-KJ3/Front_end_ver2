@@ -30,9 +30,9 @@ const CreateRoomPage = () => {
     socket = connectionStart(userDetails);
 
     socket.on("create-room-response", (response) => {
-      if (response.success) {
-        const roomID = response.roomeID;
-        navigate(`/waiting/${roomID}`, { state: name });
+      if (response) {
+        const{ roomId }= response;
+        navigate(`/waiting-friends/${roomId}`, { state: name });
       } else {
         console.error(response.error);
       }
@@ -48,8 +48,11 @@ const CreateRoomPage = () => {
   };
 
   const handleRoomCreate = async (event) => {
+    console.log("handleRoomCreate");
     event.preventDefault();
+    console.log(socket);
     socket.emit("create-room", (response) => {
+      console.log("handleRoomCreate");
       if (response.success) {
         const roomID = response.roomID;
         navigate(`/waiting-friends/${roomID}`);
