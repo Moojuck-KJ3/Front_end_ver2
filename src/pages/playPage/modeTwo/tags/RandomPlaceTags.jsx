@@ -5,10 +5,13 @@ import { tagNames } from "./tagName";
 import { getMoodKeyword, postMoodKeywordButton } from "../../../../api";
 import { useSelector } from "react-redux";
 
-const RandomPlaceTags = () => {
+const RandomPlaceTags = ({ onCardClick }) => {
   const [tags, setTags] = useState([]);
   const roomId = useSelector((state) => state.roomId);
 
+  const handleCardClick = (type, card) => {
+    onCardClick(type, card);
+  };
   // Function to get 12 random tags
   const getRandomTags = () => {
     const shuffledTags = [...tagNames].sort(() => 0.5 - Math.random());
@@ -45,11 +48,13 @@ const RandomPlaceTags = () => {
   return (
     <div className="w-3/4 flex border-1 shadow-md rounded-lg mx-10 bg-white justify-center ">
       <div className="w-full bg-gray-100 m-3 rounded-md shadow-md justify-center items-center flex ">
-        <ul className="grid grid-cols-4 gap-3 p-10">
+        <div className="grid grid-cols-4 gap-3 p-10">
           {tags.map((tag, i) => (
-            <TagCard key={i} data={tag} handleClick={handleTagClick} />
+            <button key={i} onClick={() => handleCardClick("placeTag", tag)}>
+              <TagCard data={tag} handleClick={handleTagClick} />
+            </button>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   );
