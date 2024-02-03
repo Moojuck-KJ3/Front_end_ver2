@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
 
-import { createRoom } from "../../../api";
+//import { createRoom } from "../../../api";
+import { createRoom } from "../../../realtimeComunication/socket";
+import { socket } from "../../../realtimeComunication/socket";
 
 const API_KEY = "33d3165b1407ac3d92203219d067a088";
 const JS_KEY = "fa77f847dc1c042e320456f1f78748ad";
@@ -26,6 +28,17 @@ const CreateRoomModal = ({ onSetting }) => {
   ]);
   const [purPoseName, setPurposeName] = useState(START_NAME);
 
+  useEffect(() => {
+    socket.on("create-room-response", (roomId) => {
+      console.log("response RoomId", roomId);
+      navigate(`/waiting-friends${roomId}`);
+    });
+
+    return () => {
+      socket.off("create-room-response");
+    };
+  }, []);
+
   const handleCreateRoom = () => {
     // 방 생성 로직 여기
     const createRoomData = {
@@ -33,17 +46,7 @@ const CreateRoomModal = ({ onSetting }) => {
       purposeAddress: purPosePosition,
     };
 
-    const createRooms = async (createRoomData) => {
-      const response = await createRoom(createRoomData);
-      if (response.error) {
-        console.log(response.exception);
-      } else {
-        const roomId = response.roomId;
-        navigate(`/waiting-friends${roomId}`);
-      }
-    };
-
-    createRooms(createRoomData);
+    createRoom(createRoomData);
   };
 
   const handleSearch = () => {
