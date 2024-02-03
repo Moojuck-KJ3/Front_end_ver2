@@ -1,13 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import WaitingFreindVideoContainer from "../createRoomPage/video/WaitingFreindVideoContainer";
 import CreateRoomPageFooter from "../createRoomPage/CreateRoomPageFooter";
-
 import { useLocalCameraStream } from "../../components/video/useLocalCameraStream";
-import { useChatConnection } from "../../realtimeComunication/useChatConnection";
 
 const WaitingPage = () => {
   const { localStream } = useLocalCameraStream();
-  useChatConnection();
+
   const navigator = useNavigate();
 
   const handleStartGame = () => {
