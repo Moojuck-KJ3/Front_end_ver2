@@ -48,9 +48,7 @@ const CreateRoomPage = () => {
   };
 
   const handleRoomCreate = async (event) => {
-    setIsModal(false);
     event.preventDefault();
-
     socket.emit("create-room", (response) => {
       if (response.success) {
         const roomID = response.roomID;
@@ -59,6 +57,7 @@ const CreateRoomPage = () => {
         console.error(response.error);
       }
     });
+    setIsModal(false);
   };
 
   const handleRoomJoin = () => {};
