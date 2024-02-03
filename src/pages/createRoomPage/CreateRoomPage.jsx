@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import InputWithLabel from "../../components/InputWithLable";
 import { useNavigate } from "react-router-dom";
 import CreateRoomModal from "./modal/CreateRoomModal";
-import { connectionStart } from "../../realtimeComunication/socket";
+import {
+  socket,
+  connectionStart,
+  joinRoom,
+} from "../../realtimeComunication/socket";
 
 const CreateRoomPage = () => {
   const navigator = useNavigate();
@@ -17,7 +21,20 @@ const CreateRoomPage = () => {
       const username = JSON.parse(userDetails).username;
       setUserName(username);
     }
+    console.log("connectionStart");
     connectionStart(userDetails);
+
+    socket.on("join-room-response", (isSuccess) => {
+      console.log("join-room-response", isSuccess);
+
+      if (isSuccess) {
+        navigator(`/waiting-friends/${roomNumber}`);
+      }
+    });
+
+    return () => {
+      socket.off("join-room-response");
+    };
   }, []);
 
   const handleRoomCreate = () => {
@@ -29,6 +46,11 @@ const CreateRoomPage = () => {
 
   const handleRoomJoin = () => {
     // 성공한 경우, 입력한 roomId를 redux에 저장해야 한다
+    //console.log("handleRoomJoin", roomNumber);
+    if (roomNumber === "") return;
+
+    //socket.emit("join-room", roomNumber);
+    joinRoom(roomNumber);
   };
 
   return (
