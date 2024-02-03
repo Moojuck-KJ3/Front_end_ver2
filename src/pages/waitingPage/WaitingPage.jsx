@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { VideoFeed } from "../../components/video/VideoFeed";
-import WaitingFriendVideo from "../createRoomPage/video/WaitingFriendVideo";
 import WaitingFreindVideoContainer from "../createRoomPage/video/WaitingFreindVideoContainer";
 import CreateRoomPageFooter from "../createRoomPage/CreateRoomPageFooter";
 
+import { useLocalCameraStream } from "../../components/video/useLocalCameraStream";
+
 const WaitingPage = () => {
+  const { localStream } = useLocalCameraStream();
   const navigator = useNavigate();
   const roomId = useParams().roomId;
 
@@ -25,7 +27,7 @@ const WaitingPage = () => {
         {/* 메인 컨텐츠  */}
         <div className="h-full w-full mt-5 flex flex-col items-center  bg-white shadow-xl rounded-xl justify-center  animate-fade-up">
           {/* 비디오 */}
-          <WaitingFreindVideoContainer />
+          <WaitingFreindVideoContainer localStream={localStream} />
           {/* 버튼 */}
           <CreateRoomPageFooter onStart={handleStartGame} />
         </div>
