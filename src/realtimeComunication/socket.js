@@ -1,11 +1,9 @@
 import io from "socket.io-client";
-let socket = null;
 
 export const connectionStart = (userDetails) => {
   const jwtToken = userDetails.token;
 
-  socket = io("http://localhost:3000", {
-    transports: ["websocket"],
+  const socket = io("http://13.236.161.65:8080", {
     auth: {
       token: jwtToken,
     },
@@ -15,4 +13,6 @@ export const connectionStart = (userDetails) => {
     console.log("succesfully connected with socket.io server");
     console.log(socket.id);
   });
+
+  return socket;
 };

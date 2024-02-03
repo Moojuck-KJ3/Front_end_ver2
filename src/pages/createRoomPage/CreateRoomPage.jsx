@@ -4,11 +4,21 @@ import { useNavigate } from "react-router-dom";
 import CreateRoomModal from "./modal/CreateRoomModal";
 import { connectionStart } from "../../realtimeComunication/socket";
 
+const START_LAT = "37.498";
+const START_LNG = "127.028";
+const START_NAME = "강남역 2호선";
+let socket = null;
+
 const CreateRoomPage = () => {
-  const navigator = useNavigate();
+  const navigate = useNavigate();
   const [isModal, setIsModal] = useState(false);
   const [roomNumber, setRoomNumber] = useState("");
   const [userName, setUserName] = useState("");
+  const [location, setLocation] = useState({
+    START_NAME,
+    START_LAT,
+    START_LNG,
+  });
 
   useEffect(() => {
     const userDetails = localStorage.getItem("user");
@@ -17,19 +27,28 @@ const CreateRoomPage = () => {
       const username = JSON.parse(userDetails).username;
       setUserName(username);
     }
-    connectionStart(userDetails);
+    socket = connectionStart(userDetails);
   }, []);
 
-  const handleRoomCreate = () => {
-    console.log("handleRoomCreate");
+  const handleOpenModal = () => {
     setIsModal(true);
-    console.log(isModal);
-    // navigator("/waiting-friends");
   };
 
-  const handleRoomJoin = () => {
-    // 성공한 경우, 입력한 roomId를 redux에 저장해야 한다
+  const handleRoomCreate = async (event) => {
+    setIsModal(false);
+    event.preventDefault();
+
+    socket.emit("createRoom", (response) => {
+      if (response.success) {
+        const roomID = response.roomID;
+        navigate(`/waiting-friends/${roomID}`);
+      } else {
+        console.error(response.error);
+      }
+    });
   };
+
+  const handleRoomJoin = () => {};
 
   return (
     <div className=" min-h-screen text-gray-900 flex justify-center">
@@ -42,7 +61,7 @@ const CreateRoomPage = () => {
                 <h1>안녕하세요. {userName}님</h1>
                 <button
                   className="mt-5 tracking-wide font-semibold bg-blue-400 text-gray-100 w-full py-2 rounded-lg hover:bg-blue-500 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
-                  onClick={handleRoomCreate}
+                  onClick={handleOpenModal}
                 >
                   <span className="">방 생성하기</span>
                 </button>
@@ -64,7 +83,9 @@ const CreateRoomPage = () => {
           </div>
         </div>
       </div>
-      {isModal && <CreateRoomModal onSetting={setIsModal} />}
+      {isModal && (
+        <CreateRoomModal onModal={setIsModal} onCreate={handleRoomCreate} />
+      )}
     </div>
   );
 };
