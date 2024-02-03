@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import VoiceRecoderContainer from "./VoiceRecoderContainer";
 import Timer from "./Timer";
 
+import { sendFoodCategorySpeech } from "../../api";
+import { useParams } from "react-router";
+
 const VoiceRecoder = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
@@ -10,6 +13,8 @@ const VoiceRecoder = () => {
   const [onReady, setOnReady] = useState(false);
   // Reference to store the SpeechRecognition instance
   const recognitionRef = useRef(null);
+
+  const { roomId } = useParams();
 
   // Function to start recording
   const startRecording = () => {
@@ -23,11 +28,10 @@ const VoiceRecoder = () => {
 
     // Event handler for speech recognition results
     recognitionRef.current.onresult = (event) => {
-      const { transcript } = event.results[event.results.length - 1][0];
-
+      const tempScript = event.results[event.results.length - 1][0].transcript;
       // Log the recognition results and update the transcript state
-      console.log(event.results);
-      setTranscript(transcript);
+      console.log("tempScript : ", tempScript);
+      setTranscript(tempScript);
     };
 
     // Start the speech recognition
@@ -68,6 +72,22 @@ const VoiceRecoder = () => {
 
   const sendTranscriptToServer = () => {
     console.log("Sending transcript to server:", transcript);
+
+    const data = {
+      userSpeech: transcript,
+    };
+
+    const sendFoodCategoryData = async (roomId, data) => {
+      const response = sendFoodCategorySpeech(roomId, data);
+      if (response.error) {
+        console.log(response.exception);
+      } else {
+        // 서버에 전달 성공
+        // 추가적인 처리 시 이 부분 작성
+      }
+    };
+
+    sendFoodCategoryData(roomId, data);
   };
 
   const onTimerTimeout = () => {

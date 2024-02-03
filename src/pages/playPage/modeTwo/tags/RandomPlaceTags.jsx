@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 import TagCard from "./TagCard";
 import { tagNames } from "./tagName";
 
+import { getMoodKeyword, postMoodKeywordButton } from "../../../../api";
+import { useParams } from "react-router";
+
 const RandomPlaceTags = ({ onCardClick }) => {
   const [tags, setTags] = useState([]);
+  const { roomId } = useParams();
 
   const handleCardClick = (type, card) => {
     onCardClick(type, card);
@@ -15,8 +19,31 @@ const RandomPlaceTags = ({ onCardClick }) => {
   };
 
   useEffect(() => {
-    setTags(getRandomTags());
+    const getMoodKeywords = async (roomId) => {
+      const response = await getMoodKeyword(roomId);
+
+      if (response.error) {
+        console.log(response.exception);
+      } else {
+        // 가져온 수식어들을 태그처럼 활용할 예정
+        console.log(response.moodKeywords);
+        setTags(response.moodKeywords);
+      }
+    };
+
+    getMoodKeywords(roomId);
+
+    //setTags(getRandomTags());
   }, []);
+
+  const handleTagClick = (tag) => {
+    const data = {
+      keywordId: tag.id,
+      isDelete: false,
+    };
+
+    postMoodKeywordButton(roomId, data);
+  };
 
   return (
     <div className="w-3/4 flex border-1 shadow-md rounded-lg mx-10 bg-white justify-center ">
@@ -24,7 +51,7 @@ const RandomPlaceTags = ({ onCardClick }) => {
         <div className="grid grid-cols-4 gap-3 p-10">
           {tags.map((tag, i) => (
             <button key={i} onClick={() => handleCardClick("placeTag", tag)}>
-              <TagCard data={tag} />
+              <TagCard data={tag} handleClick={handleTagClick} />
             </button>
           ))}
         </div>

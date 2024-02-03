@@ -1,14 +1,29 @@
 import React, { useState } from "react";
 import InputWithLabel from "../../components/InputWithLable";
 import { useNavigate } from "react-router-dom";
+import { register } from "../../api";
 
 const ResisterPage = () => {
+  const navigator = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     // TOOD 회원가입 관련 로직 여기에 추가
+    const userDetails = {
+      username,
+      email,
+      password,
+    };
+
+    const response = await register(userDetails);
+    if (!response.error) {
+      localStorage.setItem("user", JSON.stringify(response));
+      navigator("/entry");
+    } else {
+      console.log(response);
+    }
   };
 
   return (
