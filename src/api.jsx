@@ -195,40 +195,6 @@ export const postKeywordsToRests = async (roomId, data) => {
   }
 };
 
-// 의사 결정 모드에서 식당들을 받는다
-export const getRestDecision = async (roomId) => {
-  try {
-    const response = await apiClient.get(
-      `/rooms/rest-decision?roomId=${roomId}`
-    );
-    const responseData = {
-      restaurants: response.data.restaurants,
-    };
-
-    return responseData;
-  } catch (exception) {
-    checkResponseCode(exception);
-    return {
-      error: true,
-      exception,
-    };
-  }
-};
-
-// 의사 결정 모드에서 o,x 를 눌러 식당에 대한 의사를 표현한다
-// data : {"restId" : string, "isAgree" : boolean}
-export const postRestDecision = async (roomId, data) => {
-  try {
-    return await apiClient.post(`/rooms/rest-decision?roomId=${roomId}`, data);
-  } catch (exception) {
-    checkResponseCode(exception);
-    return {
-      error: true,
-      exception,
-    };
-  }
-};
-
 // 결과 페이지에서 선택된 식당과 선택이 되지 못하였지만 추천된 식당 리스트를 받는다
 export const getResult = async (roomId) => {
   try {
