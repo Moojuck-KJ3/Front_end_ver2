@@ -5,8 +5,10 @@ import {
   useChatConnection,
   usePeerConnection,
 } from "../../realtimeComunication/webRTCManager";
+import CopyToClipboardButton from "./ClipboardClipboardCopyButton";
 
 const WaitingPage = ({ localStream }) => {
+  const { roomId } = useParams();
   const { peerConnection, guestStream } = usePeerConnection(localStream);
   useChatConnection(peerConnection);
 
@@ -16,12 +18,14 @@ const WaitingPage = ({ localStream }) => {
 
   return (
     <div className=" min-h-screen text-gray-800 flex justify-center items-center">
-      <div className="w-[500px] h-[600px] ">
-        <div className="sm-m-10 bg-white shadow-xl py-4 rounded-xl  flex justify-center  animate-fade-up">
-          <h1 className=" font-bold">친구를 기다리는 중...</h1>
+      <div className="w-[500px] h-[600px] animate-fade-up">
+        <div className="sm-m-10 bg-white shadow-xl py-4 rounded-xl flex flex-col jus justify-center items-center">
+          <h1 className=" font-bold justify-center">친구를 기다리는 중...</h1>
+          <CopyToClipboardButton gameCode={roomId} />
         </div>
+
         {/* 메인 컨텐츠  */}
-        <div className="h-full w-full mt-5 flex flex-col items-center  bg-white shadow-xl rounded-xl justify-center  animate-fade-up">
+        <div className="h-full w-full mt-5 flex flex-col items-center  bg-white shadow-xl rounded-xl justify-center">
           {/* 비디오 */}
           <WaitingFreindVideoContainer
             localStream={localStream}
