@@ -18,23 +18,37 @@ const WaitingPage = ({ localStream }) => {
   useChatConnection(peerConnection);
 
   useEffect(() => {
-    socket.on("all-player-ready", () => {
-      console.log("all-player-ready");
+    const handleAllPlayerReady = () => {
+      console.log("All players are ready");
       setIsAllPlayerReady(true);
-    });
-    socket.on("start-play-room-response", () => {
-      console.log("start-play-room");
+    };
+
+    const handleStartPlayRoomResponse = () => {
+      console.log("Starting the play-room");
       navigator(`/play-room/${roomId}`);
-    });
+    };
+
+    socket.on("all-player-ready", handleAllPlayerReady);
+    socket.on("start-play-room-response", handleStartPlayRoomResponse);
 
     return () => {
-      socket.off("all-player-ready");
-      socket.off("start-play-room");
+      socket.off("all-player-ready", handleAllPlayerReady);
+      socket.off("start-play-room-response", handleStartPlayRoomResponse);
     };
-  });
+  }, [navigator, roomId]);
+
+  useEffect(() => {
+    if (isAllPlayerReady) {
+      console.log("The Room Creator can now start the game.");
+    }
+  }, [isAllPlayerReady]);
 
   const handleStartGame = () => {
-    socket.emit("start-play-room", { roomId });
+    if (isAllPlayerReady) {
+      socket.emit("start-play-room", { roomId });
+    } else {
+      console.log("Not all players are ready");
+    }
   };
 
   return (
