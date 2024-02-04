@@ -5,6 +5,8 @@ import CreateRoomModal from "./modal/CreateRoomModal";
 import socket from "../../realtimeComunication/socket";
 import { connectionStart } from "../../realtimeComunication/socketConnection";
 
+import { logout } from "../../api";
+
 const CreateRoomPage = () => {
   const navigator = useNavigate();
   const [isModal, setIsModal] = useState(false);
@@ -52,6 +54,7 @@ const CreateRoomPage = () => {
 
   const handleLogout = () => {
     // Todo 로그아웃 버튼
+    logout();
   };
 
   return (
