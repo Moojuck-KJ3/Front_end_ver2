@@ -16,6 +16,7 @@ const START_NAME = "강남역 2호선";
 
 const CreateRoomModal = ({ onSetting }) => {
   const navigate = useNavigate();
+const CreateRoomModal = ({ onModal, onCreate }) => {
   const [info, setInfo] = useState();
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
@@ -28,17 +29,6 @@ const CreateRoomModal = ({ onSetting }) => {
   ]);
   const [purPoseName, setPurposeName] = useState(START_NAME);
 
-  useEffect(() => {
-    socket.on("create-room-response", (roomId) => {
-      console.log("response RoomId", roomId);
-      navigate(`/waiting-friends${roomId}`);
-    });
-
-    return () => {
-      socket.off("create-room-response");
-    };
-  }, []);
-
   const handleCreateRoom = () => {
     // 방 생성 로직 여기
     const createRoomData = {
@@ -46,7 +36,17 @@ const CreateRoomModal = ({ onSetting }) => {
       purposeAddress: purPosePosition,
     };
 
-    createRoom(createRoomData);
+    const createRooms = async (createRoomData) => {
+      const response = await createRoom(createRoomData);
+      if (response.error) {
+        console.log(response.exception);
+      } else {
+        const roomId = response.roomId;
+        navigate(`/waiting-friends${roomId}`);
+      }
+    };
+
+    createRooms(createRoomData);
   };
 
   const handleSearch = () => {
@@ -71,9 +71,6 @@ const CreateRoomModal = ({ onSetting }) => {
 
         setMarkers([marker]);
         setInfo(marker);
-
-        setPurposePosition([centerPosition.lat, centerPosition.lng]);
-        setPurposeName(marker.content);
 
         if (map) {
           map.setCenter(
@@ -149,13 +146,13 @@ const CreateRoomModal = ({ onSetting }) => {
           </div>
           <div className="flex justify-center gap-4">
             <button
-              onClick={() => onSetting(false)}
+              onClick={() => onModal(false)}
               className=" bg-gray-300 px-5 py-3 rounded-lg text-gray-600 font-bold"
             >
               취소
             </button>
             <button
-              onClick={handleCreateRoom}
+              onClick={onCreate}
               className=" bg-emerald-500 px-5 py-3 rounded-lg text-white font-bold"
             >
               방 생성하기
