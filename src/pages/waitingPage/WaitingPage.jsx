@@ -1,26 +1,17 @@
 import { useNavigate, useParams } from "react-router-dom";
 import WaitingFreindVideoContainer from "../createRoomPage/video/WaitingFreindVideoContainer";
 import CreateRoomPageFooter from "../createRoomPage/CreateRoomPageFooter";
-// import {
-//   useChatConnection,
-//   useLocalCameraStream,
-//   usePeerConnection,
-// } from "../../realtimeComunication/webRTCManager";
+import {
+  useChatConnection,
+  usePeerConnection,
+} from "../../realtimeComunication/webRTCManager";
 
-const WaitingPage = () => {
-  const navigator = useNavigate();
-  const { roomId } = useParams();
-  // const { localStream } = useLocalCameraStream();
-  // const { peerConnection, guestStream } = usePeerConnection(
-  //   localStream,
-  //   roomId
-  // );
-  // useChatConnection(peerConnection, roomId);
+const WaitingPage = ({ localStream }) => {
+  const { peerConnection, guestStream } = usePeerConnection(localStream);
+  useChatConnection(peerConnection);
 
-
-  
   const handleStartGame = () => {
-    navigator(`/play-room/${roomId}`);
+    // navigator(`/play-room/${roomId}`);
   };
 
   return (

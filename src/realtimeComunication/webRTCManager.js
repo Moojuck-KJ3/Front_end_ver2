@@ -1,7 +1,10 @@
+import { useParams } from "react-router-dom";
 import socket from "./socket";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-export function useChatConnection(peerConnection, roomId) {
+export function useChatConnection(peerConnection) {
+  const { roomId } = useParams();
+
   const { sendOffer } = useSendOfferSending(peerConnection, roomId);
   const { handleConnectionOffer } = useSendingAnswer(peerConnection, roomId);
   const { handleOfferAnswer } = useAnswerProcessing(peerConnection);
@@ -18,6 +21,7 @@ export function useChatConnection(peerConnection, roomId) {
   );
 
   useEffect(() => {
+    socket.connect();
     socket.on("connect", handleConnection);
     socket.on("answer", handleOfferAnswer);
     socket.on("another-person-ready", sendOffer);
@@ -57,42 +61,38 @@ export function useLocalCameraStream() {
   };
 }
 
-export function usePeerConnection(localStream, roomId) {
-  const [peerConnection, setPeerConnection] = useState(null);
+export function usePeerConnection(localStream) {
+  const { roomId } = useParams();
   const [guestStream, setGuestStream] = useState(null);
 
-  useEffect(() => {
-    if (!localStream) return; // Do nothing if localStream is null
-
+  const peerConnection = useMemo(() => {
     const connection = new RTCPeerConnection({
       iceServers: [{ urls: "stun:stun2.1.google.com:19302" }],
+    });
+
+    connection.addEventListener("icecandidate", ({ candidate }) => {
+      socket.emit("send-candidate", { candidate, roomId });
+    });
+
+    connection.addEventListener("track", ({ streams }) => {
+      setGuestStream(streams[0]);
     });
 
     localStream.getTracks().forEach((track) => {
       connection.addTrack(track, localStream);
     });
 
-    connection.onicecandidate = ({ candidate }) => {
-      if (candidate) {
-        socket.emit("send-candidate", { roomId, candidate });
-      }
-    };
-
-    connection.ontrack = ({ streams }) => {
-      setGuestStream(streams[0]);
-    };
-
-    setPeerConnection(connection);
-
-    return () => {
-      connection.close();
-    };
+    return connection;
   }, [localStream, roomId]);
 
-  return { peerConnection, guestStream };
+  return {
+    peerConnection,
+    guestStream,
+  };
 }
 
-export function useSendOfferSending(peerConnection, roomId) {
+export function useSendOfferSending(peerConnection) {
+  const { roomId } = useParams();
   const sendOffer = useCallback(async () => {
     const offer = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(offer);
@@ -106,18 +106,18 @@ export function useSendOfferSending(peerConnection, roomId) {
   return { sendOffer };
 }
 
-export function useSendingAnswer(peerConnection, roomId) {
+export function useSendingAnswer(peerConnection) {
+  const { roomId } = useParams();
+
   const handleConnectionOffer = useCallback(
     async ({ offer }) => {
-      const sessionDescription = new RTCSessionDescription(offer);
-      await peerConnection.setRemoteDescription(sessionDescription);
+      await peerConnection.setRemoteDescription(offer);
       const answer = await peerConnection.createAnswer();
-      console.log(peerConnection, answer);
       await peerConnection.setLocalDescription(answer);
 
       socket.emit("answer", { answer, roomId });
     },
-    [peerConnection, roomId]
+    [roomId]
   );
 
   return {
