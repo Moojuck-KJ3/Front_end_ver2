@@ -1,12 +1,13 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import WaitingFreindVideoContainer from "../createRoomPage/video/WaitingFreindVideoContainer";
 import CreateRoomPageFooter from "../createRoomPage/CreateRoomPageFooter";
 import {
   createPeerConnection,
   getLocalStream,
+  getRemoteStream,
   initiateLocalStream,
-  OfferSending,
+  useSendOfferSending,
 } from "../../realtimeComunication/webRTCManager";
 
 const WaitingPage = () => {
@@ -14,20 +15,34 @@ const WaitingPage = () => {
   const { roomId } = useParams();
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
-
+  const [peerConnection, SetpeerConnection] = useState(null);
   useEffect(() => {
     const setupWebRTC = async () => {
       await initiateLocalStream();
       const localStream = getLocalStream();
-      const { peerConnection } = createPeerConnection(localStream);
-      const { sendOffer } = OfferSending(peerConnection);
-      console.log(sendOffer);
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = localStream;
+      }
+      console.log(localVideoRef.current);
+      const pc = await createPeerConnection(localStream);
+      SetpeerConnection(pc);
+      console.log(peerConnection);
+
+      const checkRemoteStream = setInterval(() => {
+        const remoteStream = getRemoteStream();
+        if (remoteStream && remoteVideoRef.current) {
+          remoteVideoRef.current.srcObject = remoteStream;
+          clearInterval(checkRemoteStream);
+        }
+      }, 1000);
     };
 
     setupWebRTC();
 
     return () => {};
   }, []);
+
+  const { sendOffer } = useSendOfferSending(peerConnection, roomId);
 
   const handleStartGame = () => {
     navigator(`/play-room/${roomId}`);

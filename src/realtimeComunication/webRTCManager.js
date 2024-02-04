@@ -30,9 +30,7 @@ export const createPeerConnection = async (localStream) => {
   return peerConnection;
 };
 
-export function OfferSending(peerConnection) {
-  const { roomId } = useParams();
-
+export function useSendOfferSending(peerConnection, roomId) {
   const sendOffer = useCallback(async () => {
     const offer = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(offer);
@@ -41,7 +39,7 @@ export function OfferSending(peerConnection) {
       roomId,
       offer,
     });
-  }, [roomId]);
+  }, [peerConnection, roomId]);
 
   return { sendOffer };
 }
