@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 
 const ImageSilderBg = () => {
   const [pickRests, setPickRests] = useState(null);
-  const [restList, setRestList] = useState([]);
   const roomId = useParams();
 
   useEffect(() => {
@@ -29,7 +28,6 @@ const ImageSilderBg = () => {
           }
         } else {
           setPickRests(result.pickRest);
-          setRestList(result.restaurants);
         }
       };
 

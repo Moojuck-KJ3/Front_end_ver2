@@ -201,7 +201,6 @@ export const getResult = async (roomId) => {
     const response = await apiClient.get(`/rooms/result?roomId=${roomId}`);
     const responseData = {
       pickRest: response.data.pickRest,
-      restaurants: response.data.restaurants,
     };
 
     return responseData;
