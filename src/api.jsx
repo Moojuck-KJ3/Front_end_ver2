@@ -10,7 +10,7 @@ const apiClient = axios.create({
   baseURL: "http://13.236.161.65:8080/api", // main url
   //baseURL: 'https://backend-nest.fly.dev/cats', // test url
   //baseURL: 'http://localhost:8080/api',
-  timeout: 5000,
+  timeout: 7000,
 });
 
 apiClient.interceptors.request.use(
