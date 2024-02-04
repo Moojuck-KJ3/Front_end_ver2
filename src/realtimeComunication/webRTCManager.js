@@ -1,57 +1,143 @@
-import socket from './socket';
+import socket from "./socket";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-let peerConnection;
-let localStream = null;
-let remoteStream = null;
-const configuration = {
-  iceServers: [{ urls: "stun:stun2.1.google.com:19302" }],
-};
+export function useChatConnection(peerConnection, roomId) {
+  const { sendOffer } = useSendOfferSending(peerConnection, roomId);
+  const { handleConnectionOffer } = useSendingAnswer(peerConnection, roomId);
+  const { handleOfferAnswer } = useAnswerProcessing(peerConnection);
 
-export const getLocalStream = () => localStream;
-export const getRemoteStream = () => remoteStream;
-
-export const initiateLocalStream = async () => {
-  localStream = await navigator.mediaDevices.getUserMedia({
-    video: true,
-    audio: true,
-  });
-  return localStream;
-};
-
-export const createPeerConnection = async () => {
-  peerConnection = new RTCPeerConnection(configuration);
-
-  localStream.getTracks().forEach((track) => {
-    peerConnection.addTrack(track, localStream);
-  });
-
-  peerConnection.ontrack = (event) => {
-    [remoteStream] = event.streams[0];
+  const handleConnection = () => {
+    socket.on("connect", () => {
+      console.log("succesfully connected with socket.io server");
+      console.log(socket.id);
+    });
   };
 
-  // Listen for ICE candidates
-  peerConnection.onicecandidate = (event) => {
-    if (event.candidate) {
-      socket.emit("send-candidate", event.candidate);
-    }
+  const handleReceiveCandidate = useCallback(
+    ({ candidate }) => {
+      peerConnection.addIceCandidate(candidate);
+    },
+    [peerConnection]
+  );
+
+  useEffect(() => {
+    socket.connect();
+    socket.on("connect", handleConnection);
+    socket.on("answer", handleOfferAnswer);
+    socket.on("another-person-ready", sendOffer);
+    socket.on("send-connection-offer", handleConnectionOffer);
+    socket.on("send_candidate", handleReceiveCandidate);
+
+    return () => {
+      socket.off("connect", handleConnection);
+      socket.off("answer", handleOfferAnswer);
+      socket.off("another-person-ready", sendOffer);
+      socket.off("send-connection-offer", handleConnectionOffer);
+      socket.off("send_candidate", handleReceiveCandidate);
+    };
+  }, [
+    peerConnection,
+    roomId,
+    handleOfferAnswer,
+    sendOffer,
+    handleConnectionOffer,
+    handleReceiveCandidate,
+  ]);
+}
+
+export function useLocalCameraStream() {
+  const [localStream, setLocalStream] = useState(null);
+
+  useEffect(() => {
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        setLocalStream(stream);
+      });
+  }, []);
+
+  return {
+    localStream,
   };
+}
 
-  // Handle receiving candidates from the remote peer
-  socket.on("receive-candidate", (candidate) => {
-    peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
-  });
+export function usePeerConnection(localStream, roomId) {
+  const [peerConnection, setPeerConnection] = useState(null);
+  const [guestStream, setGuestStream] = useState(null);
 
-  return peerConnection;
-};
+  useEffect(() => {
+    if (!localStream) return; // Do nothing if localStream is null
 
-export const closeCall = () => {
-  if (peerConnection) {
-    peerConnection.close();
-    peerConnection = null;
-  }
-  if (localStream) {
-    localStream.getTracks().forEach((track) => track.stop());
-    localStream = null;
-  }
-  remoteStream = null;
-};
+    const connection = new RTCPeerConnection({
+      iceServers: [{ urls: "stun:stun2.1.google.com:19302" }],
+    });
+
+    localStream.getTracks().forEach((track) => {
+      connection.addTrack(track, localStream);
+    });
+
+    connection.onicecandidate = ({ candidate }) => {
+      if (candidate) {
+        socket.emit("send_candidate", { roomId, candidate });
+      }
+    };
+
+    connection.ontrack = ({ streams }) => {
+      setGuestStream(streams[0]);
+    };
+
+    setPeerConnection(connection);
+
+    return () => {
+      connection.close();
+    };
+  }, [localStream, roomId]);
+
+  return { peerConnection, guestStream };
+}
+
+export function useSendOfferSending(peerConnection, roomId) {
+  const sendOffer = useCallback(async () => {
+    const offer = await peerConnection.createOffer();
+    await peerConnection.setLocalDescription(offer);
+
+    socket.emit("send-connection-offer", {
+      roomId,
+      offer,
+    });
+  }, [peerConnection, roomId]);
+
+  return { sendOffer };
+}
+
+export function useSendingAnswer(peerConnection, roomId) {
+  const handleConnectionOffer = useCallback(
+    async ({ offer }) => {
+      const sessionDescription = new RTCSessionDescription(offer);
+      await peerConnection.setRemoteDescription(sessionDescription);
+      const answer = await peerConnection.createAnswer();
+      console.log(peerConnection, answer);
+      await peerConnection.setLocalDescription(answer);
+
+      socket.emit("answer", { answer, roomId });
+    },
+    [peerConnection, roomId]
+  );
+
+  return {
+    handleConnectionOffer,
+  };
+}
+
+export function useAnswerProcessing(peerConnection) {
+  const handleOfferAnswer = useCallback(
+    ({ answer }) => {
+      peerConnection.setRemoteDescription(answer);
+    },
+    [peerConnection]
+  );
+
+  return {
+    handleOfferAnswer,
+  };
+}

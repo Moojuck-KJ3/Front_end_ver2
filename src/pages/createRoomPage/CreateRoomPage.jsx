@@ -29,8 +29,9 @@ const CreateRoomPage = () => {
     });
 
     socket.on("join-room-response", (response) => {
+      console.log(response);
       if (response) {
-        const { roomId } = response;
+        const roomId = response;
         navigate(`/waiting-friends/${roomId}`);
       } else {
         console.error(response.error);
