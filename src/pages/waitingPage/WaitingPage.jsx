@@ -7,8 +7,11 @@ import {
   getLocalStream,
   getRemoteStream,
   initiateLocalStream,
+  useAnswerProcessing,
   useSendOfferSending,
+  useSendingAnswer,
 } from "../../realtimeComunication/webRTCManager";
+import socket from "../../realtimeComunication/socket";
 
 const WaitingPage = () => {
   const navigator = useNavigate();
@@ -30,13 +33,20 @@ const WaitingPage = () => {
   }, []);
 
   const { sendOffer } = useSendOfferSending(peerConnection, roomId);
+  const { handleConnectionOffer } = useSendingAnswer(peerConnection, roomId);
+  const { handleOfferAnswer } = useAnswerProcessing(peerConnection);
 
   useEffect(() => {
-    if (peerConnection && roomId) {
-      console.log("sendOffer");
-      sendOffer();
-    }
-  }, [peerConnection, roomId, sendOffer]);
+    socket.on("answer", handleOfferAnswer);
+    socket.on("another_person_ready", sendOffer);
+    socket.on("send_connection_offer", handleConnectionOffer);
+
+    return () => {
+      socket.off("another_person_ready", sendOffer);
+      socket.off("send_connection_offer", handleConnectionOffer);
+      socket.off("answer", handleOfferAnswer);
+    };
+  }, [roomId, sendOffer, handleConnectionOffer, handleOfferAnswer]);
 
   useEffect(() => {
     const checkRemoteStream = setInterval(() => {

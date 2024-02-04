@@ -43,3 +43,33 @@ export function useSendOfferSending(peerConnection, roomId) {
 
   return { sendOffer };
 }
+
+export function useSendingAnswer(peerConnection, roomId) {
+  const handleConnectionOffer = useCallback(
+    async ({ offer }) => {
+      await peerConnection.setRemoteDescription(offer);
+      const answer = await peerConnection.createAnswer();
+      await peerConnection.setLocalDescription(answer);
+
+      socket.emit("answer", { answer, roomId });
+    },
+    [peerConnection, roomId]
+  );
+
+  return {
+    handleConnectionOffer,
+  };
+}
+
+export function useAnswerProcessing(peerConnection) {
+  const handleOfferAnswer = useCallback(
+    ({ answer }) => {
+      peerConnection.setRemoteDescription(answer);
+    },
+    [peerConnection]
+  );
+
+  return {
+    handleOfferAnswer,
+  };
+}
