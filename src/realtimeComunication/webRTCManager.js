@@ -1,8 +1,7 @@
 import socket from "./socket";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 export function useChatConnection(peerConnection, roomId) {
-  console.log("peerConnection", peerConnection);
   const { sendOffer } = useSendOfferSending(peerConnection, roomId);
   const { handleConnectionOffer } = useSendingAnswer(peerConnection, roomId);
   const { handleOfferAnswer } = useAnswerProcessing(peerConnection);
@@ -22,7 +21,6 @@ export function useChatConnection(peerConnection, roomId) {
   );
 
   useEffect(() => {
-    if (!peerConnection) return;
     socket.connect();
     socket.on("connect", handleConnection);
     socket.on("answer", handleOfferAnswer);
@@ -64,27 +62,26 @@ export function useLocalCameraStream() {
 }
 
 export function usePeerConnection(localStream, roomId) {
-  const [peerConnection, setPeerConnection] = useState(null);
   const [guestStream, setGuestStream] = useState(null);
 
-  useEffect(() => {
-    if (!localStream) return;
-
-    const pc = new RTCPeerConnection({
+  const peerConnection = useMemo(() => {
+    const connection = new RTCPeerConnection({
       iceServers: [{ urls: "stun:stun2.1.google.com:19302" }],
     });
 
-    pc.addEventListener("icecandidate", ({ candidate }) => {
+    connection.addEventListener("icecandidate", ({ candidate }) => {
       socket.emit("send_candidate", { candidate, roomId });
     });
 
-    localStream.getTracks().forEach((track) => pc.addTrack(track, localStream));
-
-    pc.addEventListener("track", ({ streams }) => {
+    connection.addEventListener("track", ({ streams }) => {
       setGuestStream(streams[0]);
     });
 
-    setPeerConnection(pc);
+    localStream.getTracks().forEach((track) => {
+      connection.addTrack(track, localStream);
+    });
+
+    return connection;
   }, [localStream, roomId]);
 
   return { peerConnection, guestStream };
