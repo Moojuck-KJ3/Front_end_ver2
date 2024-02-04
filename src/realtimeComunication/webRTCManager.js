@@ -1,23 +1,26 @@
 import socket from "./socket";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 let peerConnection;
-let localStream = null;
-let remoteStream = null;
 const configuration = {
   iceServers: [{ urls: "stun:stun2.1.google.com:19302" }],
 };
 
-export const getLocalStream = () => localStream;
-export const getRemoteStream = () => remoteStream;
+export function useLocalCameraStream() {
+  const [localStream, setLocalStream] = useState(null);
 
-export const initiateLocalStream = async () => {
-  localStream = await navigator.mediaDevices.getUserMedia({
-    video: true,
-    audio: true,
-  });
-  return localStream;
-};
+  useEffect(() => {
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        setLocalStream(stream);
+      });
+  }, []);
+
+  return {
+    localStream,
+  };
+}
 
 export const createPeerConnection = async (localStream) => {
   peerConnection = new RTCPeerConnection(configuration);
@@ -47,7 +50,6 @@ export function useSendingAnswer(peerConnection, roomId) {
   const handleConnectionOffer = useCallback(
     async ({ offer }) => {
       const sessionDescription = new RTCSessionDescription(offer);
-      console.log(sessionDescription);
       await peerConnection.setRemoteDescription(sessionDescription);
       const answer = await peerConnection.createAnswer();
       await peerConnection.setLocalDescription(answer);

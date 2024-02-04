@@ -4,7 +4,11 @@ const WaitingFreindVideoContainer = ({ localStream, remoteStrem }) => {
       <div className="justify-center items-center">
         <video
           className=" w-36 h-36 items-center border rounded-full object-cover"
-          ref={localStream}
+          ref={(ref) => {
+            if (ref) {
+              ref.srcObject = localStream;
+            }
+          }}
           autoPlay={true}
           muted={true}
         />
@@ -15,7 +19,11 @@ const WaitingFreindVideoContainer = ({ localStream, remoteStrem }) => {
       <div className="justify-center items-center">
         <video
           className=" w-36 h-36 items-center border rounded-full object-cover"
-          ref={remoteStrem}
+          ref={(ref) => {
+            if (ref) {
+              ref.srcObject = remoteStrem;
+            }
+          }}
           autoPlay={true}
           muted={true}
         />

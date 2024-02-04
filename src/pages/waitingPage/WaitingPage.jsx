@@ -4,10 +4,8 @@ import WaitingFreindVideoContainer from "../createRoomPage/video/WaitingFreindVi
 import CreateRoomPageFooter from "../createRoomPage/CreateRoomPageFooter";
 import {
   createPeerConnection,
-  getLocalStream,
-  getRemoteStream,
-  initiateLocalStream,
   useAnswerProcessing,
+  useLocalCameraStream,
   useSendOfferSending,
   useSendingAnswer,
 } from "../../realtimeComunication/webRTCManager";
@@ -16,29 +14,27 @@ import socket from "../../realtimeComunication/socket";
 const WaitingPage = () => {
   const navigator = useNavigate();
   const { roomId } = useParams();
-  const localVideoRef = useRef(null);
-  const remoteVideoRef = useRef(null);
+  const { localStream } = useLocalCameraStream();
   const [peerConnection, setPeerConnection] = useState(null);
 
   useEffect(() => {
-    (async () => {
-      await initiateLocalStream();
-      const localStream = getLocalStream();
-      if (localVideoRef.current) {
-        localVideoRef.current.srcObject = localStream;
-      }
-      const pc = await createPeerConnection(localStream);
-      setPeerConnection(pc);
-    })();
-  }, []);
+    if (localStream) {
+      const initPeerConnection = async () => {
+        const pc = await createPeerConnection(localStream);
+        setPeerConnection(pc);
+      };
+      initPeerConnection();
+    }
+  }, [localStream]);
 
   const { sendOffer } = useSendOfferSending(peerConnection, roomId);
   const { handleConnectionOffer } = useSendingAnswer(peerConnection, roomId);
   const { handleOfferAnswer } = useAnswerProcessing(peerConnection);
 
   useEffect(() => {
+    console.log(peerConnection);
     socket.on("answer", handleOfferAnswer);
-    socket.on("another-person_ready", sendOffer);
+    socket.on("another-person-ready", sendOffer);
     socket.on("send-connection-offer", handleConnectionOffer);
 
     return () => {
@@ -46,19 +42,13 @@ const WaitingPage = () => {
       socket.off("send-connection-offer", handleConnectionOffer);
       socket.off("answer", handleOfferAnswer);
     };
-  }, [roomId, sendOffer, handleConnectionOffer, handleOfferAnswer]);
-
-  useEffect(() => {
-    const checkRemoteStream = setInterval(() => {
-      const remoteStream = getRemoteStream();
-      if (remoteStream && remoteVideoRef.current) {
-        remoteVideoRef.current.srcObject = remoteStream;
-        clearInterval(checkRemoteStream);
-      }
-    }, 1000);
-
-    return () => clearInterval(checkRemoteStream);
-  }, []);
+  }, [
+    peerConnection,
+    roomId,
+    sendOffer,
+    handleConnectionOffer,
+    handleOfferAnswer,
+  ]);
 
   const handleStartGame = () => {
     navigator(`/play-room/${roomId}`);
@@ -73,8 +63,8 @@ const WaitingPage = () => {
         <div className="h-full w-full mt-5 flex flex-col items-center  bg-white shadow-xl rounded-xl justify-center  animate-fade-up">
           {/* 비디오 */}
           <WaitingFreindVideoContainer
-            localStream={localVideoRef}
-            remoteStrem={remoteVideoRef}
+            localStream={localStream}
+            remoteStrem={localStream}
           />
           {/* 버튼 */}
           <CreateRoomPageFooter onStart={handleStartGame} />
