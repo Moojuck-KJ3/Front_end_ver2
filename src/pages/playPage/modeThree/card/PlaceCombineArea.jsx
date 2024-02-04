@@ -92,7 +92,8 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
       if (response.error) {
         console.log(response.exception);
       } else {
-        setPlaceList(response);
+        console.log(response);
+        setPlaceList(response.restaurants);
       }
     };
 
@@ -153,20 +154,15 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
       return (
         <div className="flex flex-col">
           <ul className="flex gap-14 justify-center">
-            {placeList.map(
-              (
-                place,
-                index //DUMMY_PLACE.map((place, index) => (
-              ) => (
-                <li
-                  key={index}
-                  id={place.id}
-                  onClick={() => handleCardClick("selectedTag", place)}
-                >
-                  <PlaceCard imgUrl={place.imgUrl} />
-                </li>
-              )
-            )}
+            {placeList.map((place, index) => (
+              <li
+                key={index}
+                id={place.restarantId}
+                onClick={() => handleCardClick("selectedTag", place)}
+              >
+                <PlaceCard imgUrl={place.imgUrl} />
+              </li>
+            ))}
           </ul>
         </div>
       );

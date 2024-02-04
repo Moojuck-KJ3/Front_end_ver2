@@ -110,7 +110,7 @@ export const getMoodKeyword = async (roomId) => {
   try {
     const response = await apiClient.get(`/keywords/mood?roomId=${roomId}`);
     const responseData = {
-      moodKeywords: response.data.moodKeywords,
+      moodKeywords: response.data,
     };
 
     return responseData;
@@ -162,7 +162,7 @@ export const getKeywordsToRests = async (roomId) => {
     );
 
     const responseData = {
-      restaurants: response.data.restaurants,
+      restaurants: response.data,
     };
 
     return responseData;
