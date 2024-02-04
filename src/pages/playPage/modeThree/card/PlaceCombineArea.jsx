@@ -153,10 +153,10 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
       return (
         <div className="flex flex-col">
           <ul className="flex gap-14 justify-center">
-            {DUMMY_PLACE.map(
+            {placeList.map(
               (
                 place,
-                index //placeList.map((place, index) => (
+                index //DUMMY_PLACE.map((place, index) => (
               ) => (
                 <li
                   key={index}
