@@ -5,8 +5,8 @@ import CreateRoomPageFooter from "../createRoomPage/CreateRoomPageFooter";
 import {
   createPeerConnection,
   getLocalStream,
-  getRemoteStream,
   initiateLocalStream,
+  OfferSending,
 } from "../../realtimeComunication/webRTCManager";
 
 const WaitingPage = () => {
@@ -19,19 +19,9 @@ const WaitingPage = () => {
     const setupWebRTC = async () => {
       await initiateLocalStream();
       const localStream = getLocalStream();
-      if (localVideoRef.current) {
-        localVideoRef.current.srcObject = localStream;
-      }
-      console.log(localVideoRef.current);
-      await createPeerConnection();
-
-      const checkRemoteStream = setInterval(() => {
-        const remoteStream = getRemoteStream();
-        if (remoteStream && remoteVideoRef.current) {
-          remoteVideoRef.current.srcObject = remoteStream;
-          clearInterval(checkRemoteStream);
-        }
-      }, 1000);
+      const { peerConnection } = createPeerConnection(localStream);
+      const { sendOffer } = OfferSending(peerConnection);
+      console.log(sendOffer);
     };
 
     setupWebRTC();

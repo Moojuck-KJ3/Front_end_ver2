@@ -1,4 +1,6 @@
-import socket from './socket';
+import { useParams } from "react-router-dom";
+import socket from "./socket";
+import { useCallback } from "react";
 
 let peerConnection;
 let localStream = null;
@@ -18,40 +20,28 @@ export const initiateLocalStream = async () => {
   return localStream;
 };
 
-export const createPeerConnection = async () => {
+export const createPeerConnection = async (localStream) => {
   peerConnection = new RTCPeerConnection(configuration);
 
   localStream.getTracks().forEach((track) => {
     peerConnection.addTrack(track, localStream);
   });
 
-  peerConnection.ontrack = (event) => {
-    [remoteStream] = event.streams[0];
-  };
-
-  // Listen for ICE candidates
-  peerConnection.onicecandidate = (event) => {
-    if (event.candidate) {
-      socket.emit("send-candidate", event.candidate);
-    }
-  };
-
-  // Handle receiving candidates from the remote peer
-  socket.on("receive-candidate", (candidate) => {
-    peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
-  });
-
   return peerConnection;
 };
 
-export const closeCall = () => {
-  if (peerConnection) {
-    peerConnection.close();
-    peerConnection = null;
-  }
-  if (localStream) {
-    localStream.getTracks().forEach((track) => track.stop());
-    localStream = null;
-  }
-  remoteStream = null;
-};
+export function OfferSending(peerConnection) {
+  const { roomId } = useParams();
+
+  const sendOffer = useCallback(async () => {
+    const offer = await peerConnection.createOffer();
+    await peerConnection.setLocalDescription(offer);
+
+    socket.emit("send_connection_offer", {
+      roomId,
+      offer,
+    });
+  }, [roomId]);
+
+  return { sendOffer };
+}
