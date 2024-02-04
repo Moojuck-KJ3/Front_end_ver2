@@ -108,9 +108,7 @@ export const sendFoodCategoryButton = async (roomId, data) => {
 // 무드 키워드 수집 모드에서, 처음에 get 요청을 보내 미리 뜰 분위기 키워드 표시
 export const getMoodKeyword = async (roomId) => {
   try {
-    const response = await apiClient.get(
-      `/rooms/mood-keyword?roomId=${roomId}`
-    );
+    const response = await apiClient.get(`/keywords/mood?roomId=${roomId}`);
     const responseData = {
       moodKeywords: response.data.moodKeywords,
     };
@@ -160,7 +158,7 @@ export const postMoodKeywordButton = async (roomId, data) => {
 export const getKeywordsToRests = async (roomId) => {
   try {
     const response = await apiClient.get(
-      `/rooms/keywords-to-rests?roomId=${roomId}`
+      `/restaurants/keywords?roomId=${roomId}`
     );
 
     const responseData = {
@@ -198,9 +196,16 @@ export const postKeywordsToRests = async (roomId, data) => {
 // 결과 페이지에서 선택된 식당과 선택이 되지 못하였지만 추천된 식당 리스트를 받는다
 export const getResult = async (roomId) => {
   try {
-    const response = await apiClient.get(`/rooms/result?roomId=${roomId}`);
+    const response = await apiClient.get(
+      `/restaurants/results?roomId=${roomId}`
+    );
     const responseData = {
-      pickRest: response.data.pickRest,
+      name: response.data.name,
+      rating: response.data.rating,
+      address: response.data.address,
+      thumnail: response.data.thumnail,
+      menuList: response.data.menuList,
+      reviews: response.data.reviews,
     };
 
     return responseData;
@@ -216,7 +221,7 @@ export const getResult = async (roomId) => {
 // room에서 의사결정 버튼 누른 경우에 대한 get 요청
 export const selectDone = async (roomId) => {
   try {
-    return await apiClient.get(`/rooms/result?roomId=${roomId}`);
+    return await apiClient.get(`/rooms/select-done?roomId=${roomId}`);
   } catch (exception) {
     checkResponseCode(exception);
     return {

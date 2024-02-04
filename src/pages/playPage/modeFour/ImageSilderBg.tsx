@@ -3,7 +3,7 @@ import { getResult } from "../../../api";
 import { useParams } from "react-router-dom";
 
 const ImageSilderBg = () => {
-  const [pickRests, setPickRests] = useState(null);
+  const [pickRest, setPickRests] = useState(null);
   const roomId = useParams();
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const ImageSilderBg = () => {
             setTimeout(retry, 1000);
           }
         } else {
-          setPickRests(result.pickRest);
+          setPickRests(result);
         }
       };
 
@@ -40,7 +40,9 @@ const ImageSilderBg = () => {
   return (
     <div className="flex flex-col h-full w-full px-20 justify-center rounded-xl scale-90">
       <div className="flex justify-between">
-        <h3 className="text-2xl my-4 font-bold ">강남역 OOO 카페</h3>
+        <h3 className="text-2xl my-4 font-bold ">
+          {pickRest ? pickRest?.name : '강남역 OOO 카페'}
+        </h3>
       </div>
       <div className="grid grid-cols-5 gap-2">
         <img
