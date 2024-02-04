@@ -7,6 +7,8 @@ import HelpIcon from "@mui/icons-material/Help";
 import LoopIcon from "@mui/icons-material/Loop";
 import TastyTag1 from "./TastyTag1";
 import TastyTag from "./TastyTag";
+import { useParams } from "react-router-dom";
+import { getKeywordsToRests, postKeywordsToRests } from "../../../../api";
 
 const DUMMY_RESULT_PLACE = [
   {
@@ -78,6 +80,25 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [showContent, setShowContent] = useState(false);
   const [isSpining, setIsSpining] = useState(false);
+  const [placeList, setPlaceList] = useState([]);
+
+  const roomId = useParams();
+
+  useEffect(() => {
+    // get 요청으로 getKeywordsToRests 요청 예정
+    // 현재 생각으론 dummy_place를 대체할 예정
+    const getPlaceList = async (roomId) => {
+      const response = await getKeywordsToRests(roomId);
+      if (response.error) {
+        console.log(response.exception);
+      } else {
+        console.log(response);
+        setPlaceList(response.restaurants);
+      }
+    };
+
+    getPlaceList(roomId);
+  }, []);
 
   useEffect(() => {
     if (draggedTagA && draggedTagB) {
@@ -106,6 +127,9 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
     console.log(item);
 
     if (item) {
+      // drag 하여 놓을때 post 요청
+      // post 요청이 성공한 경우, response에 error가 없는 경우
+
       if (targetList === "A") {
         setDraggedTagA(item);
       } else if (targetList === "B") {
@@ -115,7 +139,6 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
 
     setIsDragging(false);
   };
-
 
   const handleResetTarget = () => {
     setDraggedTagA(null);
@@ -131,10 +154,10 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
       return (
         <div className="flex flex-col">
           <ul className="flex gap-14 justify-center">
-            {DUMMY_PLACE.map((place, index) => (
+            {placeList.map((place, index) => (
               <li
                 key={index}
-                id={place.id}
+                id={place.restarantId}
                 onClick={() => handleCardClick("selectedTag", place)}
               >
                 <PlaceCard imgUrl={place.imgUrl} />

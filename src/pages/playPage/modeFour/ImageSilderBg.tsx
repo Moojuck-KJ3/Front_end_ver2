@@ -1,10 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getResult } from "../../../api";
+import { useParams } from "react-router-dom";
 
-const ImageSilderBg = ({ img }) => {
+const ImageSilderBg = () => {
+  const [pickRest, setPickRests] = useState(null);
+  const roomId = useParams();
+
+  useEffect(() => {
+    // 중요한 결과이므로, 최대 재시도 횟수를 정해두고, 그 횟수만큼 재시도시킨다
+    const maxRetries = 3;
+    let retryCount = 0;
+
+    const getResultData = async (roomId) => {
+      const retry = async () => {
+        const result = await getResult(roomId);
+
+        if (result.error) {
+          console.log(result.error);
+
+          // 재시도 횟수가 최대 재시도 횟수보다 작은 경우에만 재시도
+          if (retryCount < maxRetries) {
+            retryCount++;
+            console.log(`Retrying... (${retryCount}/${maxRetries})`);
+
+            // 1초 후에 재시도
+            setTimeout(retry, 1000);
+          }
+        } else {
+          setPickRests(result);
+        }
+      };
+
+      retry();
+    };
+
+    getResultData(roomId);
+  }, []);
+
   return (
     <div className="flex flex-col h-full w-full px-20 justify-center rounded-xl scale-90">
       <div className="flex justify-between">
-        <h3 className="text-2xl my-4 font-bold ">강남역 OOO 카페</h3>
+        <h3 className="text-2xl my-4 font-bold ">
+          {pickRest ? pickRest?.name : '강남역 OOO 카페'}
+        </h3>
       </div>
       <div className="grid grid-cols-5 gap-2">
         <img
