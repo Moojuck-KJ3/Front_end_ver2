@@ -35,7 +35,7 @@ export function useSendOfferSending(peerConnection, roomId) {
     const offer = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(offer);
 
-    socket.emit("send_connection_offer", {
+    socket.emit("send-connection-offer", {
       roomId,
       offer,
     });

@@ -15,34 +15,40 @@ const WaitingPage = () => {
   const { roomId } = useParams();
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
-  const [peerConnection, SetpeerConnection] = useState(null);
+  const [peerConnection, setPeerConnection] = useState(null);
+
   useEffect(() => {
-    const setupWebRTC = async () => {
+    (async () => {
       await initiateLocalStream();
       const localStream = getLocalStream();
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = localStream;
       }
-      console.log(localVideoRef.current);
       const pc = await createPeerConnection(localStream);
-      SetpeerConnection(pc);
-      console.log(peerConnection);
-
-      const checkRemoteStream = setInterval(() => {
-        const remoteStream = getRemoteStream();
-        if (remoteStream && remoteVideoRef.current) {
-          remoteVideoRef.current.srcObject = remoteStream;
-          clearInterval(checkRemoteStream);
-        }
-      }, 1000);
-    };
-
-    setupWebRTC();
-
-    return () => {};
+      setPeerConnection(pc);
+    })();
   }, []);
 
   const { sendOffer } = useSendOfferSending(peerConnection, roomId);
+
+  useEffect(() => {
+    if (peerConnection && roomId) {
+      console.log("sendOffer");
+      sendOffer();
+    }
+  }, [peerConnection, roomId, sendOffer]);
+
+  useEffect(() => {
+    const checkRemoteStream = setInterval(() => {
+      const remoteStream = getRemoteStream();
+      if (remoteStream && remoteVideoRef.current) {
+        remoteVideoRef.current.srcObject = remoteStream;
+        clearInterval(checkRemoteStream);
+      }
+    }, 1000);
+
+    return () => clearInterval(checkRemoteStream);
+  }, []);
 
   const handleStartGame = () => {
     navigator(`/play-room/${roomId}`);
