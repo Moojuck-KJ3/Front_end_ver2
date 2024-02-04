@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import WaitingFreindVideoContainer from "../createRoomPage/video/WaitingFreindVideoContainer";
 import CreateRoomPageFooter from "../createRoomPage/CreateRoomPageFooter";
 import {
@@ -6,14 +6,35 @@ import {
   usePeerConnection,
 } from "../../realtimeComunication/webRTCManager";
 import CopyToClipboardButton from "./ClipboardClipboardCopyButton";
+import { useEffect, useState } from "react";
+import socket from "../../realtimeComunication/socket";
 
 const WaitingPage = ({ localStream }) => {
+  const [isAllPlayerReady, setIsAllPlayerReady] = useState(false);
+  const navigator = useNavigate();
   const { roomId } = useParams();
+
   const { peerConnection, guestStream } = usePeerConnection(localStream);
   useChatConnection(peerConnection);
 
+  useEffect(() => {
+    socket.on("all-player-ready", () => {
+      console.log("all-player-ready");
+      setIsAllPlayerReady(true);
+    });
+    socket.on("start-play-room-response", () => {
+      console.log("start-play-room");
+      navigator(`/play-room/${roomId}`);
+    });
+
+    return () => {
+      socket.off("all-player-ready");
+      socket.off("start-play-room");
+    };
+  });
+
   const handleStartGame = () => {
-    // navigator(`/play-room/${roomId}`);
+    socket.emit("start-play-room", { roomId });
   };
 
   return (
@@ -32,7 +53,10 @@ const WaitingPage = ({ localStream }) => {
             remoteStrem={guestStream}
           />
           {/* 버튼 */}
-          <CreateRoomPageFooter onStart={handleStartGame} />
+          <CreateRoomPageFooter
+            isActivate={isAllPlayerReady}
+            onStart={handleStartGame}
+          />
         </div>
       </div>
     </div>

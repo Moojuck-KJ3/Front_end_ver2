@@ -22,7 +22,7 @@ const CopyToClipboardButton = ({ roomId }) => {
       <div color="primary">
         <ContentCopyIcon />
         <Snackbar
-          message="친구에게 해당 룸ID를 보내주세요!" // Updated message
+          message="룸ID를 복사했습니다!" // Updated message
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
           autoHideDuration={2000}
           onClose={() => setOpen(false)}

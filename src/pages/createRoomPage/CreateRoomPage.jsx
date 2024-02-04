@@ -60,6 +60,7 @@ const CreateRoomPage = () => {
 
   const handleLogout = () => {
     // Todo 로그아웃 버튼
+    alert("로그아웃 구현해줘!~~");
   };
 
   return (

@@ -67,7 +67,14 @@ export function usePeerConnection(localStream) {
 
   const peerConnection = useMemo(() => {
     const connection = new RTCPeerConnection({
-      iceServers: [{ urls: "stun:stun2.1.google.com:19302" }],
+      iceServers: [
+        { urls: "stun:stun2.1.google.com:19302" },
+        {
+          urls: "turn:13.236.161.65:3478",
+          username: "adminuser",
+          credential: "mujuck101",
+        },
+      ],
     });
 
     connection.addEventListener("icecandidate", ({ candidate }) => {
