@@ -69,64 +69,6 @@ export const register = async (data) => {
   }
 };
 
-// secure routes
-export const sendFriendInvitation = async (data) => {
-  console.log(data);
-
-  try {
-    return await apiClient.post("/friends/requests", data);
-  } catch (exception) {
-    checkResponseCode(exception);
-    return {
-      error: true,
-      exception,
-    };
-  }
-};
-
-export const acceptFriendInvitation = async (data) => {
-  try {
-    return await apiClient.post("/friends/requests/accept", data);
-  } catch (exception) {
-    checkResponseCode(exception);
-    return {
-      error: true,
-      exception,
-    };
-  }
-};
-
-export const rejectFriendInvitation = async (data) => {
-  try {
-    return await apiClient.post("/friends/requests/reject", data);
-  } catch (exception) {
-    checkResponseCode(exception);
-    return {
-      error: true,
-      exception,
-    };
-  }
-};
-
-// Main Page에서 Data 받는 Get API
-export const getMainData = async () => {
-  try {
-    const response = await apiClient.get("/main");
-
-    const responseData = {
-      friends: response.data.friends,
-    };
-
-    return responseData;
-  } catch (exception) {
-    checkResponseCode(exception);
-    return {
-      error: true,
-      exception,
-    };
-  }
-};
-
 // Room API
 // 1. 모든 요청은 roomId를 파라미터로 받는다
 // 2. get 요청엔 response가 있음
