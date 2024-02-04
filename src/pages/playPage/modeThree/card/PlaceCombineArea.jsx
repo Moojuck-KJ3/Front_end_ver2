@@ -92,7 +92,7 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
       if (response.error) {
         console.log(response.exception);
       } else {
-        console.log(response);
+        console.log(response.restaurants);
         setPlaceList(response.restaurants);
       }
     };
@@ -160,7 +160,8 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
                 id={place.restarantId}
                 onClick={() => handleCardClick("selectedTag", place)}
               >
-                <PlaceCard imgUrl={place.imgUrl} />
+                {/* imgUrl={place.imgUrl} */}
+                <PlaceCard place={place} />
               </li>
             ))}
           </ul>
