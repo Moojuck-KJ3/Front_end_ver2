@@ -1,53 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
 
-//import { createRoom } from "../../../api";
-import { createRoom } from "../../../realtimeComunication/socket";
-import { socket } from "../../../realtimeComunication/socket";
-
-const API_KEY = "33d3165b1407ac3d92203219d067a088";
-const JS_KEY = "fa77f847dc1c042e320456f1f78748ad";
-
-const START_LAT = "37.498";
-const START_LNG = "127.028";
-const START_NAME = "강남역 2호선";
-
-const CreateRoomModal = ({ onSetting }) => {
-  const navigate = useNavigate();
 const CreateRoomModal = ({ onModal, onCreate }) => {
   const [info, setInfo] = useState();
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
   const [searchQuery, setSearchQuery] = useState("");
-
-  // 만들때, back에 전달할 목표의 위도 경도
-  const [purPosePosition, setPurposePosition] = useState([
-    START_LAT,
-    START_LNG,
-  ]);
-  const [purPoseName, setPurposeName] = useState(START_NAME);
-
-  const handleCreateRoom = () => {
-    // 방 생성 로직 여기
-    const createRoomData = {
-      purposeName: purPoseName,
-      purposeAddress: purPosePosition,
-    };
-
-    const createRooms = async (createRoomData) => {
-      const response = await createRoom(createRoomData);
-      if (response.error) {
-        console.log(response.exception);
-      } else {
-        const roomId = response.roomId;
-        navigate(`/waiting-friends${roomId}`);
-      }
-    };
-
-    createRooms(createRoomData);
-  };
 
   const handleSearch = () => {
     if (!searchQuery) {
