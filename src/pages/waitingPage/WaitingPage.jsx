@@ -21,7 +21,7 @@ const WaitingPage = ({ localStream }) => {
       <div className="w-[500px] h-[600px] animate-fade-up">
         <div className="sm-m-10 bg-white shadow-xl py-4 rounded-xl flex flex-col jus justify-center items-center">
           <h1 className=" font-bold justify-center">친구를 기다리는 중...</h1>
-          <CopyToClipboardButton gameCode={roomId} />
+          <CopyToClipboardButton roomId={roomId} />
         </div>
 
         {/* 메인 컨텐츠  */}

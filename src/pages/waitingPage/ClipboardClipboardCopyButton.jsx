@@ -2,29 +2,29 @@ import { useState } from "react";
 import { IconButton, Snackbar } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy"; // Changed to use the ContentCopy icon
 
-const CopyToClipboardButton = ({ gameCode }) => {
+const CopyToClipboardButton = ({ roomId }) => {
   // Accepts a gameCode prop
   const [open, setOpen] = useState(false);
 
   const handleClick = () => {
     navigator.clipboard
-      .writeText(gameCode) // Copies the gameCode prop
-      .then(() => setOpen(true)) // Shows the Snackbar on successful copy
-      .catch((err) => console.error("Could not copy text: ", err)); // Logs an error if the copy fails
+      .writeText(roomId)
+      .then(() => setOpen(true))
+      .catch((err) => console.error("Could not copy text: ", err));
   };
 
   return (
     <div
-      className="flex gap-2 border p-2 m-2 rounded-lg hover:cursor-pointer hover:border-green-200 transition-all"
+      className="flex gap-2  text-gray-600 bg-gray-100 py-2 font-bold px-4 m-2 rounded-lg hover:cursor-pointer hover:bg-green-100 transition-all"
       onClick={handleClick}
     >
-      <h1>{gameCode}</h1>
+      <h1>{roomId}</h1>
       <div color="primary">
         <ContentCopyIcon />
         <Snackbar
           message="친구에게 해당 룸ID를 보내주세요!" // Updated message
-          anchorOrigin={{ vertical: "top", horizontal: "center" }} // Changed to match the position in the screenshot
-          autoHideDuration={1000}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          autoHideDuration={2000}
           onClose={() => setOpen(false)}
           open={open}
         />

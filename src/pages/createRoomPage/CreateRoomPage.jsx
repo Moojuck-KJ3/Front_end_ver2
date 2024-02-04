@@ -58,9 +58,13 @@ const CreateRoomPage = () => {
     socket.emit("join-room", { roomId });
   };
 
+  const handleLogout = () => {
+    // Todo 로그아웃 버튼
+  };
+
   return (
     <div className=" min-h-screen text-gray-900 flex justify-center">
-      <div className="m-20  max-w-screen-xl sm-m-10 bg-white shadow-lg sm:rounded-lg flex justify-center flex-1 animate-fade-up">
+      <div className="m-60  max-w-screen-xl sm-m-10 bg-white shadow-lg sm:rounded-lg flex justify-center flex-1 animate-fade-up">
         <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
           <div className="mt-5 flex flex-col items-center">
             <h1 className="font-bold text-2xl">방 생성</h1>
@@ -86,6 +90,14 @@ const CreateRoomPage = () => {
                 >
                   <span className="">방 ID로 참가하기</span>
                 </button>
+                <div>
+                  <button
+                    className="mt-3 tracking-wide font-semibold bg-gray-200 text-gray-600 w-full py-2 rounded-lg hover:bg-gray-300 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
+                    onClick={handleLogout}
+                  >
+                    <span className="">로그아웃</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
