@@ -38,12 +38,12 @@ const WaitingPage = () => {
 
   useEffect(() => {
     socket.on("answer", handleOfferAnswer);
-    socket.on("another_person_ready", sendOffer);
-    socket.on("send_connection_offer", handleConnectionOffer);
+    socket.on("another-person_ready", sendOffer);
+    socket.on("send-connection-offer", handleConnectionOffer);
 
     return () => {
-      socket.off("another_person_ready", sendOffer);
-      socket.off("send_connection_offer", handleConnectionOffer);
+      socket.off("another-person-ready", sendOffer);
+      socket.off("send-connection-offer", handleConnectionOffer);
       socket.off("answer", handleOfferAnswer);
     };
   }, [roomId, sendOffer, handleConnectionOffer, handleOfferAnswer]);

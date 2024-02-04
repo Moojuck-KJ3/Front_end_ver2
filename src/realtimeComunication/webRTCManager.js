@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import socket from "./socket";
 import { useCallback } from "react";
 
@@ -47,7 +46,9 @@ export function useSendOfferSending(peerConnection, roomId) {
 export function useSendingAnswer(peerConnection, roomId) {
   const handleConnectionOffer = useCallback(
     async ({ offer }) => {
-      await peerConnection.setRemoteDescription(offer);
+      const sessionDescription = new RTCSessionDescription(offer);
+      console.log(sessionDescription);
+      await peerConnection.setRemoteDescription(sessionDescription);
       const answer = await peerConnection.createAnswer();
       await peerConnection.setLocalDescription(answer);
 
