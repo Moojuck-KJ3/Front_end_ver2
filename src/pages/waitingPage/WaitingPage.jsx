@@ -20,6 +20,7 @@ const WaitingPage = () => {
   const handleStartGame = () => {
     navigator(`/play-room/${roomId}`);
   };
+
   return (
     <div className=" min-h-screen text-gray-800 flex justify-center items-center">
       <div className="w-[500px] h-[600px] ">

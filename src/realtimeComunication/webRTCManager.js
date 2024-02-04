@@ -62,26 +62,35 @@ export function useLocalCameraStream() {
 }
 
 export function usePeerConnection(localStream, roomId) {
+  const [peerConnection, setPeerConnection] = useState(null);
   const [guestStream, setGuestStream] = useState(null);
 
-  const peerConnection = useMemo(() => {
+  useEffect(() => {
+    if (!localStream) return; // Do nothing if localStream is null
+
     const connection = new RTCPeerConnection({
       iceServers: [{ urls: "stun:stun2.1.google.com:19302" }],
-    });
-
-    connection.addEventListener("icecandidate", ({ candidate }) => {
-      socket.emit("send_candidate", { candidate, roomId });
-    });
-
-    connection.addEventListener("track", ({ streams }) => {
-      setGuestStream(streams[0]);
     });
 
     localStream.getTracks().forEach((track) => {
       connection.addTrack(track, localStream);
     });
 
-    return connection;
+    connection.onicecandidate = ({ candidate }) => {
+      if (candidate) {
+        socket.emit("send_candidate", { roomId, candidate });
+      }
+    };
+
+    connection.ontrack = ({ streams }) => {
+      setGuestStream(streams[0]);
+    };
+
+    setPeerConnection(connection);
+
+    return () => {
+      connection.close();
+    };
   }, [localStream, roomId]);
 
   return { peerConnection, guestStream };
