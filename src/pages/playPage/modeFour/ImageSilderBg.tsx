@@ -1,6 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getResult } from "../../../api";
+import { useParams } from "react-router-dom";
 
-const ImageSilderBg = ({ img }) => {
+const ImageSilderBg = () => {
+  const [pickRests, setPickRests] = useState(null);
+  const [restList, setRestList] = useState([]);
+  const roomId = useParams();
+
+  useEffect(() => {
+    // 중요한 결과이므로, 최대 재시도 횟수를 정해두고, 그 횟수만큼 재시도시킨다
+    const maxRetries = 3;
+    let retryCount = 0;
+
+    const getResultData = async (roomId) => {
+      const retry = async () => {
+        const result = await getResult(roomId);
+
+        if (result.error) {
+          console.log(result.error);
+
+          // 재시도 횟수가 최대 재시도 횟수보다 작은 경우에만 재시도
+          if (retryCount < maxRetries) {
+            retryCount++;
+            console.log(`Retrying... (${retryCount}/${maxRetries})`);
+
+            // 1초 후에 재시도
+            setTimeout(retry, 1000);
+          }
+        } else {
+          setPickRests(result.pickRest);
+          setRestList(result.restaurants);
+        }
+      };
+
+      retry();
+    };
+
+    getResultData(roomId);
+  }, []);
+
   return (
     <div className="flex flex-col h-full w-full px-20 justify-center rounded-xl scale-90">
       <div className="flex justify-between">
