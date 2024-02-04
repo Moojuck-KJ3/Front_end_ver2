@@ -1,17 +1,14 @@
 import socket from "./socket";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export function useChatConnection(peerConnection, roomId) {
   const { sendOffer } = useSendOfferSending(peerConnection, roomId);
   const { handleConnectionOffer } = useSendingAnswer(peerConnection, roomId);
   const { handleOfferAnswer } = useAnswerProcessing(peerConnection);
 
-  const handleConnection = () => {
-    socket.on("connect", () => {
-      console.log("succesfully connected with socket.io server");
-      console.log(socket.id);
-    });
-  };
+  const handleConnection = useCallback(() => {
+    socket.emit("join-room", roomId);
+  }, [roomId]);
 
   const handleReceiveCandidate = useCallback(
     ({ candidate }) => {
@@ -21,22 +18,21 @@ export function useChatConnection(peerConnection, roomId) {
   );
 
   useEffect(() => {
-    socket.connect();
     socket.on("connect", handleConnection);
     socket.on("answer", handleOfferAnswer);
     socket.on("another-person-ready", sendOffer);
     socket.on("send-connection-offer", handleConnectionOffer);
-    socket.on("send_candidate", handleReceiveCandidate);
+    socket.on("send-candidate", handleReceiveCandidate);
 
     return () => {
       socket.off("connect", handleConnection);
       socket.off("answer", handleOfferAnswer);
       socket.off("another-person-ready", sendOffer);
       socket.off("send-connection-offer", handleConnectionOffer);
-      socket.off("send_candidate", handleReceiveCandidate);
+      socket.off("send-candidate", handleReceiveCandidate);
     };
   }, [
-    peerConnection,
+    handleConnection,
     roomId,
     handleOfferAnswer,
     sendOffer,
@@ -78,7 +74,7 @@ export function usePeerConnection(localStream, roomId) {
 
     connection.onicecandidate = ({ candidate }) => {
       if (candidate) {
-        socket.emit("send_candidate", { roomId, candidate });
+        socket.emit("send-candidate", { roomId, candidate });
       }
     };
 
