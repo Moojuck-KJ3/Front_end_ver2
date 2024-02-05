@@ -4,8 +4,14 @@ import Timer from "./Timer";
 
 import { sendFoodCategorySpeech } from "../../api";
 import { useParams } from "react-router";
+import socket from "../../realtimeComunication/socket";
+import KeyWordFlippableCard from "../button/keywordCard";
 
-const VoiceRecoder = () => {
+// isOwner : user의 voiceRecoder인지 아닌지 구분
+// 그에 따라 말한 결과 Response의 userId와 비교하여 다른 user의 음성인식 결과를 보여주는지 구분
+const DUMMY_KEYWORDS = ["한식", "중식", "분위기 좋은", "운치있는"];
+
+const VoiceRecoder = (isOwner) => {
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [showTimer, setShowTimer] = useState(true);
@@ -15,10 +21,19 @@ const VoiceRecoder = () => {
   const recognitionRef = useRef(null);
 
   const { roomId } = useParams();
+  const serverSendTextRef = useRef("");
+
+  const [receiveKeywords, setReceiveKeywords] = useState([]);
+
+  useEffect(() => {
+    console.log("serverSendText : ", transcript);
+    serverSendTextRef.current = transcript;
+  }, [transcript]);
 
   // Function to start recording
   const startRecording = () => {
-    setTranscript("");
+    //setTranscript("");
+    serverSendTextRef.current = "";
 
     setIsRecording(true);
     // Create a new SpeechRecognition instance and configure it
@@ -30,7 +45,7 @@ const VoiceRecoder = () => {
     recognitionRef.current.onresult = (event) => {
       const tempScript = event.results[event.results.length - 1][0].transcript;
       // Log the recognition results and update the transcript state
-      console.log("tempScript : ", tempScript);
+      //console.log("tempScript : ", tempScript);
       setTranscript(tempScript);
     };
 
@@ -39,6 +54,17 @@ const VoiceRecoder = () => {
   };
 
   useEffect(() => {
+    socket.on("receive-speech-keyword", (data) => {
+      console.log("receive-speech-keyword : ", data);
+      const userDetails = localStorage.getItem("user");
+      const userId = JSON.parse(userDetails).id;
+      if (isOwner && data.userId === userId) {
+        setReceiveKeywords(data.keywords);
+      } else if (!isOwner && data.userId !== userId) {
+        setReceiveKeywords(data.keywords);
+      }
+    });
+
     setShowTimer(true);
     startRecording();
     const start = async () => {
@@ -57,6 +83,8 @@ const VoiceRecoder = () => {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
       }
+
+      socket.off("receive-speech-keyword");
     };
   }, []);
 
@@ -71,13 +99,15 @@ const VoiceRecoder = () => {
   };
 
   const sendTranscriptToServer = () => {
-    console.log("Sending transcript to server:", transcript);
+    console.log("Sending transcript to server:", serverSendTextRef.current);
 
     const data = {
-      userSpeech: transcript,
+      userSpeech: serverSendTextRef.current,
     };
 
     const sendFoodCategoryData = async (roomId, data) => {
+      console.log("roomId : ", roomId);
+      console.log("data : ", data);
       const response = sendFoodCategorySpeech(roomId, data);
       if (response.error) {
         console.log(response.exception);
@@ -98,6 +128,7 @@ const VoiceRecoder = () => {
 
   const handleReady = () => {
     setOnReady(true);
+    // 이거 누르면 실제로 server로 완료된 keyword를 보내야 한다
   };
 
   return (
@@ -145,7 +176,17 @@ const VoiceRecoder = () => {
             </div>
 
             <div className="h-[70px] flex border items-center justify-center rounded-md m-4">
-              <p className="font-semibold">#한식, #한식당, #일식, #중식</p>
+              {receiveKeywords.length > 0
+                ? receiveKeywords.map((keyword, index) => (
+                    <p key={index} className="font-semibold">
+                      #{keyword}
+                    </p>
+                  ))
+                : DUMMY_KEYWORDS.map((keyword, index) => (
+                    <KeyWordFlippableCard key={index}>
+                      #{keyword}
+                    </KeyWordFlippableCard>
+                  ))}
             </div>
             <div className="flex justify-center">
               <button

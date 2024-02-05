@@ -107,8 +107,8 @@ const PlayRoomPage = () => {
               <div className="w-full flex flex-col">
                 {/* 컨텐츠 */}
                 <div className="flex gap-5">
-                  <VoiceRecoder />
-                  <VoiceRecoder />
+                  <VoiceRecoder isOwner={true} /> {/* 좌측이 나 */}
+                  <VoiceRecoder isOwner={false} /> {/* 우측이 다른 user */}
                 </div>
               </div>
             )}
