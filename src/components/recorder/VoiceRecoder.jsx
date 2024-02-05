@@ -35,7 +35,7 @@ const isRightVoices = (isOwner, ReceiveUserId) => {
   return false;
 };
 
-const VoiceRecoder = (isOwner, playerHand) => {
+const VoiceRecoder = ({ isOwner, playerHand }) => {
   //const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [showTimer, setShowTimer] = useState(true);
@@ -153,9 +153,7 @@ const VoiceRecoder = (isOwner, playerHand) => {
     if (isOwner === false) return;
 
     setOnReady(true);
-    // 이거 누르면 실제로 server로 완료된 keyword를 보내야 한다
 
-    // '선택된 keyword'들을 보내야 함 (playhand 와 관련될듯 하다)
     const data = {
       selectedKeywords: playerHand.foodTag,
     };
