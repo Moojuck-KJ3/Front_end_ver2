@@ -11,6 +11,8 @@ import PlayRoomContainer from "./PlayRoomContainer";
 import ModeOneExpainModal from "../../components/modal/ModeOneExpainModal";
 import SelectModeButtons from "./modeThree/SelectModeButtons";
 import {
+  getLocalStream,
+  getRemoteStream,
   useChatConnection,
   usePeerConnection,
 } from "../../realtimeComunication/webRTCManager";
@@ -21,8 +23,14 @@ const PlayRoomPage = ({ localStream }) => {
   const [modeThreeContent, setModeThreeContent] = useState(
     MODEThree_Content.Content1
   );
-  const { peerConnection, guestStream } = usePeerConnection(localStream);
-  useChatConnection(peerConnection);
+  const { guestStream } = usePeerConnection(localStream);
+
+  const lg = getLocalStream();
+  const rg = getRemoteStream();
+
+  console.log("PlayRoomPage");
+  console.log(lg);
+  console.log(rg);
 
   const [playerHand, setPlayerHand] = useState({
     foodTag: ["ex : 일식", "중식", "한식"],
@@ -72,10 +80,10 @@ const PlayRoomPage = ({ localStream }) => {
   return (
     <PlayRoomContainer>
       <div className="mt-5 flex flex-col justify-center items-center border shadow-lg rounded-xl w-2/3 mx-auto">
-        <div className=" rounded-full absolute bottom-[40%] -right-5 z-10">
-          <VideoContainer mediaStream={guestStream} />
-        </div>
         <div className=" rounded-full absolute bottom-[40%] -left-5 z-10">
+          <VideoContainer mediaStream={localStream} />
+        </div>
+        <div className=" rounded-full absolute bottom-[40%] -right-5 z-10">
           <VideoContainer mediaStream={guestStream} />
         </div>
         <h1 className="font-bold text-2xl py-2 text-center">

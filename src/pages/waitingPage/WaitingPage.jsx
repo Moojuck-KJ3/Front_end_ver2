@@ -2,6 +2,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import WaitingFreindVideoContainer from "../createRoomPage/video/WaitingFreindVideoContainer";
 import CreateRoomPageFooter from "../createRoomPage/CreateRoomPageFooter";
 import {
+  getLocalStream,
+  getRemoteStream,
   useChatConnection,
   usePeerConnection,
 } from "../../realtimeComunication/webRTCManager";
@@ -17,12 +19,14 @@ const WaitingPage = ({ localStream }) => {
   const { peerConnection, guestStream } = usePeerConnection(localStream);
   useChatConnection(peerConnection);
 
-  useEffect(() => {
-    if (guestStream) {
-      console.log("sending guestStream info");
-      socket.emit("remote-stream-info", { guestStream, roomId });
-    }
+  const lg = getLocalStream();
+  const rg = getRemoteStream();
 
+  console.log("WaitingPage");
+  console.log(lg);
+  console.log(rg);
+
+  useEffect(() => {
     const handleAllPlayerReady = () => {
       console.log("All players are ready");
       setIsAllPlayerReady(true);
