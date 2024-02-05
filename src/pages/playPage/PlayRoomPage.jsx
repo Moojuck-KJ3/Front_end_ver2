@@ -81,10 +81,10 @@ const PlayRoomPage = ({ localStream }) => {
     <PlayRoomContainer>
       <div className="mt-5 flex flex-col justify-center items-center border shadow-lg rounded-xl w-2/3 mx-auto">
         <div className=" rounded-full absolute bottom-[40%] -left-5 z-10">
-          <VideoContainer mediaStream={localStream} />
+          <VideoContainer mediaStream={lg} />
         </div>
         <div className=" rounded-full absolute bottom-[40%] -right-5 z-10">
-          <VideoContainer mediaStream={guestStream} />
+          <VideoContainer mediaStream={rg} />
         </div>
         <h1 className="font-bold text-2xl py-2 text-center">
           오늘은 어떤 음식을 먹고 싶으세요?
