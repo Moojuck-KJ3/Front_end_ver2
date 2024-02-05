@@ -58,9 +58,10 @@ const VoiceRecoder = (isOwner) => {
       console.log("receive-speech-keyword : ", data);
       const userDetails = localStorage.getItem("user");
       const userId = JSON.parse(userDetails).id;
-      if (isOwner && data.userId === userId) {
-        setReceiveKeywords(data.keywords);
-      } else if (!isOwner && data.userId !== userId) {
+      if (
+        (isOwner && data.userId === userId) ||
+        (!isOwner && data.userId !== userId)
+      ) {
         setReceiveKeywords(data.keywords);
       }
     });
