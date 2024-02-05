@@ -1,6 +1,13 @@
+import { useParams } from "react-router";
+import socket from "../../realtimeComunication/socket";
+
 const ModeOneExpainModal = ({ isShowModal, onShow }) => {
+  const roomId = useParams();
+
   const handleShowModal = () => {
     onShow(true);
+    console.log("start-speech");
+    socket.emit("start-speech", roomId);
   };
   return (
     <div>
