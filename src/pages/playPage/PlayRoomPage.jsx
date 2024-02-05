@@ -55,8 +55,11 @@ const PlayRoomPage = () => {
       if (data.roomReadyCount < 2) {
         setRoomReadyCount((prev) => prev + 1);
       } else if (data.roomReadyCount >= 2) {
+        console.log(roomReadyCount);
         setRoomMode(data.newMode);
         setIsReady(false);
+        setRoomReadyCount(0);
+        console.log(roomReadyCount);
       }
     };
 
