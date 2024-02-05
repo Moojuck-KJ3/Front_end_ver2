@@ -7,8 +7,8 @@ export const logout = () => {
 };
 
 const apiClient = axios.create({
-  baseURL: "http://13.236.161.65:8080/api", // main url
-  //baseURL: 'https://backend-nest.fly.dev/cats', // test url
+  baseURL: "http://13.236.17.18:8080/api", // main url
+  // baseURL: 'https://backend-nest.fly.dev/cats', // test url
   //baseURL: 'http://localhost:8080/api',
   timeout: 3000,
 });

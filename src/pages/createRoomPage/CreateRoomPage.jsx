@@ -3,6 +3,8 @@ import InputWithLabel from "../../components/InputWithLable";
 import { useNavigate } from "react-router-dom";
 import CreateRoomModal from "./modal/CreateRoomModal";
 import socket from "../../realtimeComunication/socket";
+import LogoutIcon from "@mui/icons-material/Logout";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
 const START_LAT = "37.498";
 const START_LNG = "127.028";
@@ -61,6 +63,10 @@ const CreateRoomPage = () => {
     // Todo 로그아웃 버튼
     alert("로그아웃 구현해줘!~~");
   };
+  const handleShowExpainModal = () => {
+    // Todo 로그아웃 버튼
+    alert("모달 구현해줘!~~");
+  };
 
   return (
     <div className=" min-h-screen text-gray-900 flex justify-center">
@@ -72,7 +78,7 @@ const CreateRoomPage = () => {
               <div className="mx-auto max-w-xs">
                 <h1>안녕하세요. 마찬옥님</h1>
                 <button
-                  className="mt-5 tracking-wide font-semibold bg-blue-400 text-gray-100 w-full py-2 rounded-lg hover:bg-blue-500 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
+                  className="mt-5 tracking-wide font-bold bg-blue-400 text-gray-100 w-full py-2 rounded-lg hover:bg-blue-500 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                   onClick={handleOpenModal}
                 >
                   <span className="">방 생성하기</span>
@@ -85,17 +91,26 @@ const CreateRoomPage = () => {
                   placeholder={"방 ID"}
                 />
                 <button
-                  className="mt-5 tracking-wide font-semibold bg-green-400 text-gray-100 w-full py-2 rounded-lg hover:bg-green-500 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
+                  className="mt-3 tracking-wide font-bold bg-green-400 text-gray-100 w-full py-2 rounded-lg hover:bg-green-500 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                   onClick={handleRoomJoin}
                 >
                   <span className="">방 ID로 참가하기</span>
                 </button>
-                <div>
+                <div className="flex justify-between gap-2 mt-3 tracking-wide">
                   <button
-                    className="mt-3 tracking-wide font-semibold bg-gray-200 text-gray-600 w-full py-2 rounded-lg hover:bg-gray-300 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
+                    className=" font-bold bg-red-400 text-white w-full p-2 rounded-lg hover:bg-red-500 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
+                    onClick={handleShowExpainModal}
+                  >
+                    <h1 className="mr-1">시작 가이드</h1>
+                    <HelpOutlineIcon />
+                  </button>
+                  <button
+                    className=" font-semibold bg-gray-200 text-gray-600 p-2 rounded-lg hover:bg-gray-300 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                     onClick={handleLogout}
                   >
-                    <span className="">로그아웃</span>
+                    <span className="">
+                      <LogoutIcon />
+                    </span>
                   </button>
                 </div>
               </div>

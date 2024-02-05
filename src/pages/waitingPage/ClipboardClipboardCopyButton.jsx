@@ -15,7 +15,7 @@ const CopyToClipboardButton = ({ roomId }) => {
 
   return (
     <div
-      className="flex gap-2  text-gray-600 bg-gray-100 py-2 font-bold px-4 m-2 rounded-lg hover:cursor-pointer hover:bg-green-100 transition-all"
+      className="flex gap-2  text-gray-600 bg-gray-100 py-1 font-bold px-4 m-1 rounded-lg hover:cursor-pointer hover:bg-green-100 transition-all"
       onClick={handleClick}
     >
       <h1>{roomId}</h1>

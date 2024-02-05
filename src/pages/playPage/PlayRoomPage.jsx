@@ -18,7 +18,7 @@ const PlayRoomPage = () => {
     MODEThree_Content.Content1
   );
   const [playerHand, setPlayerHand] = useState({
-    foodTag: ["일식", "중식", "한식"],
+    foodTag: ["ex : 일식", "중식", "한식"],
     placeTag: ["분위기 좋은", "운치있는", "조용한"],
     selectedTag: [],
   });
@@ -66,7 +66,7 @@ const PlayRoomPage = () => {
     <PlayRoomContainer>
       <div className="mt-5 flex flex-col justify-center items-center border shadow-lg rounded-xl w-2/3 mx-auto">
         <div className=" rounded-full absolute bottom-[40%] -right-5 z-10">
-          <VideoContainer />
+          <VideoContainer isGuest />
         </div>
         <div className=" rounded-full absolute bottom-[40%] -left-5 z-10">
           <VideoContainer />

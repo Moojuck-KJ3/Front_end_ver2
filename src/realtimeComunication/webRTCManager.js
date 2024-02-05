@@ -70,7 +70,7 @@ export function usePeerConnection(localStream) {
       iceServers: [
         { urls: "stun:stun2.1.google.com:19302" },
         {
-          urls: "turn:13.236.161.65:3478",
+          urls: "turn:13.236.17.18:3478",
           username: "adminuser",
           credential: "mujuck101",
         },
@@ -85,9 +85,11 @@ export function usePeerConnection(localStream) {
       setGuestStream(streams[0]);
     });
 
-    localStream.getTracks().forEach((track) => {
-      connection.addTrack(track, localStream);
-    });
+    if (localStream) {
+      localStream.getTracks().forEach((track) => {
+        connection.addTrack(track, localStream);
+      });
+    }
 
     return connection;
   }, [localStream, roomId]);
