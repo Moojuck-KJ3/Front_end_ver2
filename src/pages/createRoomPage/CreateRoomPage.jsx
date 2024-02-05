@@ -6,6 +6,8 @@ import socket from "../../realtimeComunication/socket";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
+import { logout } from "../../api";
+
 const START_LAT = "37.498";
 const START_LNG = "127.028";
 const START_NAME = "강남역 2호선";
@@ -19,8 +21,16 @@ const CreateRoomPage = () => {
     START_LAT,
     START_LNG,
   });
+  const [userName, setUserName] = useState("");
 
   useEffect(() => {
+    const userDetails = localStorage.getItem("user");
+
+    if (userDetails) {
+      const username = JSON.parse(userDetails).username;
+      setUserName(username);
+    }
+
     socket.on("create-room-response", (response) => {
       if (response) {
         const { roomId } = response;
@@ -60,8 +70,7 @@ const CreateRoomPage = () => {
   };
 
   const handleLogout = () => {
-    // Todo 로그아웃 버튼
-    alert("로그아웃 구현해줘!~~");
+    logout();
   };
   const handleShowExpainModal = () => {
     // Todo 로그아웃 버튼
@@ -76,7 +85,7 @@ const CreateRoomPage = () => {
             <h1 className="font-bold text-2xl">방 생성</h1>
             <div className="w-full flex-1 mt-8">
               <div className="mx-auto max-w-xs">
-                <h1>안녕하세요. 마찬옥님</h1>
+                <h1>안녕하세요. {userName}님</h1>
                 <button
                   className="mt-5 tracking-wide font-bold bg-blue-400 text-gray-100 w-full py-2 rounded-lg hover:bg-blue-500 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                   onClick={handleOpenModal}
