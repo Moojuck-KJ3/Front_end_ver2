@@ -7,12 +7,13 @@ import { useLocalCameraStream } from "./useLocalCameraStream";
 
 const VideoContainer = ({ isGuest }) => {
   const { localStream } = useLocalCameraStream();
-  const { peerConnection, guestStream } = usePeerConnection(localStream);
-  useChatConnection(peerConnection);
+  // const { peerConnection, guestStream } = usePeerConnection(localStream);
+  // useChatConnection(peerConnection);
 
   return (
     <VideoFeed
-      mediaStream={isGuest ? guestStream : localStream}
+      // mediaStream={isGuest ? guestStream : localStream}
+      mediaStream={localStream}
       isMuted={true}
     />
   );
