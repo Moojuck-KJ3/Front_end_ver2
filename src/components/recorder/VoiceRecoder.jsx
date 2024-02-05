@@ -21,6 +21,10 @@ const isRightVoices = (isOwner, ReceiveUserId) => {
   const userDetails = localStorage.getItem("user");
   const userId = JSON.parse(userDetails).id;
 
+  console.log("isOwner : ", isOwner);
+  console.log("userId : ", userId);
+  console.log("ReceiveUserId : ", ReceiveUserId);
+
   if (
     (isOwner && userId === ReceiveUserId) ||
     (!isOwner && userId !== ReceiveUserId)
@@ -98,6 +102,8 @@ const VoiceRecoder = ({ isOwner, playerHand, isCloseModal }) => {
   }, [recordState]);
 
   useEffect(() => {
+    console.log("isCloseModal : ", isCloseModal);
+
     socket.on("receive-speech-keyword", (data) => {
       console.log("receive-speech-keyword : ", data);
 
