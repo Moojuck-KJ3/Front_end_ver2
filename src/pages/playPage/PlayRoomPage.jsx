@@ -16,6 +16,7 @@ import {
 } from "../../realtimeComunication/webRTCManager";
 import { getMoodKeyword } from "../../api";
 import { useParams } from "react-router-dom";
+import socket from "../../realtimeComunication/socket";
 
 const PlayRoomPage = () => {
   const { roomId } = useParams();
@@ -27,6 +28,8 @@ const PlayRoomPage = () => {
   const [localStream, setLocalStream] = useState(null);
   const [remoteStrem, setRemoteStream] = useState(null);
   const [tags, setTags] = useState([]);
+  const [isReady, setIsReady] = useState(false);
+  const [roomReadyCount, setRoomReadyCount] = useState(0);
 
   useEffect(() => {
     const local = getLocalStream();
@@ -47,6 +50,34 @@ const PlayRoomPage = () => {
     getMoodKeywords(roomId);
   }, []);
 
+  useEffect(() => {
+    socket.connect();
+    socket.on("mode-change-response", handleModeChange);
+
+    return () => {
+      socket.off("mode-change-response", handleModeChange);
+    };
+  }, []);
+
+  const handleModeChange = (data) => {
+    if (data.roomReadyCount < 2) {
+      setRoomReadyCount((prev) => prev + 1);
+    } else if (data.roomReadyCount >= 2) {
+      console.log(data.roomReadyCount);
+      setRoomMode(data.newMode);
+      setIsReady(false);
+      setRoomReadyCount(0);
+      console.log(data.roomReadyCount);
+    }
+  };
+
+  const handleSetReady = () => {
+    console.log("handleSetReady is called");
+    setIsReady(true);
+    console.log({ roomId, roomMode, roomReadyCount });
+    socket.emit("select-done", { roomId, roomReadyCount, roomMode });
+  };
+
   const [playerHand, setPlayerHand] = useState({
     foodTag: ["ex : 일식", "중식", "한식"],
     placeTag: ["조용한"],
@@ -54,7 +85,6 @@ const PlayRoomPage = () => {
   });
 
   const handleChangeContent = (contentNum) => {
-    console.log(contentNum);
     switch (contentNum) {
       case MODEThree_Content.Content1:
         return setModeThreeContent(1);
@@ -96,7 +126,14 @@ const PlayRoomPage = () => {
     <PlayRoomContainer>
       <div className="mt-5 flex flex-col justify-center items-center border shadow-lg rounded-xl w-2/3 mx-auto">
         <div className=" rounded-full absolute bottom-[40%] -left-5 z-10">
+          {isReady && <div>나 준비 완료~</div>}
           <VideoContainer mediaStream={localStream} />
+          <button
+            onClick={handleSetReady}
+            className="bg-blue-300 p-2 rounded-lg"
+          >
+            선택완료
+          </button>
         </div>
         <div className=" rounded-full absolute bottom-[40%] -right-5 z-10">
           <VideoContainer mediaStream={remoteStrem} />
@@ -188,10 +225,10 @@ const PlayRoomPage = () => {
 };
 
 const MODE = {
-  MODE1: "MODE_NUMBER_ONE",
-  MODE2: "MODE_NUMBER_TWO",
-  MODE3: "MODE_NUMBER_THREE",
-  MODE4: "MODE_NUMBER_FOUR",
+  MODE1: 1,
+  MODE2: 2,
+  MODE3: 3,
+  MODE4: 4,
 };
 
 const MODEThree_Content = {
