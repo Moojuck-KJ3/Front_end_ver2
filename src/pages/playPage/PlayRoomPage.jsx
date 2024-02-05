@@ -10,13 +10,20 @@ import PlayerHand from "./PlayerHand";
 import PlayRoomContainer from "./PlayRoomContainer";
 import ModeOneExpainModal from "../../components/modal/ModeOneExpainModal";
 import SelectModeButtons from "./modeThree/SelectModeButtons";
+import {
+  useChatConnection,
+  usePeerConnection,
+} from "../../realtimeComunication/webRTCManager";
 
-const PlayRoomPage = () => {
+const PlayRoomPage = ({ localStream }) => {
   const [showModal, setShowModal] = useState(false);
   const [roomMode, setRoomMode] = useState(MODE.MODE1);
   const [modeThreeContent, setModeThreeContent] = useState(
     MODEThree_Content.Content1
   );
+  const { peerConnection, guestStream } = usePeerConnection(localStream);
+  useChatConnection(peerConnection);
+
   const [playerHand, setPlayerHand] = useState({
     foodTag: ["ex : 일식", "중식", "한식"],
     placeTag: ["분위기 좋은", "운치있는", "조용한"],
@@ -66,10 +73,10 @@ const PlayRoomPage = () => {
     <PlayRoomContainer>
       <div className="mt-5 flex flex-col justify-center items-center border shadow-lg rounded-xl w-2/3 mx-auto">
         <div className=" rounded-full absolute bottom-[40%] -right-5 z-10">
-          <VideoContainer />
+          <VideoContainer mediaStream={guestStream} />
         </div>
         <div className=" rounded-full absolute bottom-[40%] -left-5 z-10">
-          <VideoContainer />
+          <VideoContainer mediaStream={guestStream} />
         </div>
         <h1 className="font-bold text-2xl py-2 text-center">
           오늘은 어떤 음식을 먹고 싶으세요?

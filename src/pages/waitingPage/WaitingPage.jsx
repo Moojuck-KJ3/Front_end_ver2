@@ -20,7 +20,7 @@ const WaitingPage = ({ localStream }) => {
   useEffect(() => {
     if (guestStream) {
       console.log("sending guestStream info");
-      socket.emit("remote-stream-info", guestStream);
+      socket.emit("remote-stream-info", { guestStream, roomId });
     }
 
     const handleAllPlayerReady = () => {

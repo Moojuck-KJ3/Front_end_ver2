@@ -21,7 +21,10 @@ function App() {
           path="/waiting-friends/:roomId"
           element={<WaitingPage localStream={localStream} />}
         />
-        <Route path="/play-room/:roomId" element={<PlayRoomPage />} />
+        <Route
+          path="/play-room/:roomId"
+          element={<PlayRoomPage localStream={localStream} />}
+        />
       </Routes>
     </BrowserRouter>
   );
