@@ -83,8 +83,8 @@ export function usePeerConnection(localStream) {
         { urls: "stun:stun2.1.google.com:19302" },
         {
           urls: import.meta.env.VITE_APP_TURN_SERVER_URL,
-          username: process.env.VITE_APP_TURN_SERVER_USERNAME,
-          credential: process.env.VITE_APP_TURN_SERVER_CREDENTIALS,
+          username: import.meta.env.VITE_APP_TURN_SERVER_USERNAME,
+          credential: import.meta.env.VITE_APP_TURN_SERVER_CREDENTIALS,
         },
       ],
     });
