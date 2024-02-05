@@ -76,11 +76,13 @@ const VoiceRecoder = ({ isOwner, playerHand, isCloseModal }) => {
 
   const start = async () => {
     setShowTimer(true);
+    console.log("startRecording isOwnwer : ", isOwner);
     await startRecording();
   };
 
   // Function to stop recording
   const stopRecording = () => {
+    console.log("stopRecording isOwnwer : ", isOwner);
     setShowTimer(false);
     sendTranscriptToServer();
     if (recognitionRef.current) {
@@ -113,7 +115,10 @@ const VoiceRecoder = ({ isOwner, playerHand, isCloseModal }) => {
     });
 
     socket.on("receive-speech", (data) => {
+      console.log("receive-speech : ", data);
+
       if (isRightVoices(isOwner, data)) {
+        console.log("receive-speech Success: ", data);
         setRecordState(RECORD_STATE.RECORDING);
       }
     });
