@@ -4,8 +4,12 @@ import Timer from "./Timer";
 
 import { sendFoodCategorySpeech } from "../../api";
 import { useParams } from "react-router";
+import socket from "../../realtimeComunication/socket";
 
-const VoiceRecoder = () => {
+// isOwner : user의 voiceRecoder인지 아닌지 구분
+// 그에 따라 말한 결과 Response의 userId와 비교하여 다른 user의 음성인식 결과를 보여주는지 구분
+
+const VoiceRecoder = (isOwner) => {
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [showTimer, setShowTimer] = useState(true);
@@ -16,6 +20,8 @@ const VoiceRecoder = () => {
 
   const { roomId } = useParams();
   const serverSendTextRef = useRef("");
+
+  const [receiveKeywords, setReceiveKeywords] = useState([]);
 
   useEffect(() => {
     console.log("serverSendText : ", transcript);
@@ -46,6 +52,17 @@ const VoiceRecoder = () => {
   };
 
   useEffect(() => {
+    socket.on("receive-speech-keyword", (data) => {
+      console.log("receive-speech-keyword : ", data);
+      const userDetails = localStorage.getItem("user");
+      const userId = JSON.parse(userDetails).id;
+      if (isOwner && data.userId === userId) {
+        setReceiveKeywords(data.keywords);
+      } else if (!isOwner && data.userId !== userId) {
+        setReceiveKeywords(data.keywords);
+      }
+    });
+
     setShowTimer(true);
     startRecording();
     const start = async () => {
@@ -64,6 +81,8 @@ const VoiceRecoder = () => {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
       }
+
+      socket.off("receive-speech-keyword");
     };
   }, []);
 
@@ -154,7 +173,13 @@ const VoiceRecoder = () => {
             </div>
 
             <div className="h-[70px] flex border items-center justify-center rounded-md m-4">
-              <p className="font-semibold">#한식, #한식당, #일식, #중식</p>
+              {receiveKeywords.length > 0 ? (
+                receiveKeywords.map((keyword) => {
+                  <p className="font-semibold">{keyword}</p>;
+                })
+              ) : (
+                <p className="font-semibold">#한식, #한식당, #일식, #중식</p>
+              )}
             </div>
             <div className="flex justify-center">
               <button
