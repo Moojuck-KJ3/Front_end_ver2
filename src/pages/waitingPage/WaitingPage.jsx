@@ -18,6 +18,11 @@ const WaitingPage = ({ localStream }) => {
   useChatConnection(peerConnection);
 
   useEffect(() => {
+    if (guestStream) {
+      console.log("sending guestStream info");
+      socket.emit("remote-stream-info", guestStream);
+    }
+
     const handleAllPlayerReady = () => {
       console.log("All players are ready");
       setIsAllPlayerReady(true);
@@ -36,7 +41,7 @@ const WaitingPage = ({ localStream }) => {
       socket.off("all-player-ready", handleAllPlayerReady);
       socket.off("start-play-room-response", handleStartPlayRoomResponse);
     };
-  }, [navigator, roomId]);
+  }, [navigator, guestStream, roomId]);
 
   useEffect(() => {
     if (isAllPlayerReady) {
