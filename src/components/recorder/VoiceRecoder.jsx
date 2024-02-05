@@ -174,95 +174,99 @@ const VoiceRecoder = ({ isOwner, playerHand, isCloseModal }) => {
   };
 
   return (
-    <>
-      {isCloseModal === true && (
-        <VoiceRecoderContainer onReady={onReady}>
-          <img
-            className="w-12 h-12 absolute -top-5 right-[40%] border-4 border-gray-200 rounded-full"
-            src="./avatar.png"
-            alt="avatar"
-          />
-          {/* 음성 텍스트 버전 */}
-          <div className="w-full h-full flex flex-col my-2 rounded-md p-5  bg-white">
-            {recordState === RECORD_STATE.WAIT && (
-              <div className="w-full flex flex-col gap-1">
-                <div className="flex justify-between items-center">
-                  <p className="text-sm font-medium leading-none text-start">
-                    음성 인식 대기 중
-                  </p>
-                  <div className="rounded-full w-3 h-3 bg-red-400 animate-pulse" />
-                </div>
-                <p className="text-sm text-muted-foreground text-start">
-                  아직 시작하지 않았어요...
+    <div
+      style={{
+        opacity: isCloseModal ? 1 : 0, // isCloseModal이 true이면 1(투명하지 않음), false이면 0(투명함)
+        visibility: isCloseModal ? "visible" : "hidden", // isCloseModal이 true이면 visible(보임), false이면 hidden(숨김)
+        transition: "opacity 0.5s ease-in-out", // 투명도 변화에 대한 transition 효과
+      }}
+    >
+      <VoiceRecoderContainer onReady={onReady}>
+        <img
+          className="w-12 h-12 absolute -top-5 right-[40%] border-4 border-gray-200 rounded-full"
+          src="./avatar.png"
+          alt="avatar"
+        />
+        {/* 음성 텍스트 버전 */}
+        <div className="w-full h-full flex flex-col my-2 rounded-md p-5  bg-white">
+          {recordState === RECORD_STATE.WAIT && (
+            <div className="w-full flex flex-col gap-1">
+              <div className="flex justify-between items-center">
+                <p className="text-sm font-medium leading-none text-start">
+                  음성 인식 대기 중
                 </p>
-                <div className="h-[130px] flex border items-center justify-center rounded-md m-4">
-                  <p className="font-semibold"> 사용자를 기다리는 중... </p>
-                </div>
+                <div className="rounded-full w-3 h-3 bg-red-400 animate-pulse" />
               </div>
-            )}
-            {recordState === RECORD_STATE.RECORDING && (
-              <div className="w-full flex flex-col gap-1">
-                <div className="flex justify-between items-center">
-                  <p className="text-sm font-medium leading-none text-start">
-                    음성 인식 중
-                  </p>
-                  <div className="rounded-full w-3 h-3 bg-red-400 animate-pulse" />
-                </div>
-                <p className="text-sm text-muted-foreground text-start">
-                  말을 해주세요...
+              <p className="text-sm text-muted-foreground text-start">
+                아직 시작하지 않았어요...
+              </p>
+              <div className="h-[130px] flex border items-center justify-center rounded-md m-4">
+                <p className="font-semibold"> 사용자를 기다리는 중... </p>
+              </div>
+            </div>
+          )}
+          {recordState === RECORD_STATE.RECORDING && (
+            <div className="w-full flex flex-col gap-1">
+              <div className="flex justify-between items-center">
+                <p className="text-sm font-medium leading-none text-start">
+                  음성 인식 중
                 </p>
-                <div className="h-[130px] flex border items-center justify-center rounded-md m-4">
-                  <p className="font-semibold">
-                    {transcript ? transcript : "입력 대기 중..."}
-                  </p>
-                </div>
-                {showTimer && (
-                  <Timer
-                    onTimeout={onTimerTimeout}
-                    timeLeft={timeLeft}
-                    setTimeLeft={setTimeLeft}
-                  />
-                )}
+                <div className="rounded-full w-3 h-3 bg-red-400 animate-pulse" />
               </div>
-            )}
-            {recordState === RECORD_STATE.FINISH && (
-              <div className="w-full flex flex-col gap-1">
-                <div className="flex flex-col items-center">
-                  <p className="p-4 w-full text-lg font-medium leading-none text-center">
-                    음성 분석 완료
-                  </p>
-                  <p className="text-sm text-muted-foreground text-start">
-                    선택 완료 버튼을 눌러주세요.
-                  </p>
-                </div>
+              <p className="text-sm text-muted-foreground text-start">
+                말을 해주세요...
+              </p>
+              <div className="h-[130px] flex border items-center justify-center rounded-md m-4">
+                <p className="font-semibold">
+                  {transcript ? transcript : "입력 대기 중..."}
+                </p>
+              </div>
+              {showTimer && (
+                <Timer
+                  onTimeout={onTimerTimeout}
+                  timeLeft={timeLeft}
+                  setTimeLeft={setTimeLeft}
+                />
+              )}
+            </div>
+          )}
+          {recordState === RECORD_STATE.FINISH && (
+            <div className="w-full flex flex-col gap-1">
+              <div className="flex flex-col items-center">
+                <p className="p-4 w-full text-lg font-medium leading-none text-center">
+                  음성 분석 완료
+                </p>
+                <p className="text-sm text-muted-foreground text-start">
+                  선택 완료 버튼을 눌러주세요.
+                </p>
+              </div>
 
-                <div className="h-[70px] flex border items-center justify-center rounded-md m-4">
-                  {receiveKeywords.length > 0
-                    ? receiveKeywords.map((keyword, index) => (
-                        <p key={index} className="font-semibold">
-                          #{keyword}
-                        </p>
-                      ))
-                    : DUMMY_KEYWORDS.map((keyword, index) => (
-                        <KeyWordFlippableCard key={index}>
-                          #{keyword}
-                        </KeyWordFlippableCard>
-                      ))}
-                </div>
-                <div className="flex justify-center">
-                  <button
-                    onClick={handleReady}
-                    className="p-2 w-32 bg-green-400 shadow-xl rounded-2xl hover:scale-105 transition-all"
-                  >
-                    선택 완료
-                  </button>
-                </div>
+              <div className="h-[70px] flex border items-center justify-center rounded-md m-4">
+                {receiveKeywords.length > 0
+                  ? receiveKeywords.map((keyword, index) => (
+                      <p key={index} className="font-semibold">
+                        #{keyword}
+                      </p>
+                    ))
+                  : DUMMY_KEYWORDS.map((keyword, index) => (
+                      <KeyWordFlippableCard key={index}>
+                        #{keyword}
+                      </KeyWordFlippableCard>
+                    ))}
               </div>
-            )}
-          </div>
-        </VoiceRecoderContainer>
-      )}
-    </>
+              <div className="flex justify-center">
+                <button
+                  onClick={handleReady}
+                  className="p-2 w-32 bg-green-400 shadow-xl rounded-2xl hover:scale-105 transition-all"
+                >
+                  선택 완료
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </VoiceRecoderContainer>
+    </div>
   );
 };
 
