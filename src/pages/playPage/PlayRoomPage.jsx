@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import VideoContainer from "../../components/video/VideoContainer";
 import VoiceRecoder from "../../components/recorder/VoiceRecoder";
 import ModeSetButton from "../../components/button/ModeSetButton";
@@ -13,24 +13,27 @@ import SelectModeButtons from "./modeThree/SelectModeButtons";
 import {
   getLocalStream,
   getRemoteStream,
-  useChatConnection,
-  usePeerConnection,
 } from "../../realtimeComunication/webRTCManager";
 
-const PlayRoomPage = ({ localStream }) => {
+const PlayRoomPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [roomMode, setRoomMode] = useState(MODE.MODE1);
   const [modeThreeContent, setModeThreeContent] = useState(
     MODEThree_Content.Content1
   );
-  const { guestStream } = usePeerConnection(localStream);
+  const [localStream, setLocalStream] = useState(null);
+  const [remoteStrem, setRemoteStream] = useState(null);
 
-  const lg = getLocalStream();
-  const rg = getRemoteStream();
+  useEffect(() => {
+    const local = getLocalStream();
+    setLocalStream(local);
+    const remote = getRemoteStream();
+    setRemoteStream(remote);
+  }, []);
 
   console.log("PlayRoomPage");
-  console.log(lg);
-  console.log(rg);
+  console.log(localStream);
+  console.log(remoteStrem);
 
   const [playerHand, setPlayerHand] = useState({
     foodTag: ["ex : 일식", "중식", "한식"],
@@ -81,10 +84,10 @@ const PlayRoomPage = ({ localStream }) => {
     <PlayRoomContainer>
       <div className="mt-5 flex flex-col justify-center items-center border shadow-lg rounded-xl w-2/3 mx-auto">
         <div className=" rounded-full absolute bottom-[40%] -left-5 z-10">
-          <VideoContainer mediaStream={lg} />
+          <VideoContainer mediaStream={localStream} />
         </div>
         <div className=" rounded-full absolute bottom-[40%] -right-5 z-10">
-          <VideoContainer mediaStream={rg} />
+          <VideoContainer mediaStream={remoteStrem} />
         </div>
         <h1 className="font-bold text-2xl py-2 text-center">
           오늘은 어떤 음식을 먹고 싶으세요?
