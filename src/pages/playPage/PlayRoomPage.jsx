@@ -66,7 +66,7 @@ const PlayRoomPage = () => {
     <PlayRoomContainer>
       <div className="mt-5 flex flex-col justify-center items-center border shadow-lg rounded-xl w-2/3 mx-auto">
         <div className=" rounded-full absolute bottom-[40%] -right-5 z-10">
-          <VideoContainer isGuest />
+          <VideoContainer />
         </div>
         <div className=" rounded-full absolute bottom-[40%] -left-5 z-10">
           <VideoContainer />

@@ -1,11 +1,7 @@
-import {
-  useChatConnection,
-  usePeerConnection,
-} from "../../realtimeComunication/webRTCManager";
 import { VideoFeed } from "./VideoFeed";
 import { useLocalCameraStream } from "./useLocalCameraStream";
 
-const VideoContainer = ({ isGuest }) => {
+const VideoContainer = () => {
   const { localStream } = useLocalCameraStream();
   // const { peerConnection, guestStream } = usePeerConnection(localStream);
   // useChatConnection(peerConnection);
