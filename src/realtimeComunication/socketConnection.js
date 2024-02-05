@@ -4,7 +4,7 @@ export const connectionStart = (userDetails) => {
   const userDetail = userDetails ? JSON.parse(userDetails) : null;
   const jwtToken = userDetail ? userDetail.token : null;
 
-  const socket = io("http://13.236.161.65:8080", {
+  const socket = io(import.meta.env.VITE_APP_BACKEND_PROD_URL, {
     auth: {
       token: jwtToken,
     },
