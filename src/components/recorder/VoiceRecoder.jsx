@@ -21,7 +21,9 @@ const isRightVoices = (isOwner, ReceiveUserId) => {
   const userDetails = localStorage.getItem("user");
   const userId = JSON.parse(userDetails).id;
 
-  console.log(isOwner, userId, ReceiveUserId);
+  console.log("isOwner : ", isOwner);
+  console.log("userId : ", userId);
+  console.log("ReceiveUserId : ", ReceiveUserId);
 
   if (
     (isOwner && userId === ReceiveUserId) ||
@@ -258,4 +260,4 @@ const VoiceRecoder = (isOwner, playerHand) => {
 };
 
 export default VoiceRecoder;
-<div className="flex justify-center"></div>;
+//<div className="flex justify-center"></div>;
