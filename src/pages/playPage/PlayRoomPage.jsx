@@ -16,6 +16,7 @@ import {
 } from "../../realtimeComunication/webRTCManager";
 import { getMoodKeyword } from "../../api";
 import { useParams } from "react-router-dom";
+import socket from "../../realtimeComunication/socket";
 
 const PlayRoomPage = () => {
   const { roomId } = useParams();
@@ -27,6 +28,7 @@ const PlayRoomPage = () => {
   const [localStream, setLocalStream] = useState(null);
   const [remoteStrem, setRemoteStream] = useState(null);
   const [tags, setTags] = useState([]);
+  const [isReady, SetIsReady] = useState(false);
 
   useEffect(() => {
     const local = getLocalStream();
@@ -46,6 +48,25 @@ const PlayRoomPage = () => {
 
     getMoodKeywords(roomId);
   }, []);
+
+  useEffect(() => {
+    const handleModeChange = (newMode) => {
+      console.log("handleModeChange is called");
+      setRoomMode(newMode);
+      SetIsReady(false);
+    };
+
+    socket.on("mode-change-response", (newMode) => handleModeChange(newMode));
+
+    return () => {
+      socket.off("mode-change-response", handleModeChange);
+    };
+  });
+
+  const handleSetReady = () => {
+    SetIsReady(true);
+    socket.emit("user-ready", { roomId, roomMode });
+  };
 
   const [playerHand, setPlayerHand] = useState({
     foodTag: ["ex : 일식", "중식", "한식"],
@@ -96,7 +117,14 @@ const PlayRoomPage = () => {
     <PlayRoomContainer>
       <div className="mt-5 flex flex-col justify-center items-center border shadow-lg rounded-xl w-2/3 mx-auto">
         <div className=" rounded-full absolute bottom-[40%] -left-5 z-10">
+          {isReady && <div>나 준비 완료~</div>}
           <VideoContainer mediaStream={localStream} />
+          <button
+            onClick={handleSetReady}
+            className="bg-blue-300 p-2 rounded-lg"
+          >
+            선택완료
+          </button>
         </div>
         <div className=" rounded-full absolute bottom-[40%] -right-5 z-10">
           <VideoContainer mediaStream={remoteStrem} />
