@@ -110,22 +110,24 @@ const PlayRoomPage = () => {
         <GameArea>
           {/* 설명 모달 */}
           <div className="text-center">
-            {!showModal ? (
-              <ModeOneExpainModal
-                isShowModal={showModal}
-                onShow={setShowModal}
-              />
-            ) : (
-              <div className="w-full flex flex-col">
-                {/* 컨텐츠 */}
-                <div className="flex gap-5">
-                  {/* 좌측이 나 */}
-                  <VoiceRecoder isOwner={true} playerHand={playerHand} />
-                  {/* 우측이 다른 user */}
-                  <VoiceRecoder isOwner={false} playerHand={playerHand} />
-                </div>
+            <div className="w-full flex flex-col">
+              {/* 컨텐츠 */}
+              <div className="flex gap-5">
+                {/* 좌측이 나 */}
+                <VoiceRecoder
+                  isOwner={true}
+                  playerHand={playerHand}
+                  isCloseModal={showModal}
+                />
+                {/* 우측이 다른 user */}
+                <VoiceRecoder
+                  isOwner={false}
+                  playerHand={playerHand}
+                  isCloseModal={showModal}
+                />
               </div>
-            )}
+            </div>
+            <ModeOneExpainModal isShowModal={showModal} onShow={setShowModal} />
           </div>
 
           {/* 플레이어 핸드 */}
