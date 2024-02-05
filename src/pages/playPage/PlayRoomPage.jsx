@@ -14,8 +14,11 @@ import {
   getLocalStream,
   getRemoteStream,
 } from "../../realtimeComunication/webRTCManager";
+import { getMoodKeyword } from "../../api";
+import { useParams } from "react-router-dom";
 
 const PlayRoomPage = () => {
+  const { roomId } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [roomMode, setRoomMode] = useState(MODE.MODE1);
   const [modeThreeContent, setModeThreeContent] = useState(
@@ -23,21 +26,30 @@ const PlayRoomPage = () => {
   );
   const [localStream, setLocalStream] = useState(null);
   const [remoteStrem, setRemoteStream] = useState(null);
+  const [tags, setTags] = useState([]);
 
   useEffect(() => {
     const local = getLocalStream();
     setLocalStream(local);
     const remote = getRemoteStream();
     setRemoteStream(remote);
-  }, []);
 
-  console.log("PlayRoomPage");
-  console.log(localStream);
-  console.log(remoteStrem);
+    const getMoodKeywords = async (roomId) => {
+      const response = await getMoodKeyword(roomId);
+
+      if (response.error) {
+        console.log(response.exception);
+      } else {
+        setTags(response.moodKeywords);
+      }
+    };
+
+    getMoodKeywords(roomId);
+  }, []);
 
   const [playerHand, setPlayerHand] = useState({
     foodTag: ["ex : 일식", "중식", "한식"],
-    placeTag: ["분위기 좋은", "운치있는", "조용한"],
+    placeTag: ["조용한"],
     selectedTag: [],
   });
 
@@ -126,6 +138,7 @@ const PlayRoomPage = () => {
         <GameArea>
           {/* 컨텐츠 */}
           <RandomPlaceTags
+            tags={tags}
             onCardClick={(cardType, cardValue) =>
               updatePlayerHand(cardType, cardValue)
             }

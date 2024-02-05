@@ -1,4 +1,5 @@
 const BigPlaceCard = ({ img }) => {
+
   return (
     <div className={` w-full bg-white shadow-md rounded-xl animate-jump `}>
       <div className="flex px-5 py-1 ">

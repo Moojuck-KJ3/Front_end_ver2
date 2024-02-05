@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-
 const ResultCard = ({ title, imgUrl }) => {
+  console.log(imgUrl);
   return (
     <div
       className={`w-[160px] h-[180px] bg-transparent cursor-pointer group perspective`}
