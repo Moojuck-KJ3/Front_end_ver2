@@ -6,19 +6,25 @@ import socket from "../../realtimeComunication/socket";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
-import { logout } from "../../api";
+const START_LAT = "37.498";
+const START_LNG = "127.028";
+const START_NAME = "강남역 2호선";
 
 const CreateRoomPage = () => {
-  const navigator = useNavigate();
+  const navigate = useNavigate();
   const [isModal, setIsModal] = useState(false);
-  const [roomNumber, setRoomNumber] = useState("");
-  const [userName, setUserName] = useState("");
+  const [roomId, setRoomId] = useState("");
+  const [location, setLocation] = useState({
+    START_NAME,
+    START_LAT,
+    START_LNG,
+  });
 
   useEffect(() => {
     socket.on("create-room-response", (response) => {
       if (response) {
         const { roomId } = response;
-        navigator(`/waiting-friends/${roomId}`);
+        navigate(`/waiting-friends/${roomId}`);
       } else {
         console.error(response.error);
       }
@@ -27,36 +33,39 @@ const CreateRoomPage = () => {
     socket.on("join-room-response", (response) => {
       if (response) {
         const roomId = response;
-        navigator(`/waiting-friends/${roomId}`);
+        navigate(`/waiting-friends/${roomId}`);
       } else {
         console.error(response.error);
       }
     });
 
     return () => {
+      socket.off("create-room-response");
       socket.off("join-room-response");
     };
   }, []);
 
-  const handleRoomCreate = () => {
-    console.log("handleRoomCreate");
+  const handleOpenModal = () => {
     setIsModal(true);
-    console.log(isModal);
-    // navigator("/waiting-friends");
+  };
+
+  const handleRoomCreate = async (event) => {
+    event.preventDefault();
+    socket.emit("create-room", { location });
+    setIsModal(false);
   };
 
   const handleRoomJoin = () => {
-    // 성공한 경우, 입력한 roomId를 redux에 저장해야 한다
-    //console.log("handleRoomJoin", roomNumber);
-    if (roomNumber === "") return;
-
-    socket.emit("join-room", roomNumber);
-    //joinRoom(roomNumber);
+    socket.emit("join-room", { roomId });
   };
 
   const handleLogout = () => {
     // Todo 로그아웃 버튼
-    logout();
+    alert("로그아웃 구현해줘!~~");
+  };
+  const handleShowExpainModal = () => {
+    // Todo 로그아웃 버튼
+    alert("모달 구현해줘!~~");
   };
 
   return (
@@ -67,7 +76,7 @@ const CreateRoomPage = () => {
             <h1 className="font-bold text-2xl">방 생성</h1>
             <div className="w-full flex-1 mt-8">
               <div className="mx-auto max-w-xs">
-                <h1>안녕하세요. {userName}님</h1>
+                <h1>안녕하세요. 마찬옥님</h1>
                 <button
                   className="mt-5 tracking-wide font-bold bg-blue-400 text-gray-100 w-full py-2 rounded-lg hover:bg-blue-500 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                   onClick={handleOpenModal}
@@ -77,8 +86,8 @@ const CreateRoomPage = () => {
 
                 <InputWithLabel
                   type="roomNumber"
-                  value={roomNumber}
-                  setValue={setRoomNumber}
+                  value={roomId}
+                  setValue={setRoomId}
                   placeholder={"방 ID"}
                 />
                 <button
@@ -109,7 +118,9 @@ const CreateRoomPage = () => {
           </div>
         </div>
       </div>
-      {isModal && <CreateRoomModal onSetting={setIsModal} />}
+      {isModal && (
+        <CreateRoomModal onModal={setIsModal} onCreate={handleRoomCreate} />
+      )}
     </div>
   );
 };
