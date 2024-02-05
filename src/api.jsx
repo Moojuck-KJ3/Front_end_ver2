@@ -79,7 +79,7 @@ export const register = async (data) => {
 export const sendFoodCategorySpeech = async (roomId, data) => {
   try {
     return await apiClient.post(
-      `/rooms/food-category/speech?roomId=${roomId}`,
+      `/foodcategories/speech?roomId=${roomId}`,
       data
     );
   } catch (exception) {
@@ -91,11 +91,11 @@ export const sendFoodCategorySpeech = async (roomId, data) => {
   }
 };
 
-// 음식 종류 수집 페이지에서 유저가 선택하여 추가하거나 지운 음식 종류를 서버에 전달한다
-// data : {“categoryId” : string, “isDelete” : boolean}
-export const sendFoodCategoryButton = async (roomId, data) => {
+// 선택 완료를 누른 시점에 user가 선택한 음식 종류를 서버에 전달한다
+// data : {“selectedKeywords" : string[]}
+export const sendFoodCategory = async (roomId, data) => {
   try {
-    return await apiClient.post(`/rooms/food-category?roomId=${roomId}`, data);
+    return await apiClient.post(`/foodcategories?roomId=${roomId}`, data);
   } catch (exception) {
     checkResponseCode(exception);
     return {
