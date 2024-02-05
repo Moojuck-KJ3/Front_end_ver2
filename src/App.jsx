@@ -5,10 +5,16 @@ import ResisterPage from "./pages/authPage/ResisterPage";
 import CreateRoomPage from "./pages/createRoomPage/CreateRoomPage";
 import PlayRoomPage from "./pages/playPage/PlayRoomPage";
 import WaitingPage from "./pages/waitingPage/WaitingPage";
-import { useLocalCameraStream } from "./realtimeComunication/webRTCManager";
+import {
+  useChatConnection,
+  useLocalCameraStream,
+  usePeerConnection,
+} from "./realtimeComunication/webRTCManager";
 
 function App() {
   const { localStream } = useLocalCameraStream();
+  const { peerConnection, guestStream } = usePeerConnection(localStream);
+  useChatConnection(peerConnection);
 
   return (
     <BrowserRouter>
@@ -19,9 +25,16 @@ function App() {
         <Route path="/entry" element={<CreateRoomPage />} />
         <Route
           path="/waiting-friends/:roomId"
-          element={<WaitingPage localStream={localStream} />}
+          element={
+            <WaitingPage localStream={localStream} guestStream={guestStream} />
+          }
         />
-        <Route path="/play-room/:roomId" element={<PlayRoomPage />} />
+        <Route
+          path="/play-room/:roomId"
+          element={
+            <PlayRoomPage localStream={localStream} guestStream={guestStream} />
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

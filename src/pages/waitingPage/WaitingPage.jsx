@@ -1,21 +1,16 @@
 import { useNavigate, useParams } from "react-router-dom";
 import WaitingFreindVideoContainer from "../createRoomPage/video/WaitingFreindVideoContainer";
 import CreateRoomPageFooter from "../createRoomPage/CreateRoomPageFooter";
-import {
-  useChatConnection,
-  usePeerConnection,
-} from "../../realtimeComunication/webRTCManager";
+
 import CopyToClipboardButton from "./ClipboardClipboardCopyButton";
 import { useEffect, useState } from "react";
 import socket from "../../realtimeComunication/socket";
 
-const WaitingPage = ({ localStream }) => {
+const WaitingPage = ({ localStream, guestStream }) => {
   const [isAllPlayerReady, setIsAllPlayerReady] = useState(false);
   const navigator = useNavigate();
   const { roomId } = useParams();
   const [progressValue, setProgressValue] = useState(50);
-  const { peerConnection, guestStream } = usePeerConnection(localStream);
-  useChatConnection(peerConnection);
 
   useEffect(() => {
     const handleAllPlayerReady = () => {
