@@ -11,7 +11,7 @@ const ModeOneExpainModal = ({ isShowModal, onShow }) => {
   };
   return (
     <>
-      {onShow === false && (
+      {isShowModal === false && (
         <div>
           <div className="modal fixed w-full h-full -top-10 left-0 flex items-center justify-center">
             {/* overlay  */}
