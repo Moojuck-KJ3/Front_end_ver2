@@ -2,6 +2,17 @@ import { useParams } from "react-router-dom";
 import socket from "./socket";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+export let global_localStream = null;
+export let global_remoteStream = null;
+
+export const getLocalStream = () => {
+  return global_localStream;
+};
+
+export const getRemoteStream = () => {
+  return global_remoteStream;
+};
+
 export function useChatConnection(peerConnection) {
   const { roomId } = useParams();
 
@@ -53,6 +64,7 @@ export function useLocalCameraStream() {
       .getUserMedia({ video: true, audio: true })
       .then((stream) => {
         setLocalStream(stream);
+        global_localStream = stream;
       });
   }, []);
 
@@ -83,11 +95,14 @@ export function usePeerConnection(localStream) {
 
     connection.addEventListener("track", ({ streams }) => {
       setGuestStream(streams[0]);
+      global_remoteStream = streams[0];
     });
 
-    localStream.getTracks().forEach((track) => {
-      connection.addTrack(track, localStream);
-    });
+    if (localStream) {
+      localStream.getTracks().forEach((track) => {
+        connection.addTrack(track, localStream);
+      });
+    }
 
     return connection;
   }, [localStream, roomId]);
@@ -124,7 +139,7 @@ export function useSendingAnswer(peerConnection) {
 
       socket.emit("answer", { answer, roomId });
     },
-    [roomId]
+    [peerConnection, roomId]
   );
 
   return {
