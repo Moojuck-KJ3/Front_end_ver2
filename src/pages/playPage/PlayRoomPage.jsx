@@ -29,7 +29,6 @@ const PlayRoomPage = () => {
   const [remoteStrem, setRemoteStream] = useState(null);
   const [tags, setTags] = useState([]);
   const [isReady, setIsReady] = useState(false);
-
   useEffect(() => {
     const local = getLocalStream();
     setLocalStream(local);
@@ -53,8 +52,8 @@ const PlayRoomPage = () => {
     const handleModeChange = (data) => {
       console.log(data);
       if (data && data.numberOfPeopleInRoom <= 2) {
-        console.log("handleModeChange is called", data.newMode);
-        setRoomMode(data.newMode);
+        console.log("handleModeChange is called", data.response);
+        setRoomMode(data.response);
         setIsReady(false);
       }
     };
@@ -80,7 +79,6 @@ const PlayRoomPage = () => {
   });
 
   const handleChangeContent = (contentNum) => {
-    console.log(contentNum);
     switch (contentNum) {
       case MODEThree_Content.Content1:
         return setModeThreeContent(1);
