@@ -108,7 +108,7 @@ const VoiceRecoder = (isOwner, playerHand) => {
     socket.on("receive-speech", (data) => {
       console.log("receive-speech", data);
 
-      if (isRightVoices(isOwner, data.userId)) {
+      if (isRightVoices(isOwner, data)) {
         console.log("isRightVoices");
         setRecordState(RECORD_STATE.RECORDING);
       }
