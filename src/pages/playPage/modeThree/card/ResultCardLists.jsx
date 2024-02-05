@@ -4,27 +4,27 @@ const DUMMY_PLACE = [
   {
     id: "item1",
     title: "토니모리",
-    imgUrl: "./초밥.png",
+    imgUrl: "/초밥.png",
   },
   {
     id: "item2",
     title: "역전할맥",
-    imgUrl: "./돈까스.png",
+    imgUrl: "/돈까스.png",
   },
   {
     id: "item3",
     title: "교촌치킨",
-    imgUrl: "./샤브샤브.png",
+    imgUrl: "/샤브샤브.png",
   },
   {
     id: "item4",
     title: "할매국밥",
-    imgUrl: "./된장찌개.png",
+    imgUrl: "/된장찌개.png",
   },
   {
     id: "item5",
     title: "돈까스",
-    imgUrl: "./국밥.png",
+    imgUrl: "/국밥.png",
   },
 ];
 

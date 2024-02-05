@@ -1,15 +1,21 @@
-import Card from "./Card";
 import PlayerHandPlace from "./modeThree/PlayerHandPlace";
-import PlaceCard from "./modeThree/card/PlaceCard";
 
 const PlayerHand = ({ Hands, playerName, avatarUrl }) => {
   const foodTags = Hands?.foodTag ?? [];
   const placeTag = Hands?.placeTag ?? [];
   const selectedTag = Hands?.selectedTag ?? [];
 
-  const handleDragStart = (event) => {
-    event.dataTransfer.setData("id", event.currentTarget.id);
-    setIsDragging(true);
+  const handleDragStart = (event, tag) => {
+    const restaurantData = JSON.stringify({
+      address: tag.address,
+      keyword_list: tag.keyword_list,
+      name: tag.name,
+      rating: tag.rating,
+      restarantId: tag.restarantId,
+      thumbnailURL: tag.thumbnailURL,
+    });
+
+    event.dataTransfer.setData("tag", restaurantData);
   };
 
   const renderFoodTags = (tags, label) => (
@@ -44,11 +50,11 @@ const PlayerHand = ({ Hands, playerName, avatarUrl }) => {
         {tags.map((tag, index) => (
           <div
             key={index}
-            id={tag.id}
+            id={tag.restarantId}
             draggable={true}
-            onDragStart={handleDragStart}
+            onDragStart={(e) => handleDragStart(e, tag)}
           >
-            <PlayerHandPlace imgUrl={tag.imgUrl} />
+            <PlayerHandPlace imgUrl={tag.thumbnailURL} />
           </div>
         ))}
       </div>

@@ -5,74 +5,8 @@ import ResultCardLists from "./ResultCardLists";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import HelpIcon from "@mui/icons-material/Help";
 import LoopIcon from "@mui/icons-material/Loop";
-import TastyTag1 from "./TastyTag1";
-import TastyTag from "./TastyTag";
 import { useParams } from "react-router-dom";
-import { getKeywordsToRests, postKeywordsToRests } from "../../../../api";
-
-const DUMMY_RESULT_PLACE = [
-  {
-    id: "item1",
-    title: "토니모리",
-    imgUrl: "./초밥.png",
-  },
-  {
-    id: "item2",
-    title: "역전할맥",
-    imgUrl: "./PlacePhoto_2.png",
-  },
-  {
-    id: "item3",
-    title: "교촌치킨",
-    imgUrl: "./PlacePhoto.png",
-  },
-  {
-    id: "item4",
-    title: "할매국밥",
-    imgUrl: "./PlacePhoto_1.png",
-  },
-  {
-    id: "item5",
-    title: "돈까스",
-    imgUrl: "./PlacePhoto_2.png",
-  },
-];
-
-const DUMMY_PLACE = [
-  {
-    id: "item1",
-    title: "맛집",
-    imgUrl: "./초밥.png",
-  },
-  {
-    id: "item2",
-    title: "카페",
-    imgUrl: "./PlacePhoto_2.png",
-  },
-  {
-    id: "item3",
-    title: "디저트",
-    imgUrl: "./PlacePhoto.png",
-  },
-];
-
-const DUMMY_PLACE1 = [
-  {
-    id: "item1",
-    title: "맛집",
-    imgUrl: "./PlacePhoto_1.png",
-  },
-  {
-    id: "item2",
-    title: "카페",
-    imgUrl: "./된장찌개.png",
-  },
-  {
-    id: "item3",
-    title: "디저트",
-    imgUrl: "./국밥.png",
-  },
-];
+import { getKeywordsToRests } from "../../../../api";
 
 const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
   const [draggedTagA, setDraggedTagA] = useState(null);
@@ -92,7 +26,6 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
       if (response.error) {
         console.log(response.exception);
       } else {
-        console.log(response.restaurants);
         setPlaceList(response.restaurants);
       }
     };
@@ -101,6 +34,7 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
   }, []);
 
   useEffect(() => {
+    console.log(draggedTagA, draggedTagB);
     if (draggedTagA && draggedTagB) {
       setIsSpining(true);
       const delay = setTimeout(() => {
@@ -122,18 +56,16 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
   const handleDrop = (event, targetList) => {
     event.preventDefault();
 
-    const id = event.dataTransfer.getData("id");
-    const item = DUMMY_PLACE.find((x) => x.id === id);
-    console.log(item);
-
-    if (item) {
+    const tagData = event.dataTransfer.getData("tag");
+    const tag = JSON.parse(tagData);
+    if (tag) {
       // drag 하여 놓을때 post 요청
       // post 요청이 성공한 경우, response에 error가 없는 경우
 
       if (targetList === "A") {
-        setDraggedTagA(item);
+        setDraggedTagA(tag);
       } else if (targetList === "B") {
-        setDraggedTagB(item);
+        setDraggedTagB(tag);
       }
     }
 
@@ -183,7 +115,7 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
                 onDragOver={handleDragOver}
                 onDrop={(event) => handleDrop(event, "A")}
               >
-                {draggedTagA && <BigPlaceCard img={draggedTagA.imgUrl} />}
+                {draggedTagA && <BigPlaceCard img={draggedTagA.thumbnailURL} />}
               </div>
 
               <div className=" flex justify-center items-center mt-2 ">
@@ -207,7 +139,7 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
                 onDragOver={handleDragOver}
                 onDrop={(event) => handleDrop(event, "B")}
               >
-                {draggedTagB && <BigPlaceCard img={draggedTagB.imgUrl} />}
+                {draggedTagB && <BigPlaceCard img={draggedTagB.thumbnailURL} />}
               </div>
             </div>
           )}

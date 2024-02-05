@@ -1,17 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import TagCard from "./TagCard";
-//import { tagNames } from "./tagName";
 
-import { getMoodKeyword, postMoodKeywordButton } from "../../../../api";
-import { useParams } from "react-router";
-
-const RandomPlaceTags = ({ onCardClick }) => {
-  const [tags, setTags] = useState([]);
-  const { roomId } = useParams();
-
+const RandomPlaceTags = ({ onCardClick, tags }) => {
+  const recognitionRef = useRef(null);
   const handleCardClick = (type, card) => {
-    onCardClick(type, card);
+    onCardClick(type, card.name);
   };
+
   // Function to get 12 random tags
   // const getRandomTags = () => {
   //   const shuffledTags = [...tagNames].sort(() => 0.5 - Math.random());
@@ -19,27 +14,64 @@ const RandomPlaceTags = ({ onCardClick }) => {
   // };
 
   useEffect(() => {
-    const getMoodKeywords = async (roomId) => {
-      const response = await getMoodKeyword(roomId);
+    setupSpeechRecognition();
 
-      if (response.error) {
-        console.log(response.exception);
-      } else {
-        // 가져온 수식어들을 태그처럼 활용할 예정
-        setTags(response.moodKeywords);
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+        recognitionRef.current.onend = null;
+        recognitionRef.current.onresult = null;
+        recognitionRef.current.onerror = null;
       }
     };
-
-    getMoodKeywords(roomId);
   }, []);
 
-  const handleTagClick = (tag) => {
-    const data = {
-      keywordId: tag.id,
-      isDelete: false,
-    };
+  const handleMatchedTag = (type, tag) => {
+    onCardClick(type, tag.name);
+    // const data = {
+    //   keywordId: tag.id,
+    //   isDelete: false,
+    // };
+    // postMoodKeywordButton(roomId, data);
+  };
 
-    postMoodKeywordButton(roomId, data);
+  const setupSpeechRecognition = () => {
+    if (!recognitionRef.current) {
+      recognitionRef.current = new window.webkitSpeechRecognition();
+
+      recognitionRef.current.continuous = true;
+      recognitionRef.current.lang = "ko-KR";
+      recognitionRef.current.interimResults = false;
+      recognitionRef.current.onresult = (event) => {
+        const last = event.results.length - 1;
+        const text = event.results[last][0].transcript.trim();
+        console.log("Voice Input:", text);
+        matchTagByText(text);
+      };
+      recognitionRef.current.start();
+
+      recognitionRef.current.onerror = (event) => {
+        console.error("Speech Recognition Error", event.error);
+      };
+
+      recognitionRef.current.onend = () => {
+        // Automatically restart the recognition in case of end
+        recognitionRef.current.start();
+      };
+    }
+  };
+
+  const matchTagByText = (spokenText) => {
+    const tag = tags.find((tag) =>
+      tag.name.toLowerCase().includes(spokenText.toLowerCase())
+    );
+
+    if (tag) {
+      console.log("Tag is matched");
+      handleMatchedTag("placeTag", tag);
+    } else {
+      console.log("Tag is not matched");
+    }
   };
 
   return (
@@ -48,7 +80,7 @@ const RandomPlaceTags = ({ onCardClick }) => {
         <div className="grid grid-cols-4 gap-3 p-10">
           {tags.map((tag, i) => (
             <button key={i} onClick={() => handleCardClick("placeTag", tag)}>
-              <TagCard data={tag.name} handleClick={handleTagClick} />
+              <TagCard data={tag.name} />
             </button>
           ))}
         </div>
