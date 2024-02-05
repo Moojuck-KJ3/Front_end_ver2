@@ -1,10 +1,8 @@
-import React from "react";
-
 const MODE = {
-  MODE1: "MODE_NUMBER_ONE",
-  MODE2: "MODE_NUMBER_TWO",
-  MODE3: "MODE_NUMBER_THREE",
-  MODE4: "MODE_NUMBER_FOUR",
+  MODE1: 1,
+  MODE2: 2,
+  MODE3: 3,
+  MODE4: 3,
 };
 
 const ModeSetButton = ({ setRoomMode }) => {

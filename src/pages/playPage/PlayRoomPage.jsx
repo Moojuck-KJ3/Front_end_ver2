@@ -51,7 +51,7 @@ const PlayRoomPage = () => {
 
   useEffect(() => {
     const handleModeChange = (newMode) => {
-      console.log("handleModeChange is called");
+      console.log("handleModeChange is called", newMode);
       setRoomMode(newMode);
       SetIsReady(false);
     };
@@ -64,8 +64,10 @@ const PlayRoomPage = () => {
   });
 
   const handleSetReady = () => {
+    console.log("handleSetReady is called");
     SetIsReady(true);
-    socket.emit("user-ready", { roomId, roomMode });
+    console.log({ roomId, roomMode });
+    socket.emit("select-done", { roomId, roomMode });
   };
 
   const [playerHand, setPlayerHand] = useState({
@@ -216,10 +218,10 @@ const PlayRoomPage = () => {
 };
 
 const MODE = {
-  MODE1: "MODE_NUMBER_ONE",
-  MODE2: "MODE_NUMBER_TWO",
-  MODE3: "MODE_NUMBER_THREE",
-  MODE4: "MODE_NUMBER_FOUR",
+  MODE1: 1,
+  MODE2: 2,
+  MODE3: 3,
+  MODE4: 4,
 };
 
 const MODEThree_Content = {
