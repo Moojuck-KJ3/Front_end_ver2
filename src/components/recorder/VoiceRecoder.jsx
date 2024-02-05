@@ -17,8 +17,14 @@ const RECORD_STATE = {
   FINISH: 2,
 };
 
-const isRightVoices = (isOwner, userId) => {
-  if ((isOwner && userId === userId) || (!isOwner && userId !== userId))
+const isRightVoices = (isOwner, ReceiveUserId) => {
+  const userDetails = localStorage.getItem("user");
+  const userId = JSON.parse(userDetails).id;
+
+  if (
+    (isOwner && userId === ReceiveUserId) ||
+    (!isOwner && userId !== ReceiveUserId)
+  )
     return true;
 
   return false;
@@ -91,21 +97,19 @@ const VoiceRecoder = (isOwner, playerHand) => {
   }, [recordState]);
 
   useEffect(() => {
-    const userDetails = localStorage.getItem("user");
-    const userId = JSON.parse(userDetails).id;
-
     socket.on("receive-speech-keyword", (data) => {
       console.log("receive-speech-keyword : ", data);
 
-      if (isRightVoices(isOwner, userId)) {
+      if (isRightVoices(isOwner, data.userId)) {
         setReceiveKeywords(data.keywords);
       }
     });
 
-    socket.on("receive-speech", () => {
-      console.log("receive-speech");
+    socket.on("receive-speech", (data) => {
+      console.log("receive-speech", data);
 
-      if (isRightVoices(isOwner, userId)) {
+      if (isRightVoices(isOwner, data.userId)) {
+        console.log("isRightVoices");
         setRecordState(RECORD_STATE.RECORDING);
       }
     });
