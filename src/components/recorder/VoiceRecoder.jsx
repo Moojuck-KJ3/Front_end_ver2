@@ -21,11 +21,14 @@ const isRightVoices = (isOwner, ReceiveUserId) => {
   const userDetails = localStorage.getItem("user");
   const userId = JSON.parse(userDetails).id;
 
+  console.log(isOwner, userId, ReceiveUserId);
+
   if (
     (isOwner && userId === ReceiveUserId) ||
     (!isOwner && userId !== ReceiveUserId)
-  )
+  ) {
     return true;
+  }
 
   return false;
 };
@@ -109,7 +112,6 @@ const VoiceRecoder = (isOwner, playerHand) => {
       console.log("receive-speech", data);
 
       if (isRightVoices(isOwner, data)) {
-        console.log("isRightVoices");
         setRecordState(RECORD_STATE.RECORDING);
       }
     });
