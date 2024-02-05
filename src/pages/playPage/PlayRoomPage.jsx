@@ -29,6 +29,8 @@ const PlayRoomPage = () => {
   const [remoteStrem, setRemoteStream] = useState(null);
   const [tags, setTags] = useState([]);
   const [isReady, setIsReady] = useState(false);
+  const [roomReadyCount, setRoomReadyCount] = useState(0);
+
   useEffect(() => {
     const local = getLocalStream();
     setLocalStream(local);
@@ -50,15 +52,15 @@ const PlayRoomPage = () => {
 
   useEffect(() => {
     const handleModeChange = (data) => {
-      console.log(data);
-      if (data && data.numberOfPeopleInRoom <= 2) {
-        console.log("handleModeChange is called", data.response);
-        setRoomMode(data.response);
+      if (data.roomReadyCount < 2) {
+        setRoomReadyCount((prev) => prev + 1);
+      } else if (data.roomReadyCount >= 2) {
+        setRoomMode(data.newMode);
         setIsReady(false);
       }
     };
 
-    socket.on("mode-change-response", (data) => handleModeChange(data));
+    socket.on("mode-change-response", handleModeChange);
 
     return () => {
       socket.off("mode-change-response", handleModeChange);
@@ -68,8 +70,8 @@ const PlayRoomPage = () => {
   const handleSetReady = () => {
     console.log("handleSetReady is called");
     setIsReady(true);
-    console.log({ roomId, roomMode });
-    socket.emit("select-done", { roomId, roomMode });
+    console.log({ roomId, roomMode, roomReadyCount });
+    socket.emit("select-done", { roomId, roomReadyCount, roomMode });
   };
 
   const [playerHand, setPlayerHand] = useState({
