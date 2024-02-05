@@ -51,24 +51,25 @@ const PlayRoomPage = () => {
   }, []);
 
   useEffect(() => {
-    const handleModeChange = (data) => {
-      if (data.roomReadyCount < 2) {
-        setRoomReadyCount((prev) => prev + 1);
-      } else if (data.roomReadyCount >= 2) {
-        console.log(data.roomReadyCount);
-        setRoomMode(data.newMode);
-        setIsReady(false);
-        setRoomReadyCount(0);
-        console.log(data.roomReadyCount);
-      }
-    };
-
+    socket.connect();
     socket.on("mode-change-response", handleModeChange);
 
     return () => {
       socket.off("mode-change-response", handleModeChange);
     };
   }, []);
+
+  const handleModeChange = (data) => {
+    if (data.roomReadyCount < 2) {
+      setRoomReadyCount((prev) => prev + 1);
+    } else if (data.roomReadyCount >= 2) {
+      console.log(data.roomReadyCount);
+      setRoomMode(data.newMode);
+      setIsReady(false);
+      setRoomReadyCount(0);
+      console.log(data.roomReadyCount);
+    }
+  };
 
   const handleSetReady = () => {
     console.log("handleSetReady is called");
