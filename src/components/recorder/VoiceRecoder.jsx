@@ -15,10 +15,17 @@ const VoiceRecoder = () => {
   const recognitionRef = useRef(null);
 
   const { roomId } = useParams();
+  const serverSendTextRef = useRef("");
+
+  useEffect(() => {
+    console.log("serverSendText : ", transcript);
+    serverSendTextRef.current = transcript;
+  }, [transcript]);
 
   // Function to start recording
   const startRecording = () => {
-    setTranscript("");
+    //setTranscript("");
+    serverSendTextRef.current = "";
 
     setIsRecording(true);
     // Create a new SpeechRecognition instance and configure it
@@ -30,7 +37,7 @@ const VoiceRecoder = () => {
     recognitionRef.current.onresult = (event) => {
       const tempScript = event.results[event.results.length - 1][0].transcript;
       // Log the recognition results and update the transcript state
-      console.log("tempScript : ", tempScript);
+      //console.log("tempScript : ", tempScript);
       setTranscript(tempScript);
     };
 
@@ -71,13 +78,15 @@ const VoiceRecoder = () => {
   };
 
   const sendTranscriptToServer = () => {
-    console.log("Sending transcript to server:", transcript);
+    console.log("Sending transcript to server:", serverSendTextRef.current);
 
     const data = {
-      userSpeech: transcript,
+      userSpeech: serverSendTextRef.current,
     };
 
     const sendFoodCategoryData = async (roomId, data) => {
+      console.log("roomId : ", roomId);
+      console.log("data : ", data);
       const response = sendFoodCategorySpeech(roomId, data);
       if (response.error) {
         console.log(response.exception);
