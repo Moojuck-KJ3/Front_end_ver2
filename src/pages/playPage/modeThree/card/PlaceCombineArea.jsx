@@ -6,7 +6,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import HelpIcon from "@mui/icons-material/Help";
 import LoopIcon from "@mui/icons-material/Loop";
 import { useParams } from "react-router-dom";
-import { getKeywordsToRests } from "../../../../api";
+import { getKeywordsToRests, postKeywordsToRests } from "../../../../api";
 
 const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
   const [draggedTagA, setDraggedTagA] = useState(null);
@@ -61,11 +61,28 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
     if (tag) {
       // drag 하여 놓을때 post 요청
       // post 요청이 성공한 경우, response에 error가 없는 경우
+      console.log(tag);
+      const data = {
+        restId: tag.restarantId,
+        slotIndex: targetList === "A" ? 0 : 1,
+      };
 
-      if (targetList === "A") {
-        setDraggedTagA(tag);
-      } else if (targetList === "B") {
-        setDraggedTagB(tag);
+      const postPlaceToSlot = async (roomId, data) => {
+        const response = await postKeywordsToRests(roomId, data);
+        if (response.error) {
+          console.log("postKeywordsToRests error : ", response.exception);
+          return false;
+        }
+
+        return true;
+      };
+
+      if (postPlaceToSlot(roomId, data) === true) {
+        if (targetList === "A") {
+          setDraggedTagA(tag);
+        } else if (targetList === "B") {
+          setDraggedTagB(tag);
+        }
       }
     }
 
