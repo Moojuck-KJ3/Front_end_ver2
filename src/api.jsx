@@ -127,10 +127,7 @@ export const getMoodKeyword = async (roomId) => {
 // data : {userSpeech : string}
 export const postMoodKeywordSpeech = async (roomId, data) => {
   try {
-    return await apiClient.post(
-      `/rooms/mood-keyword/speech?roomId=${roomId}`,
-      data
-    );
+    return await apiClient.post(`/keywords/mood/speech?roomId=${roomId}`, data);
   } catch (exception) {
     checkResponseCode(exception);
     return {
@@ -141,10 +138,13 @@ export const postMoodKeywordSpeech = async (roomId, data) => {
 };
 
 // 무드 키워드 수집 모드에서 유저가 선택하거나 지운 무드 키워드를 서버에 전달한다
-// data : {“keywordId” : string, “isDelete” : boolean}
-export const postMoodKeywordButton = async (roomId, data) => {
+// data : { “moodKeywords” : string[]}
+export const sendMoodKeyword = async (roomId, data) => {
   try {
-    return await apiClient.post(`/rooms/mood-keyword?roomId=${roomId}`, data);
+    return await apiClient.post(
+      `/rooms/mood-keyword/done?roomId=${roomId}`,
+      data
+    );
   } catch (exception) {
     checkResponseCode(exception);
     return {
