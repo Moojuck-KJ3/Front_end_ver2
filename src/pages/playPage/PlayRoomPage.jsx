@@ -14,9 +14,11 @@ import {
   getLocalStream,
   getRemoteStream,
 } from "../../realtimeComunication/webRTCManager";
-import { getMoodKeyword } from "../../api";
+//import { getMoodKeyword } from "../../api";
 import { useParams } from "react-router-dom";
 import socket from "../../realtimeComunication/socket";
+
+import { tagNames } from "./modeTwo/TagList";
 
 const PlayRoomPage = () => {
   const { roomId } = useParams();
@@ -37,17 +39,18 @@ const PlayRoomPage = () => {
     const remote = getRemoteStream();
     setRemoteStream(remote);
 
-    const getMoodKeywords = async (roomId) => {
-      const response = await getMoodKeyword(roomId);
+    // const getMoodKeywords = async (roomId) => {
+    //   const response = await getMoodKeyword(roomId);
 
-      if (response.error) {
-        console.log(response.exception);
-      } else {
-        setTags(response.moodKeywords);
-      }
-    };
+    //   if (response.error) {
+    //     console.log(response.exception);
+    //   } else {
+    //     setTags(response.moodKeywords);
+    //   }
+    // };
 
-    getMoodKeywords(roomId);
+    // getMoodKeywords(roomId);
+    setTags(tagNames);
   }, []);
 
   useEffect(() => {
@@ -150,15 +153,7 @@ const PlayRoomPage = () => {
             <div className="w-full flex flex-col">
               {/* 컨텐츠 */}
               <div className="flex gap-5">
-                {/* 좌측이 나 */}
                 <VoiceRecoder
-                  isOwner={true}
-                  playerHand={playerHand}
-                  isCloseModal={showModal}
-                />
-                {/* 우측이 다른 user */}
-                <VoiceRecoder
-                  isOwner={false}
                   playerHand={playerHand}
                   isCloseModal={showModal}
                 />

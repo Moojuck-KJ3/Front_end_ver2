@@ -1,6 +1,8 @@
 import ResultCard from "./ResultCard";
+import { postCombineSelect } from "../../../../api";
+import { useParams } from "react-router-dom";
 
-const DUMMY_PLACE = [
+export const DUMMY_PLACE = [
   {
     id: "item1",
     title: "토니모리",
@@ -29,6 +31,19 @@ const DUMMY_PLACE = [
 ];
 
 const ResultCardLists = () => {
+  const roomId = useParams();
+
+  const handleSelect = async (event, id) => {
+    event.preventDefault();
+
+    const response = await postCombineSelect(roomId, id);
+    if (response.error) {
+      console.log(response.exception);
+    } else {
+      console.log(response);
+    }
+  };
+
   return (
     <ul className="flex gap-10">
       <li
@@ -40,6 +55,8 @@ const ResultCardLists = () => {
         <ResultCard
           title={DUMMY_PLACE[0].title}
           imgUrl={DUMMY_PLACE[0].imgUrl}
+          id={DUMMY_PLACE[0].id}
+          onClick={handleSelect}
         />
       </li>
       <li
@@ -51,6 +68,8 @@ const ResultCardLists = () => {
         <ResultCard
           title={DUMMY_PLACE[1].title}
           imgUrl={DUMMY_PLACE[1].imgUrl}
+          id={DUMMY_PLACE[1].id}
+          onClick={handleSelect}
         />
       </li>
       <li
@@ -62,6 +81,8 @@ const ResultCardLists = () => {
         <ResultCard
           title={DUMMY_PLACE[2].title}
           imgUrl={DUMMY_PLACE[2].imgUrl}
+          id={DUMMY_PLACE[2].id}
+          onClick={handleSelect}
         />
       </li>
       <li
@@ -73,6 +94,8 @@ const ResultCardLists = () => {
         <ResultCard
           title={DUMMY_PLACE[3].title}
           imgUrl={DUMMY_PLACE[3].imgUrl}
+          id={DUMMY_PLACE[3].id}
+          onClick={handleSelect}
         />
       </li>
       <li
@@ -84,6 +107,8 @@ const ResultCardLists = () => {
         <ResultCard
           title={DUMMY_PLACE[4].title}
           imgUrl={DUMMY_PLACE[4].imgUrl}
+          id={DUMMY_PLACE[4].id}
+          onClick={handleSelect}
         />
       </li>
     </ul>

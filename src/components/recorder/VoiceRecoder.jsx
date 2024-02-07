@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import VoiceRecoderContainer from "./VoiceRecoderContainer";
 import Timer from "./Timer";
 
-import { sendFoodCategorySpeech, sendFoodCategory } from "../../api";
+import { sendFoodCategorySpeech } from "../../api";
 import { useParams } from "react-router";
 import socket from "../../realtimeComunication/socket";
 import KeyWordFlippableCard from "../button/keywordCard";
@@ -17,32 +17,14 @@ const RECORD_STATE = {
   FINISH: 2,
 };
 
-const isRightVoices = (isOwner, ReceiveUserId) => {
-  const userDetails = localStorage.getItem("user");
-  const userId = JSON.parse(userDetails).id;
-
-  console.log("isOwner : ", isOwner);
-  console.log("userId : ", userId);
-  console.log("ReceiveUserId : ", ReceiveUserId);
-
-  if (
-    (isOwner && userId === ReceiveUserId) ||
-    (!isOwner && userId !== ReceiveUserId)
-  ) {
-    return true;
-  }
-
-  return false;
-};
-
-const VoiceRecoder = ({ isOwner, playerHand, isCloseModal }) => {
-  //const [isRecording, setIsRecording] = useState(false);
+const VoiceRecoder = ({ playerHand, isCloseModal }) => {
   const [transcript, setTranscript] = useState("");
   const [showTimer, setShowTimer] = useState(true);
   const [timeLeft, setTimeLeft] = useState(5);
   const [onReady, setOnReady] = useState(false);
-  const [receiveKeywords, setReceiveKeywords] = useState([]);
   const [recordState, setRecordState] = useState(RECORD_STATE.WAIT);
+
+  const [receiveCategories, setReceiveCategories] = useState([]);
 
   // Reference to store the SpeechRecognition instance
   const recognitionRef = useRef(null);
@@ -76,13 +58,11 @@ const VoiceRecoder = ({ isOwner, playerHand, isCloseModal }) => {
 
   const start = async () => {
     setShowTimer(true);
-    console.log("startRecording isOwnwer : ", isOwner);
     await startRecording();
   };
 
   // Function to stop recording
   const stopRecording = () => {
-    console.log("stopRecording isOwnwer : ", isOwner);
     setShowTimer(false);
     sendTranscriptToServer();
     if (recognitionRef.current) {
@@ -104,23 +84,10 @@ const VoiceRecoder = ({ isOwner, playerHand, isCloseModal }) => {
   }, [recordState]);
 
   useEffect(() => {
-    console.log("isCloseModal : ", isCloseModal);
+    socket.on("receive-speech-foodCategory", (data) => {
+      console.log("receive-speech-foodCategory : ", data);
 
-    socket.on("receive-speech-keyword", (data) => {
-      console.log("receive-speech-keyword : ", data);
-
-      if (isRightVoices(isOwner, data.userId)) {
-        setReceiveKeywords(data.keywords);
-      }
-    });
-
-    socket.on("receive-speech", (data) => {
-      console.log("receive-speech : ", data);
-
-      if (isRightVoices(isOwner, data)) {
-        console.log("receive-speech Success: ", data);
-        setRecordState(RECORD_STATE.RECORDING);
-      }
+      setReceiveCategories(data.foodCategories);
     });
 
     return () => {
@@ -129,8 +96,7 @@ const VoiceRecoder = ({ isOwner, playerHand, isCloseModal }) => {
         recognitionRef.current.stop();
       }
 
-      socket.off("receive-speech-keyword");
-      socket.off("receive-speech");
+      socket.off("receive-speech-foodCategory");
     };
   }, []);
 
@@ -154,23 +120,20 @@ const VoiceRecoder = ({ isOwner, playerHand, isCloseModal }) => {
   };
 
   const handleReady = () => {
-    // owner가 아니면 실행하지 않는다
-    if (isOwner === false) return;
-
     setOnReady(true);
 
-    const data = {
-      selectedKeywords: playerHand.foodTag,
-    };
+    // const data = {
+    //   selectedKeywords: playerHand.foodTag,
+    // };
 
-    const sendFoodCategoryData = async (roomId, data) => {
-      const response = sendFoodCategory(roomId, data);
-      if (response.error) {
-        console.log(response.exception);
-      }
-    };
+    // const sendFoodCategoryData = async (roomId, data) => {
+    //   const response = sendFoodCategory(roomId, data);
+    //   if (response.error) {
+    //     console.log(response.exception);
+    //   }
+    // };
 
-    sendFoodCategoryData(roomId, data);
+    // sendFoodCategoryData(roomId, data);
   };
 
   return (
@@ -242,8 +205,8 @@ const VoiceRecoder = ({ isOwner, playerHand, isCloseModal }) => {
               </div>
 
               <div className="h-[70px] flex border items-center justify-center rounded-md m-4">
-                {receiveKeywords.length > 0
-                  ? receiveKeywords.map((keyword, index) => (
+                {receiveCategories.length > 0
+                  ? receiveCategories.map((keyword, index) => (
                       <p key={index} className="font-semibold">
                         #{keyword}
                       </p>

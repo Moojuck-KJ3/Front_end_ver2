@@ -1,4 +1,4 @@
-const ResultCard = ({ title, imgUrl }) => {
+const ResultCard = ({ title, imgUrl, id, onClick }) => {
   console.log(imgUrl);
   return (
     <div
@@ -36,7 +36,10 @@ const ResultCard = ({ title, imgUrl }) => {
                 <p className="text-sm">21:00까지</p>
               </div>
             </div>
-            <button className="bg-teal-500 px-4 py-2 text-xs font-semibold text-white rounded-full absolute -bottom-20 delay-500 duration-1000 group-hover:bottom-1 scale-0 group-hover:scale-105">
+            <button
+              className="bg-teal-500 px-4 py-2 text-xs font-semibold text-white rounded-full absolute -bottom-20 delay-500 duration-1000 group-hover:bottom-1 scale-0 group-hover:scale-105"
+              onClick={onClick(id)}
+            >
               선택하기
             </button>
           </div>

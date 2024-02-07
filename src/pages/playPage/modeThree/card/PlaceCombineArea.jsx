@@ -6,7 +6,9 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import HelpIcon from "@mui/icons-material/Help";
 import LoopIcon from "@mui/icons-material/Loop";
 import { useParams } from "react-router-dom";
-import { getKeywordsToRests, postKeywordsToRests } from "../../../../api";
+import { postCombine } from "../../../../api";
+
+import { DUMMY_PLACE } from "./ResultCardLists";
 
 const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
   const [draggedTagA, setDraggedTagA] = useState(null);
@@ -21,16 +23,17 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
   useEffect(() => {
     // get 요청으로 getKeywordsToRests 요청 예정
     // 현재 생각으론 dummy_place를 대체할 예정
-    const getPlaceList = async (roomId) => {
-      const response = await getKeywordsToRests(roomId);
-      if (response.error) {
-        console.log(response.exception);
-      } else {
-        setPlaceList(response.restaurants);
-      }
-    };
+    // const getPlaceList = async (roomId) => {
+    //   const response = await getKeywordsToRests(roomId);
+    //   if (response.error) {
+    //     console.log(response.exception);
+    //   } else {
+    //     setPlaceList(response.restaurants);
+    //   }
+    // };
 
-    getPlaceList(roomId);
+    // getPlaceList(roomId);
+    setPlaceList(DUMMY_PLACE);
   }, []);
 
   useEffect(() => {
@@ -68,9 +71,9 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
       };
 
       const postPlaceToSlot = async (roomId, data) => {
-        const response = await postKeywordsToRests(roomId, data);
+        const response = await postCombine(roomId, data);
         if (response.error) {
-          console.log("postKeywordsToRests error : ", response.exception);
+          console.log("postCombine error : ", response.exception);
           return false;
         }
 
@@ -110,7 +113,7 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
                 onClick={() => handleCardClick("selectedTag", place)}
               >
                 {/* imgUrl={place.imgUrl} */}
-                <PlaceCard place={place} />
+                <PlaceCard imgUrl={place.imgUrl} />
               </li>
             ))}
           </ul>

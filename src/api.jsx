@@ -91,41 +91,10 @@ export const sendFoodCategorySpeech = async (roomId, data) => {
   }
 };
 
-// 선택 완료를 누른 시점에 user가 선택한 음식 종류를 서버에 전달한다
-// data : {“selectedKeywords" : string[]}
-export const sendFoodCategory = async (roomId, data) => {
-  try {
-    return await apiClient.post(`/foodcategories?roomId=${roomId}`, data);
-  } catch (exception) {
-    checkResponseCode(exception);
-    return {
-      error: true,
-      exception,
-    };
-  }
-};
-
-// 무드 키워드 수집 모드에서, 처음에 get 요청을 보내 미리 뜰 분위기 키워드 표시
-export const getMoodKeyword = async (roomId) => {
-  try {
-    const response = await apiClient.get(`/keywords/mood?roomId=${roomId}`);
-    const responseData = {
-      moodKeywords: response.data,
-    };
-
-    return responseData;
-  } catch (exception) {
-    checkResponseCode(exception);
-    return {
-      error: true,
-      exception,
-    };
-  }
-};
-
-// 무드 키워드 수집 모드에서 유저가 말한 무드 키워드를 서버에 전달한다
+// 처음에 client에서 대량의 data를 받을 것
+// 따라서 server에서 '정제된' 키워드를 socket으로 받을 예정이다
 // data : {userSpeech : string}
-export const postMoodKeywordSpeech = async (roomId, data) => {
+export const sendMoodKeywordSpeech = async (roomId, data) => {
   try {
     return await apiClient.post(`/keywords/mood/speech?roomId=${roomId}`, data);
   } catch (exception) {
@@ -137,53 +106,13 @@ export const postMoodKeywordSpeech = async (roomId, data) => {
   }
 };
 
-// 무드 키워드 수집 모드에서 유저가 선택하거나 지운 무드 키워드를 서버에 전달한다
-// data : { “moodKeywords” : string[]}
-export const sendMoodKeyword = async (roomId, data) => {
-  try {
-    return await apiClient.post(
-      `/rooms/mood-keyword/done?roomId=${roomId}`,
-      data
-    );
-  } catch (exception) {
-    checkResponseCode(exception);
-    return {
-      error: true,
-      exception,
-    };
-  }
-};
-
-// 교집합 식당 추천 모드에서 기본 식당들을 받는다
-export const getKeywordsToRests = async (roomId) => {
-  try {
-    const response = await apiClient.get(
-      `/restaurants/keywords?roomId=${roomId}`
-    );
-
-    const responseData = {
-      restaurants: response.data,
-    };
-
-    return responseData;
-  } catch (exception) {
-    checkResponseCode(exception);
-    return {
-      error: true,
-      exception,
-    };
-  }
-};
-
 // 교집합 식당 추천 모드에서 식당을 슬롯에 넣어 조합을 시도한다
-// 두 슬롯이 모두 차있어야 반응이 오기에, response body는 없음
-// data : {"restId" : string, "slotIndex" : number,}
-export const postKeywordsToRests = async (roomId, data) => {
+// 한쪽이 비어있는 경우는 null을 넣어 처리
+// data : {"restId1" : string or null, "restId2" : string or null}
+// server에서 response socket을 받아 처리할 예정이므로 response body는 없음
+export const postCombine = async (roomId, data) => {
   try {
-    return await apiClient.post(
-      `/rooms/keywords-to-rests?roomId=${roomId}`,
-      data
-    );
+    return await apiClient.post(`/Combine?roomId=${roomId}`, data);
   } catch (exception) {
     checkResponseCode(exception);
     return {
@@ -193,35 +122,11 @@ export const postKeywordsToRests = async (roomId, data) => {
   }
 };
 
-// 결과 페이지에서 선택된 식당과 선택이 되지 못하였지만 추천된 식당 리스트를 받는다
-export const getResult = async (roomId) => {
+// 교집합 식당 추천 모드에서 식당을 결정한 경우에 대한 post 요청
+// data : {"restId" : string}
+export const postCombineSelect = async (roomId, data) => {
   try {
-    const response = await apiClient.get(
-      `/restaurants/results?roomId=${roomId}`
-    );
-    const responseData = {
-      name: response.data.name,
-      rating: response.data.rating,
-      address: response.data.address,
-      thumnail: response.data.thumnail,
-      menuList: response.data.menuList,
-      reviews: response.data.reviews,
-    };
-
-    return responseData;
-  } catch (exception) {
-    checkResponseCode(exception);
-    return {
-      error: true,
-      exception,
-    };
-  }
-};
-
-// room에서 의사결정 버튼 누른 경우에 대한 get 요청
-export const selectDone = async (roomId) => {
-  try {
-    return await apiClient.get(`/rooms/select-done?roomId=${roomId}`);
+    return await apiClient.post(`/Combine/select?roomId=${roomId}`, data);
   } catch (exception) {
     checkResponseCode(exception);
     return {
