@@ -17,21 +17,38 @@ import {
 //import { getMoodKeyword } from "../../api";
 import { useParams } from "react-router-dom";
 import socket from "../../realtimeComunication/socket";
+import { StarryBackground } from "./StarryBackground";
+import { restaurantLists } from "./restaurantLists";
+import VoiceRecognition from "./modeTwo/VoiceRecognition";
 
 import { tagNames } from "./modeTwo/TagList";
 
 const PlayRoomPage = () => {
   const { roomId } = useParams();
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(true);
   const [roomMode, setRoomMode] = useState(MODE.MODE1);
-  const [modeThreeContent, setModeThreeContent] = useState(
-    MODEThree_Content.Content1
-  );
   const [localStream, setLocalStream] = useState(null);
   const [remoteStrem, setRemoteStream] = useState(null);
-  const [tags, setTags] = useState([]);
+  const [restaurantList, setRestaurantList] = useState(restaurantLists);
   const [isReady, setIsReady] = useState(false);
   const [roomReadyCount, setRoomReadyCount] = useState(0);
+  const [showVoiceRecorder, setShowVoiceRecorder] = useState(false);
+  const [modeOneVoiceRecResult, setModeOneVoiceRecResult] = useState([]);
+  const [modeTwoVoiceRecResult, setModeTwoVoiceRecResult] = useState([]);
+  const [playerHand, setPlayerHand] = useState([
+    {
+      restId: "1",
+      name: "토리모리",
+      x: 1,
+      y: 2,
+      category: "한식", // Korean
+      mood: ["분위기 좋은"],
+
+      miniStarUrl: "/Star_2.png",
+      BigStarUrl: "/Star_3.png",
+      FoodUrl: "/Food.png",
+    },
+  ]);
 
   useEffect(() => {
     const local = getLocalStream();
@@ -77,143 +94,122 @@ const PlayRoomPage = () => {
   const handleSetReady = () => {
     console.log("handleSetReady is called");
     setIsReady(true);
+    setShowVoiceRecorder(false);
     console.log({ roomId, roomMode, roomReadyCount });
     socket.emit("select-done", { roomId, roomReadyCount, roomMode });
   };
 
-  const [playerHand, setPlayerHand] = useState({
-    foodTag: ["ex : 일식", "중식", "한식"],
-    placeTag: ["조용한"],
-    selectedTag: [],
-  });
-
-  const handleChangeContent = (contentNum) => {
-    switch (contentNum) {
-      case MODEThree_Content.Content1:
-        return setModeThreeContent(1);
-
-      case MODEThree_Content.Content2:
-        return setModeThreeContent(2);
-
-      case MODEThree_Content.Content3:
-        return setModeThreeContent(3);
-    }
-  };
-
-  const updatePlayerHand = (cardType, cardValue) => {
-    console.log(cardValue);
-    setPlayerHand((prevHand) => {
-      // Copy previous state to avoid direct mutation
-      const newHand = { ...prevHand };
-
-      // Determine the action based on the mode and card type
-      switch (cardType) {
-        case "foodTag":
-          newHand.foodTag.push(cardValue);
-          break;
-        case "placeTag":
-          newHand.placeTag.push(cardValue);
-          break;
-        case "selectedTag":
-          newHand.selectedTag.push(cardValue);
-          break;
-        default:
-          break;
-      }
-
-      return newHand;
-    });
-  };
-
   return (
     <PlayRoomContainer>
-      <div className="mt-5 flex flex-col justify-center items-center border shadow-lg rounded-xl w-2/3 mx-auto">
-        <div className=" rounded-full absolute bottom-[40%] -left-5 z-10">
-          {isReady && <div>나 준비 완료~</div>}
+      <div className="mt-5 bg-white flex flex-col justify-center items-center border-8 shadow-inner font-tenada rounded-xl w-2/3 mx-auto">
+        <div className=" rounded-full absolute bottom-10 -left-8 z-10">
           <VideoContainer mediaStream={localStream} />
-          <button
-            onClick={handleSetReady}
-            className="bg-blue-300 p-2 rounded-lg"
-          >
-            선택완료
-          </button>
         </div>
-        <div className=" rounded-full absolute bottom-[40%] -right-5 z-10">
+        <div className=" rounded-full absolute bottom-10 -right-8 z-10">
           <VideoContainer mediaStream={remoteStrem} />
         </div>
-        <h1 className="font-bold text-2xl py-2 text-center">
+        <div className=" rounded-full absolute top-16 -right-8 z-10">
+          <img
+            className=" w-40 h-40 items-center border-4 bg-gray-300 border-white
+            shadow-2xl rounded-full object-cover"
+            src="/현재훈_profile.jpg"
+            alt=""
+          />
+        </div>
+        <div className=" rounded-full absolute top-16 -left-8 z-10">
+          <img
+            className=" w-40 h-40 items-center border-4 bg-gray-300 border-white
+            shadow-2xl rounded-full object-cover"
+            src="/이서연_profile.png"
+            alt=""
+          />
+        </div>
+        {/* <h1 className="font-bold text-2xl h-[100px] text-center">
           오늘은 어떤 음식을 먹고 싶으세요?
-        </h1>
-        <ModeSetButton setRoomMode={setRoomMode} />
+        </h1> */}
       </div>
       {roomMode === MODE.MODE1 && (
         <GameArea>
-          {/* 설명 모달 */}
-          <div className="text-center">
-            <div className="w-full flex flex-col">
-              {/* 컨텐츠 */}
-              <div className="flex gap-5">
-                <VoiceRecoder
-                  playerHand={playerHand}
-                  isCloseModal={showModal}
-                />
-              </div>
+          <StarryBackground
+            restaurantList={restaurantList}
+            resultTags={modeOneVoiceRecResult}
+            resultMoodTags={modeTwoVoiceRecResult}
+          />
+          {showModal && (
+            <ModeOneExpainModal
+              isShowModal={showModal}
+              onShow={setShowModal}
+              SetShowVoiceRecorder={setShowVoiceRecorder}
+            />
+          )}
+          {showVoiceRecorder && (
+            <div className=" absolute top-[10%]">
+              <VoiceRecoder
+                onClick={handleSetReady}
+                onSetResult={setModeOneVoiceRecResult}
+              />
             </div>
-            <ModeOneExpainModal isShowModal={showModal} onShow={setShowModal} />
-          </div>
+          )}
 
-          {/* 플레이어 핸드 */}
+          <ModeSetButton setRoomMode={setRoomMode} />
+
           <PlayerHand
             Hands={playerHand}
             playerName="마찬옥님"
-            avatarUrl="./avatar.png" // Replace with the actual path to John's avatar
+            avatarUrl="/avatar.png"
           />
         </GameArea>
       )}
       {roomMode === MODE.MODE2 && (
         <GameArea>
           {/* 컨텐츠 */}
-          <RandomPlaceTags
-            tags={tags}
-            onCardClick={(cardType, cardValue) =>
-              updatePlayerHand(cardType, cardValue)
-            }
-          />
 
+          <VoiceRecognition onSetResult={setModeTwoVoiceRecResult} />
+
+          <StarryBackground
+            restaurantList={restaurantList}
+            resultTags={modeOneVoiceRecResult}
+            resultMoodTags={modeTwoVoiceRecResult}
+          />
+          {/* 프로그레스 바 */}
+          <ModeSetButton setRoomMode={setRoomMode} />
           {/* 플레이어 핸드 */}
           <PlayerHand
             Hands={playerHand}
             playerName="마찬옥님"
-            avatarUrl="./avatar.png" // Replace with the actual path to John's avatar
+            avatarUrl="/avatar.png" // Replace with the actual path to John's avatar
           />
         </GameArea>
       )}
       {roomMode === MODE.MODE3 && (
         <GameArea>
           {/* 버튼 */}
-          <SelectModeButtons onClick={handleChangeContent} />
 
           {/* 컨텐츠 */}
           <div className="w-3/4 flex border-1 shadow-md rounded-lg mx-10 bg-white justify-center ">
             <div className="w-full bg-gray-100 m-3 rounded-md shadow-md justify-center items-center flex ">
               <PlaceCombineArea
-                contentNumber={modeThreeContent}
+                contentNumber={2}
                 onCardClick={(cardType, cardValue) =>
                   updatePlayerHand(cardType, cardValue)
                 }
               />
             </div>
           </div>
+          {/* 프로그레스 바 */}
+          <ModeSetButton setRoomMode={setRoomMode} />
           {/* 플레이어 핸드 */}
           <PlayerHand
             Hands={playerHand}
             playerName="마찬옥님"
-            avatarUrl="./avatar.png" // Replace with the actual path to John's avatar
+            avatarUrl="/avatar.png" // Replace with the actual path to John's avatar
           />
         </GameArea>
       )}
       {roomMode === MODE.MODE4 && (
         <GameArea>
+          {/* 프로그레스 바 */}
+          <ModeSetButton setRoomMode={setRoomMode} />
           <ImageSilderBg />
         </GameArea>
       )}
@@ -226,12 +222,6 @@ const MODE = {
   MODE2: 2,
   MODE3: 3,
   MODE4: 4,
-};
-
-const MODEThree_Content = {
-  Content1: 1,
-  Content2: 2,
-  Content3: 3,
 };
 
 export default PlayRoomPage;

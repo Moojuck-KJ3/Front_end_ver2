@@ -12,17 +12,17 @@ const Timer = ({ onTimeout, timeLeft, setTimeLeft }) => {
     // component re-renders or unmounts
     const intervalId = setInterval(() => {
       setTimeLeft(timeLeft - 1);
-    }, 1000);
+    }, 5000);
 
     return () => clearInterval(intervalId);
-  }, [timeLeft, onTimeout]);
+  }, [timeLeft, onTimeout, setTimeLeft]);
 
   return (
     <div className="w-full justify-center items-center relative">
       <div className="flex justify-center items-center">
         <CircularProgress disableShrink />
       </div>
-      <div className=" font-semibold text-lg w-full items-center absolute top-1">
+      <div className=" font-semibold text-lg w-full items-center absolute top-[16%] left-[48%] ">
         {timeLeft}
       </div>
     </div>
