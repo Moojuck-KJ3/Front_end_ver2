@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { sendMoodKeywordSpeech } from "../../../api";
 import { useParams } from "react-router-dom";
+import socket from "../../../realtimeComunication/socket";
 
 const VoiceRecognition = ({ onSetResult }) => {
   const recognitionRef = useRef(null);
@@ -26,6 +27,11 @@ const VoiceRecognition = ({ onSetResult }) => {
   useEffect(() => {
     setupSpeechRecognition();
 
+    socket.on("receive-speech-foodCategory", (data) => {
+      console.log(data);
+      onSetResult(data.keywords);
+    });
+
     return () => {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
@@ -33,6 +39,8 @@ const VoiceRecognition = ({ onSetResult }) => {
         recognitionRef.current.onresult = null;
         recognitionRef.current.onerror = null;
       }
+
+      socket.off("receive-speech-foodCategory");
     };
   }, []);
 
