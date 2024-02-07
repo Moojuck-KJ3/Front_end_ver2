@@ -2,18 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --gradient-color-1: #20b4c8;
-  --gradient-color-2: rgba(36, 181, 201, 0.99);
-  --gradient-color-3: rgba(255, 255, 255, 0);
+/* Tailwind CSS */
+.moon {
+  @apply relative;
+  box-shadow: inset -10px -5px 6px 1px #7b6447;
 }
-
-body {
-  background: linear-gradient(
-    180deg,
-    var(--gradient-color-1) 0%,
-    var(--gradient-color-2) 0.01%,
-    var(--gradient-color-3) 100%
-  );
-  min-height: 100vh;
+.moon::before {
+  content: "";
+  @apply absolute w-2 h-2 bg-[#cca87c96] rounded-full;
+  top: 35px;
+  left: 15px;
+}
+.moon::after {
+  content: "";
+  @apply absolute w-4 h-4 bg-[#cca87c96] rounded-full;
+  top: 15px;
+  left: 23px;
 }

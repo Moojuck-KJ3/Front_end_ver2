@@ -62,7 +62,7 @@ const PlayerHand = ({ Hands, playerName, avatarUrl }) => {
   );
 
   return (
-    <div className="w-2/3 h-[180px] absolute -bottom-14 flex justify-center bg-white border-1 border-gray-200 shadow-md rounded-lg mx-10">
+    <div className="w-2/3 h-[180px] absolute bottom-0 flex justify-center bg-white border-1 border-gray-200 shadow-md rounded-lg mx-10">
       <div className="w-full bg-gray-100 border-2 m-2 rounded-md shadow-inner p-2 grid grid-cols-8 justify-center items-center ">
         {/* Render foodTag, placeTag, and selectedTag */}
         {renderFoodTags(foodTags, "음식 태그")}

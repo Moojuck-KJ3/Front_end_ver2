@@ -7,7 +7,7 @@ const MODE = {
 
 const ModeSetButton = ({ setRoomMode }) => {
   return (
-    <div className=" absolute top-0 right-0 flex gap-2 m-4">
+    <div className=" absolute -top-5 flex gap-2 m-4">
       <button
         onClick={() => setRoomMode(MODE.MODE1)}
         className="w-5 h-5 bg-white rounded-full"

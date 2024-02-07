@@ -17,6 +17,7 @@ import {
 import { getMoodKeyword } from "../../api";
 import { useParams } from "react-router-dom";
 import socket from "../../realtimeComunication/socket";
+import { StarryBackground } from "./StarryBackground";
 
 const PlayRoomPage = () => {
   const { roomId } = useParams();
@@ -124,19 +125,35 @@ const PlayRoomPage = () => {
 
   return (
     <PlayRoomContainer>
-      <div className="mt-5 flex flex-col justify-center items-center border shadow-lg rounded-xl w-2/3 mx-auto">
-        <div className=" rounded-full absolute bottom-[40%] -left-5 z-10">
-          {isReady && <div>나 준비 완료~</div>}
-          <VideoContainer mediaStream={localStream} />
+      <div className="mt-5 bg-white flex flex-col justify-center items-center border-8 shadow-inner font-tenada rounded-xl w-2/3 mx-auto">
+        <div className=" rounded-full absolute bottom-5 -left-10 z-10">
+          {isReady && <div className="bg-white">나 준비 완료~</div>}
           <button
             onClick={handleSetReady}
             className="bg-blue-300 p-2 rounded-lg"
           >
             선택완료
           </button>
+          <VideoContainer mediaStream={localStream} />
         </div>
-        <div className=" rounded-full absolute bottom-[40%] -right-5 z-10">
+        <div className=" rounded-full absolute bottom-5 -right-10 z-10">
           <VideoContainer mediaStream={remoteStrem} />
+        </div>
+        <div className=" rounded-full absolute top-5 -right-10 z-10">
+          <img
+            className=" w-40 h-40 items-center border-4 bg-gray-300 border-white
+            shadow-2xl rounded-full object-cover"
+            src="/현재훈_profile.jpg"
+            alt=""
+          />
+        </div>
+        <div className=" rounded-full absolute top-5 -left-10 z-10">
+          <img
+            className=" w-40 h-40 items-center border-4 bg-gray-300 border-white
+            shadow-2xl rounded-full object-cover"
+            src="/이서연_profile.png"
+            alt=""
+          />
         </div>
         <h1 className="font-bold text-2xl py-2 text-center">
           오늘은 어떤 음식을 먹고 싶으세요?
@@ -145,31 +162,25 @@ const PlayRoomPage = () => {
       </div>
       {roomMode === MODE.MODE1 && (
         <GameArea>
-          {/* 설명 모달 */}
-          <div className="text-center">
-            {!showModal ? (
-              <ModeOneExpainModal
-                isShowModal={showModal}
-                onShow={setShowModal}
-              />
-            ) : (
-              <div className="w-full flex flex-col">
-                {/* 컨텐츠 */}
-                <div className="flex gap-5">
-                  {/* 좌측이 나 */}
-                  <VoiceRecoder isOwner={true} playerHand={playerHand} />
-                  {/* 우측이 다른 user */}
-                  <VoiceRecoder isOwner={false} playerHand={playerHand} />
-                </div>
+          <StarryBackground />
+          {!showModal ? (
+            <ModeOneExpainModal isShowModal={showModal} onShow={setShowModal} />
+          ) : (
+            <div className=" absolute top-[25%] left-[25%] flex flex-col">
+              {/* 컨텐츠 */}
+              <div className="flex gap-5">
+                {/* 좌측이 나 */}
+                <VoiceRecoder isOwner={true} playerHand={playerHand} />
+                {/* 우측이 다른 user */}
+                <VoiceRecoder isOwner={false} playerHand={playerHand} />
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
-          {/* 플레이어 핸드 */}
           <PlayerHand
             Hands={playerHand}
             playerName="마찬옥님"
-            avatarUrl="./avatar.png" // Replace with the actual path to John's avatar
+            avatarUrl="./avatar.png"
           />
         </GameArea>
       )}

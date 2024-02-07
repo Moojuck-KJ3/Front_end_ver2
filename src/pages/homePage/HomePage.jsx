@@ -1,26 +1,28 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
+  const navigator = useNavigate();
+  const handleClick = () => {
+    navigator("/login");
+  };
   return (
-    <div className=" min-h-screen text-gray-900 flex justify-center">
-      <div className="m-20  max-w-screen-xl sm:1/3  sm-m-10 bg-white shadow-lg rounded-lg flex justify-center flex-1 animate-fade-up">
-        <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
-          <div className="mt-5 flex flex-col items-center">
-            <h1 className="font-bold text-2xl">HOME</h1>
-            <div className="w-full flex-1 mt-8">
-              <div className="mx-auto max-w-xs">
-                <div>
-                  <div className="border-b text-center">
-                    <a
-                      className=" text-blue-600 hover:text-blue-800 ml-1"
-                      href="/login
-                        "
-                    >
-                      로그인
-                    </a>
-                  </div>
-                </div>
-              </div>
+    <div className="bg-[url('/BackGroundImg_2.jpg')] min-h-screen text-gray-900 flex items-center justify-center">
+      <div className="m-20 h-full p-6 bg-white opacity-70 shadow-lg rounded-lg flex justify-center animate-fade-up items-center">
+        <div className="mt-2 flex flex-col items-center">
+          <h1 className="font-bold text-2xl"></h1>
+          <img
+            className="mt-2 rounded-xl w-[320px] h-[200px] object-cover"
+            src="./BackGroundImg_3.png"
+            alt=""
+          />
+          <div className="w-full flex-1 mt-8">
+            <div className="mx-auto max-w-xs">
+              <button
+                onClick={handleClick}
+                className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
+              >
+                <span className="">시작하기</span>
+              </button>
             </div>
           </div>
         </div>

@@ -21,7 +21,14 @@ const Myclass = plugin(function ({ addUtilities }) {
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        tenada: ["Tenada"],
+      },
+      backgroundImage: {
+        "space-bg": "url('./BackGroundImg.jpg')",
+      },
+    },
   },
   plugins: [require("tailwindcss-animated"), Myclass],
 };
