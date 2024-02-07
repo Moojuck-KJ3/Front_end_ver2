@@ -57,9 +57,11 @@ const PlayRoomPage = () => {
   useEffect(() => {
     socket.connect();
     socket.on("mode-change-response", handleModeChange);
+    socket.on("receive-speech-foodCategory", handleReceiveFoodCategory);
 
     return () => {
       socket.off("mode-change-response", handleModeChange);
+      socket.off("receive-speech-foodCategory", handleReceiveFoodCategory);
     };
   }, []);
 
@@ -72,6 +74,14 @@ const PlayRoomPage = () => {
       setIsReady(false);
       setRoomReadyCount(0);
       console.log(data.roomReadyCount);
+    }
+  };
+
+  const handleReceiveFoodCategory = (data) => {
+    if (length(data.foodCategories) > 0) {
+      setModeOneVoiceRecResult(data.foodCategories);
+    } else {
+      console.log("적절한 음식 카테고리를 찾지 못했습니다.");
     }
   };
 
@@ -130,7 +140,7 @@ const PlayRoomPage = () => {
             <div className=" absolute top-[10%]">
               <VoiceRecoder
                 onClick={handleSetReady}
-                onSetResult={setModeOneVoiceRecResult}
+                //onSetResult={setModeOneVoiceRecResult}
               />
             </div>
           )}

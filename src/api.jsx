@@ -8,8 +8,6 @@ export const logout = () => {
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_APP_BACKEND_PROD_URL + "/api", // main url
-  // baseURL: 'https://backend-nest.fly.dev/cats', // test url
-  //baseURL: 'http://localhost:8080/api',
   timeout: 7000,
 });
 

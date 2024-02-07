@@ -1,11 +1,25 @@
 import { useEffect, useRef, useState } from "react";
 
+import { sendMoodKeywordSpeech } from "../../../api";
+import { useParams } from "react-router-dom";
+
 const VoiceRecognition = ({ onSetResult }) => {
   const recognitionRef = useRef(null);
+  const roomId = useParams();
 
-  const handleSetMoodTags = () => {
-    // TODO
-    // 서버에 음성 인식 결과 받고, 그 결과를 SET하기
+  const handleSetMoodTags = (text) => {
+    const data = { userSpeech: text };
+
+    const sendTransText = async (roomId, data) => {
+      const response = await sendMoodKeywordSpeech(roomId, data);
+      if (response.error) {
+        console.error("Error occured in sending mood tags", response.exception);
+      }
+    };
+
+    sendTransText(roomId, data);
+
+    // 반응은 response로 받을 예정
     onSetResult("조용한");
   };
 
@@ -33,7 +47,7 @@ const VoiceRecognition = ({ onSetResult }) => {
         const last = event.results.length - 1;
         const text = event.results[last][0].transcript.trim();
         console.log("Voice Input:", text);
-        handleSetMoodTags();
+        handleSetMoodTags(text);
       };
       recognitionRef.current.start();
 

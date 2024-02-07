@@ -5,12 +5,15 @@ import Timer from "./Timer";
 import { sendFoodCategorySpeech } from "../../api";
 import { useParams } from "react-router";
 
-const VoiceRecoder = ({ onClick, onSetResult }) => {
+import {} from "../../api";
+
+const VoiceRecoder = ({ onClick }) => {
+  //onSetResult
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [showTimer, setShowTimer] = useState(true);
   const [timeLeft, setTimeLeft] = useState(5);
-  const [onReady, setOnReady] = useState(false);
+  //const [onReady, setOnReady] = useState(false);
   // Reference to store the SpeechRecognition instance
   const recognitionRef = useRef(null);
 
@@ -78,11 +81,14 @@ const VoiceRecoder = ({ onClick, onSetResult }) => {
     };
 
     const sendFoodCategoryData = async (roomId, data) => {
-      const response = sendFoodCategorySpeech(roomId, data);
-      if (response) {
-        onSetResult(["한식"]);
-      } else {
-        console.log(response.error);
+      const response = await sendFoodCategorySpeech(roomId, data);
+      // if (response) {
+      //   onSetResult(["한식"]);
+      // } else {
+      //   console.log(response.error);
+      // }
+      if (response.error) {
+        console.error("Error occured in sending mood tags", response.exception);
       }
     };
 
