@@ -1,12 +1,13 @@
 import { useState } from "react";
 import PlaceCard from "./modeThree/card/PlaceCard";
-import { StepProgressBar } from "./StepProgressBar";
 
 const PlayerHand = ({ Hands, playerName, avatarUrl }) => {
   const [placeList, setPlaceList] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
 
   const handleDragStart = (event, restaurant) => {
+    setIsDragging(true);
+    console.log("handleDragStart");
     const restaurantData = JSON.stringify({
       id: restaurant.id,
       thumbnailURL: restaurant.FoodUrl,
@@ -27,9 +28,17 @@ const PlayerHand = ({ Hands, playerName, avatarUrl }) => {
     }
   };
 
+  const handleDragEnd = (event) => {
+    console.log("handleDragEnd");
+    setIsDragging(false);
+  };
+
   const handleDragOver = (event) => {
     event.preventDefault();
-    if (!isDragging) setIsDragging(true);
+  };
+
+  const handleDragLeave = (event) => {
+    event.preventDefault();
   };
 
   return (
@@ -39,8 +48,24 @@ const PlayerHand = ({ Hands, playerName, avatarUrl }) => {
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
+        {isDragging && (
+          <div className="absolute inset-0 mt-10 mb-52 mx-40 rounded-xl grid grid-cols-3 items-center justify-center text-lg font-semibold ">
+            <div>
+              <img src="/음식돋보기.png" alt="" />
+            </div>
+            <div>안녕</div>
+            <div>안녕</div>
+          </div>
+        )}
         {placeList.map((place, index) => (
-          <PlaceCard key={index} place={place} /> // Displaying as images for example
+          <div
+            onDragStart={(e) => handleDragStart(e, place)}
+            onDragEnd={handleDragEnd}
+            onDragLeave={handleDragLeave}
+            key={index}
+          >
+            <PlaceCard place={place} />
+          </div>
         ))}
       </div>
     </div>

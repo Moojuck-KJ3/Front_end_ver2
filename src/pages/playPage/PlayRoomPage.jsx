@@ -168,7 +168,7 @@ const PlayRoomPage = () => {
             />
           )}
           {showVoiceRecorder && (
-            <div className=" absolute top-[10%]">
+            <div className=" absolute top-[15%]">
               <VoiceRecoder
                 onClick={handleSetReady}
                 onSetResult={setModeOneVoiceRecResult}

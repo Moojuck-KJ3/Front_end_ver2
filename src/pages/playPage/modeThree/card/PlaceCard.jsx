@@ -1,7 +1,6 @@
 import React from "react";
 
 const PlaceCard = ({ place }) => {
-  console.log(place);
   return (
     <div
       className={` rounded-xl p-2 hover:scale-105  bg-white shadow-2xl border-transparent cursor-pointer transition-all border-2 hover:border-green-400 animate-jump`}
