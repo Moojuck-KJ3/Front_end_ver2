@@ -9,19 +9,19 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { logout } from "../../api";
 import { VideoFeed } from "../../components/video/VideoFeed";
 
-const START_LAT = "37.498";
-const START_LNG = "127.028";
-const START_NAME = "강남역 2호선";
+// const START_LAT = "37.498";
+// const START_LNG = "127.028";
+// const START_NAME = "강남역 2호선";
 
 const CreateRoomPage = ({ localStream }) => {
   const navigate = useNavigate();
   const [isModal, setIsModal] = useState(false);
   const [roomId, setRoomId] = useState("");
-  const [location, setLocation] = useState({
-    START_NAME,
-    START_LAT,
-    START_LNG,
-  });
+  // const [location, setLocation] = useState({
+  //   START_NAME,
+  //   START_LAT,
+  //   START_LNG,
+  // });
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
@@ -62,7 +62,7 @@ const CreateRoomPage = ({ localStream }) => {
 
   const handleRoomCreate = async (event) => {
     event.preventDefault();
-    socket.emit("create-room", { location });
+    socket.emit("create-room");
     setIsModal(false);
   };
 
