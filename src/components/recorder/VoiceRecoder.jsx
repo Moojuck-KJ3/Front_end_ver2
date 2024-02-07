@@ -5,16 +5,12 @@ import Timer from "./Timer";
 import { sendFoodCategorySpeech } from "../../api";
 import { useParams } from "react-router";
 
-const VoiceRecoder = ({ onClick, onSetResult, playerHand, isCloseModal }) => {
+const VoiceRecoder = ({ onClick, onSetResult }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [showTimer, setShowTimer] = useState(true);
   const [timeLeft, setTimeLeft] = useState(5);
   const [onReady, setOnReady] = useState(false);
-  const [recordState, setRecordState] = useState(RECORD_STATE.WAIT);
-
-  const [receiveCategories, setReceiveCategories] = useState([]);
-
   // Reference to store the SpeechRecognition instance
   const recognitionRef = useRef(null);
 
@@ -44,45 +40,23 @@ const VoiceRecoder = ({ onClick, onSetResult, playerHand, isCloseModal }) => {
 
   useEffect(() => {
     setShowTimer(true);
-    await startRecording();
-  };
+    startRecording();
+    const start = async () => {
+      await startRecording();
 
-  // Function to stop recording
-  const stopRecording = () => {
-    setShowTimer(false);
-    sendTranscriptToServer();
-    if (recognitionRef.current) {
-      recognitionRef.current.stop();
-    }
-  };
-
-  useEffect(() => {
-    switch (recordState) {
-      case RECORD_STATE.RECORDING:
-        start();
-        break;
-      case RECORD_STATE.FINISH:
+      setTimeout(() => {
         stopRecording();
-        break;
-      default:
-        break;
-    }
-  }, [recordState]);
+        setShowTimer(false);
+      }, 5000); // Stop recording after 5 seconds
+    };
 
-  useEffect(() => {
-    socket.on("receive-speech-foodCategory", (data) => {
-      console.log("receive-speech-foodCategory : ", data);
-
-      setReceiveCategories(data.foodCategories);
-    });
+    start();
 
     return () => {
       // Stop the speech recognition if it's active
       if (recognitionRef.current) {
         recognitionRef.current.stop();
       }
-
-      socket.off("receive-speech-foodCategory");
     };
   }, []);
 
@@ -123,20 +97,6 @@ const VoiceRecoder = ({ onClick, onSetResult, playerHand, isCloseModal }) => {
 
   const handleReady = () => {
     onClick();
-    setOnReady(true);
-
-    // const data = {
-    //   selectedKeywords: playerHand.foodTag,
-    // };
-
-    // const sendFoodCategoryData = async (roomId, data) => {
-    //   const response = sendFoodCategory(roomId, data);
-    //   if (response.error) {
-    //     console.log(response.exception);
-    //   }
-    // };
-
-    // sendFoodCategoryData(roomId, data);
   };
 
   return (
@@ -183,32 +143,23 @@ const VoiceRecoder = ({ onClick, onSetResult, playerHand, isCloseModal }) => {
               </p>
             </div>
 
-              <div className="h-[70px] flex border items-center justify-center rounded-md m-4">
-                {receiveCategories.length > 0
-                  ? receiveCategories.map((keyword, index) => (
-                      <p key={index} className="font-semibold">
-                        #{keyword}
-                      </p>
-                    ))
-                  : DUMMY_KEYWORDS.map((keyword, index) => (
-                      <KeyWordFlippableCard key={index}>
-                        #{keyword}
-                      </KeyWordFlippableCard>
-                    ))}
-              </div>
-              <div className="flex justify-center">
-                <button
-                  onClick={handleReady}
-                  className="p-2 w-32 bg-green-400 shadow-xl rounded-2xl hover:scale-105 transition-all"
-                >
-                  선택 완료
-                </button>
-              </div>
+            <div className="h-[130px] flex border items-center justify-center rounded-md m-4">
+              <p className="font-semibold font-tenada text-xl">
+                #한식, #한식당, #일식, #중식
+              </p>
             </div>
-          )}
-        </div>
-      </VoiceRecoderContainer>
-    </div>
+            <div className="flex justify-center">
+              <button
+                onClick={handleReady}
+                className="p-2 w-32 bg-green-400 shadow-xl rounded-2xl hover:scale-105 transition-all"
+              >
+                선택 완료
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </VoiceRecoderContainer>
   );
 };
 

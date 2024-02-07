@@ -14,14 +14,11 @@ import {
   getLocalStream,
   getRemoteStream,
 } from "../../realtimeComunication/webRTCManager";
-//import { getMoodKeyword } from "../../api";
 import { useParams } from "react-router-dom";
 import socket from "../../realtimeComunication/socket";
 import { StarryBackground } from "./StarryBackground";
 import { restaurantLists } from "./restaurantLists";
 import VoiceRecognition from "./modeTwo/VoiceRecognition";
-
-import { tagNames } from "./modeTwo/TagList";
 
 const PlayRoomPage = () => {
   const { roomId } = useParams();
@@ -55,19 +52,6 @@ const PlayRoomPage = () => {
     setLocalStream(local);
     const remote = getRemoteStream();
     setRemoteStream(remote);
-
-    // const getMoodKeywords = async (roomId) => {
-    //   const response = await getMoodKeyword(roomId);
-
-    //   if (response.error) {
-    //     console.log(response.exception);
-    //   } else {
-    //     setTags(response.moodKeywords);
-    //   }
-    // };
-
-    // getMoodKeywords(roomId);
-    setTags(tagNames);
   }, []);
 
   useEffect(() => {
@@ -190,8 +174,9 @@ const PlayRoomPage = () => {
             <div className="w-full bg-gray-100 m-3 rounded-md shadow-md justify-center items-center flex ">
               <PlaceCombineArea
                 contentNumber={2}
-                onCardClick={(cardType, cardValue) =>
-                  updatePlayerHand(cardType, cardValue)
+                onCardClick={
+                  (cardType, cardValue) => {}
+                  //updatePlayerHand(cardType, cardValue)
                 }
               />
             </div>
