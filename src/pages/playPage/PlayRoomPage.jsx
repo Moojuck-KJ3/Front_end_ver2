@@ -2,19 +2,17 @@ import { useEffect, useState } from "react";
 import VideoContainer from "../../components/video/VideoContainer";
 import VoiceRecoder from "../../components/recorder/VoiceRecoder";
 import ModeSetButton from "../../components/button/ModeSetButton";
-import RandomPlaceTags from "./modeTwo/tags/RandomPlaceTags";
 import PlaceCombineArea from "./modeThree/card/PlaceCombineArea";
 import ImageSilderBg from "./modeFour/ImageSilderBg";
 import GameArea from "./GameArea";
 import PlayerHand from "./PlayerHand";
 import PlayRoomContainer from "./PlayRoomContainer";
 import ModeOneExpainModal from "../../components/modal/ModeOneExpainModal";
-import SelectModeButtons from "./modeThree/SelectModeButtons";
 import {
   getLocalStream,
   getRemoteStream,
 } from "../../realtimeComunication/webRTCManager";
-import { getMoodKeyword } from "../../api";
+
 import { useParams } from "react-router-dom";
 import socket from "../../realtimeComunication/socket";
 import { StarryBackground } from "./StarryBackground";
@@ -28,6 +26,41 @@ const PlayRoomPage = () => {
   const [localStream, setLocalStream] = useState(null);
   const [remoteStrem, setRemoteStream] = useState(null);
   const [restaurantList, setRestaurantList] = useState(restaurantLists);
+  const [selectedRestaurant, setSelectedRestaurant] = useState([
+    {
+      restId: "1",
+      name: "토리모리",
+      x: 1,
+      y: 2,
+      category: "한식",
+      mood: ["분위기 좋은"],
+      miniStarUrl: "/Star_2.png",
+      BigStarUrl: "/Star_3.png",
+      FoodUrl: "/Food.png",
+    },
+    {
+      restId: "1",
+      name: "토리모리",
+      x: 1,
+      y: 2,
+      category: "한식",
+      mood: ["분위기 좋은"],
+      miniStarUrl: "/Star_2.png",
+      BigStarUrl: "/Star_3.png",
+      FoodUrl: "/Food.png",
+    },
+    {
+      restId: "1",
+      name: "토리모리",
+      x: 1,
+      y: 2,
+      category: "한식",
+      mood: ["분위기 좋은"],
+      miniStarUrl: "/Star_2.png",
+      BigStarUrl: "/Star_3.png",
+      FoodUrl: "/Food.png",
+    },
+  ]);
   const [isReady, setIsReady] = useState(false);
   const [roomReadyCount, setRoomReadyCount] = useState(0);
   const [showVoiceRecorder, setShowVoiceRecorder] = useState(false);
@@ -39,9 +72,8 @@ const PlayRoomPage = () => {
       name: "토리모리",
       x: 1,
       y: 2,
-      category: "한식", // Korean
+      category: "한식",
       mood: ["분위기 좋은"],
-
       miniStarUrl: "/Star_2.png",
       BigStarUrl: "/Star_3.png",
       FoodUrl: "/Food.png",
@@ -87,13 +119,19 @@ const PlayRoomPage = () => {
   return (
     <PlayRoomContainer>
       <div className="mt-5 bg-white flex flex-col justify-center items-center border-8 shadow-inner font-tenada rounded-xl w-2/3 mx-auto">
-        <div className=" rounded-full absolute bottom-10 -left-8 z-10">
-          <VideoContainer mediaStream={localStream} />
+        <div className=" rounded-full absolute bottom-20 left-0 z-10">
+          <VideoContainer
+            mediaStream={localStream}
+            selectedRestaurant={selectedRestaurant}
+          />
         </div>
-        <div className=" rounded-full absolute bottom-10 -right-8 z-10">
-          <VideoContainer mediaStream={remoteStrem} />
+        <div className=" rounded-full absolute bottom-20 right-0 z-10">
+          <VideoContainer
+            selectedRestaurant={selectedRestaurant}
+            mediaStream={remoteStrem}
+          />
         </div>
-        <div className=" rounded-full absolute top-16 -right-8 z-10">
+        <div className=" rounded-full absolute top-10 right-0 z-10">
           <img
             className=" w-40 h-40 items-center border-4 bg-gray-300 border-white
             shadow-2xl rounded-full object-cover"
@@ -101,7 +139,7 @@ const PlayRoomPage = () => {
             alt=""
           />
         </div>
-        <div className=" rounded-full absolute top-16 -left-8 z-10">
+        <div className=" rounded-full absolute top-10 left-0 z-10">
           <img
             className=" w-40 h-40 items-center border-4 bg-gray-300 border-white
             shadow-2xl rounded-full object-cover"
@@ -109,9 +147,11 @@ const PlayRoomPage = () => {
             alt=""
           />
         </div>
-        {/* <h1 className="font-bold text-2xl h-[100px] text-center">
+        <h1 className="font-bold text-2xl p-2 text-center">
           오늘은 어떤 음식을 먹고 싶으세요?
-        </h1> */}
+        </h1>
+
+        <ModeSetButton setRoomMode={setRoomMode} />
       </div>
       {roomMode === MODE.MODE1 && (
         <GameArea>
@@ -136,8 +176,6 @@ const PlayRoomPage = () => {
             </div>
           )}
 
-          <ModeSetButton setRoomMode={setRoomMode} />
-
           <PlayerHand
             Hands={playerHand}
             playerName="마찬옥님"
@@ -150,14 +188,12 @@ const PlayRoomPage = () => {
           {/* 컨텐츠 */}
 
           <VoiceRecognition onSetResult={setModeTwoVoiceRecResult} />
-
           <StarryBackground
             restaurantList={restaurantList}
             resultTags={modeOneVoiceRecResult}
             resultMoodTags={modeTwoVoiceRecResult}
           />
-          {/* 프로그레스 바 */}
-          <ModeSetButton setRoomMode={setRoomMode} />
+
           {/* 플레이어 핸드 */}
           <PlayerHand
             Hands={playerHand}
@@ -168,21 +204,14 @@ const PlayRoomPage = () => {
       )}
       {roomMode === MODE.MODE3 && (
         <GameArea>
-          {/* 버튼 */}
-
+          <StarryBackground
+            restaurantList={restaurantList}
+            resultTags={modeOneVoiceRecResult}
+            resultMoodTags={modeTwoVoiceRecResult}
+          />
+          <PlaceCombineArea />
           {/* 컨텐츠 */}
-          <div className="w-3/4 flex border-1 shadow-md rounded-lg mx-10 bg-white justify-center ">
-            <div className="w-full bg-gray-100 m-3 rounded-md shadow-md justify-center items-center flex ">
-              <PlaceCombineArea
-                contentNumber={2}
-                onCardClick={(cardType, cardValue) =>
-                  updatePlayerHand(cardType, cardValue)
-                }
-              />
-            </div>
-          </div>
-          {/* 프로그레스 바 */}
-          <ModeSetButton setRoomMode={setRoomMode} />
+
           {/* 플레이어 핸드 */}
           <PlayerHand
             Hands={playerHand}
@@ -193,8 +222,6 @@ const PlayRoomPage = () => {
       )}
       {roomMode === MODE.MODE4 && (
         <GameArea>
-          {/* 프로그레스 바 */}
-          <ModeSetButton setRoomMode={setRoomMode} />
           <ImageSilderBg />
         </GameArea>
       )}

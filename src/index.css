@@ -2,20 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Tailwind CSS */
-.moon {
-  @apply relative;
-  box-shadow: inset -10px -5px 6px 1px #7b6447;
-}
-.moon::before {
-  content: "";
-  @apply absolute w-2 h-2 bg-[#cca87c96] rounded-full;
-  top: 35px;
-  left: 15px;
-}
-.moon::after {
-  content: "";
-  @apply absolute w-4 h-4 bg-[#cca87c96] rounded-full;
-  top: 15px;
-  left: 23px;
+@layer components {
+  @keyframes orbit {
+    from {
+      transform: translate(-50%, -50%) rotate(0deg) translateX(100px)
+        rotate(0deg);
+    }
+    to {
+      transform: translate(-50%, -50%) rotate(360deg) translateX(100px)
+        rotate(-360deg);
+    }
+  }
+
+  .orbit {
+    @apply absolute top-1/2 left-1/2;
+    width: 35px; /* Size of the orbiting images */
+    height: 35px; /* Size of the orbiting images */
+    animation: orbit 10s infinite linear; /* Adjust timing as needed */
+  }
 }

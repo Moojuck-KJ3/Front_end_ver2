@@ -10,39 +10,39 @@ export const StarryBackground = ({
 }) => {
   const [stars, setStars] = useState([]);
 
+  const handleDragStart = (event, restaurant) => {
+    console.log(restaurant);
+    const restaurantData = JSON.stringify({
+      id: restaurant.id,
+      thumbnailURL: restaurant.FoodUrl,
+    });
+
+    event.dataTransfer.setData("restaurant", restaurantData);
+  };
+
   useEffect(() => {
     const starsData = restaurantList.map((restaurant) => {
-      // Check if the restaurant's category matches the result tags
       const matchesResultTag = resultTags.includes(restaurant.category);
-      // Check if the restaurant's category matches the mood result tags
       const matchesResultMoodTag = restaurant.mood.some((mood) =>
         resultMoodTags.includes(mood)
       );
-      console.log(matchesResultMoodTag);
-      // Determine which image URL to use
 
       let imageUrl;
       if (matchesResultTag && matchesResultMoodTag) {
-        // If both conditions are true, use the FoodUrl
         imageUrl = restaurant.FoodUrl;
         console.log(imageUrl);
       } else if (matchesResultTag) {
-        // If only matchesResultTag is true, use the BigStarUrl
         imageUrl = restaurant.BigStarUrl;
       } else {
-        // If none are true, default to miniStarUrl
         imageUrl = restaurant.miniStarUrl;
       }
 
       let size;
       if (matchesResultTag && matchesResultMoodTag) {
-        // If both conditions are true, use the FoodUrl
         size = 6;
       } else if (matchesResultTag) {
-        // If only matchesResultTag is true, use the BigStarUrl
         size = 4;
       } else {
-        // If none are true, default to miniStarUrl
         size = 2;
       }
 
@@ -51,8 +51,7 @@ export const StarryBackground = ({
         x: getRandomInt(10, 90),
         y: getRandomInt(0, 70),
         size: size,
-        imageUrl: imageUrl, // Use the determined image URL
-        // You might still want to keep the original URLs for any reason, so they're still included
+        imageUrl: imageUrl,
         miniStarUrl: restaurant.miniStarUrl,
         BigStarUrl: restaurant.BigStarUrl,
         FoodUrl: restaurant.FoodUrl,
@@ -68,6 +67,9 @@ export const StarryBackground = ({
         <div
           className="w-4 h-4 hover:bg-yellow-200 rounded-full cursor-pointer duration-500"
           key={i}
+          id={star.id}
+          draggable={true}
+          onDragStart={(e) => handleDragStart(e, star)}
           style={{
             position: "absolute",
             top: `${star.y}%`,
