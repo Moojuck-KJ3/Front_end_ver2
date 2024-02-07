@@ -32,6 +32,12 @@ const CreateRoomModal = ({ onModal, onCreate }) => {
         setMarkers([marker]);
         setInfo(marker);
 
+        // start-play-room에서 사용할 목적지 좌표
+        localStorage.setItem(
+          "purposeCoordinate",
+          JSON.stringify(centerPosition)
+        );
+
         if (map) {
           map.setCenter(
             new kakao.maps.LatLng(centerPosition.lat, centerPosition.lng)

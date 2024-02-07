@@ -57,7 +57,9 @@ const WaitingPage = ({ localStream }) => {
 
   const handleStartGame = () => {
     if (isAllPlayerReady) {
-      socket.emit("start-play-room", { roomId });
+      const data = localStorage.getItem("purposeCoordinate");
+
+      socket.emit("start-play-room", { roomId, data });
     } else {
       console.log("Not all players are ready");
     }
