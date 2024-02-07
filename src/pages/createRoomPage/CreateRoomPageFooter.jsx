@@ -4,7 +4,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const CreateRoomPageFooter = ({ isActivate, onStart, progressValue }) => {
   return (
-    <div className="flex items-center mt-3 gap-2">
+    <div className="flex mt-4 items-center gap-2">
       <button
         onClick={onStart}
         className="tracking-wide font-semibold bg-gray-200 text-black text-lg p-2 rounded-lg hover:bg-gray-300 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"

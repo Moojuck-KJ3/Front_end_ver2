@@ -10,9 +10,11 @@ import {
 import CopyToClipboardButton from "./ClipboardClipboardCopyButton";
 import { useEffect, useState } from "react";
 import socket from "../../realtimeComunication/socket";
+import Typewriter from "../../components/type/TypeWriter";
 
 const WaitingPage = ({ localStream }) => {
-  const [isAllPlayerReady, setIsAllPlayerReady] = useState(false);
+  // 개발 끝나면, isAllPlayerReady False로 바꾸기
+  const [isAllPlayerReady, setIsAllPlayerReady] = useState(true);
   const navigator = useNavigate();
   const { roomId } = useParams();
   const [progressValue, setProgressValue] = useState(50);
@@ -62,10 +64,17 @@ const WaitingPage = ({ localStream }) => {
   };
 
   return (
-    <div className=" min-h-screen text-gray-800 flex justify-center items-center">
-      <div className="w-[500px] h-[600px] animate-fade-up">
+    <div className="bg-[url('/BackGroundImg_2.jpg')] min-h-screen text-gray-800 flex justify-center items-center">
+      <div className="w-[500px] h-[400px] animate-fade-up">
         <div className="sm-m-10 bg-white shadow-2xl py-3 rounded-2xl flex flex-col jus justify-center items-center">
-          <h1 className=" font-bold justify-center">친구를 기다리는 중...</h1>
+          <div className="flex">
+            <h1 className=" font-bold justify-center font-tenada">
+              친구를 기다리는 중
+            </h1>
+            <div>
+              <Typewriter text="...." delay={300} infinite />
+            </div>
+          </div>
           <CopyToClipboardButton roomId={roomId} />
         </div>
 

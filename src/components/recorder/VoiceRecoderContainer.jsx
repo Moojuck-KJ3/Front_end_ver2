@@ -1,9 +1,9 @@
-const VoiceRecoderContainer = ({ children, onReady }) => {
+const VoiceRecoderContainer = ({ children }) => {
   return (
     <div
-      className={`w-72 h-72 relative bg-white shadow-2xl rounded-xl duration-500 hover:scale-105 hover:shadow-xl animate-fade ${
-        onReady ? " border-8 border-blue-200" : ""
-      }`}
+      className={
+        " w-96 h-72 relative bg-white shadow-2xl rounded-lg duration-500 hover:scale-105 hover:shadow-xl animate-fade"
+      }
     >
       <div className="flex flex-col justify-center items-centerp">
         {children}

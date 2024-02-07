@@ -53,11 +53,11 @@ const CreateRoomModal = ({ onModal, onCreate }) => {
         {/* Add modal content here */}
         <div className="modal-content py-4 text-left px-6">
           <div className="flex justify-between items-center pb-3 border-b ">
-            <h1 className="w-full text-2xl font-bold text-center">
+            <h1 className="font-[Tenada] w-full text-2xl font-bold text-center">
               방 생성하기
             </h1>
           </div>
-          <div className="flex justify-center m-2">
+          <div className="font-[Tenada] flex justify-center m-2">
             <p className="p-2 text-lg">
               어떤 지역을 기반으로 맛집을 추천해드릴까요?
             </p>
@@ -71,7 +71,7 @@ const CreateRoomModal = ({ onModal, onCreate }) => {
               className="border p-2 w-full rounded-lg"
             />
             <button
-              className=" p-2 rounded-lg bg-emerald-500 text-white ml-2"
+              className=" p-2 rounded-lg bg-emerald-400 hover:bg-emerald-500 transition-all  text-white ml-2"
               onClick={handleSearch}
             >
               <SearchIcon />
@@ -104,16 +104,16 @@ const CreateRoomModal = ({ onModal, onCreate }) => {
               )}
             </Map>
           </div>
-          <div className="flex justify-center gap-4">
+          <div className="flex justify-center gap-4 font-[Tenada]">
             <button
               onClick={() => onModal(false)}
-              className=" bg-gray-300 px-5 py-3 rounded-lg text-gray-600 font-bold"
+              className=" bg-gray-200 hover:bg-gray-300 transition-all px-5 py-3 rounded-lg text-gray-600 font-bold"
             >
               취소
             </button>
             <button
               onClick={onCreate}
-              className=" bg-emerald-500 px-5 py-3 rounded-lg text-white font-bold"
+              className=" bg-emerald-400 hover:bg-emerald-500 transition-all px-5 py-3 rounded-lg text-white font-bold"
             >
               방 생성하기
             </button>

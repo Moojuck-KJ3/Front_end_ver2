@@ -1,8 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import TagCard from "./TagCard";
 
 const RandomPlaceTags = ({ onCardClick, tags }) => {
   const recognitionRef = useRef(null);
+  const [matchedTag, setMatchedTag] = useState(null);
+
   const handleCardClick = (type, card) => {
     onCardClick(type, card.name);
   };
@@ -28,11 +30,10 @@ const RandomPlaceTags = ({ onCardClick, tags }) => {
 
   const handleMatchedTag = (type, tag) => {
     onCardClick(type, tag.name);
-    // const data = {
-    //   keywordId: tag.id,
-    //   isDelete: false,
-    // };
-    // postMoodKeywordButton(roomId, data);
+    setMatchedTag(tag);
+    setTimeout(() => {
+      setMatchedTag(null);
+    }, 2000);
   };
 
   const setupSpeechRecognition = () => {
@@ -79,7 +80,13 @@ const RandomPlaceTags = ({ onCardClick, tags }) => {
       <div className="w-full bg-gray-100 m-3 rounded-md shadow-md justify-center items-center flex ">
         <div className="grid grid-cols-4 gap-3 p-10">
           {tags.map((tag, i) => (
-            <button key={i} onClick={() => handleCardClick("placeTag", tag)}>
+            <button
+              key={i}
+              onClick={() => handleCardClick("placeTag", tag)}
+              className={
+                matchedTag?.name === tag.name ? " scale-125 transition-all" : ""
+              }
+            >
               <TagCard data={tag.name} />
             </button>
           ))}
