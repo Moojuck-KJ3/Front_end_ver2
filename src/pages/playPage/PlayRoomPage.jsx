@@ -18,6 +18,7 @@ import { getMoodKeyword } from "../../api";
 import { useParams } from "react-router-dom";
 import socket from "../../realtimeComunication/socket";
 import { StarryBackground } from "./StarryBackground";
+import { restaurantLists } from "./restaurantLists";
 
 const PlayRoomPage = () => {
   const { roomId } = useParams();
@@ -26,29 +27,19 @@ const PlayRoomPage = () => {
   const [modeThreeContent, setModeThreeContent] = useState(
     MODEThree_Content.Content1
   );
+  console.log(roomMode);
   const [localStream, setLocalStream] = useState(null);
   const [remoteStrem, setRemoteStream] = useState(null);
-  const [tags, setTags] = useState([]);
+  const [restaurantList, setRestaurantList] = useState(restaurantLists);
   const [isReady, setIsReady] = useState(false);
   const [roomReadyCount, setRoomReadyCount] = useState(0);
-
+  const [showVoiceRecorder, setShowVoiceRecorder] = useState(false);
+  console.log(showVoiceRecorder);
   useEffect(() => {
     const local = getLocalStream();
     setLocalStream(local);
     const remote = getRemoteStream();
     setRemoteStream(remote);
-
-    const getMoodKeywords = async (roomId) => {
-      const response = await getMoodKeyword(roomId);
-
-      if (response.error) {
-        console.log(response.exception);
-      } else {
-        setTags(response.moodKeywords);
-      }
-    };
-
-    getMoodKeywords(roomId);
   }, []);
 
   useEffect(() => {
@@ -75,14 +66,13 @@ const PlayRoomPage = () => {
   const handleSetReady = () => {
     console.log("handleSetReady is called");
     setIsReady(true);
+    setShowVoiceRecorder(false);
     console.log({ roomId, roomMode, roomReadyCount });
     socket.emit("select-done", { roomId, roomReadyCount, roomMode });
   };
 
   const [playerHand, setPlayerHand] = useState({
-    foodTag: ["ex : 일식", "중식", "한식"],
-    placeTag: ["조용한"],
-    selectedTag: [],
+    selectedPlaceList: ["조용한"],
   });
 
   const handleChangeContent = (contentNum) => {
@@ -99,12 +89,9 @@ const PlayRoomPage = () => {
   };
 
   const updatePlayerHand = (cardType, cardValue) => {
-    console.log(cardValue);
     setPlayerHand((prevHand) => {
-      // Copy previous state to avoid direct mutation
       const newHand = { ...prevHand };
 
-      // Determine the action based on the mode and card type
       switch (cardType) {
         case "foodTag":
           newHand.foodTag.push(cardValue);
@@ -123,16 +110,19 @@ const PlayRoomPage = () => {
     });
   };
 
+  const handleShowModal = () => {
+    setShowModal(true);
+  };
+
   return (
     <PlayRoomContainer>
       <div className="mt-5 bg-white flex flex-col justify-center items-center border-8 shadow-inner font-tenada rounded-xl w-2/3 mx-auto">
         <div className=" rounded-full absolute bottom-5 -left-10 z-10">
-          {isReady && <div className="bg-white">나 준비 완료~</div>}
           <button
-            onClick={handleSetReady}
+            onClick={handleShowModal}
             className="bg-blue-300 p-2 rounded-lg"
           >
-            선택완료
+            추천받기
           </button>
           <VideoContainer mediaStream={localStream} />
         </div>
@@ -158,47 +148,50 @@ const PlayRoomPage = () => {
         <h1 className="font-bold text-2xl py-2 text-center">
           오늘은 어떤 음식을 먹고 싶으세요?
         </h1>
-        <ModeSetButton setRoomMode={setRoomMode} />
       </div>
       {roomMode === MODE.MODE1 && (
         <GameArea>
-          <StarryBackground />
-          {!showModal ? (
-            <ModeOneExpainModal isShowModal={showModal} onShow={setShowModal} />
-          ) : (
-            <div className=" absolute top-[25%] left-[25%] flex flex-col">
-              {/* 컨텐츠 */}
-              <div className="flex gap-5">
-                {/* 좌측이 나 */}
-                <VoiceRecoder isOwner={true} playerHand={playerHand} />
-                {/* 우측이 다른 user */}
-                <VoiceRecoder isOwner={false} playerHand={playerHand} />
-              </div>
+          <StarryBackground restaurantList={restaurantList} />
+          {showModal && (
+            <ModeOneExpainModal
+              isShowModal={showModal}
+              onShow={setShowModal}
+              SetShowVoiceRecorder={setShowVoiceRecorder}
+            />
+          )}
+          {showVoiceRecorder && (
+            <div className=" absolute top-[20%]">
+              <VoiceRecoder onClick={handleSetReady} />
             </div>
           )}
+
+          <ModeSetButton setRoomMode={setRoomMode} />
 
           <PlayerHand
             Hands={playerHand}
             playerName="마찬옥님"
-            avatarUrl="./avatar.png"
+            avatarUrl="/avatar.png"
           />
         </GameArea>
       )}
       {roomMode === MODE.MODE2 && (
         <GameArea>
           {/* 컨텐츠 */}
-          <RandomPlaceTags
+          {/* <RandomPlaceTags
             tags={tags}
             onCardClick={(cardType, cardValue) =>
               updatePlayerHand(cardType, cardValue)
             }
-          />
+          /> */}
 
+          <StarryBackground restaurantList={restaurantList} />
+          {/* 프로그레스 바 */}
+          <ModeSetButton setRoomMode={setRoomMode} />
           {/* 플레이어 핸드 */}
           <PlayerHand
             Hands={playerHand}
             playerName="마찬옥님"
-            avatarUrl="./avatar.png" // Replace with the actual path to John's avatar
+            avatarUrl="/avatar.png" // Replace with the actual path to John's avatar
           />
         </GameArea>
       )}
@@ -218,16 +211,20 @@ const PlayRoomPage = () => {
               />
             </div>
           </div>
+          {/* 프로그레스 바 */}
+          <ModeSetButton setRoomMode={setRoomMode} />
           {/* 플레이어 핸드 */}
           <PlayerHand
             Hands={playerHand}
             playerName="마찬옥님"
-            avatarUrl="./avatar.png" // Replace with the actual path to John's avatar
+            avatarUrl="/avatar.png" // Replace with the actual path to John's avatar
           />
         </GameArea>
       )}
       {roomMode === MODE.MODE4 && (
         <GameArea>
+          {/* 프로그레스 바 */}
+          <ModeSetButton setRoomMode={setRoomMode} />
           <ImageSilderBg />
         </GameArea>
       )}

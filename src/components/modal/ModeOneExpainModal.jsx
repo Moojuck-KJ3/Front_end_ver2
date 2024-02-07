@@ -1,17 +1,18 @@
 import { useParams } from "react-router";
 import socket from "../../realtimeComunication/socket";
 
-const ModeOneExpainModal = ({ isShowModal, onShow }) => {
+const ModeOneExpainModal = ({ SetShowVoiceRecorder, isShowModal, onShow }) => {
   const roomId = useParams();
 
-  const handleShowModal = () => {
-    onShow(true);
+  const handleClick = () => {
+    onShow(false);
+    SetShowVoiceRecorder(true);
     console.log("start-speech");
     socket.emit("start-speech", roomId);
   };
   return (
     <div>
-      <div className="modal fixed w-full h-full -top-10 left-0 flex items-center justify-center">
+      <div className="modal fixed w-full h-full -top-10 left-0 flex items-center justify-center  animate-fade">
         {/* overlay  */}
         <div className="modal-overlay absolute  w-full h-full opacity-50"></div>
 
@@ -32,7 +33,7 @@ const ModeOneExpainModal = ({ isShowModal, onShow }) => {
 
             <div className="mt-4 flex justify-end">
               <button
-                onClick={handleShowModal}
+                onClick={handleClick}
                 className="px-4 bg-purple-500 p-3 ml-3 rounded-lg text-white hover:bg-purple-400"
               >
                 음성 인식 시작하기

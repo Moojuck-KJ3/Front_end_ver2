@@ -3,50 +3,37 @@ import { useEffect, useState } from "react";
 const getRandomInt = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
 
-const restaurantLists = [
-  {
-    id: 1,
-    name: "토리모리",
-  },
-];
-
-export const StarryBackground = () => {
-  const [list, setList] = useState([]);
+export const StarryBackground = ({ restaurantList }) => {
+  const [stars, setStars] = useState([]);
 
   useEffect(() => {
-    const chosenTags = Array.from({ length: 100 }, () => {
-      const randomIndex = getRandomInt(0, restaurantLists.length - 1);
-      return restaurantLists[randomIndex];
-    });
-
-    const initialTags = chosenTags.map((tagName, i) => ({
-      id: i.toString(),
-      title: tagName,
+    const starsData = restaurantList.map((restaurant) => ({
+      id: restaurant.restId,
       x: getRandomInt(10, 90),
       y: getRandomInt(0, 70),
-      size: getRandomInt(1, 3),
-      isFixed: false,
+      size: getRandomInt(1, 1.5),
+      miniStarUrl: restaurant.miniStarUrl,
+      BigStarUrl: restaurant.BigStarUrl,
+      FoodUrl: restaurant.FoodUrl,
     }));
-    setList(initialTags);
 
-    return () => clearInterval(initialTags); // Cleanup the interval when the component unmounts
-  }, []);
+    setStars(starsData);
+  }, [restaurantList]);
 
   return (
     <div className="relative w-full h-full overflow-hidden">
-      {" "}
-      {/* Ensure overflow is hidden */}
-      {list.map((tag, i) => (
+      {stars.map((star, i) => (
         <div
-          className="w-5 h-5 hover:bg-yellow-200 rounded-full cursor-pointer duration-500"
+          className="w-7 h-7 hover:bg-yellow-200 rounded-full cursor-pointer duration-500"
           key={i}
           style={{
             position: "absolute",
-            top: `${tag.y}%`, // Directly use tag.y
-            left: `${tag.x}%`, // Directly use tag.x
+            top: `${star.y}%`,
+            left: `${star.x}%`,
+            transform: `scale(${star.size})`,
           }}
         >
-          <img src="/Star_2.png" alt="" />
+          <img src={star.miniStarUrl} alt="" />
         </div>
       ))}
     </div>
