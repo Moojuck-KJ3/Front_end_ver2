@@ -19,22 +19,35 @@ import { useParams } from "react-router-dom";
 import socket from "../../realtimeComunication/socket";
 import { StarryBackground } from "./StarryBackground";
 import { restaurantLists } from "./restaurantLists";
+import VoiceRecognition from "./modeTwo/VoiceRecognition";
 
 const PlayRoomPage = () => {
   const { roomId } = useParams();
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(true);
   const [roomMode, setRoomMode] = useState(MODE.MODE1);
-  const [modeThreeContent, setModeThreeContent] = useState(
-    MODEThree_Content.Content1
-  );
-  console.log(roomMode);
   const [localStream, setLocalStream] = useState(null);
   const [remoteStrem, setRemoteStream] = useState(null);
   const [restaurantList, setRestaurantList] = useState(restaurantLists);
   const [isReady, setIsReady] = useState(false);
   const [roomReadyCount, setRoomReadyCount] = useState(0);
   const [showVoiceRecorder, setShowVoiceRecorder] = useState(false);
-  console.log(showVoiceRecorder);
+  const [modeOneVoiceRecResult, setModeOneVoiceRecResult] = useState([]);
+  const [modeTwoVoiceRecResult, setModeTwoVoiceRecResult] = useState([]);
+  const [playerHand, setPlayerHand] = useState([
+    {
+      restId: "1",
+      name: "토리모리",
+      x: 1,
+      y: 2,
+      category: "한식", // Korean
+      mood: ["분위기 좋은"],
+
+      miniStarUrl: "/Star_2.png",
+      BigStarUrl: "/Star_3.png",
+      FoodUrl: "/Food.png",
+    },
+  ]);
+
   useEffect(() => {
     const local = getLocalStream();
     setLocalStream(local);
@@ -71,65 +84,16 @@ const PlayRoomPage = () => {
     socket.emit("select-done", { roomId, roomReadyCount, roomMode });
   };
 
-  const [playerHand, setPlayerHand] = useState({
-    selectedPlaceList: ["조용한"],
-  });
-
-  const handleChangeContent = (contentNum) => {
-    switch (contentNum) {
-      case MODEThree_Content.Content1:
-        return setModeThreeContent(1);
-
-      case MODEThree_Content.Content2:
-        return setModeThreeContent(2);
-
-      case MODEThree_Content.Content3:
-        return setModeThreeContent(3);
-    }
-  };
-
-  const updatePlayerHand = (cardType, cardValue) => {
-    setPlayerHand((prevHand) => {
-      const newHand = { ...prevHand };
-
-      switch (cardType) {
-        case "foodTag":
-          newHand.foodTag.push(cardValue);
-          break;
-        case "placeTag":
-          newHand.placeTag.push(cardValue);
-          break;
-        case "selectedTag":
-          newHand.selectedTag.push(cardValue);
-          break;
-        default:
-          break;
-      }
-
-      return newHand;
-    });
-  };
-
-  const handleShowModal = () => {
-    setShowModal(true);
-  };
-
   return (
     <PlayRoomContainer>
       <div className="mt-5 bg-white flex flex-col justify-center items-center border-8 shadow-inner font-tenada rounded-xl w-2/3 mx-auto">
-        <div className=" rounded-full absolute bottom-5 -left-10 z-10">
-          <button
-            onClick={handleShowModal}
-            className="bg-blue-300 p-2 rounded-lg"
-          >
-            추천받기
-          </button>
+        <div className=" rounded-full absolute bottom-10 -left-8 z-10">
           <VideoContainer mediaStream={localStream} />
         </div>
-        <div className=" rounded-full absolute bottom-5 -right-10 z-10">
+        <div className=" rounded-full absolute bottom-10 -right-8 z-10">
           <VideoContainer mediaStream={remoteStrem} />
         </div>
-        <div className=" rounded-full absolute top-5 -right-10 z-10">
+        <div className=" rounded-full absolute top-16 -right-8 z-10">
           <img
             className=" w-40 h-40 items-center border-4 bg-gray-300 border-white
             shadow-2xl rounded-full object-cover"
@@ -137,7 +101,7 @@ const PlayRoomPage = () => {
             alt=""
           />
         </div>
-        <div className=" rounded-full absolute top-5 -left-10 z-10">
+        <div className=" rounded-full absolute top-16 -left-8 z-10">
           <img
             className=" w-40 h-40 items-center border-4 bg-gray-300 border-white
             shadow-2xl rounded-full object-cover"
@@ -145,13 +109,17 @@ const PlayRoomPage = () => {
             alt=""
           />
         </div>
-        <h1 className="font-bold text-2xl py-2 text-center">
+        {/* <h1 className="font-bold text-2xl h-[100px] text-center">
           오늘은 어떤 음식을 먹고 싶으세요?
-        </h1>
+        </h1> */}
       </div>
       {roomMode === MODE.MODE1 && (
         <GameArea>
-          <StarryBackground restaurantList={restaurantList} />
+          <StarryBackground
+            restaurantList={restaurantList}
+            resultTags={modeOneVoiceRecResult}
+            resultMoodTags={modeTwoVoiceRecResult}
+          />
           {showModal && (
             <ModeOneExpainModal
               isShowModal={showModal}
@@ -160,8 +128,11 @@ const PlayRoomPage = () => {
             />
           )}
           {showVoiceRecorder && (
-            <div className=" absolute top-[20%]">
-              <VoiceRecoder onClick={handleSetReady} />
+            <div className=" absolute top-[10%]">
+              <VoiceRecoder
+                onClick={handleSetReady}
+                onSetResult={setModeOneVoiceRecResult}
+              />
             </div>
           )}
 
@@ -177,14 +148,14 @@ const PlayRoomPage = () => {
       {roomMode === MODE.MODE2 && (
         <GameArea>
           {/* 컨텐츠 */}
-          {/* <RandomPlaceTags
-            tags={tags}
-            onCardClick={(cardType, cardValue) =>
-              updatePlayerHand(cardType, cardValue)
-            }
-          /> */}
 
-          <StarryBackground restaurantList={restaurantList} />
+          <VoiceRecognition onSetResult={setModeTwoVoiceRecResult} />
+
+          <StarryBackground
+            restaurantList={restaurantList}
+            resultTags={modeOneVoiceRecResult}
+            resultMoodTags={modeTwoVoiceRecResult}
+          />
           {/* 프로그레스 바 */}
           <ModeSetButton setRoomMode={setRoomMode} />
           {/* 플레이어 핸드 */}
@@ -198,13 +169,12 @@ const PlayRoomPage = () => {
       {roomMode === MODE.MODE3 && (
         <GameArea>
           {/* 버튼 */}
-          <SelectModeButtons onClick={handleChangeContent} />
 
           {/* 컨텐츠 */}
           <div className="w-3/4 flex border-1 shadow-md rounded-lg mx-10 bg-white justify-center ">
             <div className="w-full bg-gray-100 m-3 rounded-md shadow-md justify-center items-center flex ">
               <PlaceCombineArea
-                contentNumber={modeThreeContent}
+                contentNumber={2}
                 onCardClick={(cardType, cardValue) =>
                   updatePlayerHand(cardType, cardValue)
                 }
@@ -237,12 +207,6 @@ const MODE = {
   MODE2: 2,
   MODE3: 3,
   MODE4: 4,
-};
-
-const MODEThree_Content = {
-  Content1: 1,
-  Content2: 2,
-  Content3: 3,
 };
 
 export default PlayRoomPage;

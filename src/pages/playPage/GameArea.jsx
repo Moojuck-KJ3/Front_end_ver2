@@ -1,6 +1,6 @@
 const GameArea = ({ children }) => {
   return (
-    <div className="bg-black relative mt-5 w-full h-full flex flex-col justify-center items-center ">
+    <div className="relative mt-5 px-10 w-full h-full flex flex-col justify-center items-center ">
       {children}
     </div>
   );

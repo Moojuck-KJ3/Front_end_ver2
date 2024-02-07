@@ -5,7 +5,7 @@ import Timer from "./Timer";
 import { sendFoodCategorySpeech } from "../../api";
 import { useParams } from "react-router";
 
-const VoiceRecoder = ({ onClick }) => {
+const VoiceRecoder = ({ onClick, onSetResult }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [showTimer, setShowTimer] = useState(true);
@@ -79,11 +79,10 @@ const VoiceRecoder = ({ onClick }) => {
 
     const sendFoodCategoryData = async (roomId, data) => {
       const response = sendFoodCategorySpeech(roomId, data);
-      if (response.error) {
-        console.log(response.exception);
+      if (response) {
+        onSetResult(["한식"]);
       } else {
-        // 서버에 전달 성공
-        // 추가적인 처리 시 이 부분 작성
+        console.log(response.error);
       }
     };
 
@@ -112,16 +111,16 @@ const VoiceRecoder = ({ onClick }) => {
         {isRecording ? (
           <div className="w-full flex flex-col gap-1">
             <div className="flex justify-between items-center">
-              <p className="text-sm font-medium leading-none text-start">
+              <p className="text-2xl font-medium leading-none text-start font-tenada">
                 음성 인식 중
               </p>
               <div className="rounded-full w-3 h-3 bg-red-400 animate-pulse" />
             </div>
-            <p className="text-sm text-muted-foreground text-start">
+            <p className=" text-lg text-muted-foreground text-start">
               말을 해주세요...
             </p>
             <div className="h-[130px] flex border items-center justify-center rounded-md m-4">
-              <p className="font-semibold">
+              <p className="font-tenada text-xl">
                 {transcript ? transcript : "입력 대기 중..."}
               </p>
             </div>
@@ -134,18 +133,20 @@ const VoiceRecoder = ({ onClick }) => {
             )}
           </div>
         ) : (
-          <div className="w-full flex flex-col gap-1">
+          <div className="w-full h-full flex flex-col my-2 rounded-md p-5  bg-white animate-fade">
             <div className="flex flex-col items-center">
-              <p className="p-4 w-full text-lg font-medium leading-none text-center">
+              <p className="font-tenada p-2 w-full text-2xl font-medium leading-none text-center">
                 음성 분석 완료
               </p>
-              <p className="text-sm text-muted-foreground text-start">
+              <p className="text-lg text-muted-foreground text-start">
                 선택 완료 버튼을 눌러주세요.
               </p>
             </div>
 
-            <div className="h-[70px] flex border items-center justify-center rounded-md m-4">
-              <p className="font-semibold">#한식, #한식당, #일식, #중식</p>
+            <div className="h-[130px] flex border items-center justify-center rounded-md m-4">
+              <p className="font-semibold font-tenada text-xl">
+                #한식, #한식당, #일식, #중식
+              </p>
             </div>
             <div className="flex justify-center">
               <button
