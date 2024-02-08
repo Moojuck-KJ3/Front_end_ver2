@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import { sendMoodKeywordSpeech } from "../../../api";
 import { useParams } from "react-router-dom";
@@ -72,7 +72,6 @@ const VoiceRecognition = ({ onSetResult, onAddRest }) => {
       };
 
       recognitionRef.current.onend = () => {
-        // Automatically restart the recognition in case of end
         recognitionRef.current.start();
       };
     }

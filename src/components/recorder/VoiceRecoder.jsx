@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import VoiceRecoderContainer from "./VoiceRecoderContainer";
 import Timer from "./Timer";
-
 import { sendFoodCategorySpeech } from "../../api";
 import { useParams } from "react-router";
-
 import {} from "../../api";
 
 const VoiceRecoder = ({ onClick }) => {
@@ -13,31 +11,23 @@ const VoiceRecoder = ({ onClick }) => {
   const [transcript, setTranscript] = useState("");
   const [showTimer, setShowTimer] = useState(true);
   const [timeLeft, setTimeLeft] = useState(5);
-  //const [onReady, setOnReady] = useState(false);
-  // Reference to store the SpeechRecognition instance
+
   const recognitionRef = useRef(null);
 
   const { roomId } = useParams();
-
-  // Function to start recording
   const startRecording = () => {
     setTranscript("");
 
     setIsRecording(true);
-    // Create a new SpeechRecognition instance and configure it
     recognitionRef.current = new window.webkitSpeechRecognition();
     recognitionRef.current.continuous = true;
     recognitionRef.current.interimResults = true;
-
-    // Event handler for speech recognition results
     recognitionRef.current.onresult = (event) => {
       const tempScript = event.results[event.results.length - 1][0].transcript;
-      // Log the recognition results and update the transcript state
       console.log("tempScript : ", tempScript);
       setTranscript(tempScript);
     };
 
-    // Start the speech recognition
     recognitionRef.current.start();
   };
 
@@ -50,25 +40,22 @@ const VoiceRecoder = ({ onClick }) => {
       setTimeout(() => {
         stopRecording();
         setShowTimer(false);
-      }, 5000); // Stop recording after 5 seconds
+      }, 5000);
     };
 
     start();
 
     return () => {
-      // Stop the speech recognition if it's active
       if (recognitionRef.current) {
         recognitionRef.current.stop();
       }
     };
   }, []);
 
-  // Function to stop recording
   const stopRecording = () => {
     setIsRecording(false);
     sendTranscriptToServer();
     if (recognitionRef.current) {
-      // Stop the speech recognition and mark recording as complete
       recognitionRef.current.stop();
     }
   };
@@ -96,8 +83,6 @@ const VoiceRecoder = ({ onClick }) => {
   };
 
   const onTimerTimeout = () => {
-    // Function to handle when the timer runs out
-
     stopRecording();
   };
 

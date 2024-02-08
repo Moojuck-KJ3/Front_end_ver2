@@ -1,4 +1,4 @@
-import { createRef, useEffect, useRef, useState } from "react";
+import { createRef, useEffect, useState } from "react";
 
 const getRandomInt = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
@@ -82,7 +82,7 @@ export const StarryBackground = ({
     });
 
     setStars(starsData);
-  }, [restaurantList, resultTags, resultMoodTags, combineList]); // Ensuring combineList is treated as an array
+  }, [restaurantList, resultTags, resultMoodTags, combineList]);
 
   return (
     <div

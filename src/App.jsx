@@ -6,7 +6,6 @@ import CreateRoomPage from "./pages/createRoomPage/CreateRoomPage";
 import PlayRoomPage from "./pages/playPage/PlayRoomPage";
 import WaitingPage from "./pages/waitingPage/WaitingPage";
 import { useLocalCameraStream } from "./realtimeComunication/webRTCManager";
-import { Test } from "./pages/test/Test";
 
 function App() {
   const { localStream } = useLocalCameraStream();
@@ -16,7 +15,6 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/test" element={<Test />} />
         <Route path="/register" element={<ResisterPage />} />
         <Route
           path="/entry"
