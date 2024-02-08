@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import VideoContainer from "../../components/video/VideoContainer";
 import VoiceRecoder from "../../components/recorder/VoiceRecoder";
-import ModeSetButton from "../../components/button/ModeSetButton";
 import PlaceCombineArea from "./modeThree/card/PlaceCombineArea";
 import ImageSilderBg from "./modeFour/ImageSilderBg";
 import GameArea from "./GameArea";
@@ -19,10 +18,12 @@ import { StarryBackground } from "./StarryBackground";
 import { restaurantLists } from "./restaurantLists";
 import VoiceRecognition from "./modeTwo/VoiceRecognition";
 import { StepperWithContent } from "./StepperWithContent";
+import ModeThreeModal from "../../components/modal/ModeThreeExpainModal";
 
 const PlayRoomPage = () => {
   const { roomId } = useParams();
   const [showModal, setShowModal] = useState(true);
+  const [showModeThreeModal, setShowModeThreeModal] = useState(true);
   const [roomMode, setRoomMode] = useState(MODE.MODE1);
   const [localStream, setLocalStream] = useState(null);
   const [remoteStrem, setRemoteStream] = useState(null);
@@ -160,13 +161,12 @@ const PlayRoomPage = () => {
             resultMoodTags={modeTwoVoiceRecResult}
           />
 
-          <PlaceCombineArea />
+          {/* <PlaceCombineArea /> */}
           {/* 컨텐츠 */}
-          {showModal && (
-            <ModeOneExpainModal
-              isShowModal={showModal}
-              onShow={setShowModal}
-              SetShowVoiceRecorder={setShowVoiceRecorder}
+          {showModeThreeModal && (
+            <ModeThreeModal
+              isShowModal={showModeThreeModal}
+              onShow={setShowModeThreeModal}
             />
           )}
           {/* 플레이어 핸드 */}
@@ -175,7 +175,12 @@ const PlayRoomPage = () => {
       )}
       {roomMode === MODE.MODE4 && (
         <GameArea>
-          <ImageSilderBg />
+          {/* <ImageSilderBg /> */}
+          <StarryBackground
+            restaurantList={restaurantList}
+            resultTags={modeOneVoiceRecResult}
+            resultMoodTags={modeTwoVoiceRecResult}
+          />
           <PlayerHand handList={playerHand} onSetHandList={setPlayerHand} />
         </GameArea>
       )}
