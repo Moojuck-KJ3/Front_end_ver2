@@ -84,8 +84,12 @@ const PlayRoomPage = () => {
     const remote = getRemoteStream();
     setRemoteStream(remote);
 
+    const parsedCoordinate = JSON.parse(
+      localStorage.getItem("purposeCoordinate")
+    );
+
     const sendData = {
-      purposeCoordinate: localStorage.getItem("purposeCoordinate"),
+      purposeCoordinate: parsedCoordinate,
     };
 
     const getRestList = async (roomId, sendData) => {
