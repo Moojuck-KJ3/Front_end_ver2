@@ -2,23 +2,22 @@ import { useState } from "react";
 import PlaceCard from "./modeThree/card/PlaceCard";
 
 const PlayerHand = ({ handList, onSetHandList }) => {
-  const [placeList, setPlaceList] = useState([]);
-  const [isDragging, setIsDragging] = useState(false);
-
   const handleDragStart = (event, restaurant) => {
-    setIsDragging(true);
+    console.log(restaurant);
     console.log("handleDragStart");
     const restaurantData = JSON.stringify({
-      id: restaurant.id,
-      thumbnailURL: restaurant.FoodUrl,
+      restId: restaurant.restId,
+      name: restaurant.name,
+      thumbnailURL: restaurant.thumbnailURL,
+      category: restaurant.category,
     });
 
     event.dataTransfer.setData("restaurant", restaurantData);
+    console.log(restaurantData);
   };
 
   const handleDrop = (event) => {
     event.preventDefault();
-    setIsDragging(false);
 
     const restaurantData = event.dataTransfer.getData("restaurant");
     const parsedRestaurantData = JSON.parse(restaurantData);
@@ -30,7 +29,6 @@ const PlayerHand = ({ handList, onSetHandList }) => {
 
   const handleDragEnd = (event) => {
     console.log("handleDragEnd");
-    setIsDragging(false);
   };
 
   const handleDragOver = (event) => {
