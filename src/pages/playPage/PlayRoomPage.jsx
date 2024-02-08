@@ -166,36 +166,54 @@ const PlayRoomPage = () => {
 
   // 문자열 배열이므로 이 방식으로 중복을 검사한다
   const addFoodCategory = (foodCategory) => {
-    if (Array.isArray(foodCategory)) {
-      // foodCategory가 배열인 경우 각 요소를 검사하여 modeOneVoiceRecResult에 추가
-      foodCategory.forEach((category) => {
-        if (!modeOneVoiceRecResult.includes(category)) {
-          setModeOneVoiceRecResult((prevResult) => [...prevResult, category]);
-        }
-      });
-    } else {
-      // foodCategory가 문자열인 경우 단일 요소를 검사하여 modeOneVoiceRecResult에 추가
-      if (!modeOneVoiceRecResult.includes(foodCategory)) {
-        setModeOneVoiceRecResult((prevResult) => [...prevResult, foodCategory]);
+    setPlayerHand((prevPlayerHand) => {
+      if (Array.isArray(foodCategory)) {
+        // foodCategory가 배열인 경우 각 요소를 검사하여 prevPlayerHand에 추가
+        return {
+          ...prevPlayerHand,
+          selectedFoodTag: [
+            ...prevPlayerHand.selectedFoodTag,
+            ...foodCategory.filter(
+              (category) => !prevPlayerHand.selectedFoodTag.includes(category)
+            ),
+          ],
+        };
+      } else {
+        // foodCategory가 문자열인 경우 단일 요소를 검사하여 prevPlayerHand에 추가
+        return {
+          ...prevPlayerHand,
+          selectedFoodTag: prevPlayerHand.selectedFoodTag.includes(foodCategory)
+            ? prevPlayerHand.selectedFoodTag
+            : [...prevPlayerHand.selectedFoodTag, foodCategory],
+        };
       }
-    }
+    });
   };
 
   // 문자열 배열이므로 이 방식으로 중복을 검사한다
   const addMoodKeyword = (moodKeyword) => {
-    if (Array.isArray(moodKeyword)) {
-      // moodKeyword가 배열인 경우 각 요소를 검사하여 modeTwoVoiceRecResult에 추가
-      moodKeyword.forEach((keyword) => {
-        if (!modeTwoVoiceRecResult.includes(keyword)) {
-          setModeTwoVoiceRecResult((prevResult) => [...prevResult, keyword]);
-        }
-      });
-    } else {
-      // moodKeyword가 문자열인 경우 단일 요소를 검사하여 modeTwoVoiceRecResult에 추가
-      if (!modeTwoVoiceRecResult.includes(moodKeyword)) {
-        setModeTwoVoiceRecResult((prevResult) => [...prevResult, moodKeyword]);
+    setPlayerHand((prevPlayerHand) => {
+      if (Array.isArray(moodKeyword)) {
+        // moodKeyword가 배열인 경우 각 요소를 검사하여 prevPlayerHand에 추가
+        return {
+          ...prevPlayerHand,
+          selectedMoodTag: [
+            ...prevPlayerHand.selectedMoodTag,
+            ...moodKeyword.filter(
+              (keyword) => !prevPlayerHand.selectedMoodTag.includes(keyword)
+            ),
+          ],
+        };
+      } else {
+        // moodKeyword가 문자열인 경우 단일 요소를 검사하여 prevPlayerHand에 추가
+        return {
+          ...prevPlayerHand,
+          selectedMoodTag: prevPlayerHand.selectedMoodTag.includes(moodKeyword)
+            ? prevPlayerHand.selectedMoodTag
+            : [...prevPlayerHand.selectedMoodTag, moodKeyword],
+        };
       }
-    }
+    });
   };
 
   const addSelectedCombineList = (combineData) => {

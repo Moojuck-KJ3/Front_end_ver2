@@ -15,7 +15,7 @@ const VoiceRecoder = ({ onClick }) => {
   const recognitionRef = useRef(null);
   const serverSendScript = useRef("");
 
-  const { roomId } = useParams().roomId;
+  const { roomId } = useParams();
   const startRecording = () => {
     setTranscript("");
 
