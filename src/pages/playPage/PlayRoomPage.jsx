@@ -54,9 +54,22 @@ const PlayRoomPage = () => {
 
   // 플레이어 핸드에 보이는 데이터
   const [playerHand, setPlayerHand] = useState({
-    selectedFoodTag: [],
-    selectedMoodTag: [],
-    selectedPlace: [],
+    selectedFoodTag: ["#한식", "일식"],
+    selectedMoodTag: ["#조용한", "#분위기 있는"],
+    selectedPlace: [
+      {
+        restId: "1",
+        name: "토리모리",
+        x: 1,
+        y: 2,
+        category: "한식", // Korean
+        mood: ["조용한"],
+        miniStarUrl: "/Star_2.png",
+        BigStarUrl: "/Star_3.png",
+        FoodUrl: "/Food.png",
+        thumbnailURL: "/돈까스.png",
+      },
+    ],
   });
 
   // 조합시 결과를 보여줄 담을 리스트

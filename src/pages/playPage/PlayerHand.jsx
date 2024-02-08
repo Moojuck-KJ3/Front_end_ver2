@@ -2,14 +2,14 @@ import PlaceCard from "./modeThree/card/PlaceCard";
 
 const PlayerHand = ({ handList, onSetHandList }) => {
   const handleDragStart = (event, restaurant) => {
-    console.log(restaurant);
     console.log("handleDragStart");
     const restaurantData = JSON.stringify({
       restId: restaurant.restId,
-      name: restaurant.name,
+      // name: restaurant.name,
       thumbnailURL: restaurant.thumbnailURL,
-      category: restaurant.category,
+      // category: restaurant.category,
     });
+    console.log(restaurantData);
 
     event.dataTransfer.setData("restaurant", restaurantData);
     console.log(restaurantData);
@@ -20,9 +20,12 @@ const PlayerHand = ({ handList, onSetHandList }) => {
 
     const restaurantData = event.dataTransfer.getData("restaurant");
     const parsedRestaurantData = JSON.parse(restaurantData);
-
+    console.log(parsedRestaurantData);
     if (restaurantData) {
-      onSetHandList((prev) => [...prev, parsedRestaurantData]);
+      onSetHandList((prevHand) => ({
+        ...prevHand,
+        selectedPlace: [...prevHand.selectedPlace, parsedRestaurantData],
+      }));
     }
   };
 
@@ -47,21 +50,21 @@ const PlayerHand = ({ handList, onSetHandList }) => {
       >
         <div className="col-span-1 flex flex-col justify-center items-center">
           <ul>
-            <li>#한식</li>
-            <li>#중식</li>
-            <li>#양식</li>
+            {handList.selectedFoodTag.map((tag, index) => (
+              <li key={index}>음식 태그</li>
+            ))}
           </ul>
         </div>
         <div className="col-span-1 flex flex-col justify-center items-center">
           <ul className="">
-            <li className="m-1 px-10 py-2 bg-gray-300 rounded-xl">#한식</li>
-            <li className="m-1 px-10 py-2 bg-gray-300 rounded-xl">#한식</li>
-            <li className="m-1 px-10 py-2 bg-gray-300 rounded-xl">#한식</li>
+            {handList.selectedMoodTag.map((tag, index) => (
+              <li key={index}>분위기 태그</li>
+            ))}
           </ul>
         </div>
 
         <div className=" justify-end flex col-span-3 gap-2 ">
-          {handList.map((place, index) => (
+          {handList.selectedPlace.map((place, index) => (
             <div
               className="h-full"
               onDragStart={(e) => handleDragStart(e, place)}
