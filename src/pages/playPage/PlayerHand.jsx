@@ -1,4 +1,3 @@
-import { useState } from "react";
 import PlaceCard from "./modeThree/card/PlaceCard";
 
 const PlayerHand = ({ handList, onSetHandList }) => {
@@ -63,25 +62,3 @@ const PlayerHand = ({ handList, onSetHandList }) => {
 };
 
 export default PlayerHand;
-
-// {/* Container for trump indicator and cards */}
-// <div className="flex items-center z-10 w-full">
-//   <div className="flex -ml-2">
-//     {cards.map((card, index) => (
-//       <Card
-//         key={index}
-//         suit={card.suit}
-//         rank={card.rank}
-//         className="shadow-lg"
-//       />
-//     ))}
-//   </div>
-// </div>
-
-// {isDragging && (
-//   <div className="absolute inset-0 mt-10 mb-52 mx-40 rounded-xl grid grid-cols-3 items-center justify-center text-lg font-semibold ">
-//     <div>안녕</div>
-//     <div>안녕</div>
-//     <div>안녕</div>
-//   </div>
-// )}

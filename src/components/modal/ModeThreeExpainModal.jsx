@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PlaceCombineArea from "../../pages/playPage/modeThree/card/PlaceCombineArea";
 
-const ModeThreeModal = ({ isShowModal, onShow, onSetSelectedCombineList }) => {
+const ModeThreeModal = ({ onShow, onSetSelectedCombineList }) => {
   const [restaurantData, setRestaurantData] = useState();
   const handleClick = () => {
     onShow(false);
@@ -13,7 +13,6 @@ const ModeThreeModal = ({ isShowModal, onShow, onSetSelectedCombineList }) => {
         <div className="modal-overlay absolute  w-full h-full opacity-50"></div>
 
         <div className="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-lg shadow-lg  animate-fade p-1">
-          {/* Add modal content here */}
           <div className="modal-content py-4 text-left px-6">
             <div className="flex justify-between items-center pb-3">
               <p className="text-2xl font-bold text-center font-tenada w-full">

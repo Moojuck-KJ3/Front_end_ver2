@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import VideoContainer from "../../components/video/VideoContainer";
 import VoiceRecoder from "../../components/recorder/VoiceRecoder";
 import GameArea from "./GameArea";
 import PlayerHand from "./PlayerHand";
@@ -19,6 +18,7 @@ import { StepperWithContent } from "./StepperWithContent";
 import ModeThreeModal from "../../components/modal/ModeThreeExpainModal";
 
 import { getRestaurantList } from "../../api";
+import UserVideoContainer from "../../components/video/UserVideoContainer";
 
 const PlayRoomPage = () => {
   const { roomId } = useParams();
@@ -55,6 +55,7 @@ const PlayRoomPage = () => {
   // 플레이어 핸드에 보이는 데이터
   const [playerHand, setPlayerHand] = useState([
     {
+      // 더미 데이터
       restId: "1",
       name: "토리모리",
       x: 1,
@@ -164,120 +165,73 @@ const PlayRoomPage = () => {
   return (
     <PlayRoomContainer>
       {/* 비디오 */}
-      <div className=" rounded-full absolute bottom-32 left-0 z-10">
-        <VideoContainer mediaStream={localStream} />
-      </div>
-      <div className=" rounded-full absolute bottom-32 right-0 z-10">
-        <VideoContainer mediaStream={remoteStrem} />
-      </div>
-      <div className=" rounded-full absolute top-20 right-0 z-10">
-        <img
-          className=" w-40 h-40 items-center border-4 bg-gray-300 border-white
-            shadow-2xl rounded-full object-cover"
-          src="/현재훈_profile.jpg"
-          alt=""
-        />
-      </div>
-      <div className=" rounded-full absolute top-20 left-0 z-10">
-        <img
-          className=" w-40 h-40 items-center border-4 bg-gray-300 border-white
-            shadow-2xl rounded-full object-cover"
-          src="/이서연_profile.png"
-          alt=""
-        />
-      </div>
+      <UserVideoContainer localStream={localStream} remoteStrem={remoteStrem} />
 
       {/* 스텝바 */}
       <StepperWithContent setRoomMode={setRoomMode} />
+      {/* 컨텐츠 시작 */}
+      <GameArea>
+        {/* 별 */}
+        <StarryBackground
+          restaurantList={restaurantList}
+          resultTags={modeOneVoiceRecResult}
+          resultMoodTags={modeTwoVoiceRecResult}
+          combineList={combineList}
+        />
+        <PlayerHand handList={playerHand} onSetHandList={setPlayerHand} />
 
-      {roomMode === MODE.MODE1 && (
-        <GameArea>
-          {/* 별 */}
-          <StarryBackground
-            restaurantList={restaurantList}
-            resultTags={modeOneVoiceRecResult}
-            resultMoodTags={modeTwoVoiceRecResult}
-            combineList={combineList}
-          />
-
-          {/* 설명 모달 */}
-          {showModal && (
-            <ModeOneExpainModal
-              isShowModal={showModal}
-              onShow={setShowModal}
-              SetShowVoiceRecorder={setShowVoiceRecorder}
-            />
-          )}
-          {/* 음성 인식 모달 */}
-          {showVoiceRecorder && (
-            <div className=" absolute top-[15%]">
-              <VoiceRecoder
-                onClick={handleSetReady}
-                //onSetResult={setModeOneVoiceRecResult}
+        {roomMode === MODE.MODE1 && (
+          <>
+            {/* 설명 모달 */}
+            {showModal && (
+              <ModeOneExpainModal
+                onShowModal={setShowModal}
+                SetShowVoiceRecorder={setShowVoiceRecorder}
               />
-            </div>
-          )}
-
-          <PlayerHand handList={playerHand} onSetHandList={setPlayerHand} />
-        </GameArea>
-      )}
-      {roomMode === MODE.MODE2 && (
-        <GameArea>
-          {/* 음성 인식 기능 On */}
-          <VoiceRecognition
-            onSetResult={addMoodKeyword}
-            onAddRest={addUniqueRestaurant}
-          />
-          {/* 별 */}
-          <StarryBackground
-            restaurantList={restaurantList}
-            resultTags={modeOneVoiceRecResult}
-            resultMoodTags={modeTwoVoiceRecResult}
-            combineList={combineList}
-          />
-
-          {/* 플레이어 핸드 */}
-          <PlayerHand handList={playerHand} onSetHandList={setPlayerHand} />
-        </GameArea>
-      )}
-      {roomMode === MODE.MODE3 && (
-        <GameArea>
-          {/* 별 */}
-          <StarryBackground
-            restaurantList={restaurantList}
-            resultTags={modeOneVoiceRecResult}
-            resultMoodTags={modeTwoVoiceRecResult}
-            combineList={combineList}
-          />
-
-          {/* 조합 모달 */}
-          {showModeThreeModal && (
-            <ModeThreeModal
-              isShowModal={showModeThreeModal}
-              onShow={setShowModeThreeModal}
-              onSetSelectedCombineList={setSelectedCombineList}
+            )}
+            {/* 음성 인식 모달 */}
+            {showVoiceRecorder && (
+              <div className=" absolute top-12">
+                <VoiceRecoder
+                  onClick={handleSetReady}
+                  //onSetResult={setModeOneVoiceRecResult}
+                />
+              </div>
+            )}
+          </>
+        )}
+        {roomMode === MODE.MODE2 && (
+          <>
+            {/* 음성 인식 기능 On */}
+            <VoiceRecognition
+              onSetResult={addMoodKeyword}
+              onAddRest={addUniqueRestaurant}
             />
-          )}
-          {/* 플레이어 핸드 */}
-          <PlayerHand handList={playerHand} onSetHandList={setPlayerHand} />
-        </GameArea>
-      )}
-      {roomMode === MODE.MODE4 && (
-        <GameArea>
-          {/* 결과창 */}
-          {/* <ImageSilderBg /> */}
-          <StarryBackground
-            restaurantList={restaurantList}
-            resultTags={modeOneVoiceRecResult}
-            resultMoodTags={modeTwoVoiceRecResult}
-            combineList={combineList}
-          />
-          <PlayerHand handList={playerHand} onSetHandList={setPlayerHand} />
-        </GameArea>
-      )}
+          </>
+        )}
+        {roomMode === MODE.MODE3 && (
+          <>
+            {/* 조합 모달 */}
+            {showModeThreeModal && (
+              <ModeThreeModal
+                onShow={setShowModeThreeModal}
+                onSetSelectedCombineList={setSelectedCombineList}
+              />
+            )}
+          </>
+        )}
+        {roomMode === MODE.MODE4 && (
+          <>
+            {/* 결과창 */}
+            {/* <ImageSilderBg /> */}
+          </>
+        )}
+      </GameArea>
     </PlayRoomContainer>
   );
 };
+
+export default PlayRoomPage;
 
 const MODE = {
   MODE1: 1,
@@ -285,8 +239,6 @@ const MODE = {
   MODE3: 3,
   MODE4: 4,
 };
-
-export default PlayRoomPage;
 
 const DUMMY_COMBINE_LIST = [
   {
