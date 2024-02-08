@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import PlaceCard from "./PlaceCard";
 import BigPlaceCard from "./BigPlaceCard";
 import ResultCardLists from "./ResultCardLists";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -55,16 +54,16 @@ const PlaceCombineArea = () => {
   const handleDrop = (event, targetList) => {
     event.preventDefault();
 
-    const tagData = event.dataTransfer.getData("tag");
-    const tag = JSON.parse(tagData);
-    if (tag) {
+    const restaurantData = event.dataTransfer.getData("restaurant");
+    const parsedRestaurantData = JSON.parse(restaurantData);
+    if (parsedRestaurantData) {
       // drag 하여 놓을때 post 요청
       // post 요청이 성공한 경우, response에 error가 없는 경우
 
       if (targetList === "A") {
-        setDraggedTagA(tag);
+        setDraggedTagA(parsedRestaurantData);
       } else if (targetList === "B") {
-        setDraggedTagB(tag);
+        setDraggedTagB(parsedRestaurantData);
       }
     }
 
@@ -91,7 +90,7 @@ const PlaceCombineArea = () => {
             onDragOver={handleDragOver}
             onDrop={(event) => handleDrop(event, "A")}
           >
-            {draggedTagA && <BigPlaceCard img={draggedTagA.thumbnailURL} />}
+            {draggedTagA && <BigPlaceCard img={"/돈까스.png"} />}
           </div>
 
           <div className=" flex justify-center items-center mt-2 ">
@@ -115,7 +114,7 @@ const PlaceCombineArea = () => {
             onDragOver={handleDragOver}
             onDrop={(event) => handleDrop(event, "B")}
           >
-            {draggedTagB && <BigPlaceCard img={draggedTagB.thumbnailURL} />}
+            {draggedTagB && <BigPlaceCard img={"/돈까스.png"} />}
           </div>
         </div>
       )}

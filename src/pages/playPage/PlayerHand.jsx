@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PlaceCard from "./modeThree/card/PlaceCard";
 
-const PlayerHand = ({ Hands, playerName, avatarUrl }) => {
+const PlayerHand = ({ handList, onSetHandList }) => {
   const [placeList, setPlaceList] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -24,7 +24,7 @@ const PlayerHand = ({ Hands, playerName, avatarUrl }) => {
     const parsedRestaurantData = JSON.parse(restaurantData);
 
     if (restaurantData) {
-      setPlaceList((prev) => [...prev, parsedRestaurantData]);
+      onSetHandList((prev) => [...prev, parsedRestaurantData]);
     }
   };
 
@@ -42,23 +42,15 @@ const PlayerHand = ({ Hands, playerName, avatarUrl }) => {
   };
 
   return (
-    <div className="w-2/3 h-[200px] mt-4 flex justify-center bg-white border-1 border-gray-200 shadow-md rounded-lg mx-10">
+    <div className="w-2/3 h-[260px] mt-2 mb-2 flex justify-center bg-white border-1 border-gray-200 shadow-md rounded-lg mx-10">
       <div
-        className="w-full bg-gray-100 border-2 m-2 rounded-md shadow-inner p-2 grid grid-cols-8 gap-2 justify-items-center items-center"
+        className="w-full bg-gray-100 border-2 m-2 rounded-md shadow-inner p-2 flex gap-2 justify-items-center items-center"
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
-        {isDragging && (
-          <div className="absolute inset-0 mt-10 mb-52 mx-40 rounded-xl grid grid-cols-3 items-center justify-center text-lg font-semibold ">
-            <div>
-              <img src="/음식돋보기.png" alt="" />
-            </div>
-            <div>안녕</div>
-            <div>안녕</div>
-          </div>
-        )}
-        {placeList.map((place, index) => (
+        {handList.map((place, index) => (
           <div
+            className="h-full"
             onDragStart={(e) => handleDragStart(e, place)}
             onDragEnd={handleDragEnd}
             onDragLeave={handleDragLeave}
@@ -87,3 +79,11 @@ export default PlayerHand;
 //     ))}
 //   </div>
 // </div>
+
+// {isDragging && (
+//   <div className="absolute inset-0 mt-10 mb-52 mx-40 rounded-xl grid grid-cols-3 items-center justify-center text-lg font-semibold ">
+//     <div>안녕</div>
+//     <div>안녕</div>
+//     <div>안녕</div>
+//   </div>
+// )}
