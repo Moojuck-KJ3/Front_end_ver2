@@ -76,6 +76,8 @@ export const register = async (data) => {
 // data : {userSpeech : string}
 export const sendFoodCategorySpeech = async (roomId, data) => {
   try {
+    console.log("sendFoodCategorySpeech", roomId, data);
+
     return await apiClient.post(
       `/foodcategories/speech?roomId=${roomId}`,
       data

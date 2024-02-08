@@ -115,9 +115,11 @@ const PlayRoomPage = () => {
 
   // 모든 유저가 준비 완료할 경우, 다음 모드로  넘어가는 함수
   const handleModeChange = (data) => {
-    if (data.roomReadyCount < 2) {
+    const roomMemberCount = JSON.parse(localStorage.getItem("roomMemberCount"));
+
+    if (data.roomReadyCount < roomMemberCount) {
       setRoomReadyCount((prev) => prev + 1);
-    } else if (data.roomReadyCount >= 2) {
+    } else if (data.roomReadyCount >= roomMemberCount) {
       console.log(data.roomReadyCount);
       setRoomMode(data.newMode);
       setIsReady(false);
@@ -127,6 +129,7 @@ const PlayRoomPage = () => {
   };
 
   const handleReceiveFoodCategory = (data) => {
+    console.log("handleReceiveFoodCategory is called, data : ", data);
     if (length(data.foodCategories) > 0) {
       addFoodCategory(data.foodCategories);
     } else {
