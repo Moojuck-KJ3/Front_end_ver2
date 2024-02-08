@@ -35,8 +35,12 @@ const WaitingPage = ({ localStream }) => {
       setProgressValue(100);
     };
 
-    const handleStartPlayRoomResponse = () => {
+    const handleStartPlayRoomResponse = (data) => {
       console.log("Starting the play-room");
+
+      // play-room 시작 전에 모든 클라가 해당 data를 가지고 있게 한다
+      localStorage.setItem("purposeCoordinate", data.purposeCoordinate);
+
       navigator(`/play-room/${roomId}`);
     };
 
