@@ -1,67 +1,31 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import BigPlaceCard from "./BigPlaceCard";
-import ResultCardLists from "./ResultCardLists";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import HelpIcon from "@mui/icons-material/Help";
-import LoopIcon from "@mui/icons-material/Loop";
-import { useParams } from "react-router-dom";
 
-import { DUMMY_PLACE } from "./ResultCardLists";
-
-const PlaceCombineArea = () => {
-  const [draggedTagA, setDraggedTagA] = useState(null);
-  const [draggedTagB, setDraggedTagB] = useState(null);
+const PlaceCombineArea = ({ onSetData }) => {
+  const [draggedTag, setDraggedTag] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [showContent, setShowContent] = useState(false);
-  const [isSpining, setIsSpining] = useState(false);
-  const [placeList, setPlaceList] = useState([]);
-
-  const roomId = useParams();
-
-  useEffect(() => {
-    setPlaceList(DUMMY_PLACE);
-  }, []);
-
-  useEffect(() => {
-    if (draggedTagA && draggedTagB) {
-      setIsSpining(true);
-      const delay = setTimeout(() => {
-        setShowContent(true);
-      }, 3000);
-
-      return () => clearTimeout(delay);
-    } else {
-      setShowContent(false);
-      setIsSpining(false);
-    }
-  }, [draggedTagA, draggedTagB]);
 
   const handleDragOver = (event) => {
+    setDraggedTag(null);
+
     event.preventDefault();
     setIsDragging(true);
   };
 
-  const handleDrop = (event, targetList) => {
+  const handleDrop = (event) => {
     event.preventDefault();
 
     const restaurantData = event.dataTransfer.getData("restaurant");
     const parsedRestaurantData = JSON.parse(restaurantData);
     if (parsedRestaurantData) {
-      // drag 하여 놓을때 socket 쏠 예정
-
-      if (targetList === "A") {
-        setDraggedTagA(parsedRestaurantData);
-      } else if (targetList === "B") {
-        setDraggedTagB(parsedRestaurantData);
-      }
+      // drag 하여 놓을때 post 요청
+      // post 요청이 성공한 경우, response에 error가 없는 경우
+      console.log("parsedRestaurantData", parsedRestaurantData);
+      setDraggedTag(parsedRestaurantData);
+      onSetData(parsedRestaurantData);
     }
 
     setIsDragging(false);
-  };
-
-  const handleResetTarget = () => {
-    setDraggedTagA(null);
-    setDraggedTagB(null);
   };
 
   return (
@@ -70,9 +34,9 @@ const PlaceCombineArea = () => {
         isDragging ? "additional-styles-if-dragging" : ""
       }`}
       onDragOver={handleDragOver}
-      onDrop={(event) => handleDrop(event, "B")}
+      onDrop={(event) => handleDrop(event)}
     >
-      {draggedTagB ? (
+      {draggedTag ? (
         <BigPlaceCard img={"/돈까스.png"} />
       ) : (
         <div className="text-center">여기에 올리기</div>

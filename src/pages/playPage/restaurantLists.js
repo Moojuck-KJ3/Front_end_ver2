@@ -11,6 +11,7 @@ export const restaurantLists = [
     miniStarUrl: "/Star_2.png",
     BigStarUrl: "/Star_3.png",
     FoodUrl: "/Food.png",
+    thumbnailURL: "/돈까스.png",
   },
   {
     restId: "2",
@@ -22,6 +23,7 @@ export const restaurantLists = [
     miniStarUrl: "/Star_2.png",
     BigStarUrl: "/Star_3.png",
     FoodUrl: "/Food.png",
+    thumbnailURL: "/돈까스.png",
   },
   {
     restId: "3",
@@ -33,6 +35,7 @@ export const restaurantLists = [
     miniStarUrl: "/Star_2.png",
     BigStarUrl: "/Star_3.png",
     FoodUrl: "/Food.png",
+    thumbnailURL: "/돈까스.png",
   },
   {
     restId: "7",
@@ -45,6 +48,7 @@ export const restaurantLists = [
     miniStarUrl: "/Star_2.png",
     BigStarUrl: "/Star_3.png",
     FoodUrl: "/Food.png",
+    thumbnailURL: "/돈까스.png",
   },
   {
     restId: "8",
@@ -57,6 +61,7 @@ export const restaurantLists = [
     miniStarUrl: "/Star_2.png",
     BigStarUrl: "/Star_3.png",
     FoodUrl: "/Food.png",
+    thumbnailURL: "/돈까스.png",
   },
   {
     restId: "9",
@@ -69,6 +74,7 @@ export const restaurantLists = [
     miniStarUrl: "/Star_2.png",
     BigStarUrl: "/Star_3.png",
     FoodUrl: "/Food.png",
+    thumbnailURL: "/돈까스.png",
   },
   {
     restId: "10",
@@ -81,6 +87,7 @@ export const restaurantLists = [
     miniStarUrl: "/Star_2.png",
     BigStarUrl: "/Star_3.png",
     FoodUrl: "/Food.png",
+    thumbnailURL: "/돈까스.png",
   },
   {
     restId: "21",
@@ -93,6 +100,7 @@ export const restaurantLists = [
     miniStarUrl: "/Star_2.png",
     BigStarUrl: "/Star_3.png",
     FoodUrl: "/Food.png",
+    thumbnailURL: "/돈까스.png",
   },
   {
     restId: "31",
@@ -105,6 +113,7 @@ export const restaurantLists = [
     miniStarUrl: "/Star_2.png",
     BigStarUrl: "/Star_3.png",
     FoodUrl: "/Food.png",
+    thumbnailURL: "/돈까스.png",
   },
   {
     restId: "41",
@@ -117,6 +126,7 @@ export const restaurantLists = [
     miniStarUrl: "/Star_2.png",
     BigStarUrl: "/Star_3.png",
     FoodUrl: "/Food.png",
+    thumbnailURL: "/돈까스.png",
   },
   {
     restId: "125",
@@ -129,6 +139,7 @@ export const restaurantLists = [
     miniStarUrl: "/Star_2.png",
     BigStarUrl: "/Star_3.png",
     FoodUrl: "/Food.png",
+    thumbnailURL: "/돈까스.png",
   },
   {
     restId: "26",
@@ -141,5 +152,6 @@ export const restaurantLists = [
     miniStarUrl: "/Star_2.png",
     BigStarUrl: "/Star_3.png",
     FoodUrl: "/Food.png",
+    thumbnailURL: "/돈까스.png",
   },
 ];
