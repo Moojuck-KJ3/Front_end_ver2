@@ -161,12 +161,12 @@ const PlayRoomPage = () => {
             resultMoodTags={modeTwoVoiceRecResult}
           />
 
+          {/* <PlaceCombineArea /> */}
           {/* 컨텐츠 */}
           {showModeThreeModal && (
             <ModeThreeModal
               isShowModal={showModeThreeModal}
               onShow={setShowModeThreeModal}
-              SetShowVoiceRecorder={setShowVoiceRecorder}
             />
           )}
           {/* 플레이어 핸드 */}
@@ -175,7 +175,12 @@ const PlayRoomPage = () => {
       )}
       {roomMode === MODE.MODE4 && (
         <GameArea>
-          <ImageSilderBg />
+          {/* <ImageSilderBg /> */}
+          <StarryBackground
+            restaurantList={restaurantList}
+            resultTags={modeOneVoiceRecResult}
+            resultMoodTags={modeTwoVoiceRecResult}
+          />
           <PlayerHand handList={playerHand} onSetHandList={setPlayerHand} />
         </GameArea>
       )}

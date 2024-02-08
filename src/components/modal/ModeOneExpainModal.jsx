@@ -12,11 +12,11 @@ const ModeOneExpainModal = ({ SetShowVoiceRecorder, isShowModal, onShow }) => {
   };
   return (
     <div>
-      <div className="modal fixed w-full h-full -top-10 left-0 flex items-center justify-center  animate-fade">
+      <div className="modal fixed w-full h-full -top-10 left-0 flex items-center justify-center  ">
         {/* overlay  */}
         <div className="modal-overlay absolute  w-full h-full opacity-50"></div>
 
-        <div className="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-lg shadow-lg  animate-jump">
+        <div className="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-lg shadow-lg  animate-fade">
           {/* Add modal content here */}
           <div className="modal-content py-4 text-left px-6">
             <div className="flex justify-between items-center pb-3">

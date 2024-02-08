@@ -1,16 +1,15 @@
-import { useParams } from "react-router";
 import PlaceCombineArea from "../../pages/playPage/modeThree/card/PlaceCombineArea";
 
-const ModeThreeModal = ({ SetShowVoiceRecorder, isShowModal, onShow }) => {
-  const roomId = useParams();
-
-  const handleClick = () => {};
+const ModeThreeModal = ({ isShowModal, onShow }) => {
+  const handleClick = () => {
+    onShow(false);
+  };
   return (
     <div>
-      <div className="modal fixed w-full h-full m-94 -top-10 left-0 flex items-center justify-center  animate-fade">
+      <div className="modal fixed w-full h-full m-94 -top-10 left-0 flex items-center justify-center ">
         <div className="modal-overlay absolute  w-full h-full opacity-50"></div>
 
-        <div className="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-lg shadow-lg  animate-jump p-1">
+        <div className="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-lg shadow-lg  animate-fade p-1">
           {/* Add modal content here */}
           <div className="modal-content py-4 text-left px-6">
             <div className="flex justify-between items-center pb-3">
