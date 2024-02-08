@@ -12,11 +12,15 @@ export const StarryBackground = ({
   const [stars, setStars] = useState([]);
 
   const handleDragStart = (event, restaurant) => {
+    console.log(restaurant);
     const restaurantData = JSON.stringify({
-      restId: restaurant.restId,
+      restId: restaurant.id,
+      // name: restaurant.name,
       thumbnailURL: restaurant.FoodUrl,
+      // category: restaurant.category,
     });
 
+    console.log(restaurantData);
     event.dataTransfer.setData("restaurant", restaurantData);
   };
 
@@ -86,7 +90,7 @@ export const StarryBackground = ({
 
   return (
     <div
-      className="bg-black border-2 border-dashed border-spacing-4 rounded-xl relative w-full h-full
+      className="bg-black m-4 p-14 rounded-full border-2 border-dashed border-spacing-4 relative w-full h-full
     "
     >
       {stars.map((star, i) => (
