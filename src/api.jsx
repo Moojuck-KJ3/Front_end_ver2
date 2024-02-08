@@ -96,6 +96,7 @@ export const sendFoodCategorySpeech = async (roomId, data) => {
 // data : {userSpeech : string}
 export const sendMoodKeywordSpeech = async (roomId, data) => {
   try {
+    console.log("sendMoodKeywordSpeech", roomId, data);
     return await apiClient.post(`/keywords/mood/speech?roomId=${roomId}`, data);
   } catch (exception) {
     checkResponseCode(exception);

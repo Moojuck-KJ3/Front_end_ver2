@@ -6,10 +6,10 @@ import socket from "../../../realtimeComunication/socket";
 
 const VoiceRecognition = ({ onSetResult, onAddRest }) => {
   const recognitionRef = useRef(null);
-  const roomId = useParams();
+  const roomId = useParams().roomId;
 
   const handleSetMoodTags = (text) => {
-    const data = { userSpeech: text };
+    const data = { speechSentence: text };
 
     const sendTransText = async (roomId, data) => {
       const response = await sendMoodKeywordSpeech(roomId, data);

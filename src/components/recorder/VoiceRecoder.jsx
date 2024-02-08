@@ -15,7 +15,7 @@ const VoiceRecoder = ({ onClick }) => {
   const recognitionRef = useRef(null);
   const serverSendScript = useRef("");
 
-  const { roomId } = useParams();
+  const { roomId } = useParams().roomId;
   const startRecording = () => {
     setTranscript("");
 
@@ -72,10 +72,16 @@ const VoiceRecoder = ({ onClick }) => {
       const response = await sendFoodCategorySpeech(roomId, data);
       if (response.error) {
         console.error("Error occured in sending mood tags", response.exception);
+      } else {
+        console.log("response! :", response);
       }
     };
 
-    sendFoodCategoryData(roomId, serverSendScript);
+    const serverSendData = {
+      speechSentence: serverSendScript,
+    };
+
+    sendFoodCategoryData(roomId, serverSendData);
   };
 
   const onTimerTimeout = () => {
