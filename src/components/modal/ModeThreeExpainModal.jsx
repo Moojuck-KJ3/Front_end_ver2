@@ -18,7 +18,7 @@ const ModeThreeModal = ({
       restId: restaurantData.id,
     };
 
-    onSetSelectedCombineList((prev) => [...prev, insertData]);
+    onSetSelectedCombineList(insertData);
 
     // 선택 완료 버튼을 눌렀기에 socket을 쏘기 위함
     onSelectComplete();
