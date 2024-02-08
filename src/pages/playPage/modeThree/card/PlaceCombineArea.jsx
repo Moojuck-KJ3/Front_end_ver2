@@ -20,18 +20,6 @@ const PlaceCombineArea = () => {
   const roomId = useParams();
 
   useEffect(() => {
-    // get 요청으로 getKeywordsToRests 요청 예정
-    // 현재 생각으론 dummy_place를 대체할 예정
-    // const getPlaceList = async (roomId) => {
-    //   const response = await getKeywordsToRests(roomId);
-    //   if (response.error) {
-    //     console.log(response.exception);
-    //   } else {
-    //     setPlaceList(response.restaurants);
-    //   }
-    // };
-
-    // getPlaceList(roomId);
     setPlaceList(DUMMY_PLACE);
   }, []);
 
@@ -62,11 +50,28 @@ const PlaceCombineArea = () => {
     if (parsedRestaurantData) {
       // drag 하여 놓을때 post 요청
       // post 요청이 성공한 경우, response에 error가 없는 경우
+      const data = {
+        restId: parsedRestaurantData.id,
+      };
 
-      if (targetList === "A") {
-        setDraggedTagA(parsedRestaurantData);
-      } else if (targetList === "B") {
-        setDraggedTagB(parsedRestaurantData);
+      // boolean에 따라서 아래쪽에서 set 해놓을지 여부 결정
+      // post에 실패하면 area에 보이지 않게하여 user에게 다시 drag하도록 유도
+      const sendPostCombine = async (roomId, data) => {
+        const response = await postCombine(roomId, data);
+        if (response.error) {
+          console.log(response.exception);
+          return false;
+        }
+
+        return true;
+      };
+
+      if (sendPostCombine(roomId, data) === true) {
+        if (targetList === "A") {
+          setDraggedTagA(parsedRestaurantData);
+        } else if (targetList === "B") {
+          setDraggedTagB(parsedRestaurantData);
+        }
       }
     }
 
