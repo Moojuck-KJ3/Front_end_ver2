@@ -70,6 +70,8 @@ const PlayRoomPage = () => {
 
   // 조합시 결과를 보여줄 담을 리스트
   const [combineList, setCombineList] = useState([]);
+
+  // 조합 시 유저들이 선택한 레스토랑을 담을 리스트
   const [selectedCombineList, setSelectedCombineList] = useState([]);
 
   useEffect(() => {
