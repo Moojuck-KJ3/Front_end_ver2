@@ -33,6 +33,7 @@ const CreateRoomModal = ({ onModal, onCreate }) => {
         setInfo(marker);
 
         // start-play-room에서 사용할 목적지 좌표
+        // 이거 검색 안하면 undefined가 들어간다는 단점이 있으니 고려
         localStorage.setItem(
           "purposeCoordinate",
           JSON.stringify(centerPosition)

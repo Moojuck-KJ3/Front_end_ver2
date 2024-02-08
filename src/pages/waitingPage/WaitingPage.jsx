@@ -36,7 +36,7 @@ const WaitingPage = ({ localStream }) => {
     };
 
     const handleStartPlayRoomResponse = (data) => {
-      console.log("Starting the play-room");
+      console.log("Starting the play-room", data);
 
       // play-room 시작 전에 모든 클라가 해당 data를 가지고 있게 한다
       localStorage.setItem("purposeCoordinate", data.purposeCoordinate);
@@ -62,7 +62,13 @@ const WaitingPage = ({ localStream }) => {
 
   const handleStartGame = () => {
     if (isAllPlayerReady) {
-      const data = localStorage.getItem("purposeCoordinate");
+      const purpose = JSON.parse(localStorage.getItem("purposeCoordinate"));
+      console.log("Starting the game", purpose);
+
+      const data = {
+        roomId: roomId,
+        purposeCoordinate: purpose,
+      };
 
       socket.emit("start-play-room", { roomId, data });
     } else {
