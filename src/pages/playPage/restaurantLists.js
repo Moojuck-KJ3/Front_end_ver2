@@ -35,7 +35,7 @@ export const restaurantLists = [
     FoodUrl: "/Food.png",
   },
   {
-    restId: "1",
+    restId: "7",
     name: "토리모리",
     x: 22,
     y: 12,
@@ -47,7 +47,7 @@ export const restaurantLists = [
     FoodUrl: "/Food.png",
   },
   {
-    restId: "2",
+    restId: "8",
     name: "사쿠라",
     x: 53,
     y: 35,
@@ -59,7 +59,7 @@ export const restaurantLists = [
     FoodUrl: "/Food.png",
   },
   {
-    restId: "3",
+    restId: "9",
     name: "중국성",
     x: 32,
     y: 75,
@@ -71,7 +71,7 @@ export const restaurantLists = [
     FoodUrl: "/Food.png",
   },
   {
-    restId: "1",
+    restId: "10",
     name: "토리모리",
     x: 12,
     y: 73,
@@ -83,7 +83,7 @@ export const restaurantLists = [
     FoodUrl: "/Food.png",
   },
   {
-    restId: "2",
+    restId: "21",
     name: "사쿠라",
     x: 68,
     y: 23,
@@ -95,7 +95,7 @@ export const restaurantLists = [
     FoodUrl: "/Food.png",
   },
   {
-    restId: "3",
+    restId: "31",
     name: "중국성",
     x: 23,
     y: 94,
@@ -107,7 +107,7 @@ export const restaurantLists = [
     FoodUrl: "/Food.png",
   },
   {
-    restId: "1",
+    restId: "41",
     name: "토리모리",
     x: 25,
     y: 36,
@@ -119,7 +119,7 @@ export const restaurantLists = [
     FoodUrl: "/Food.png",
   },
   {
-    restId: "2",
+    restId: "125",
     name: "사쿠라",
     x: 57,
     y: 23,
@@ -131,7 +131,7 @@ export const restaurantLists = [
     FoodUrl: "/Food.png",
   },
   {
-    restId: "3",
+    restId: "26",
     name: "중국성",
     x: 21,
     y: 86,

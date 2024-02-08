@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import PlaceCard from "./PlaceCard";
 import BigPlaceCard from "./BigPlaceCard";
 import ResultCardLists from "./ResultCardLists";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -10,7 +9,7 @@ import { postCombine } from "../../../../api";
 
 import { DUMMY_PLACE } from "./ResultCardLists";
 
-const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
+const PlaceCombineArea = () => {
   const [draggedTagA, setDraggedTagA] = useState(null);
   const [draggedTagB, setDraggedTagB] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -37,7 +36,6 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
   }, []);
 
   useEffect(() => {
-    console.log(draggedTagA, draggedTagB);
     if (draggedTagA && draggedTagB) {
       setIsSpining(true);
       const delay = setTimeout(() => {
@@ -59,33 +57,16 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
   const handleDrop = (event, targetList) => {
     event.preventDefault();
 
-    const tagData = event.dataTransfer.getData("tag");
-    const tag = JSON.parse(tagData);
-    if (tag) {
+    const restaurantData = event.dataTransfer.getData("restaurant");
+    const parsedRestaurantData = JSON.parse(restaurantData);
+    if (parsedRestaurantData) {
       // drag 하여 놓을때 post 요청
       // post 요청이 성공한 경우, response에 error가 없는 경우
-      console.log(tag);
-      const data = {
-        restId: tag.restarantId,
-        slotIndex: targetList === "A" ? 0 : 1,
-      };
 
-      const postPlaceToSlot = async (roomId, data) => {
-        const response = await postCombine(roomId, data);
-        if (response.error) {
-          console.log("postCombine error : ", response.exception);
-          return false;
-        }
-
-        return true;
-      };
-
-      if (postPlaceToSlot(roomId, data) === true) {
-        if (targetList === "A") {
-          setDraggedTagA(tag);
-        } else if (targetList === "B") {
-          setDraggedTagB(tag);
-        }
+      if (targetList === "A") {
+        setDraggedTagA(parsedRestaurantData);
+      } else if (targetList === "B") {
+        setDraggedTagB(parsedRestaurantData);
       }
     }
 
@@ -97,84 +78,51 @@ const PlaceCombineArea = ({ contentNumber, onCardClick }) => {
     setDraggedTagB(null);
   };
 
-  const handleCardClick = (type, card) => {
-    onCardClick(type, card);
-  };
-
-  switch (contentNumber) {
-    case 1:
-      return (
-        <div className="flex flex-col">
-          <ul className="flex gap-14 justify-center">
-            {placeList.map((place, index) => (
-              <li
-                key={index}
-                id={place.restarantId}
-                onClick={() => handleCardClick("selectedTag", place)}
-              >
-                {/* imgUrl={place.imgUrl} */}
-                <PlaceCard imgUrl={place.imgUrl} />
-              </li>
-            ))}
-          </ul>
+  return (
+    <div className=" absolute top-[20%] flex flex-col m-10 p-2 justify-center gap-20 items-center">
+      {showContent ? (
+        <div onDragOver={handleResetTarget}>
+          <ResultCardLists />
         </div>
-      );
-    case 2:
-      return (
-        <div className="flex flex-col m-10 p-2 w-full h-full justify-center gap-20 items-center">
-          {showContent ? (
-            <div onDragOver={handleResetTarget}>
-              <ResultCardLists />
+      ) : (
+        <div className="flex ">
+          <div
+            className={`w-48  juitems-center py-1 bg-white shadow-lg border-dashed border-2 min-h-40 border-black ${
+              isDragging ? "" : ""
+            }`}
+            onDragOver={handleDragOver}
+            onDrop={(event) => handleDrop(event, "A")}
+          >
+            {draggedTagA && <BigPlaceCard img={"/돈까스.png"} />}
+          </div>
+
+          <div className=" flex justify-center items-center mt-2 ">
+            <div>
+              <MoreHorizIcon fontSize="large" />
             </div>
-          ) : (
-            <div className="flex ">
-              <div
-                className={`w-48 juitems-center py-1 bg-white shadow-lg border-dashed border-2 min-h-40 border-black ${
-                  isDragging ? "" : ""
-                }`}
-                onDragOver={handleDragOver}
-                onDrop={(event) => handleDrop(event, "A")}
-              >
-                {draggedTagA && <BigPlaceCard img={draggedTagA.thumbnailURL} />}
-              </div>
+            <button
+              className={`hover:scale-105 text-gray-800 font-semibold rounded-full p-2
+      px-2 ${isSpining && "animate-spin animate-infinite"}`}
+            >
+              {isSpining ? <LoopIcon /> : <HelpIcon />}
+            </button>
+            <MoreHorizIcon fontSize="large" />
+          </div>
 
-              <div className=" flex justify-center items-center mt-2 ">
-                <div>
-                  <MoreHorizIcon fontSize="large" />
-                </div>
-                <button
-                  className={`hover:scale-105 text-gray-800 font-semibold rounded-full p-2
-              px-2 ${isSpining && "animate-spin animate-infinite"}`}
-                >
-                  {isSpining ? <LoopIcon /> : <HelpIcon />}
-                </button>
-                <MoreHorizIcon fontSize="large" />
-              </div>
-
-              {/* USER B Target Area */}
-              <div
-                className={`w-48 items-center py-1 bg-white shadow-lg border-dashed border-2 min-h-40 border-black ${
-                  isDragging ? "" : ""
-                }`}
-                onDragOver={handleDragOver}
-                onDrop={(event) => handleDrop(event, "B")}
-              >
-                {draggedTagB && <BigPlaceCard img={draggedTagB.thumbnailURL} />}
-              </div>
-            </div>
-          )}
+          {/* USER B Target Area */}
+          <div
+            className={`w-48 items-center py-1 bg-white shadow-lg border-dashed border-2 min-h-40 border-black ${
+              isDragging ? "" : ""
+            }`}
+            onDragOver={handleDragOver}
+            onDrop={(event) => handleDrop(event, "B")}
+          >
+            {draggedTagB && <BigPlaceCard img={"/돈까스.png"} />}
+          </div>
         </div>
-      );
-    case 3:
-      return (
-        <div>
-          {/* Content for case 3 */}
-          상대방에게 제안하면 어떨까?
-        </div>
-      );
-    default:
-      return null;
-  }
+      )}
+    </div>
+  );
 };
 
 export default PlaceCombineArea;

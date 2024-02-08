@@ -9,40 +9,70 @@ export const StarryBackground = ({
   resultMoodTags,
 }) => {
   const [stars, setStars] = useState([]);
+  const [draggingId, setDraggingId] = useState(null);
+
+  const handleDragStart = (event, restaurant) => {
+    const restaurantData = JSON.stringify({
+      id: restaurant.id,
+      thumbnailURL: restaurant.FoodUrl,
+    });
+
+    event.dataTransfer.setData("restaurant", restaurantData);
+  };
+
+  const handleDragEnter = (event) => {
+    event.preventDefault();
+    // Optionally, you can handle drag enter event if needed
+    // console.log("handleDragEnter");
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault(); // Necessary to allow the drop event
+    // Optionally, you can handle drag over event if needed
+    // console.log("handleDragOver");
+  };
+
+  const handleDragLeave = (event) => {
+    event.preventDefault();
+    // Optionally, reset or handle drag leave event if needed
+    // console.log("handleDragLeave");
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    // const restaurantData = event.dataTransfer.getData("restaurant");
+    // const restaurant = JSON.parse(restaurantData);
+    // console.log(restaurant);
+    // console.log("handleDrop");
+  };
+
+  const handleDragEnd = (event) => {
+    // setDraggingId(null);
+  };
 
   useEffect(() => {
     const starsData = restaurantList.map((restaurant) => {
-      // Check if the restaurant's category matches the result tags
       const matchesResultTag = resultTags.includes(restaurant.category);
-      // Check if the restaurant's category matches the mood result tags
       const matchesResultMoodTag = restaurant.mood.some((mood) =>
         resultMoodTags.includes(mood)
       );
-      console.log(matchesResultMoodTag);
-      // Determine which image URL to use
 
       let imageUrl;
       if (matchesResultTag && matchesResultMoodTag) {
-        // If both conditions are true, use the FoodUrl
         imageUrl = restaurant.FoodUrl;
         console.log(imageUrl);
       } else if (matchesResultTag) {
-        // If only matchesResultTag is true, use the BigStarUrl
         imageUrl = restaurant.BigStarUrl;
       } else {
-        // If none are true, default to miniStarUrl
         imageUrl = restaurant.miniStarUrl;
       }
 
       let size;
       if (matchesResultTag && matchesResultMoodTag) {
-        // If both conditions are true, use the FoodUrl
         size = 6;
       } else if (matchesResultTag) {
-        // If only matchesResultTag is true, use the BigStarUrl
         size = 4;
       } else {
-        // If none are true, default to miniStarUrl
         size = 2;
       }
 
@@ -51,8 +81,7 @@ export const StarryBackground = ({
         x: getRandomInt(10, 90),
         y: getRandomInt(0, 70),
         size: size,
-        imageUrl: imageUrl, // Use the determined image URL
-        // You might still want to keep the original URLs for any reason, so they're still included
+        imageUrl: imageUrl,
         miniStarUrl: restaurant.miniStarUrl,
         BigStarUrl: restaurant.BigStarUrl,
         FoodUrl: restaurant.FoodUrl,
@@ -63,11 +92,22 @@ export const StarryBackground = ({
   }, [restaurantList, resultTags, resultMoodTags]);
 
   return (
-    <div className="bg-black border-2 border-dashed border-spacing-4 rounded-xl relative w-full h-full">
+    <div
+      className="bg-black border-2 border-dashed border-spacing-4 rounded-xl relative w-full h-full
+    "
+      onDragEnter={handleDragEnter}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+    >
       {stars.map((star, i) => (
         <div
           className="w-4 h-4 hover:bg-yellow-200 rounded-full cursor-pointer duration-500"
           key={i}
+          id={star.id}
+          draggable={true}
+          onDragStart={(e) => handleDragStart(e, star)}
+          onDragEnd={handleDragEnd} // Add this line to handle drag end
           style={{
             position: "absolute",
             top: `${star.y}%`,
@@ -78,6 +118,18 @@ export const StarryBackground = ({
           <img src={star.imageUrl} alt="" />
         </div>
       ))}
+
+      {draggingId && (
+        // This div is the new drop area that shows up when dragging
+        <div
+          className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-opacity-50 bg-gray-700"
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+          onDragLeave={handleDragLeave}
+        >
+          <div className="text-white text-center">Drop here!</div>
+        </div>
+      )}
     </div>
   );
 };

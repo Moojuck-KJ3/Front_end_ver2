@@ -1,70 +1,64 @@
-import PlayerHandPlace from "./modeThree/PlayerHandPlace";
+import { useState } from "react";
+import PlaceCard from "./modeThree/card/PlaceCard";
 
-const PlayerHand = ({ Hands, playerName, avatarUrl }) => {
-  const foodTags = Hands?.foodTag ?? [];
-  const placeTag = Hands?.placeTag ?? [];
-  const selectedTag = Hands?.selectedTag ?? [];
+const PlayerHand = ({ handList, onSetHandList }) => {
+  const [placeList, setPlaceList] = useState([]);
+  const [isDragging, setIsDragging] = useState(false);
 
-  const handleDragStart = (event, tag) => {
+  const handleDragStart = (event, restaurant) => {
+    setIsDragging(true);
+    console.log("handleDragStart");
     const restaurantData = JSON.stringify({
-      address: tag.address,
-      keyword_list: tag.keyword_list,
-      name: tag.name,
-      rating: tag.rating,
-      restarantId: tag.restarantId,
-      thumbnailURL: tag.thumbnailURL,
+      id: restaurant.id,
+      thumbnailURL: restaurant.FoodUrl,
     });
 
-    event.dataTransfer.setData("tag", restaurantData);
+    event.dataTransfer.setData("restaurant", restaurantData);
   };
 
-  const renderFoodTags = (tags, label) => (
-    <div className="col-span-1 flex flex-col">
-      {tags.map((tag, index) => (
-        <div
-          key={`${label}-${index}`}
-          className="m-1 p-1 text-xs bg-blue-200 rounded text-center"
-        >
-          {`#${tag}`}
-        </div>
-      ))}
-    </div>
-  );
+  const handleDrop = (event) => {
+    event.preventDefault();
+    setIsDragging(false);
 
-  const renderMoodTag = (tags, label) => (
-    <div className="col-span-1 flex flex-col">
-      {tags.map((tag, index) => (
-        <div
-          key={`${label}-${index}`}
-          className="m-1 p-1 text-xs bg-blue-200 rounded text-center"
-        >
-          {`#${tag}`}
-        </div>
-      ))}
-    </div>
-  );
+    const restaurantData = event.dataTransfer.getData("restaurant");
+    const parsedRestaurantData = JSON.parse(restaurantData);
 
-  const renderPlaceTag = (tags, label) => (
-    <div className=" col-span-5">
-      <div className=" flex flex-wrap gap-4 m-1">
-        {tags.map((tag, index) => (
-          <div
-            key={index}
-            id={tag.restarantId}
-            draggable={true}
-            onDragStart={(e) => handleDragStart(e, tag)}
-          >
-            <PlayerHandPlace imgUrl={tag.thumbnailURL} />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+    if (restaurantData) {
+      onSetHandList((prev) => [...prev, parsedRestaurantData]);
+    }
+  };
+
+  const handleDragEnd = (event) => {
+    console.log("handleDragEnd");
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
+  const handleDragLeave = (event) => {
+    event.preventDefault();
+  };
 
   return (
-    <div className="w-2/3 h-[140px] mt-4 flex justify-center bg-white border-1 border-gray-200 shadow-md rounded-lg mx-10">
-      <div className="w-full bg-gray-100 border-2 m-2 rounded-md shadow-inner p-2 grid grid-cols-8 justify-center items-center ">
-        {renderMoodTag(placeTag, "장소 태그")}
+    <div className="w-2/3 h-[260px] mt-2 mb-2 flex justify-center bg-white border-1 border-gray-200 shadow-md rounded-lg mx-10">
+      <div
+        className="w-full bg-gray-100 border-2 m-2 rounded-md shadow-inner p-2 flex gap-2 justify-items-center items-center"
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+      >
+        {handList.map((place, index) => (
+          <div
+            className="h-full"
+            onDragStart={(e) => handleDragStart(e, place)}
+            onDragEnd={handleDragEnd}
+            onDragLeave={handleDragLeave}
+            key={index}
+          >
+            <PlaceCard place={place} />
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -85,3 +79,11 @@ export default PlayerHand;
 //     ))}
 //   </div>
 // </div>
+
+// {isDragging && (
+//   <div className="absolute inset-0 mt-10 mb-52 mx-40 rounded-xl grid grid-cols-3 items-center justify-center text-lg font-semibold ">
+//     <div>안녕</div>
+//     <div>안녕</div>
+//     <div>안녕</div>
+//   </div>
+// )}
