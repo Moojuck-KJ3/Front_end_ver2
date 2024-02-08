@@ -68,8 +68,9 @@ const PlayRoomPage = () => {
     },
   ]);
 
-  // 조합시 결과를 보여줄 리스트
+  // 조합시 결과를 보여줄 담을 리스트
   const [combineList, setCombineList] = useState([]);
+  const [selectedCombineList, setSelectedCombineList] = useState([]);
 
   useEffect(() => {
     const local = getLocalStream();
@@ -92,6 +93,7 @@ const PlayRoomPage = () => {
 
       // 받아오는 data에 별 및 음식 관련 url 내용 추가
       setRestaurantList(response);
+      console.log(restaurantList);
     };
 
     getRestList(roomId, sendData);
@@ -253,7 +255,7 @@ const PlayRoomPage = () => {
             <ModeThreeModal
               isShowModal={showModeThreeModal}
               onShow={setShowModeThreeModal}
-              onSetCombineList={setCombineList}
+              onSetSelectedCombineList={setSelectedCombineList}
             />
           )}
           {/* 플레이어 핸드 */}
