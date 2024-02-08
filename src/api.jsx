@@ -105,12 +105,14 @@ export const sendMoodKeywordSpeech = async (roomId, data) => {
 };
 
 // 교집합 식당 추천 모드에서 식당을 슬롯에 넣어 조합을 시도한다
-// 한쪽이 비어있는 경우는 null을 넣어 처리
-// data : {"restId1" : string or null, "restId2" : string or null}
-// server에서 response socket을 받아 처리할 예정이므로 response body는 없음
+// data : {"restId1" : string}
+// 자기 자신만 보내면 됨
 export const postCombine = async (roomId, data) => {
   try {
-    return await apiClient.post(`/Combine?roomId=${roomId}`, data);
+    return await apiClient.post(
+      `/restaurants/combination?roomId=${roomId}`,
+      data
+    );
   } catch (exception) {
     checkResponseCode(exception);
     return {
@@ -124,7 +126,7 @@ export const postCombine = async (roomId, data) => {
 // data : {"restId" : string}
 export const postCombineSelect = async (roomId, data) => {
   try {
-    return await apiClient.post(`/Combine/select?roomId=${roomId}`, data);
+    return await apiClient.post(`/restaurants/select?roomId=${roomId}`, data);
   } catch (exception) {
     checkResponseCode(exception);
     return {
@@ -134,10 +136,53 @@ export const postCombineSelect = async (roomId, data) => {
   }
 };
 
+// play-room 진입 시, 식당 리스트들을 받기 위한 요청
+// data : {"purposeCoordinate" : {lat : number, lng : number}}
+/*
+  response : [
+    {
+      restId : string,
+      restName : string, 
+      rating : number,            // 별점
+      foodCategory : string[],
+      moodKeyword : string[],
+      menu : string[], 
+      thumbnailURL : string,
+      position : {number,number}, // 좌표
+      “miniStarUrl” : string,
+      “BigStarUrl” : string,
+      “FoodUrl” : string,
+    }
+  ]
+*/
+
+export const getRestaurantList = async (roomId, data, retries = 3) => {
+  const requestFunction = () =>
+    apiClient.post(`/restaurants/get?roomId=${roomId}`, data);
+  return await retryRequest(requestFunction, retries);
+};
+
 const checkResponseCode = (exception) => {
   const responseCode = exception?.response?.status;
 
   if (responseCode) {
     (responseCode === 401 || responseCode === 403) && logout();
+  }
+};
+
+// 중요한 요청의 경우, 실패시
+// 재시도 하도록 해당 모듈을 추가함
+const retryRequest = async (requestFunction, retries = 3, delay = 1000) => {
+  try {
+    return await requestFunction();
+  } catch (error) {
+    if (retries > 0) {
+      console.log(`Request failed, retrying (${retries}/${3})`);
+      await new Promise((resolve) => setTimeout(resolve, delay));
+      return retryRequest(requestFunction, retries - 1, delay);
+    } else {
+      console.error("Max retries exceeded. Request failed.");
+      throw error;
+    }
   }
 };

@@ -20,6 +20,8 @@ import VoiceRecognition from "./modeTwo/VoiceRecognition";
 import { StepperWithContent } from "./StepperWithContent";
 import ModeThreeModal from "../../components/modal/ModeThreeExpainModal";
 
+import { getRestaurantList } from "../../api";
+
 const PlayRoomPage = () => {
   const { roomId } = useParams();
   const [showModal, setShowModal] = useState(true);
@@ -52,6 +54,25 @@ const PlayRoomPage = () => {
     setLocalStream(local);
     const remote = getRemoteStream();
     setRemoteStream(remote);
+
+    const sendData = {
+      purposeCoordinate: localStorage.getItem("purposeCoordinate"),
+    };
+
+    const getRestList = async (roomId, sendData) => {
+      // default 재시도는 3
+      const response = await getRestaurantList(roomId, sendData);
+
+      if (response.error) {
+        console.log(response.exception);
+        return;
+      }
+
+      // 받아오는 data에 별 및 음식 관련 url 내용 추가
+      setRestaurantList(response);
+    };
+
+    getRestList(roomId, sendData);
   }, []);
 
   useEffect(() => {
