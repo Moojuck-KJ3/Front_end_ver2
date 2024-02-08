@@ -165,6 +165,19 @@ const PlayRoomPage = () => {
     }
   };
 
+  // 조합 모달에서 선택 완료 버튼을 눌렀을 때, socket을 emit하는 용도의 함수
+
+  const handleCombineSelectComplete = () => {
+    console.log("handleCombineSelectComplete is called");
+
+    const broadCombineDoneData = {
+      roomId: roomId,
+      combineSelects: selectedCombineList,
+    };
+
+    socket.emit("combine-try", broadCombineDoneData);
+  };
+
   return (
     <PlayRoomContainer>
       {/* 비디오 */}
@@ -219,6 +232,7 @@ const PlayRoomPage = () => {
               <ModeThreeModal
                 onShow={setShowModeThreeModal}
                 onSetSelectedCombineList={setSelectedCombineList}
+                onSelectComplete={handleCombineSelectComplete}
               />
             )}
           </>

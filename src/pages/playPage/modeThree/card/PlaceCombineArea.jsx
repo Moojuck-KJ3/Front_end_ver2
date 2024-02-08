@@ -18,8 +18,6 @@ const PlaceCombineArea = ({ onSetData }) => {
     const restaurantData = event.dataTransfer.getData("restaurant");
     const parsedRestaurantData = JSON.parse(restaurantData);
     if (parsedRestaurantData) {
-      // drag 하여 놓을때 post 요청
-      // post 요청이 성공한 경우, response에 error가 없는 경우
       console.log("parsedRestaurantData", parsedRestaurantData);
       setDraggedTag(parsedRestaurantData);
       onSetData(parsedRestaurantData);
