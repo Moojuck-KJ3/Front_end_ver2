@@ -126,6 +126,7 @@ const PlayRoomPage = () => {
   };
 
   const handleReceiveFoodCategory = (data) => {
+    console.log("handleReceiveFoodCategory is called, data : ", data);
     if (length(data.foodCategories) > 0) {
       addFoodCategory(data.foodCategories);
     } else {

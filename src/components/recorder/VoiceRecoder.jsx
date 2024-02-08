@@ -16,6 +16,7 @@ const VoiceRecoder = ({ onClick }) => {
   //const [onReady, setOnReady] = useState(false);
   // Reference to store the SpeechRecognition instance
   const recognitionRef = useRef(null);
+  const serverSendScript = useRef("");
 
   const { roomId } = useParams();
 
@@ -40,6 +41,10 @@ const VoiceRecoder = ({ onClick }) => {
     // Start the speech recognition
     recognitionRef.current.start();
   };
+
+  useEffect(() => {
+    serverSendScript.current = transcript;
+  }, [transcript]);
 
   useEffect(() => {
     setShowTimer(true);
@@ -74,25 +79,16 @@ const VoiceRecoder = ({ onClick }) => {
   };
 
   const sendTranscriptToServer = () => {
-    console.log("Sending transcript to server:", transcript);
-
-    const data = {
-      userSpeech: transcript,
-    };
+    console.log("Sending transcript to server:", serverSendScript);
 
     const sendFoodCategoryData = async (roomId, data) => {
       const response = await sendFoodCategorySpeech(roomId, data);
-      // if (response) {
-      //   onSetResult(["한식"]);
-      // } else {
-      //   console.log(response.error);
-      // }
       if (response.error) {
         console.error("Error occured in sending mood tags", response.exception);
       }
     };
 
-    sendFoodCategoryData(roomId, data);
+    sendFoodCategoryData(roomId, serverSendScript);
   };
 
   const onTimerTimeout = () => {
