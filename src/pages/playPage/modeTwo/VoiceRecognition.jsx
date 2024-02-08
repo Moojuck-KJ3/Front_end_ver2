@@ -4,7 +4,7 @@ import { sendMoodKeywordSpeech } from "../../../api";
 import { useParams } from "react-router-dom";
 import socket from "../../../realtimeComunication/socket";
 
-const VoiceRecognition = ({ onSetResult }) => {
+const VoiceRecognition = ({ onSetResult, onAddRest }) => {
   const recognitionRef = useRef(null);
   const roomId = useParams();
 
@@ -21,15 +21,23 @@ const VoiceRecognition = ({ onSetResult }) => {
     sendTransText(roomId, data);
 
     // 반응은 response로 받을 예정
-    onSetResult("조용한");
+    //onSetResult("조용한");
   };
 
   useEffect(() => {
     setupSpeechRecognition();
 
-    socket.on("receive-speech-foodCategory", (data) => {
+    socket.on("receive-speech-keyword", (data) => {
       console.log(data);
-      onSetResult(data.keywords);
+      if (data.keywords.length > 0) {
+        onSetResult(data.keywords);
+      }
+
+      if (length(data.restaruntList) > 0) {
+        for (let i = 0; i < data.restaruntList.length; i++) {
+          onAddRest(data.restaruntList[i]);
+        }
+      }
     });
 
     return () => {
@@ -40,7 +48,7 @@ const VoiceRecognition = ({ onSetResult }) => {
         recognitionRef.current.onerror = null;
       }
 
-      socket.off("receive-speech-foodCategory");
+      socket.off("receive-speech-keyword");
     };
   }, []);
 

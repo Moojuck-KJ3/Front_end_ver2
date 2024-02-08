@@ -1,5 +1,4 @@
 import ResultCard from "./ResultCard";
-import { postCombineSelect } from "../../../../api";
 import { useParams } from "react-router-dom";
 
 export const DUMMY_PLACE = [
@@ -35,13 +34,6 @@ const ResultCardLists = () => {
 
   const handleSelect = async (event, id) => {
     event.preventDefault();
-
-    const response = await postCombineSelect(roomId, id);
-    if (response.error) {
-      console.log(response.exception);
-    } else {
-      console.log(response);
-    }
   };
 
   return (

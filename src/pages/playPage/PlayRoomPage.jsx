@@ -100,7 +100,7 @@ const PlayRoomPage = () => {
 
   const handleReceiveFoodCategory = (data) => {
     if (length(data.foodCategories) > 0) {
-      setModeOneVoiceRecResult(data.foodCategories);
+      addFoodCategory(data.foodCategories);
     } else {
       console.log("적절한 음식 카테고리를 찾지 못했습니다.");
     }
@@ -112,6 +112,26 @@ const PlayRoomPage = () => {
     setShowVoiceRecorder(false);
     console.log({ roomId, roomMode, roomReadyCount });
     socket.emit("select-done", { roomId, roomReadyCount, roomMode });
+  };
+
+  // 중복되지 않는 데이터만 추가
+  // restData 는 배열이 아닌 '요소'만 받는다
+  const addUniqueRestaurant = (restData) => {
+    if (!restaurantList.includes(restData)) {
+      setRestaurantList([...restaurantList, restData]);
+    }
+  };
+
+  const addFoodCategory = (foodCategory) => {
+    if (!modeOneVoiceRecResult.includes(foodCategory)) {
+      setModeOneVoiceRecResult([...modeOneVoiceRecResult, foodCategory]);
+    }
+  };
+
+  const addMoodKeyword = (moodKeyword) => {
+    if (!modeTwoVoiceRecResult.includes(moodKeyword)) {
+      setModeTwoVoiceRecResult([...modeTwoVoiceRecResult, moodKeyword]);
+    }
   };
 
   return (
@@ -173,7 +193,10 @@ const PlayRoomPage = () => {
         <GameArea>
           {/* 컨텐츠 */}
 
-          <VoiceRecognition onSetResult={setModeTwoVoiceRecResult} />
+          <VoiceRecognition
+            onSetResult={addMoodKeyword}
+            onAddRest={addUniqueRestaurant}
+          />
           <StarryBackground
             restaurantList={restaurantList}
             resultTags={modeOneVoiceRecResult}
