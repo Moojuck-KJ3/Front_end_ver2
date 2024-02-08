@@ -107,9 +107,15 @@ const PlayRoomPage = () => {
     socket.on("mode-change-response", handleModeChange);
     socket.on("receive-speech-foodCategory", handleReceiveFoodCategory);
 
+    // mode 3 식당 조합에서 '선택 완료' 한 경우
+    socket.on("combine-response", handleCombineTryResponse);
+    socket.on("combine-result", handleCombineResult);
+
     return () => {
       socket.off("mode-change-response", handleModeChange);
       socket.off("receive-speech-foodCategory", handleReceiveFoodCategory);
+      socket.off("combine-response", handleCombineTryResponse);
+      socket.off("combine-result", handleCombineResult);
     };
   }, []);
 
@@ -165,6 +171,12 @@ const PlayRoomPage = () => {
     }
   };
 
+  const addSelectedCombineList = (combineData) => {
+    if (!selectedCombineList.includes(combineData)) {
+      setSelectedCombineList([...selectedCombineList, combineData]);
+    }
+  };
+
   // 조합 모달에서 선택 완료 버튼을 눌렀을 때, socket을 emit하는 용도의 함수
 
   const handleCombineSelectComplete = () => {
@@ -176,6 +188,33 @@ const PlayRoomPage = () => {
     };
 
     socket.emit("combine-try", broadCombineDoneData);
+  };
+
+  const handleCombineTryResponse = (data) => {
+    console.log("handleCombineTryResponse is called, data : ", data);
+    const roomMemberCount = JSON.parse(localStorage.getItem("roomMemberCount"));
+
+    if (roomMemberCount < data.combineSelects.length) {
+      if (data.combineSelects.length > 0) {
+        setCombineList(data.combineSelects);
+      }
+    } else {
+      // 모두 선택 완료하였기에 combine-ready를 emit
+      const broadCombineReadyData = {
+        roomId: roomId,
+        combineSelects: selectedCombineList,
+      };
+
+      socket.emit("combine-ready", broadCombineReadyData);
+    }
+  };
+
+  // 조합 결과를 받는 함수 (현재는 아마 5개)
+  const handleCombineResult = (data) => {
+    console.log("handleCombineResult is called, data : ", data);
+    if (data.restaruntList.length > 0) {
+      setCombineList(data.restaruntList);
+    }
   };
 
   return (
@@ -231,7 +270,7 @@ const PlayRoomPage = () => {
             {showModeThreeModal && (
               <ModeThreeModal
                 onShow={setShowModeThreeModal}
-                onSetSelectedCombineList={setSelectedCombineList}
+                onSetSelectedCombineList={addSelectedCombineList}
                 onSelectComplete={handleCombineSelectComplete}
               />
             )}
