@@ -87,9 +87,11 @@ const PlayRoomPage = () => {
   }, []);
 
   const handleModeChange = (data) => {
-    if (data.roomReadyCount < 2) {
+    const roomMemberCount = JSON.parse(localStorage.getItem("roomMemberCount"));
+
+    if (data.roomReadyCount < roomMemberCount) {
       setRoomReadyCount((prev) => prev + 1);
-    } else if (data.roomReadyCount >= 2) {
+    } else if (data.roomReadyCount >= roomMemberCount) {
       console.log(data.roomReadyCount);
       setRoomMode(data.newMode);
       setIsReady(false);
