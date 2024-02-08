@@ -1,11 +1,11 @@
 import { useState } from "react";
 import PlaceCombineArea from "../../pages/playPage/modeThree/card/PlaceCombineArea";
 
-const ModeThreeModal = ({ isShowModal, onShow, onSetCombineList }) => {
+const ModeThreeModal = ({ isShowModal, onShow, onSetSelectedCombineList }) => {
   const [restaurantData, setRestaurantData] = useState();
   const handleClick = () => {
     onShow(false);
-    onSetCombineList((prev) => [...prev, restaurantData]);
+    onSetSelectedCombineList((prev) => [...prev, restaurantData]);
   };
   return (
     <div>
