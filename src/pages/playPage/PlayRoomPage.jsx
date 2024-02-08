@@ -53,21 +53,11 @@ const PlayRoomPage = () => {
   const [modeTwoVoiceRecResult, setModeTwoVoiceRecResult] = useState([]);
 
   // 플레이어 핸드에 보이는 데이터
-  const [playerHand, setPlayerHand] = useState([
-    {
-      // 더미 데이터
-      restId: "1",
-      name: "토리모리",
-      x: 1,
-      y: 2,
-      category: "한식",
-      mood: ["분위기 좋은"],
-      miniStarUrl: "/Star_2.png",
-      BigStarUrl: "/Star_3.png",
-      FoodUrl: "/Food.png",
-      thumbnailURL: "/돈까스.png",
-    },
-  ]);
+  const [playerHand, setPlayerHand] = useState({
+    selectedFoodTag: [],
+    selectedMoodTag: [],
+    selectedPlace: [],
+  });
 
   // 조합시 결과를 보여줄 담을 리스트
   const [combineList, setCombineList] = useState([]);
@@ -246,7 +236,7 @@ const PlayRoomPage = () => {
             )}
             {/* 음성 인식 모달 */}
             {showVoiceRecorder && (
-              <div className=" absolute top-12">
+              <div className=" absolute top-[15%]">
                 <VoiceRecoder
                   onClick={handleSetReady}
                   //onSetResult={setModeOneVoiceRecResult}

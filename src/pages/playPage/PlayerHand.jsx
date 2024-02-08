@@ -41,21 +41,38 @@ const PlayerHand = ({ handList, onSetHandList }) => {
   return (
     <div className="w-2/3 h-[260px] mt-2 mb-2 flex justify-center bg-white border-1 border-gray-200 shadow-md rounded-lg mx-10">
       <div
-        className="w-full bg-gray-100 border-2 m-2 rounded-md shadow-inner p-2 flex gap-2 justify-items-center items-center"
+        className="w-full bg-gray-100 border-2 m-2 rounded-md shadow-inner p-2 grid grid-cols-5 items-center  "
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
-        {handList.map((place, index) => (
-          <div
-            className="h-full"
-            onDragStart={(e) => handleDragStart(e, place)}
-            onDragEnd={handleDragEnd}
-            onDragLeave={handleDragLeave}
-            key={index}
-          >
-            <PlaceCard place={place} />
-          </div>
-        ))}
+        <div className="col-span-1 flex flex-col justify-center items-center">
+          <ul>
+            <li>#한식</li>
+            <li>#중식</li>
+            <li>#양식</li>
+          </ul>
+        </div>
+        <div className="col-span-1 flex flex-col justify-center items-center">
+          <ul className="">
+            <li className="m-1 px-10 py-2 bg-gray-300 rounded-xl">#한식</li>
+            <li className="m-1 px-10 py-2 bg-gray-300 rounded-xl">#한식</li>
+            <li className="m-1 px-10 py-2 bg-gray-300 rounded-xl">#한식</li>
+          </ul>
+        </div>
+
+        <div className=" justify-end flex col-span-3 gap-2 ">
+          {handList.map((place, index) => (
+            <div
+              className="h-full"
+              onDragStart={(e) => handleDragStart(e, place)}
+              onDragEnd={handleDragEnd}
+              onDragLeave={handleDragLeave}
+              key={index}
+            >
+              <PlaceCard place={place} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
