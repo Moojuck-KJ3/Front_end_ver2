@@ -54,9 +54,22 @@ const PlayRoomPage = () => {
 
   // 플레이어 핸드에 보이는 데이터
   const [playerHand, setPlayerHand] = useState({
-    selectedFoodTag: [],
-    selectedMoodTag: [],
-    selectedPlace: [],
+    selectedFoodTag: ["#한식", "일식"],
+    selectedMoodTag: ["#조용한", "#분위기 있는"],
+    selectedPlace: [
+      {
+        restId: "1",
+        name: "토리모리",
+        x: 1,
+        y: 2,
+        category: "한식", // Korean
+        mood: ["조용한"],
+        miniStarUrl: "/Star_2.png",
+        BigStarUrl: "/Star_3.png",
+        FoodUrl: "/Food.png",
+        thumbnailURL: "/돈까스.png",
+      },
+    ],
   });
 
   // 조합시 결과를 보여줄 담을 리스트
@@ -144,27 +157,33 @@ const PlayRoomPage = () => {
   // 중복되지 않는 데이터만 추가
   // restData 는 배열이 아닌 '요소'만 받는다
   const addUniqueRestaurant = (restData) => {
+    console.log("addUniqueRestaurant", restData);
     if (!restaurantList.includes(restData)) {
       setRestaurantList([...restaurantList, restData]);
     }
   };
 
   const addFoodCategory = (foodCategory) => {
-    if (!modeOneVoiceRecResult.includes(foodCategory)) {
-      setModeOneVoiceRecResult([...modeOneVoiceRecResult, foodCategory]);
-    }
+    console.log("addFoodCategory", foodCategory);
+
+    setPlayerHand((prevHand) => ({
+      ...prevHand,
+      selectedFoodTag: [...prevHand.selectedFoodTag, ...foodCategory],
+    }));
   };
 
   const addMoodKeyword = (moodKeyword) => {
-    if (!modeTwoVoiceRecResult.includes(moodKeyword)) {
-      setModeTwoVoiceRecResult([...modeTwoVoiceRecResult, moodKeyword]);
-    }
+    console.log("addMoodKeyword", moodKeyword);
+
+    setPlayerHand((prevHand) => ({
+      ...prevHand,
+      selectedMoodTag: [...prevHand.selectedMoodTag, ...moodKeyword],
+    }));
   };
 
   const addSelectedCombineList = (combineData) => {
-    if (!selectedCombineList.includes(combineData)) {
-      setSelectedCombineList([...selectedCombineList, combineData]);
-    }
+    console.log("addSelectedCombineList", combineData);
+    setSelectedCombineList([...selectedCombineList, combineData]);
   };
 
   // 조합 모달에서 선택 완료 버튼을 눌렀을 때, socket을 emit하는 용도의 함수
