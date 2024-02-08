@@ -1,8 +1,11 @@
+import { useState } from "react";
 import PlaceCombineArea from "../../pages/playPage/modeThree/card/PlaceCombineArea";
 
-const ModeThreeModal = ({ isShowModal, onShow }) => {
+const ModeThreeModal = ({ isShowModal, onShow, onSetCombineList }) => {
+  const [restaurantData, setRestaurantData] = useState();
   const handleClick = () => {
     onShow(false);
+    onSetCombineList((prev) => [...prev, restaurantData]);
   };
   return (
     <div>
@@ -21,7 +24,7 @@ const ModeThreeModal = ({ isShowModal, onShow }) => {
               <p>나와 상대방의 식당을 조합해서 서로의 교집합을 찾아보세요.</p>
             </div>
             <div className="flex justify-center ">
-              <PlaceCombineArea />
+              <PlaceCombineArea onSetData={setRestaurantData} />
             </div>
             <div className="mt-4 flex justify-center">
               <button
