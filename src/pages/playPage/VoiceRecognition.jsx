@@ -3,7 +3,12 @@ import { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import socket from "../../realtimeComunication/socket";
 
-const VoiceRecognition = ({ onSetResult, onAddRest, onSetTestResult }) => {
+const VoiceRecognition = ({
+  onSetResult,
+  onAddRest,
+  onSetTestResult,
+  getSelectedFoodCategories,
+}) => {
   const recognitionRef = useRef(null);
   const roomId = useParams();
 
@@ -18,9 +23,12 @@ const VoiceRecognition = ({ onSetResult, onAddRest, onSetTestResult }) => {
     // };
     // sendTransText(roomId, data);
 
+    const selectedFoodCategories = getSelectedFoodCategories();
+
     const serverSendData = {
       roomId: roomId,
       speechSentence: text,
+      selectedFoodCategories: selectedFoodCategories,
     };
 
     socket.emit("send-speech-keyword", serverSendData);
