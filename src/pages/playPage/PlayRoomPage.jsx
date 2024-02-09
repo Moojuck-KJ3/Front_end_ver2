@@ -169,7 +169,8 @@ const PlayRoomPage = () => {
     setIsReady(true);
     setShowVoiceRecorder(false);
     // console.log({ roomId, roomMode, roomReadyCount });
-    socket.emit("select-done", { roomId, roomReadyCount, roomMode });
+    const sendServerReadyCount = roomReadyCount + 1;
+    socket.emit("select-done", { roomId, sendServerReadyCount, roomMode });
   };
 
   // 중복되지 않는 데이터만 추가
