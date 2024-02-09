@@ -10,7 +10,7 @@ const VoiceRecognition = ({
   selectedFoodCategories,
 }) => {
   const recognitionRef = useRef(null);
-  const roomId = useParams();
+  const { roomId } = useParams();
 
   const handleSetMoodTags = (text) => {
     // const data = { speechSentence: text };

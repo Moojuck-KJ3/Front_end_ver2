@@ -30,7 +30,7 @@ export const DUMMY_PLACE = [
 ];
 
 const ResultCardLists = () => {
-  const roomId = useParams();
+  const { roomId } = useParams();
 
   const handleSelect = async (event, id) => {
     event.preventDefault();
