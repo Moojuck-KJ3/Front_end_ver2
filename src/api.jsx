@@ -67,46 +67,6 @@ export const register = async (data) => {
   }
 };
 
-// Room API
-// 1. 모든 요청은 roomId를 파라미터로 받는다
-// 2. get 요청엔 response가 있음
-// 3. post 요청엔 response가 없음 (socket.io로 통신하고 해당 방의 모든 유저에게 브로드캐스트하는 방식)
-
-// 음식 종류 수집 페이지에서 유저가 말한 음식 종류를 서버에 전달한다
-// data : {userSpeech : string}
-export const sendFoodCategorySpeech = async (roomId, data) => {
-  try {
-    console.log("sendFoodCategorySpeech", roomId, data);
-
-    return await apiClient.post(
-      `/foodcategories/speech?roomId=${roomId}`,
-      data
-    );
-  } catch (exception) {
-    checkResponseCode(exception);
-    return {
-      error: true,
-      exception,
-    };
-  }
-};
-
-// 처음에 client에서 대량의 data를 받을 것
-// 따라서 server에서 '정제된' 키워드를 socket으로 받을 예정이다
-// data : {userSpeech : string}
-export const sendMoodKeywordSpeech = async (roomId, data) => {
-  try {
-    console.log("sendMoodKeywordSpeech", roomId, data);
-    return await apiClient.post(`/keywords/mood/speech?roomId=${roomId}`, data);
-  } catch (exception) {
-    checkResponseCode(exception);
-    return {
-      error: true,
-      exception,
-    };
-  }
-};
-
 // play-room 진입 시, 식당 리스트들을 받기 위한 요청
 // data : {"purposeCoordinate" : {lat : number, lng : number}}
 /*

@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import VoiceRecoderContainer from "./VoiceRecoderContainer";
 import Timer from "./Timer";
-import { sendFoodCategorySpeech } from "../../api";
 import { useParams } from "react-router";
 import {} from "../../api";
+import socket from "../../realtimeComunication/socket";
 
 const VoiceRecoder = ({ onClick }) => {
   //onSetResult
@@ -68,20 +68,12 @@ const VoiceRecoder = ({ onClick }) => {
   const sendTranscriptToServer = () => {
     console.log("Sending transcript to server:", serverSendScript);
 
-    const sendFoodCategoryData = async (roomId, data) => {
-      const response = await sendFoodCategorySpeech(roomId, data);
-      if (response.error) {
-        console.error("Error occured in sending mood tags", response.exception);
-      } else {
-        console.log("response! :", response);
-      }
-    };
-
     const serverSendData = {
+      roomId: roomId,
       speechSentence: serverSendScript,
     };
 
-    sendFoodCategoryData(roomId, serverSendData);
+    socket.emit("send-speech-foodCategory", serverSendData);
   };
 
   const onTimerTimeout = () => {
