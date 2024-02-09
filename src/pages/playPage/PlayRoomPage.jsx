@@ -144,7 +144,7 @@ const PlayRoomPage = () => {
     const roomMemberCount = JSON.parse(localStorage.getItem("roomMemberCount"));
 
     if (data.roomReadyCount < roomMemberCount) {
-      setRoomReadyCount(data.roomReadyCount);
+      setRoomReadyCount((prev) => prev + 1);
     } else if (data.roomReadyCount >= roomMemberCount) {
       console.log(data.roomReadyCount);
       setRoomMode(data.newMode);
@@ -169,8 +169,7 @@ const PlayRoomPage = () => {
     setIsReady(true);
     setShowVoiceRecorder(false);
     // console.log({ roomId, roomMode, roomReadyCount });
-    const sendServerReadyCount = roomReadyCount + 1;
-    socket.emit("select-done", { roomId, sendServerReadyCount, roomMode });
+    socket.emit("select-done", { roomId, roomReadyCount, roomMode });
   };
 
   // 중복되지 않는 데이터만 추가
