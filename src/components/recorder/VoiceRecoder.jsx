@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import VoiceRecoderContainer from "./VoiceRecoderContainer";
 import Timer from "./Timer";
 import { useParams } from "react-router";
-import {} from "../../api";
 import socket from "../../realtimeComunication/socket";
 
 const VoiceRecoder = ({ onClick, onSetResult }) => {
