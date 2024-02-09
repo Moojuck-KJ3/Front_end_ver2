@@ -81,13 +81,13 @@ const PlayRoomPage = () => {
     const remote = getRemoteStream();
     setRemoteStream(remote);
 
-    const parsedCoordinate = JSON.parse(
-      localStorage.getItem("purposeCoordinate")
-    );
+    // const parsedCoordinate = JSON.parse(
+    //   localStorage.getItem("purposeCoordinate")
+    // );
 
-    const sendData = {
-      purposeCoordinate: parsedCoordinate,
-    };
+    // const sendData = {
+    //   purposeCoordinate: parsedCoordinate,
+    // };
 
     // const getRestList = async (roomId, sendData) => {
     //   // default 재시도는 3
