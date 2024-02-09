@@ -5,7 +5,7 @@ import { useParams } from "react-router";
 import {} from "../../api";
 import socket from "../../realtimeComunication/socket";
 
-const VoiceRecoder = ({ onClick }) => {
+const VoiceRecoder = ({ onClick, onSetResult }) => {
   //onSetResult
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");

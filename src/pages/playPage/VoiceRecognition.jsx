@@ -1,15 +1,32 @@
 import { useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
-import socket from "../../../realtimeComunication/socket";
 
-const VoiceRecognition = ({ onSetResult, onAddRest }) => {
+import { useParams } from "react-router-dom";
+import socket from "../../realtimeComunication/socket";
+import { sendMoodKeywordSpeech } from "../../api";
+
+const VoiceRecognition = ({ onSetResult, onAddRest, onSetTestResult }) => {
   const recognitionRef = useRef(null);
   const roomId = useParams();
 
   const handleSetMoodTags = (text) => {
-    const data = { roomId: roomId, speechSentence: text };
+    const data = { speechSentence: text };
 
-    socket.emit("send-speech-keyword", data);
+    const sendTransText = async (roomId, data) => {
+      const response = await sendMoodKeywordSpeech(roomId, data);
+      if (response.error) {
+        console.error("Error occured in sending mood tags", response.exception);
+      }
+    };
+    sendTransText(roomId, data);
+
+    // 반응은 response로 받을 예정
+    //onSetResult("조용한");
+
+    // TEST
+    onSetTestResult((prevPlayerHand) => ({
+      ...prevPlayerHand,
+      selectedMoodTag: [...prevPlayerHand.selectedMoodTag, "조용한"],
+    }));
   };
 
   useEffect(() => {

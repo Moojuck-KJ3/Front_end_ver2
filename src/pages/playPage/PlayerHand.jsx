@@ -48,17 +48,16 @@ const PlayerHand = ({ handList, onSetHandList }) => {
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
-        <div className="col-span-1 flex flex-col justify-center items-center">
-          <ul>
-            {handList.selectedFoodTag.map((tag, index) => (
-              <li key={index}>음식 태그</li>
-            ))}
-          </ul>
-        </div>
+        <ul className="col-span-1 flex flex-col justify-center items-center">
+          {handList.selectedFoodTag.map((tag, index) => (
+            <li key={index}>{`#${tag}`}</li>
+          ))}
+        </ul>
+
         <div className="col-span-1 flex flex-col justify-center items-center">
           <ul className="">
             {handList.selectedMoodTag.map((tag, index) => (
-              <li key={index}>분위기 태그</li>
+              <li key={index}>{`#${tag}`}</li>
             ))}
           </ul>
         </div>
