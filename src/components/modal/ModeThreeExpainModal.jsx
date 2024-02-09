@@ -9,13 +9,14 @@ const ModeThreeModal = ({
   const [restaurantData, setRestaurantData] = useState();
   const handleClick = () => {
     onShow(false);
-
+    console.log(restaurantData);
     const userDetails = localStorage.getItem("user");
     const userId = JSON.parse(userDetails).id;
 
     const insertData = {
       userId: userId,
-      restId: restaurantData.id,
+      restId: restaurantData.restId,
+      thumbnailURL: restaurantData.thumbnailURL,
     };
 
     onSetSelectedCombineList(insertData);

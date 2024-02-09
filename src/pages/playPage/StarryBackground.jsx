@@ -5,12 +5,12 @@ const getRandomInt = (min, max) =>
 
 export const StarryBackground = ({
   restaurantList,
-  resultTags,
+  resultFoodTags,
   resultMoodTags,
-  combineList,
+  resultPlaceTags,
+  selectedCombineList,
 }) => {
   const [stars, setStars] = useState([]);
-
   const handleDragStart = (event, restaurant) => {
     console.log(restaurant);
     const restaurantData = JSON.stringify({
@@ -20,18 +20,17 @@ export const StarryBackground = ({
       // category: restaurant.category,
     });
 
-    console.log(restaurantData);
     event.dataTransfer.setData("restaurant", restaurantData);
   };
 
   useEffect(() => {
     const starsData = restaurantList.map((restaurant) => {
-      const matchesResultTag = resultTags.includes(restaurant.category);
+      const matchesResultTag = resultFoodTags.includes(restaurant.category);
       const matchesResultMoodTag = restaurant.mood.some((mood) =>
         resultMoodTags.includes(mood)
       );
 
-      const combineListMatch = combineList.find(
+      const combineListMatch = selectedCombineList.find(
         (combineItem) => combineItem.restId === restaurant.restId
       );
 
@@ -73,20 +72,19 @@ export const StarryBackground = ({
 
       return {
         id: restaurant.restId,
-        x: getRandomInt(10, 90),
-        y: getRandomInt(0, 70),
+        x: getRandomInt(15, 80),
+        y: getRandomInt(10, 90),
         className: className,
         size: size,
         imageUrl: imageUrl,
         miniStarUrl: restaurant.miniStarUrl,
         BigStarUrl: restaurant.BigStarUrl,
         FoodUrl: restaurant.FoodUrl,
-        ref: createRef(),
       };
     });
 
     setStars(starsData);
-  }, [restaurantList, resultTags, resultMoodTags, combineList]);
+  }, [restaurantList, resultFoodTags, resultMoodTags, selectedCombineList]);
 
   return (
     <div
@@ -95,7 +93,6 @@ export const StarryBackground = ({
     >
       {stars.map((star, i) => (
         <div
-          ref={star.ref}
           className={star.className}
           key={i}
           id={star.id}

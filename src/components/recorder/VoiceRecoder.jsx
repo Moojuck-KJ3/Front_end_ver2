@@ -5,7 +5,7 @@ import { sendFoodCategorySpeech } from "../../api";
 import { useParams } from "react-router";
 import {} from "../../api";
 
-const VoiceRecoder = ({ onClick }) => {
+const VoiceRecoder = ({ onClick, onSetResult }) => {
   //onSetResult
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
@@ -74,6 +74,12 @@ const VoiceRecoder = ({ onClick }) => {
         console.error("Error occured in sending mood tags", response.exception);
       } else {
         console.log("response! :", response);
+
+        // Test
+        onSetResult((prevPlayerHand) => ({
+          ...prevPlayerHand,
+          selectedFoodTag: [...prevPlayerHand.selectedFoodTag, "한식", "일식"],
+        }));
       }
     };
 

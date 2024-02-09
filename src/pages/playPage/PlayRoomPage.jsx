@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import VoiceRecoder from "../../components/recorder/VoiceRecoder";
 import GameArea from "./GameArea";
 import PlayerHand from "./PlayerHand";
@@ -13,12 +13,13 @@ import { useParams } from "react-router-dom";
 import socket from "../../realtimeComunication/socket";
 import { StarryBackground } from "./StarryBackground";
 import { restaurantLists } from "./restaurantLists";
-import VoiceRecognition from "./modeTwo/VoiceRecognition";
+
 import { StepperWithContent } from "./StepperWithContent";
 import ModeThreeModal from "../../components/modal/ModeThreeExpainModal";
 
 import { getRestaurantList } from "../../api";
 import UserVideoContainer from "../../components/video/UserVideoContainer";
+import VoiceRecognition from "./VoiceRecognition";
 
 const PlayRoomPage = () => {
   const { roomId } = useParams();
@@ -46,19 +47,13 @@ const PlayRoomPage = () => {
   // 모드 2, 음성 인식 On, Off
   const [showVoiceRecorder, setShowVoiceRecorder] = useState(false);
 
-  // 모드 1, 음성 인식 결과 담는 곳
-  const [modeOneVoiceRecResult, setModeOneVoiceRecResult] = useState([]);
-
-  // 모드 2, 음성 인식 결과 담는 곳
-  const [modeTwoVoiceRecResult, setModeTwoVoiceRecResult] = useState([]);
-
   // 플레이어 핸드에 보이는 데이터
   const [playerHand, setPlayerHand] = useState({
-    selectedFoodTag: ["#한식", "일식"],
-    selectedMoodTag: ["#조용한", "#분위기 있는"],
+    selectedFoodTag: [],
+    selectedMoodTag: [],
     selectedPlace: [
       {
-        restId: "1",
+        restId: "10",
         name: "토리모리",
         x: 1,
         y: 2,
@@ -79,6 +74,8 @@ const PlayRoomPage = () => {
   const [selectedCombineList, setSelectedCombineList] = useState([]);
 
   useEffect(() => {
+    socket.connect();
+    socket.emit("join-room", roomId);
     const local = getLocalStream();
     setLocalStream(local);
     const remote = getRemoteStream();
@@ -88,21 +85,21 @@ const PlayRoomPage = () => {
       purposeCoordinate: localStorage.getItem("purposeCoordinate"),
     };
 
-    const getRestList = async (roomId, sendData) => {
-      // default 재시도는 3
-      const response = await getRestaurantList(roomId, sendData);
+    // const getRestList = async (roomId, sendData) => {
+    //   // default 재시도는 3
+    //   const response = await getRestaurantList(roomId, sendData);
 
-      if (response.error) {
-        console.log(response.exception);
-        return;
-      }
+    //   if (response.error) {
+    //     console.log(response.exception);
+    //     return;
+    //   }
 
-      // 받아오는 data에 별 및 음식 관련 url 내용 추가
-      setRestaurantList(response);
-      console.log(restaurantList);
-    };
+    //   // 받아오는 data에 별 및 음식 관련 url 내용 추가
+    //   setRestaurantList(response);
+    //   console.log(restaurantList);
+    // };
 
-    getRestList(roomId, sendData);
+    // getRestList(roomId, sendData);
   }, []);
 
   useEffect(() => {
@@ -120,30 +117,35 @@ const PlayRoomPage = () => {
       socket.off("combine-response", handleCombineTryResponse);
       socket.off("combine-result", handleCombineResult);
     };
-  }, []);
+  }, [roomId]);
 
   // 모든 유저가 준비 완료할 경우, 다음 모드로  넘어가는 함수
   const handleModeChange = (data) => {
-    const roomMemberCount = JSON.parse(localStorage.getItem("roomMemberCount"));
+    // const roomMemberCount = JSON.parse(localStorage.getItem("roomMemberCount"));
 
-    if (data.roomReadyCount < roomMemberCount) {
-      setRoomReadyCount((prev) => prev + 1);
-    } else if (data.roomReadyCount >= roomMemberCount) {
-      console.log(data.roomReadyCount);
-      setRoomMode(data.newMode);
-      setIsReady(false);
-      setRoomReadyCount(0);
-      console.log(data.roomReadyCount);
-    }
+    // if (data.roomReadyCount < roomMemberCount) {
+    //   setRoomReadyCount((prev) => prev + 1);
+    // } else if (data.roomReadyCount >= roomMemberCount) {
+    //   console.log(data.roomReadyCount);
+    //   setRoomMode(data.newMode);
+    //   setIsReady(false);
+    //   setRoomReadyCount(0);
+    //   console.log(data.roomReadyCount);
+    // }
+    console.log(data);
   };
 
+  // const handleReceiveFoodCategory = (data) => {
+  //   console.log("handleReceiveFoodCategory is called, data : ", data);
+  //   if (length(data.foodCategories) > 0) {
+  //     addFoodCategory(data.foodCategories);
+  //   } else {
+  //     console.log("적절한 음식 카테고리를 찾지 못했습니다.");
+  //   }
+  // };
+
   const handleReceiveFoodCategory = (data) => {
-    console.log("handleReceiveFoodCategory is called, data : ", data);
-    if (length(data.foodCategories) > 0) {
-      addFoodCategory(data.foodCategories);
-    } else {
-      console.log("적절한 음식 카테고리를 찾지 못했습니다.");
-    }
+    console.log("Received food categories:", data);
   };
 
   const handleSetReady = () => {
@@ -278,9 +280,10 @@ const PlayRoomPage = () => {
         {/* 별 */}
         <StarryBackground
           restaurantList={restaurantList}
-          resultTags={modeOneVoiceRecResult}
-          resultMoodTags={modeTwoVoiceRecResult}
-          combineList={combineList}
+          resultFoodTags={playerHand.selectedFoodTag}
+          resultMoodTags={playerHand.selectedMoodTag}
+          resultPlaceTags={playerHand.selectedPlace}
+          selectedCombineList={selectedCombineList}
         />
         <PlayerHand handList={playerHand} onSetHandList={setPlayerHand} />
 
@@ -298,7 +301,8 @@ const PlayRoomPage = () => {
               <div className=" absolute top-[15%]">
                 <VoiceRecoder
                   onClick={handleSetReady}
-                  //onSetResult={setModeOneVoiceRecResult}
+                  // TEST
+                  onSetResult={setPlayerHand}
                 />
               </div>
             )}
@@ -310,6 +314,8 @@ const PlayRoomPage = () => {
             <VoiceRecognition
               onSetResult={addMoodKeyword}
               onAddRest={addUniqueRestaurant}
+              // TEST
+              onSetTestResult={setPlayerHand}
             />
           </>
         )}
