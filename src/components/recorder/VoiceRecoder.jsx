@@ -69,7 +69,7 @@ const VoiceRecoder = ({ onClick, onSetResult, resultList }) => {
 
     const serverSendData = {
       roomId: roomId,
-      speechSentence: serverSendScript,
+      speechSentence: serverSendScript.current,
     };
 
     socket.emit("send-speech-foodCategory", serverSendData);

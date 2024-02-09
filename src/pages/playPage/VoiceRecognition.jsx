@@ -46,18 +46,7 @@ const VoiceRecognition = ({
   useEffect(() => {
     setupSpeechRecognition();
 
-    socket.on("receive-speech-keyword", (data) => {
-      console.log(data);
-      if (data.keywords.length > 0) {
-        onSetResult(data.keywords);
-      }
-
-      if (length(data.restaruntList) > 0) {
-        for (let i = 0; i < data.restaruntList.length; i++) {
-          onAddRest(data.restaruntList[i]);
-        }
-      }
-    });
+    socket.on("receive-speech-keyword", handleReceiveSpeechKeyword);
 
     return () => {
       if (recognitionRef.current) {
@@ -67,9 +56,22 @@ const VoiceRecognition = ({
         recognitionRef.current.onerror = null;
       }
 
-      socket.off("receive-speech-keyword");
+      socket.off("receive-speech-keyword", handleReceiveSpeechKeyword);
     };
   }, []);
+
+  const handleReceiveSpeechKeyword = (data) => {
+    console.log("receive speech keyword Datas : ", data);
+    if (data.keywords.length > 0) {
+      onSetResult(data.keywords);
+    }
+
+    if (length(data.restaruntList) > 0) {
+      for (let i = 0; i < data.restaruntList.length; i++) {
+        onAddRest(data.restaruntList[i]);
+      }
+    }
+  };
 
   const setupSpeechRecognition = () => {
     if (!recognitionRef.current) {
