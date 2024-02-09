@@ -140,8 +140,8 @@ const PlayRoomPage = () => {
 
   // 모든 유저가 준비 완료할 경우, 다음 모드로  넘어가는 함수
   const handleModeChange = (data) => {
+    console.log("handleModeChange is called, data : ", data);
     const roomMemberCount = JSON.parse(localStorage.getItem("roomMemberCount"));
-    x;
 
     if (data.roomReadyCount < roomMemberCount) {
       setRoomReadyCount((prev) => prev + 1);
