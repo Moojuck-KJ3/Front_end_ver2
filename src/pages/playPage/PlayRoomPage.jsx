@@ -147,7 +147,7 @@ const PlayRoomPage = () => {
     setTempRoomMode(data.newMode);
 
     if (data.roomReadyCount < roomMemberCount) {
-      setRoomReadyCount((prev) => prev + 1);
+      setRoomReadyCount(data.roomReadyCount);
     }
   };
 
