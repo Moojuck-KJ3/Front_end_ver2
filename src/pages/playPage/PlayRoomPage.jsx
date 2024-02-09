@@ -53,6 +53,8 @@ const PlayRoomPage = () => {
   // 모드 2 보이스 인식 결과
   const [modeTwoVoiceRecResult, SetModeTwoVoiceRecResult] = useState([]);
 
+  const [tempRoomMode, setTempRoomMode] = useState(0);
+
   // 플레이어 핸드에 보이는 데이터
   const [playerHand, setPlayerHand] = useState({
     selectedFoodTag: [],
@@ -142,18 +144,23 @@ const PlayRoomPage = () => {
   const handleModeChange = (data) => {
     console.log("handleModeChange is called, data : ", data);
     const roomMemberCount = JSON.parse(localStorage.getItem("roomMemberCount"));
+    setTempRoomMode(data.newMode);
 
     if (data.roomReadyCount < roomMemberCount) {
       setRoomReadyCount((prev) => prev + 1);
-    } else if (data.roomReadyCount >= roomMemberCount) {
-      console.log(data.roomReadyCount);
-      setRoomMode(data.newMode);
+    }
+  };
+
+  useEffect(() => {
+    const roomMemberCount = JSON.parse(localStorage.getItem("roomMemberCount"));
+
+    if (roomReadyCount >= roomMemberCount) {
+      console.log("All players are ready");
+      setRoomMode(tempRoomMode);
       setIsReady(false);
       setRoomReadyCount(0);
-      console.log(data.roomReadyCount);
     }
-    console.log(data);
-  };
+  }, [roomReadyCount]);
 
   // const handleReceiveFoodCategory = (data) => {
   //   console.log("handleReceiveFoodCategory is called, data : ", data);
