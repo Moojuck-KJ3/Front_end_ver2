@@ -66,9 +66,9 @@ const VoiceRecognition = ({
       onSetResult(data.keywords);
     }
 
-    if (length(data.restaruntList) > 0) {
-      for (let i = 0; i < data.restaruntList.length; i++) {
-        onAddRest(data.restaruntList[i]);
+    if (length(data.restaurantList) > 0) {
+      for (let i = 0; i < data.restaurantList.length; i++) {
+        onAddRest(data.restaurantList[i]);
       }
     }
   };
