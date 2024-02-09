@@ -7,7 +7,7 @@ const VoiceRecognition = ({
   onSetResult,
   onAddRest,
   onSetTestResult,
-  getSelectedFoodCategories,
+  selectedFoodCategories,
 }) => {
   const recognitionRef = useRef(null);
   const roomId = useParams();
@@ -23,13 +23,13 @@ const VoiceRecognition = ({
     // };
     // sendTransText(roomId, data);
 
-    const selectedFoodCategories = getSelectedFoodCategories();
-
     const serverSendData = {
       roomId: roomId,
       speechSentence: text,
       selectedFoodCategories: selectedFoodCategories,
     };
+
+    console.log("send-speech-keyword serverSendData", serverSendData);
 
     socket.emit("send-speech-keyword", serverSendData);
 

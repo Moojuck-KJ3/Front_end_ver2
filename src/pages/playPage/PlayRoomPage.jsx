@@ -284,10 +284,6 @@ const PlayRoomPage = () => {
     }
   };
 
-  const getPlayerHandSelectFoodCategories = () => {
-    return playerHand.selectedFoodTag;
-  };
-
   return (
     <PlayRoomContainer>
       {/* 비디오 */}
@@ -335,7 +331,7 @@ const PlayRoomPage = () => {
             <VoiceRecognition
               onSetResult={addMoodKeyword}
               onAddRest={addUniqueRestaurant}
-              getSelectedFoodCategories={getPlayerHandSelectFoodCategories}
+              selectedFoodCategories={modeOneVoiceRecResult}
               // TEST
               onSetTestResult={setPlayerHand}
             />
