@@ -4,13 +4,13 @@ import Timer from "./Timer";
 import { useParams } from "react-router";
 import socket from "../../realtimeComunication/socket";
 
-const VoiceRecoder = ({ onClick, onSetResult }) => {
+const VoiceRecoder = ({ onClick, onSetResult, resultList }) => {
   //onSetResult
+  console.log(resultList);
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [showTimer, setShowTimer] = useState(true);
   const [timeLeft, setTimeLeft] = useState(5);
-
   const recognitionRef = useRef(null);
   const serverSendScript = useRef("");
 
@@ -80,6 +80,13 @@ const VoiceRecoder = ({ onClick, onSetResult }) => {
   };
 
   const handleReady = () => {
+    onSetResult((prevPlayerHand) => ({
+      ...prevPlayerHand,
+      selectedFoodTag: [
+        ...prevPlayerHand.selectedFoodTag,
+        ...resultList, // Assuming `result` holds the updated list based on `resultList` props
+      ],
+    }));
     onClick();
   };
 
@@ -127,10 +134,15 @@ const VoiceRecoder = ({ onClick, onSetResult }) => {
               </p>
             </div>
 
-            <div className="h-[130px] flex border items-center justify-center rounded-md m-4">
-              <p className="font-semibold font-tenada text-xl">
-                #한식, #한식당, #일식, #중식
-              </p>
+            <div className="h-[130px] flex border items-center justify-center rounded-md m-4 gap-2">
+              {(resultList || []).map((tag, i) => (
+                <p
+                  className="font-semibold font-tenada text-xl bg-gray-200 rounded-xl px-3 py-2"
+                  key={i}
+                >
+                  {`#${tag}`}
+                </p>
+              ))}
             </div>
             <div className="flex justify-center">
               <button

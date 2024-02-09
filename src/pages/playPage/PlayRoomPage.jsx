@@ -47,6 +47,12 @@ const PlayRoomPage = () => {
   // 모드 2, 음성 인식 On, Off
   const [showVoiceRecorder, setShowVoiceRecorder] = useState(false);
 
+  // 모드 1 보이스 인식 결과
+  const [modeOneVoiceRecResult, SetModeOneVoiceRecResult] = useState([]);
+
+  // 모드 2 보이스 인식 결과
+  const [modeTwoVoiceRecResult, SetModeTwoVoiceRecResult] = useState([]);
+
   // 플레이어 핸드에 보이는 데이터
   const [playerHand, setPlayerHand] = useState({
     selectedFoodTag: [],
@@ -107,6 +113,10 @@ const PlayRoomPage = () => {
   }, []);
 
   useEffect(() => {
+    console.log("Updated modeOneVoiceRecResult:", modeOneVoiceRecResult);
+  }, [modeOneVoiceRecResult]);
+
+  useEffect(() => {
     socket.connect();
     socket.on("mode-change-response", handleModeChange);
     socket.on("receive-speech-foodCategory", handleReceiveFoodCategory);
@@ -123,19 +133,25 @@ const PlayRoomPage = () => {
     };
   }, [roomId]);
 
+  const handleReceiveFoodCategory = useCallback((data) => {
+    console.log("Received food categories:", data.foodCategories);
+    SetModeOneVoiceRecResult(data.foodCategories);
+  }, []);
+
   // 모든 유저가 준비 완료할 경우, 다음 모드로  넘어가는 함수
   const handleModeChange = (data) => {
-    // const roomMemberCount = JSON.parse(localStorage.getItem("roomMemberCount"));
+    const roomMemberCount = JSON.parse(localStorage.getItem("roomMemberCount"));
+    x;
 
-    // if (data.roomReadyCount < roomMemberCount) {
-    //   setRoomReadyCount((prev) => prev + 1);
-    // } else if (data.roomReadyCount >= roomMemberCount) {
-    //   console.log(data.roomReadyCount);
-    //   setRoomMode(data.newMode);
-    //   setIsReady(false);
-    //   setRoomReadyCount(0);
-    //   console.log(data.roomReadyCount);
-    // }
+    if (data.roomReadyCount < roomMemberCount) {
+      setRoomReadyCount((prev) => prev + 1);
+    } else if (data.roomReadyCount >= roomMemberCount) {
+      console.log(data.roomReadyCount);
+      setRoomMode(data.newMode);
+      setIsReady(false);
+      setRoomReadyCount(0);
+      console.log(data.roomReadyCount);
+    }
     console.log(data);
   };
 
@@ -148,15 +164,11 @@ const PlayRoomPage = () => {
   //   }
   // };
 
-  const handleReceiveFoodCategory = (data) => {
-    console.log("Received food categories:", data);
-  };
-
   const handleSetReady = () => {
     console.log("handleSetReady is called");
     setIsReady(true);
     setShowVoiceRecorder(false);
-    console.log({ roomId, roomMode, roomReadyCount });
+    // console.log({ roomId, roomMode, roomReadyCount });
     socket.emit("select-done", { roomId, roomReadyCount, roomMode });
   };
 
@@ -309,6 +321,7 @@ const PlayRoomPage = () => {
               <div className=" absolute top-[15%]">
                 <VoiceRecoder
                   onClick={handleSetReady}
+                  resultList={modeOneVoiceRecResult}
                   // TEST
                   onSetResult={setPlayerHand}
                 />
@@ -359,68 +372,3 @@ const MODE = {
   MODE3: 3,
   MODE4: 4,
 };
-
-const DUMMY_COMBINE_LIST = [
-  {
-    restId: "1",
-    name: "토리모리",
-    x: 1,
-    y: 2,
-    category: "한식", // Korean
-    mood: ["조용한"],
-    miniStarUrl: "/Star_2.png",
-    BigStarUrl: "/Star_3.png",
-    FoodUrl: "/Food.png",
-    thumbnailURL: "/돈까스.png",
-  },
-  {
-    restId: "2",
-    name: "사쿠라",
-    x: 3,
-    y: 4,
-    category: "일식", // Japanese
-    mood: ["행복한"],
-    miniStarUrl: "/Star_2.png",
-    BigStarUrl: "/Star_3.png",
-    FoodUrl: "/Food.png",
-    thumbnailURL: "/돈까스.png",
-  },
-  {
-    restId: "3",
-    name: "중국성",
-    x: 5,
-    y: 6,
-    category: "중식", // Chinese
-    mood: ["분위기 좋은"],
-    miniStarUrl: "/Star_2.png",
-    BigStarUrl: "/Star_3.png",
-    FoodUrl: "/Food.png",
-    thumbnailURL: "/돈까스.png",
-  },
-  {
-    restId: "7",
-    name: "토리모리",
-    x: 22,
-    y: 12,
-    category: "한식", // Korean
-    mood: ["분위기 좋은"],
-
-    miniStarUrl: "/Star_2.png",
-    BigStarUrl: "/Star_3.png",
-    FoodUrl: "/Food.png",
-    thumbnailURL: "/돈까스.png",
-  },
-  {
-    restId: "8",
-    name: "사쿠라",
-    x: 53,
-    y: 35,
-    category: "일식", // Japanese
-    mood: ["분위기 좋은"],
-
-    miniStarUrl: "/Star_2.png",
-    BigStarUrl: "/Star_3.png",
-    FoodUrl: "/Food.png",
-    thumbnailURL: "/돈까스.png",
-  },
-];

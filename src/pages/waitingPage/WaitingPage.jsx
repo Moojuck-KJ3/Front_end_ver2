@@ -62,12 +62,12 @@ const WaitingPage = ({ localStream }) => {
 
   const handleStartGame = () => {
     if (isAllPlayerReady) {
-      const purpose = JSON.parse(localStorage.getItem("purposeCoordinate"));
-      console.log("Starting the game", purpose);
+      // const purpose = JSON.parse(localStorage.getItem("purposeCoordinate"));
+      // console.log("Starting the game", purpose);
 
       const data = {
         roomId: roomId,
-        purposeCoordinate: purpose,
+        // purposeCoordinate: purpose,
       };
 
       socket.emit("start-play-room", { roomId, data });
