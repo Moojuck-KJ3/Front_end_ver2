@@ -81,7 +81,6 @@ const PlayRoomPage = () => {
 
   useEffect(() => {
     socket.connect();
-    socket.emit("join-room", roomId);
     const local = getLocalStream();
     setLocalStream(local);
     const remote = getRemoteStream();
@@ -287,14 +286,17 @@ const PlayRoomPage = () => {
 
   return (
     <PlayRoomContainer>
-      {/* 비디오 */}
-      <UserVideoContainer localStream={localStream} remoteStrem={remoteStrem} />
-
       {/* 스텝바 */}
       <StepperWithContent setRoomMode={setRoomMode} />
       {/* 컨텐츠 시작 */}
       <GameArea>
         {/* 별 */}
+        <UserVideoContainer
+          handList={playerHand}
+          localStream={localStream}
+          remoteStrem={remoteStrem}
+        />
+
         <StarryBackground
           restaurantList={restaurantList}
           resultFoodTags={playerHand.selectedFoodTag}
@@ -302,7 +304,11 @@ const PlayRoomPage = () => {
           resultPlaceTags={playerHand.selectedPlace}
           selectedCombineList={selectedCombineList}
         />
-        <PlayerHand handList={playerHand} onSetHandList={setPlayerHand} />
+        <UserVideoContainer
+          handList={playerHand}
+          localStream={localStream}
+          remoteStrem={remoteStrem}
+        />
 
         {roomMode === MODE.MODE1 && (
           <>
@@ -315,14 +321,12 @@ const PlayRoomPage = () => {
             )}
             {/* 음성 인식 모달 */}
             {showVoiceRecorder && (
-              <div className=" absolute top-[15%]">
-                <VoiceRecoder
-                  onClick={handleSetReady}
-                  resultList={modeOneVoiceRecResult}
-                  // TEST
-                  onSetResult={setPlayerHand}
-                />
-              </div>
+              <VoiceRecoder
+                onClick={handleSetReady}
+                resultList={modeOneVoiceRecResult}
+                // TEST
+                onSetResult={setPlayerHand}
+              />
             )}
           </>
         )}
@@ -357,6 +361,7 @@ const PlayRoomPage = () => {
           </>
         )}
       </GameArea>
+      <PlayerHand handList={playerHand} onSetHandList={setPlayerHand} />
     </PlayRoomContainer>
   );
 };

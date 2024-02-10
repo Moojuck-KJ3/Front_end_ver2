@@ -1,4 +1,6 @@
-import { createRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 const getRandomInt = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
@@ -22,6 +24,19 @@ export const StarryBackground = ({
 
     event.dataTransfer.setData("restaurant", restaurantData);
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setStars((prevStars) =>
+        prevStars.map((star) => ({
+          ...star,
+          isTwinkling: Math.random() < 0.5, // Randomly determine if the star should twinkle
+        }))
+      );
+    }, 1000); // Adjust the interval as needed
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const starsData = restaurantList.map((restaurant) => {
@@ -53,7 +68,7 @@ export const StarryBackground = ({
       } else if (matchesResultTag) {
         size = 4;
       } else {
-        size = 2;
+        size = 1;
       }
 
       let className;
@@ -72,7 +87,7 @@ export const StarryBackground = ({
 
       return {
         id: restaurant.restId,
-        x: getRandomInt(15, 80),
+        x: getRandomInt(10, 90),
         y: getRandomInt(10, 90),
         className: className,
         size: size,
@@ -87,10 +102,7 @@ export const StarryBackground = ({
   }, [restaurantList, resultFoodTags, resultMoodTags, selectedCombineList]);
 
   return (
-    <div
-      className="bg-black m-4 p-14 rounded-full border-2 border-dashed border-spacing-4 relative w-full h-full
-    "
-    >
+    <div className=" flex-grow bg-black relative border-4 border-dashed">
       {stars.map((star, i) => (
         <div
           className={star.className}
@@ -105,11 +117,14 @@ export const StarryBackground = ({
             transform: `scale(${star.size})`,
           }}
         >
-          <img
+          {/* <img
             className="rounded-full object-cover"
             src={star.imageUrl}
             alt=""
-          />
+          /> */}
+          <div className=" text-yellow-400 ">
+            <FontAwesomeIcon icon={faStar} />
+          </div>
         </div>
       ))}
     </div>

@@ -42,38 +42,26 @@ const PlayerHand = ({ handList, onSetHandList }) => {
   };
 
   return (
-    <div className="w-2/3 h-[260px] mt-2 mb-2 flex justify-center bg-white border-1 border-gray-200 shadow-md rounded-lg mx-10">
-      <div
-        className="w-full bg-gray-100 border-2 m-2 rounded-md shadow-inner p-2 grid grid-cols-5 items-center  "
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
-      >
-        <ul className="col-span-1 flex flex-col justify-center items-center">
-          {handList.selectedFoodTag.map((tag, index) => (
-            <li key={index}>{`#${tag}`}</li>
-          ))}
-        </ul>
-
-        <div className="col-span-1 flex flex-col justify-center items-center">
-          <ul className="">
-            {handList.selectedMoodTag.map((tag, index) => (
-              <li key={index}>{`#${tag}`}</li>
+    <div className="w-full h-full max-h-60 pb-4">
+      <div className="w-1/2 max-h-60 overflow-hidden mx-auto flex justify-center bg-white border-1 border-gray-200 shadow-2xl rounded-lg">
+        <div
+          className="w-full bg-gray-100 border-2 m-2 rounded-md shadow-inner p-2 items-center  "
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+        >
+          <div className=" justify-end flex col-span-3 gap-2 ">
+            {handList.selectedPlace.map((place, index) => (
+              <div
+                className="h-full"
+                onDragStart={(e) => handleDragStart(e, place)}
+                onDragEnd={handleDragEnd}
+                onDragLeave={handleDragLeave}
+                key={index}
+              >
+                <PlaceCard place={place} />
+              </div>
             ))}
-          </ul>
-        </div>
-
-        <div className=" justify-end flex col-span-3 gap-2 ">
-          {handList.selectedPlace.map((place, index) => (
-            <div
-              className="h-full"
-              onDragStart={(e) => handleDragStart(e, place)}
-              onDragEnd={handleDragEnd}
-              onDragLeave={handleDragLeave}
-              key={index}
-            >
-              <PlaceCard place={place} />
-            </div>
-          ))}
+          </div>
         </div>
       </div>
     </div>

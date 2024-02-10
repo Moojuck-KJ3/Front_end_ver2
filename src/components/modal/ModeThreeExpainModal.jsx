@@ -25,7 +25,7 @@ const ModeThreeModal = ({
     onSelectComplete();
   };
   return (
-    <div className="absolute top-[15%] flex items-center justify-center ">
+    <div className="modal fixed w-full h-full -top-10 left-0 flex items-center justify-center ">
       <div className="bg-white w-11/12 md:max-w-md mx-auto rounded-lg shadow-lg  animate-fade p-1">
         <div className="py-4 text-left px-6">
           <div className="flex justify-between items-center pb-3">
