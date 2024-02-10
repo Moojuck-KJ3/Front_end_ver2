@@ -79,8 +79,8 @@ const CreateRoomPage = ({ localStream }) => {
   };
 
   return (
-    <div className="bg-[url('/BackGroundImg_2.jpg')] min-h-screen text-gray-900 flex justify-center">
-      <div className="m-20 p-6 shadow-lg bg-white rounded-lg flex justify-center animate-fade-up">
+    <div className="bg-[url('/BackGroundImg_2.jpg')] min-h-screen text-gray-900 flex justify-center items-center">
+      <div className="m-20 p-8 shadow-lg bg-white rounded-lg flex justify-center animate-fade-up">
         <div className="w-full flex flex-col items-center">
           <img
             className="rounded-xl w-[320px] h-[100px] object-cover"

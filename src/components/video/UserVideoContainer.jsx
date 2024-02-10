@@ -1,11 +1,29 @@
 import VideoContainer from "./VideoContainer";
+import MicIcon from "@mui/icons-material/Mic";
 
-const UserVideoContainer = ({ localStream, remoteStrem, handList }) => {
+const UserVideoContainer = ({
+  localStream,
+  remoteStrem,
+  handList,
+  showMic,
+  onReady,
+}) => {
+  const handleClickMic = () => {
+    console.log("handleClickMic is called");
+    onReady();
+  };
   return (
-    <div className=" flex flex-col w-1/5 h-full gap-4">
-      <div className="flex flex-col justify-center bg-white p-4 mx-2  rounded-lg shadow-2xl border-2 flex-grow">
+    <div className=" flex flex-col w-1/5 h-full gap-4 ">
+      <div className="flex flex-col justify-center bg-white p-4 mx-2  rounded-lg shadow-2xl border-2 flex-grow relative">
         <VideoContainer mediaStream={localStream} />
-
+        {showMic && (
+          <button
+            onClick={handleClickMic}
+            className="w-10 h-10 bg-white rounded-full absolute top-6 right-6 animate-fade"
+          >
+            <MicIcon />
+          </button>
+        )}
         <div className=" w-full flex justify-center items-center p-2 gap-2 h-full">
           <div className="flex flex-col gap-1  w-full h-full border-2 border-dashed flex-grow p-1  items-center font-tenada mt-1">
             <div className="text-center w-full font-tenada ">선호하는 음식</div>

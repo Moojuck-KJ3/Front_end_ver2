@@ -13,19 +13,18 @@ import { useParams } from "react-router-dom";
 import socket from "../../realtimeComunication/socket";
 import { StarryBackground } from "./StarryBackground";
 import { restaurantLists } from "./restaurantLists";
-
 import { StepperWithContent } from "./StepperWithContent";
 import ModeThreeModal from "../../components/modal/ModeThreeExpainModal";
-
-import { getRestaurantList } from "../../api";
 import UserVideoContainer from "../../components/video/UserVideoContainer";
 import VoiceRecognition from "./VoiceRecognition";
+import ModeTwoExpainModal from "../../components/modal/ModeTwoExpainModal";
 
 const PlayRoomPage = () => {
   const { roomId } = useParams();
 
   // 모달 관련
   const [showModal, setShowModal] = useState(true);
+  const [showModeTwoModal, setShowModeTwoModal] = useState(true);
   const [showModeThreeModal, setShowModeThreeModal] = useState(true);
 
   // 룸 모드 설정
@@ -44,8 +43,12 @@ const PlayRoomPage = () => {
   // 방에 총 몇 명이 준비 완료했는지 카운트.
   const [roomReadyCount, setRoomReadyCount] = useState(0);
 
-  // 모드 2, 음성 인식 On, Off
+  // 모드 1, 음성 인식 On, Off
   const [showVoiceRecorder, setShowVoiceRecorder] = useState(false);
+
+  // 모드 2, 음성 인식 On, Off
+  const [showModeTwoVoiceRecorder, setModeTwoShowVoiceRecorder] =
+    useState(false);
 
   // 모드 1 보이스 인식 결과
   const [modeOneVoiceRecResult, SetModeOneVoiceRecResult] = useState([]);
@@ -166,7 +169,12 @@ const PlayRoomPage = () => {
   const handleSetReady = () => {
     console.log("handleSetReady is called");
     setIsReady(true);
-    setShowVoiceRecorder(false);
+    if (roomMode == 1) {
+      setShowVoiceRecorder(false);
+    }
+    if (roomMode == 2) {
+      setModeTwoShowVoiceRecorder(false);
+    }
     // console.log({ roomId, roomMode, roomReadyCount });
     const sendServerReadyCount = roomReadyCount + 1;
     socket.emit("select-done", { roomId, sendServerReadyCount, roomMode });
@@ -295,6 +303,8 @@ const PlayRoomPage = () => {
           handList={playerHand}
           localStream={localStream}
           remoteStrem={remoteStrem}
+          showMic={showModeTwoVoiceRecorder}
+          onReady={handleSetReady}
         />
 
         <StarryBackground
@@ -332,14 +342,21 @@ const PlayRoomPage = () => {
         )}
         {roomMode === MODE.MODE2 && (
           <>
-            {/* 음성 인식 기능 On */}
-            <VoiceRecognition
-              onSetResult={addMoodKeyword}
-              onAddRest={addUniqueRestaurant}
-              selectedFoodCategories={modeOneVoiceRecResult}
-              // TEST
-              onSetTestResult={setPlayerHand}
-            />
+            {showModeTwoModal && (
+              <ModeTwoExpainModal
+                onShowModal={setShowModeTwoModal}
+                SetShowVoiceRecorder={setModeTwoShowVoiceRecorder}
+              />
+            )}
+            {showModeTwoVoiceRecorder && (
+              <VoiceRecognition
+                onSetResult={addMoodKeyword}
+                onAddRest={addUniqueRestaurant}
+                selectedFoodCategories={modeOneVoiceRecResult}
+                // TEST
+                onSetTestResult={setPlayerHand}
+              />
+            )}
           </>
         )}
         {roomMode === MODE.MODE3 && (

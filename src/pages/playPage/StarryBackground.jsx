@@ -17,9 +17,7 @@ export const StarryBackground = ({
     console.log(restaurant);
     const restaurantData = JSON.stringify({
       restId: restaurant.id,
-      // name: restaurant.name,
       thumbnailURL: restaurant.FoodUrl,
-      // category: restaurant.category,
     });
 
     event.dataTransfer.setData("restaurant", restaurantData);
@@ -41,9 +39,11 @@ export const StarryBackground = ({
   useEffect(() => {
     const starsData = restaurantList.map((restaurant) => {
       const matchesResultTag = resultFoodTags.includes(restaurant.category);
+      let foodTagVisibilityClass = matchesResultTag ? "" : "hidden";
       const matchesResultMoodTag = restaurant.mood.some((mood) =>
         resultMoodTags.includes(mood)
       );
+      let moodTagVisibilityClass = matchesResultMoodTag ? "" : "hidden";
 
       const combineListMatch = selectedCombineList.find(
         (combineItem) => combineItem.restId === restaurant.restId
@@ -68,27 +68,24 @@ export const StarryBackground = ({
       } else if (matchesResultTag) {
         size = 4;
       } else {
-        size = 1;
+        size = 2;
       }
 
       let className;
       if (combineListMatch) {
         className = "w-4 h-4 rounded-full cursor-pointer duration-500";
       } else if (matchesResultTag && matchesResultMoodTag) {
-        className =
-          "w-4 h-4 hover:bg-yellow-200 rounded-full cursor-pointer duration-500";
+        className = `w-4 h-4 hover:bg-yellow-200 rounded-full cursor-pointer duration-500 `;
       } else if (matchesResultTag) {
-        className =
-          "w-4 h-4 hover:bg-yellow-200 rounded-full cursor-pointer duration-500";
+        className = `w-4 h-4 hover:bg-yellow-200 rounded-full cursor-pointer duration-500`;
       } else {
-        className =
-          "w-4 h-4 hover:bg-yellow-200 rounded-full cursor-pointer duration-500";
+        className = `w-4 h-4 hover:bg-yellow-200 rounded-full cursor-pointer duration-500 `;
       }
 
       return {
         id: restaurant.restId,
-        x: getRandomInt(10, 90),
-        y: getRandomInt(10, 90),
+        x: getRandomInt(5, 95),
+        y: getRandomInt(5, 95),
         className: className,
         size: size,
         imageUrl: imageUrl,
@@ -117,14 +114,14 @@ export const StarryBackground = ({
             transform: `scale(${star.size})`,
           }}
         >
-          {/* <img
+          <img
             className="rounded-full object-cover"
             src={star.imageUrl}
             alt=""
-          /> */}
-          <div className=" text-yellow-400 ">
+          />
+          {/* <div className=" text-yellow-400 ">
             <FontAwesomeIcon icon={faStar} />
-          </div>
+          </div> */}
         </div>
       ))}
     </div>
