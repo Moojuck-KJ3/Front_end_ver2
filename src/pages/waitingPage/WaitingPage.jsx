@@ -19,7 +19,8 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const { roomId } = useParams();
   const [progressValue, setProgressValue] = useState(50);
   const { peerConnection, guestStream } = usePeerConnection(localStream);
-  const [remoteStream, setRemoteStream] = useState(guestStream);
+  useChatConnection(peerConnection);
+  const [remoteStream, setRemoteStream] = useState(getRemoteStream());
 
   useEffect(() => {
     setRemoteStream(getRemoteStream());
