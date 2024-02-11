@@ -35,32 +35,33 @@ const ModeThreeCombineArea = () => {
     setIsDragging(true);
   };
 
-  const handleDrop = (event, targetList) => {
+  const handleDrop = (event, targetArea) => {
     event.preventDefault();
 
     const restaurantData = event.dataTransfer.getData("restaurant");
     const parsedRestaurantData = JSON.parse(restaurantData);
 
     if (parsedRestaurantData) {
-      if (targetList === "A") {
+      if (targetArea === "A") {
         setDraggedTagA(parsedRestaurantData);
-      } else if (targetList === "B") {
+      } else if (targetArea === "B") {
         setDraggedTagB(parsedRestaurantData);
       }
     }
     socket.emit("user-selected-card", {
       roomId,
-      targetList,
+      targetArea,
       restaurantData: parsedRestaurantData,
     });
+    console.log(parsedRestaurantData);
     setIsDragging(false);
   };
 
   useEffect(() => {
-    socket.on("other-user-selected-card", ({ targetList, restaurantData }) => {
-      if (targetList === "A") {
+    socket.on("other-user-selected-card", ({ targetArea, restaurantData }) => {
+      if (targetArea === "A") {
         setDraggedTagA(restaurantData);
-      } else if (targetList === "B") {
+      } else if (targetArea === "B") {
         setDraggedTagB(restaurantData);
       }
     });

@@ -20,6 +20,7 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const [progressValue, setProgressValue] = useState(50);
   const { peerConnection, guestStream } = usePeerConnection(localStream);
   useChatConnection(peerConnection);
+
   const lg = getLocalStream();
   const rg = getRemoteStream();
   console.log("WaitingPage");

@@ -12,7 +12,6 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const [isModal, setIsModal] = useState(false);
   const [roomId, setRoomId] = useState("");
   const [userName, setUserName] = useState("");
-
   useEffect(() => {
     const userDetails = localStorage.getItem("user");
 
