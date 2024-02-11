@@ -1,9 +1,15 @@
-const ResultCard = ({ title, imgUrl, id }) => {
-  console.log(imgUrl);
+import FavoriteIcon from "@mui/icons-material/Favorite";
+
+const ResultCard = ({ title, imgUrl, id, likesCount }) => {
+  console.log();
   return (
     <div
-      className={`w-[160px] h-[180px] bg-transparent cursor-pointer group perspective`}
+      className={`w-[160px] h-[180px] bg-transparent cursor-pointer group perspective relative`}
     >
+      <div className="absolute z-10 -top-8 flex justify-center items-center w-10 h-8 bg-white rounded-full">
+        <FavoriteIcon style={{ color: "red" }} />
+        {likesCount}
+      </div>
       <div className="relative preserve-3d group-hover:my-rotate-y-180 w-full h-full duration-1000">
         <div className="absolute bg-white text-black  shadow-xl backface-hidden w-full h-full rounded-lg">
           <img src={imgUrl} className="w-full h-full rounded-lg" />

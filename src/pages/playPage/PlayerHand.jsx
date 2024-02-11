@@ -49,7 +49,7 @@ const PlayerHand = ({
           )}`}
         >
           <div>
-            <h1 className="mt-2 font-tenada text-lg">선호하는 음식</h1>
+            <h1 className="mt-2 font-tenada text-2xl">선호하는 음식🍔</h1>
             <ul>
               {playerHand.selectedFoodTag?.map((tag, index) => (
                 <li
@@ -76,7 +76,7 @@ const PlayerHand = ({
           )}`}
         >
           <div>
-            <h1 className=" font-tenada text-lg ">선호하는 분위기</h1>
+            <h1 className="mt-1 font-tenada text-2xl ">선호하는 분위기👀</h1>
             <ul className="">
               {playerHand.selectedMoodTag?.map((tag, index) => (
                 <li
@@ -102,7 +102,7 @@ const PlayerHand = ({
           )}`}
         >
           <div>
-            <h1 className=" font-tenada text-lg ">조합하고 싶은 장소</h1>
+            <h1 className="mt-1 font-tenada text-2xl ">조합하고 싶은 장소💫</h1>
             <div className="grid grid-cols-3">
               {playerHand.selectedPlace?.map((place, index) => (
                 <div
@@ -131,7 +131,7 @@ const PlayerHand = ({
             4
           )}`}
         >
-          <h1 className=" font-tenada text-lg ">최고의 장소</h1>
+          <h1 className="mt-1 font-tenada text-2xl ">최종 목적지⛳️</h1>
           <ul className="">
             {/* {playerHand.selectedMoodTag?.map((tag, index) => (
               <li
