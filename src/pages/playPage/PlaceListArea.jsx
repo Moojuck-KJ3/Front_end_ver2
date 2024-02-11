@@ -20,6 +20,7 @@ export const PlaceListArea = ({
   roomMode,
   setRoomMode,
   handleSetReady,
+  roomDetail,
 }) => {
   const [stars, setStars] = useState([]);
   const [hoveredStarId, setHoveredStarId] = useState(null);
@@ -51,7 +52,7 @@ export const PlaceListArea = ({
 
   let content;
   if (roomMode === 3) {
-    content = <ModeThreeCombineArea />;
+    content = <ModeThreeCombineArea roomDetail={roomDetail} />;
   } else if (roomMode === 4) {
     content = <FinalRestaurantDetails />;
   } else {

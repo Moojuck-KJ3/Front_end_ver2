@@ -30,7 +30,7 @@ export const DUMMY_PLACE = [
 ];
 
 const ResultCardLists = ({ combinedplaceList }) => {
-  const { roomId } = useParams();
+  console.log("ResultCardLists", combinedplaceList);
 
   return (
     <ul className="flex gap-10 roun">

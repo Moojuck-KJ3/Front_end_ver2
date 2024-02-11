@@ -14,6 +14,7 @@ function App() {
     roomId: "",
     purposeCoordinate: { lat: null, lng: null },
     roomMemberCount: 0,
+    playerId: null,
     participants: [],
   });
 

@@ -19,7 +19,6 @@ import ModeTwoExpainModal from "../../components/modal/ModeTwoExpainModal";
 import RightSideUserVideoContainer from "../../components/video/RightSideUserVideoContainer";
 
 const PlayRoomPage = ({ roomDetail, setRoomDetail }) => {
-  console.log(roomDetail);
   const { roomId } = useParams();
   const [showModal, setShowModal] = useState(true);
   const [showModeTwoModal, setShowModeTwoModal] = useState(true);
@@ -273,6 +272,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail }) => {
           roomMode={roomMode}
           setRoomMode={setRoomMode}
           handleSetReady={handleSetReady}
+          roomDetail={roomDetail}
         />
         <RightSideUserVideoContainer
           localStream={localStream}

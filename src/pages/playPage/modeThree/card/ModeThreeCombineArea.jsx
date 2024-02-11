@@ -7,7 +7,7 @@ import LoopIcon from "@mui/icons-material/Loop";
 import { useParams } from "react-router-dom";
 import socket from "../../../../realtimeComunication/socket";
 
-const ModeThreeCombineArea = () => {
+const ModeThreeCombineArea = ({ roomDetail }) => {
   const [draggedTagA, setDraggedTagA] = useState(null);
   const [draggedTagB, setDraggedTagB] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -35,26 +35,23 @@ const ModeThreeCombineArea = () => {
     setIsDragging(true);
   };
 
-  const handleDrop = (event, targetArea) => {
+  const handleDrop = (event, playerId) => {
     event.preventDefault();
 
     const restaurantData = event.dataTransfer.getData("restaurant");
     const parsedRestaurantData = JSON.parse(restaurantData);
 
     if (parsedRestaurantData) {
-      if (targetArea === "A") {
+      if (playerId === 1) {
         setDraggedTagA(parsedRestaurantData);
-      } else if (targetArea === "B") {
+      } else if (playerId === 2) {
         setDraggedTagB(parsedRestaurantData);
       }
     }
 
-    console.log(roomId);
-    console.log(targetArea);
-    console.log(parsedRestaurantData);
     socket.emit("user-selected-card", {
       roomId,
-      targetArea,
+      playerId,
       restaurantData: parsedRestaurantData,
     });
     console.log("socket emited!");
@@ -63,12 +60,12 @@ const ModeThreeCombineArea = () => {
 
   useEffect(() => {
     socket.connect();
-    socket.on("other-user-selected-card", ({ targetArea, restaurantData }) => {
+    socket.on("other-user-selected-card", ({ playerId, restaurantData }) => {
       console.log("other-user-selected-card is called,!");
-
-      if (targetArea === "A") {
+      if (playerId === 1) {
         setDraggedTagA(restaurantData);
-      } else if (targetArea === "B") {
+        console.log(draggedTagA);
+      } else if (playerId === 2) {
         setDraggedTagB(restaurantData);
       }
     });
@@ -81,10 +78,19 @@ const ModeThreeCombineArea = () => {
     if (draggedTagA && draggedTagB) {
       socket.emit("both-users-selected", {
         roomId,
-        userSelectedList: [draggedTagA, draggedTagB],
+        userSelectedList: [
+          {
+            playerId: 1,
+            restId: draggedTagA.restId,
+          },
+          {
+            playerId: 2,
+            restId: draggedTagB.restId,
+          },
+        ],
       });
     }
-  }, [draggedTagA, draggedTagB, roomId, socket]);
+  }, [draggedTagA, draggedTagB, roomId]);
 
   useEffect(() => {
     socket.on("combined-result", handleCombineResult);
@@ -95,9 +101,9 @@ const ModeThreeCombineArea = () => {
   }, [socket]);
 
   const handleCombineResult = (data) => {
-    console.log("Combined result received:", data);
-    if (data && data.length > 0) {
-      setCombinedPlaceList(data);
+    console.log("Combined result received:", data.restaurantList);
+    if (data) {
+      setCombinedPlaceList(data.restaurantList);
     } else {
       console.log("No results received or empty results array");
       setCombinedPlaceList([]);
@@ -122,7 +128,7 @@ const ModeThreeCombineArea = () => {
               isDragging ? "" : ""
             }`}
             onDragOver={handleDragOver}
-            onDrop={(event) => handleDrop(event, "A")}
+            onDrop={(event) => handleDrop(event, 1)}
           >
             {draggedTagA && <BigPlaceCard img={"/돈까스.png"} />}
           </div>
@@ -146,7 +152,7 @@ const ModeThreeCombineArea = () => {
               isDragging ? "" : ""
             }`}
             onDragOver={handleDragOver}
-            onDrop={(event) => handleDrop(event, "B")}
+            onDrop={(event) => handleDrop(event, 2)}
           >
             {draggedTagB && <BigPlaceCard img={"/돈까스.png"} />}
           </div>
