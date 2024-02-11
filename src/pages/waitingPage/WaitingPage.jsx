@@ -19,9 +19,10 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const { roomId } = useParams();
   const [progressValue, setProgressValue] = useState(50);
   const { peerConnection, guestStream } = usePeerConnection(localStream);
-  useChatConnection(peerConnection);
+  const [remoteStream, setRemoteStream] = useState(guestStream);
 
   useEffect(() => {
+    setRemoteStream(getRemoteStream());
     const handleAllPlayerReady = () => {
       console.log("All players are ready");
       setIsAllPlayerReady(true);
@@ -45,8 +46,6 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
         },
         roomMemberCount: data.roomMemberCount,
       }));
-      // console.log(roomDetail);
-
       navigator(`/play-room/${roomId}`);
     };
 
@@ -57,7 +56,7 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
       socket.off("all-player-ready", handleAllPlayerReady);
       socket.off("start-play-room-response", handleStartPlayRoomResponse);
     };
-  }, [navigator, setRoomDetail, guestStream, roomId]);
+  }, [navigator, setRoomDetail, guestStream, roomId, setRemoteStream]);
 
   useEffect(() => {
     if (isAllPlayerReady) {
@@ -108,7 +107,7 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
           {/* 비디오 */}
           <WaitingFreindVideoContainer
             localStream={localStream}
-            remoteStrem={guestStream}
+            remoteStrem={remoteStream}
           />
           {/* 버튼 */}
           <CreateRoomPageFooter

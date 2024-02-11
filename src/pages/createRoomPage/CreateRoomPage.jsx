@@ -24,6 +24,7 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
     socket.on("create-room-response", (response) => {
       if (response) {
         const { roomId } = response;
+        console.log(response);
         navigate(`/waiting-friends/${roomId}`);
       } else {
         console.error(response.error);
