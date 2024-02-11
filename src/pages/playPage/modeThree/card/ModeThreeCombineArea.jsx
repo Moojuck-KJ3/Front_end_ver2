@@ -14,7 +14,7 @@ const ModeThreeCombineArea = () => {
   const [showContent, setShowContent] = useState(false);
   const [isSpining, setIsSpining] = useState(false);
   const [combinedplaceList, setCombinedPlaceList] = useState([]);
-  const roomId = useParams();
+  const { roomId } = useParams();
 
   useEffect(() => {
     if (draggedTagA && draggedTagB) {
@@ -48,17 +48,24 @@ const ModeThreeCombineArea = () => {
         setDraggedTagB(parsedRestaurantData);
       }
     }
+
+    console.log(roomId);
+    console.log(targetArea);
+    console.log(parsedRestaurantData);
     socket.emit("user-selected-card", {
       roomId,
       targetArea,
       restaurantData: parsedRestaurantData,
     });
-    console.log(parsedRestaurantData);
+    console.log("socket emited!");
     setIsDragging(false);
   };
 
   useEffect(() => {
+    socket.connect();
     socket.on("other-user-selected-card", ({ targetArea, restaurantData }) => {
+      console.log("other-user-selected-card is called,!");
+
       if (targetArea === "A") {
         setDraggedTagA(restaurantData);
       } else if (targetArea === "B") {

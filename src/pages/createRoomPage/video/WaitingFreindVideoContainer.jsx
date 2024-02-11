@@ -1,7 +1,7 @@
 import { VideoFeed } from "../../../components/video/VideoFeed";
 
 const WaitingFreindVideoContainer = ({ localStream, remoteStrem }) => {
-  console.log(remoteStrem);
+  console.log("remoteStrem", remoteStrem);
   return (
     <div className="grid grid-cols-2 gap-10">
       <div className="justify-center items-center">
