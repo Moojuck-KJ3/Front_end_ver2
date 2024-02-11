@@ -20,10 +20,13 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const [progressValue, setProgressValue] = useState(50);
   const { peerConnection, guestStream } = usePeerConnection(localStream);
   useChatConnection(peerConnection);
-  const [remoteStream, setRemoteStream] = useState(getRemoteStream());
+  const lg = getLocalStream();
+  const rg = getRemoteStream();
+  console.log("WaitingPage");
+  console.log(lg);
+  console.log(rg);
 
   useEffect(() => {
-    setRemoteStream(getRemoteStream());
     const handleAllPlayerReady = () => {
       console.log("All players are ready");
       setIsAllPlayerReady(true);
@@ -108,7 +111,7 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
           {/* 비디오 */}
           <WaitingFreindVideoContainer
             localStream={localStream}
-            remoteStrem={remoteStream}
+            remoteStrem={guestStream}
           />
           {/* 버튼 */}
           <CreateRoomPageFooter
