@@ -6,9 +6,20 @@ import CreateRoomPage from "./pages/createRoomPage/CreateRoomPage";
 import PlayRoomPage from "./pages/playPage/PlayRoomPage";
 import WaitingPage from "./pages/waitingPage/WaitingPage";
 import { useLocalCameraStream } from "./realtimeComunication/webRTCManager";
+import { useEffect, useState } from "react";
 
 function App() {
   const { localStream } = useLocalCameraStream();
+  const [roomDetail, setRoomDetail] = useState({
+    roomId: "",
+    purposeCoordinate: { lat: null, lng: null },
+    roomMemberCount: 0,
+    participants: [],
+  });
+
+  useEffect(() => {
+    console.log(roomDetail);
+  }, [roomDetail]);
 
   return (
     <BrowserRouter>
@@ -18,15 +29,33 @@ function App() {
         <Route path="/register" element={<ResisterPage />} />
         <Route
           path="/entry"
-          element={<CreateRoomPage localStream={localStream} />}
+          element={
+            <CreateRoomPage
+              localStream={localStream}
+              roomDetail={roomDetail}
+              setRoomDetail={setRoomDetail}
+            />
+          }
         />
         <Route
           path="/waiting-friends/:roomId"
-          element={<WaitingPage localStream={localStream} />}
+          element={
+            <WaitingPage
+              localStream={localStream}
+              roomDetail={roomDetail}
+              setRoomDetail={setRoomDetail}
+            />
+          }
         />
         <Route
           path="/play-room/:roomId"
-          element={<PlayRoomPage localStream={localStream} />}
+          element={
+            <PlayRoomPage
+              localStream={localStream}
+              roomDetail={roomDetail}
+              setRoomDetail={setRoomDetail}
+            />
+          }
         />
       </Routes>
     </BrowserRouter>

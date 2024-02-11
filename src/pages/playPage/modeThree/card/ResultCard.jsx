@@ -1,14 +1,14 @@
-const ResultCard = ({ title, imgUrl, id, onClick }) => {
+const ResultCard = ({ title, imgUrl, id }) => {
   console.log(imgUrl);
   return (
     <div
       className={`w-[160px] h-[180px] bg-transparent cursor-pointer group perspective`}
     >
       <div className="relative preserve-3d group-hover:my-rotate-y-180 w-full h-full duration-1000">
-        <div className="absolute bg-white text-black  shadow-xl backface-hidden w-full h-full">
+        <div className="absolute bg-white text-black  shadow-xl backface-hidden w-full h-full rounded-lg">
           <img src={imgUrl} className="w-full h-full rounded-lg" />
         </div>
-        <div className="absolute my-rotate-y-180 backface-hidden w-full h-full bg-white shadow-xl overflow-hidden">
+        <div className="absolute my-rotate-y-180 backface-hidden w-full h-full bg-white shadow-xl overflow-hidden rounded-lg">
           <div className="text-center flex flex-col items-center h-full text-gray-800 px-2">
             <div className="my-4 gap-1 flex flex-col w-full p-3">
               <div className="flex justify-between">
@@ -36,10 +36,7 @@ const ResultCard = ({ title, imgUrl, id, onClick }) => {
                 <p className="text-sm">21:00까지</p>
               </div>
             </div>
-            <button
-              className="bg-teal-500 px-4 py-2 text-xs font-semibold text-white rounded-full absolute -bottom-20 delay-500 duration-1000 group-hover:bottom-1 scale-0 group-hover:scale-105"
-              onClick={onClick(id)}
-            >
+            <button className="bg-teal-500 px-4 py-2 text-xs font-semibold text-white rounded-full absolute -bottom-20 delay-500 duration-1000 group-hover:bottom-1 scale-0 group-hover:scale-105">
               선택하기
             </button>
           </div>

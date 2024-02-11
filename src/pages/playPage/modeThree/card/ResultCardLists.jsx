@@ -29,15 +29,11 @@ export const DUMMY_PLACE = [
   },
 ];
 
-const ResultCardLists = () => {
+const ResultCardLists = ({ combinedplaceList }) => {
   const { roomId } = useParams();
 
-  const handleSelect = async (event, id) => {
-    event.preventDefault();
-  };
-
   return (
-    <ul className="flex gap-10">
+    <ul className="flex gap-10 roun">
       <li
         id={DUMMY_PLACE[0].id}
         key={0}
@@ -48,7 +44,6 @@ const ResultCardLists = () => {
           title={DUMMY_PLACE[0].title}
           imgUrl={DUMMY_PLACE[0].imgUrl}
           id={DUMMY_PLACE[0].id}
-          onClick={handleSelect}
         />
       </li>
       <li
@@ -61,7 +56,6 @@ const ResultCardLists = () => {
           title={DUMMY_PLACE[1].title}
           imgUrl={DUMMY_PLACE[1].imgUrl}
           id={DUMMY_PLACE[1].id}
-          onClick={handleSelect}
         />
       </li>
       <li
@@ -74,7 +68,6 @@ const ResultCardLists = () => {
           title={DUMMY_PLACE[2].title}
           imgUrl={DUMMY_PLACE[2].imgUrl}
           id={DUMMY_PLACE[2].id}
-          onClick={handleSelect}
         />
       </li>
       <li
@@ -87,7 +80,6 @@ const ResultCardLists = () => {
           title={DUMMY_PLACE[3].title}
           imgUrl={DUMMY_PLACE[3].imgUrl}
           id={DUMMY_PLACE[3].id}
-          onClick={handleSelect}
         />
       </li>
       <li
@@ -100,7 +92,6 @@ const ResultCardLists = () => {
           title={DUMMY_PLACE[4].title}
           imgUrl={DUMMY_PLACE[4].imgUrl}
           id={DUMMY_PLACE[4].id}
-          onClick={handleSelect}
         />
       </li>
     </ul>

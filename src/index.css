@@ -21,17 +21,3 @@
     animation: orbit 10s infinite linear; /* Adjust timing as needed */
   }
 }
-
-@keyframes twinkle {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-.twinkle {
-  animation: twinkle 1s infinite;
-}
