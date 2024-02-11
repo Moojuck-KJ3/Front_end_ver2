@@ -5,23 +5,12 @@ import CreateRoomModal from "./modal/CreateRoomModal";
 import socket from "../../realtimeComunication/socket";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-
 import { logout } from "../../api";
-import { VideoFeed } from "../../components/video/VideoFeed";
 
-// const START_LAT = "37.498";
-// const START_LNG = "127.028";
-// const START_NAME = "강남역 2호선";
-
-const CreateRoomPage = ({ localStream }) => {
+const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const navigate = useNavigate();
   const [isModal, setIsModal] = useState(false);
   const [roomId, setRoomId] = useState("");
-  // const [location, setLocation] = useState({
-  //   START_NAME,
-  //   START_LAT,
-  //   START_LNG,
-  // });
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
@@ -79,8 +68,8 @@ const CreateRoomPage = ({ localStream }) => {
   };
 
   return (
-    <div className="bg-[url('/BackGroundImg_2.jpg')] min-h-screen text-gray-900 flex justify-center">
-      <div className="m-20 p-6 shadow-lg bg-white rounded-lg flex justify-center animate-fade-up">
+    <div className="bg-[url('/BackGroundImg_2.jpg')] min-h-screen text-gray-900 flex justify-center items-center">
+      <div className="m-20 p-8 shadow-lg bg-white rounded-lg flex justify-center animate-fade-up">
         <div className="w-full flex flex-col items-center">
           <img
             className="rounded-xl w-[320px] h-[100px] object-cover"
@@ -151,7 +140,11 @@ const CreateRoomPage = ({ localStream }) => {
         </div>
       </div>
       {isModal && (
-        <CreateRoomModal onModal={setIsModal} onCreate={handleRoomCreate} />
+        <CreateRoomModal
+          onModal={setIsModal}
+          onCreate={handleRoomCreate}
+          setRoomDetail={setRoomDetail}
+        />
       )}
     </div>
   );

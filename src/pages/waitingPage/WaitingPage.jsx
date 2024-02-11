@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import socket from "../../realtimeComunication/socket";
 import Typewriter from "../../components/type/TypeWriter";
 
-const WaitingPage = ({ localStream }) => {
+const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   // 개발 끝나면, isAllPlayerReady False로 바꾸기
   const [isAllPlayerReady, setIsAllPlayerReady] = useState(true);
   const navigator = useNavigate();
@@ -20,13 +20,6 @@ const WaitingPage = ({ localStream }) => {
   const [progressValue, setProgressValue] = useState(50);
   const { peerConnection, guestStream } = usePeerConnection(localStream);
   useChatConnection(peerConnection);
-
-  const lg = getLocalStream();
-  const rg = getRemoteStream();
-
-  console.log("WaitingPage");
-  console.log(lg);
-  console.log(rg);
 
   useEffect(() => {
     const handleAllPlayerReady = () => {
@@ -36,11 +29,23 @@ const WaitingPage = ({ localStream }) => {
     };
 
     const handleStartPlayRoomResponse = (data) => {
-      console.log("Starting the play-room", data);
+      // console.log("Starting the play-room", data);
 
       // play-room 시작 전에 모든 클라가 해당 data를 가지고 있게 한다
-      localStorage.setItem("purposeCoordinate", data.coordinates);
-      localStorage.setItem("roomMemberCount", data.roomMemberCount);
+      // localStorage.setItem("purposeCoordinate", data.coordinates);
+      // localStorage.setItem("roomMemberCount", data.roomMemberCount);
+      // console.log(data.coordinates[0]);
+      // console.log(data.coordinates[1]);
+      setRoomDetail((prev) => ({
+        ...prev,
+        roomId: roomId,
+        purposeCoordinate: {
+          lat: data.coordinates[0],
+          lng: data.coordinates[1],
+        },
+        roomMemberCount: data.roomMemberCount,
+      }));
+      // console.log(roomDetail);
 
       navigator(`/play-room/${roomId}`);
     };
@@ -52,7 +57,7 @@ const WaitingPage = ({ localStream }) => {
       socket.off("all-player-ready", handleAllPlayerReady);
       socket.off("start-play-room-response", handleStartPlayRoomResponse);
     };
-  }, [navigator, guestStream, roomId]);
+  }, [navigator, setRoomDetail, guestStream, roomId]);
 
   useEffect(() => {
     if (isAllPlayerReady) {
@@ -62,15 +67,20 @@ const WaitingPage = ({ localStream }) => {
 
   const handleStartGame = () => {
     if (isAllPlayerReady) {
-      const purpose = JSON.parse(localStorage.getItem("purposeCoordinate"));
-      console.log("Starting the game", purpose);
+      // const purpose = JSON.parse(localStorage.getItem("purposeCoordinate"));
+      // console.log();
+      // console.log();
+      // console.log("Starting the game", purpose);
 
       const data = {
         roomId: roomId,
-        coordinates: [purpose.lat, purpose.lng],
+        coordinates: [
+          roomDetail.purposeCoordinate.lat,
+          roomDetail.purposeCoordinate.lng,
+        ],
       };
 
-      console.log("Server send Data : ", data);
+      // console.log("Server send Data : ", data);
 
       socket.emit("start-play-room", data);
     } else {

@@ -5,7 +5,7 @@ const PlaceCard = ({ place }) => {
     <div
       className={`rounded-xl w-28 p-2 h-full bg-white shadow-2xl border-transparent cursor-pointer transition-all border-2 hover:border-green-400 animate-jump`}
     >
-      <div className="w-26 h-30 flex justify-center items-center rounded-xl shadow-md overflow-hidden bg-gray-300 ">
+      <div className="mx-auto w-20 h-14 flex justify-center items-center rounded-xl shadow-md overflow-hidden bg-gray-300 ">
         <img
           src="/돈까스.png"
           alt="placePhoto"

@@ -24,8 +24,8 @@ const LoginPage = () => {
     }
   };
   return (
-    <div className="bg-[url('/BackGroundImg_2.jpg')] min-h-screen text-gray-900 flex justify-center">
-      <div className="m-20 p-6 bg-white shadow-lg rounded-lg flex justify-center animate-fade-up">
+    <div className="bg-[url('/BackGroundImg_2.jpg')] min-h-screen text-gray-900 flex justify-center items-center">
+      <div className=" p-8 bg-white shadow-lg rounded-lg flex justify-center animate-fade-up">
         <div className="w-full mt-5 flex flex-col items-center">
           <h1 className="font-bold text-2xl font-[Tenada]">로그인</h1>
           <div className="w-full flex-1 mt-8">

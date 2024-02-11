@@ -84,7 +84,11 @@ const VoiceRecognition = ({
         const last = event.results.length - 1;
         const text = event.results[last][0].transcript.trim();
         console.log("Voice Input:", text);
-        handleSetMoodTags(text);
+        if (text) {
+          handleSetMoodTags(text);
+        } else {
+          console.log("No speech detected or speech was empty.");
+        }
       };
       recognitionRef.current.start();
 

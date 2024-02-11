@@ -1,89 +1,52 @@
 import { useCallback, useEffect, useState } from "react";
 import VoiceRecoder from "../../components/recorder/VoiceRecoder";
 import GameArea from "./GameArea";
-import PlayerHand from "./PlayerHand";
 import PlayRoomContainer from "./PlayRoomContainer";
 import ModeOneExpainModal from "../../components/modal/ModeOneExpainModal";
 import {
   getLocalStream,
   getRemoteStream,
 } from "../../realtimeComunication/webRTCManager";
-
 import { useParams } from "react-router-dom";
 import socket from "../../realtimeComunication/socket";
-import { StarryBackground } from "./StarryBackground";
+import { PlaceListArea } from "./PlaceListArea";
 import { restaurantLists } from "./restaurantLists";
-
-import { StepperWithContent } from "./StepperWithContent";
+import { Header } from "./Header";
 import ModeThreeModal from "../../components/modal/ModeThreeExpainModal";
-
-import { getRestaurantList } from "../../api";
 import UserVideoContainer from "../../components/video/UserVideoContainer";
 import VoiceRecognition from "./VoiceRecognition";
+import ModeTwoExpainModal from "../../components/modal/ModeTwoExpainModal";
+import RightSideUserVideoContainer from "../../components/video/RightSideUserVideoContainer";
 
-const PlayRoomPage = () => {
+const PlayRoomPage = ({ roomDetail, setRoomDetail }) => {
+  console.log(roomDetail);
   const { roomId } = useParams();
-
-  // 모달 관련
   const [showModal, setShowModal] = useState(true);
+  const [showModeTwoModal, setShowModeTwoModal] = useState(true);
   const [showModeThreeModal, setShowModeThreeModal] = useState(true);
-
-  // 룸 모드 설정
   const [roomMode, setRoomMode] = useState(MODE.MODE1);
-
-  // 화상 채팅
   const [localStream, setLocalStream] = useState(null);
   const [remoteStrem, setRemoteStream] = useState(null);
-
-  // 200개 레스토랑 리스트 상태 관리
   const [restaurantList, setRestaurantList] = useState(restaurantLists);
-
-  // 모드별 유저 선택 완료시, 상태 관리
   const [isReady, setIsReady] = useState(false);
-
-  // 방에 총 몇 명이 준비 완료했는지 카운트.
   const [roomReadyCount, setRoomReadyCount] = useState(0);
-
-  // 모드 2, 음성 인식 On, Off
   const [showVoiceRecorder, setShowVoiceRecorder] = useState(false);
-
-  // 모드 1 보이스 인식 결과
+  const [showModeTwoVoiceRecorder, setModeTwoShowVoiceRecorder] =
+    useState(false);
   const [modeOneVoiceRecResult, SetModeOneVoiceRecResult] = useState([]);
-
-  // 모드 2 보이스 인식 결과
   const [modeTwoVoiceRecResult, SetModeTwoVoiceRecResult] = useState([]);
-
-  const [tempRoomMode, setTempRoomMode] = useState(0);
-
-  // 플레이어 핸드에 보이는 데이터
   const [playerHand, setPlayerHand] = useState({
     selectedFoodTag: [],
     selectedMoodTag: [],
-    selectedPlace: [
-      {
-        restId: "10",
-        name: "토리모리",
-        x: 1,
-        y: 2,
-        category: "한식", // Korean
-        mood: ["조용한"],
-        miniStarUrl: "/Star_2.png",
-        BigStarUrl: "/Star_3.png",
-        FoodUrl: "/Food.png",
-        thumbnailURL: "/돈까스.png",
-      },
-    ],
+    selectedPlace: [],
   });
-
-  // 조합시 결과를 보여줄 담을 리스트
-  const [combineList, setCombineList] = useState([]);
+  const [combineResultList, setCombineResultList] = useState([]);
 
   // 조합 시 유저들이 선택한 레스토랑을 담을 리스트
-  const [selectedCombineList, setSelectedCombineList] = useState([]);
+  const [userSelectedCombineList, setUserSelectedCombineList] = useState([]);
 
   useEffect(() => {
     socket.connect();
-    socket.emit("join-room", roomId);
     const local = getLocalStream();
     setLocalStream(local);
     const remote = getRemoteStream();
@@ -122,8 +85,6 @@ const PlayRoomPage = () => {
     socket.connect();
     socket.on("mode-change-response", handleModeChange);
     socket.on("receive-speech-foodCategory", handleReceiveFoodCategory);
-
-    // mode 3 식당 조합에서 '선택 완료' 한 경우
     socket.on("combine-response", handleCombineTryResponse);
     socket.on("combine-result", handleCombineResult);
 
@@ -140,43 +101,30 @@ const PlayRoomPage = () => {
     SetModeOneVoiceRecResult(data.foodCategories);
   }, []);
 
-  // 모든 유저가 준비 완료할 경우, 다음 모드로  넘어가는 함수
   const handleModeChange = (data) => {
     console.log("handleModeChange is called, data : ", data);
-    const roomMemberCount = JSON.parse(localStorage.getItem("roomMemberCount"));
-    setTempRoomMode(data.newMode);
+    const roomMemberCount = roomDetail.roomMemberCount;
 
     if (data.roomReadyCount < roomMemberCount) {
-      setRoomReadyCount(data.roomReadyCount + 1);
-    }
-  };
-
-  useEffect(() => {
-    const roomMemberCount = JSON.parse(localStorage.getItem("roomMemberCount"));
-
-    if (roomReadyCount >= roomMemberCount) {
-      console.log("All players are ready");
-      setRoomMode(tempRoomMode);
+      setRoomReadyCount(data.roomReadyCount);
+    } else if (data.roomReadyCount >= roomMemberCount) {
+      setRoomMode(data.newMode);
       setIsReady(false);
       setRoomReadyCount(0);
     }
-  }, [roomReadyCount]);
-
-  // const handleReceiveFoodCategory = (data) => {
-  //   console.log("handleReceiveFoodCategory is called, data : ", data);
-  //   if (length(data.foodCategories) > 0) {
-  //     addFoodCategory(data.foodCategories);
-  //   } else {
-  //     console.log("적절한 음식 카테고리를 찾지 못했습니다.");
-  //   }
-  // };
-
+  };
   const handleSetReady = () => {
     console.log("handleSetReady is called");
+    handleShowVoiceRecorder();
     setIsReady(true);
-    setShowVoiceRecorder(false);
-    // console.log({ roomId, roomMode, roomReadyCount });
-    socket.emit("select-done", { roomId, roomReadyCount, roomMode });
+    const updatedRoomReadyCount = roomReadyCount + 1;
+    setRoomReadyCount(updatedRoomReadyCount);
+
+    socket.emit("select-done", {
+      roomId,
+      roomReadyCount: updatedRoomReadyCount,
+      roomMode,
+    });
   };
 
   // 중복되지 않는 데이터만 추가
@@ -244,21 +192,22 @@ const PlayRoomPage = () => {
   const addSelectedCombineList = (combineData) => {
     // userId가 중복되지 않는 경우에 추가
     if (
-      !selectedCombineList.some((item) => item.userId === combineData.userId)
+      !userSelectedCombineList.some(
+        (item) => item.userId === combineData.userId
+      )
     ) {
       // rest Id는 같아도 된다
-      setSelectedCombineList([...selectedCombineList, combineData]);
+      setUserSelectedCombineList([...userSelectedCombineList, combineData]);
     }
   };
 
   // 조합 모달에서 선택 완료 버튼을 눌렀을 때, socket을 emit하는 용도의 함수
-
   const handleCombineSelectComplete = () => {
     console.log("handleCombineSelectComplete is called");
 
     const broadCombineDoneData = {
       roomId: roomId,
-      combineSelects: selectedCombineList,
+      combineSelects: userSelectedCombineList,
     };
 
     socket.emit("combine-try", broadCombineDoneData);
@@ -270,13 +219,13 @@ const PlayRoomPage = () => {
 
     if (roomMemberCount < data.combineSelects.length) {
       if (data.combineSelects.length > 0) {
-        setCombineList(data.combineSelects);
+        setCombineResultList(data.combineSelects);
       }
     } else {
       // 모두 선택 완료하였기에 combine-ready를 emit
       const broadCombineReadyData = {
         roomId: roomId,
-        combineSelects: selectedCombineList,
+        combineSelects: userSelectedCombineList,
       };
 
       socket.emit("combine-ready", broadCombineReadyData);
@@ -287,28 +236,50 @@ const PlayRoomPage = () => {
   const handleCombineResult = (data) => {
     console.log("handleCombineResult is called, data : ", data);
     if (data.restaruntList.length > 0) {
-      setCombineList(data.restaruntList);
+      setCombineResultList(data.restaruntList);
     }
   };
 
+  const handleShowVoiceRecorder = () => {
+    if (roomMode == 1) {
+      setShowVoiceRecorder(false);
+    }
+    if (roomMode == 2) {
+      setModeTwoShowVoiceRecorder(false);
+    }
+  };
   return (
     <PlayRoomContainer>
-      {/* 비디오 */}
-      <UserVideoContainer localStream={localStream} remoteStrem={remoteStrem} />
-
       {/* 스텝바 */}
-      <StepperWithContent setRoomMode={setRoomMode} />
+      <Header roomMode={roomMode} />
+
       {/* 컨텐츠 시작 */}
       <GameArea>
         {/* 별 */}
-        <StarryBackground
+        <UserVideoContainer
+          localStream={localStream}
+          remoteStrem={remoteStrem}
+          showMic={showModeTwoVoiceRecorder}
+        />
+
+        <PlaceListArea
           restaurantList={restaurantList}
           resultFoodTags={playerHand.selectedFoodTag}
           resultMoodTags={playerHand.selectedMoodTag}
           resultPlaceTags={playerHand.selectedPlace}
-          selectedCombineList={selectedCombineList}
+          selectedCombineList={userSelectedCombineList}
+          playerHand={playerHand}
+          setPlayerHand={setPlayerHand}
+          roomMode={roomMode}
+          setRoomMode={setRoomMode}
+          handleSetReady={handleSetReady}
         />
-        <PlayerHand handList={playerHand} onSetHandList={setPlayerHand} />
+        <RightSideUserVideoContainer
+          localStream={localStream}
+          remoteStrem={remoteStrem}
+          showMic={showModeTwoVoiceRecorder}
+          onReady={handleSetReady}
+        />
 
         {roomMode === MODE.MODE1 && (
           <>
@@ -321,27 +292,32 @@ const PlayRoomPage = () => {
             )}
             {/* 음성 인식 모달 */}
             {showVoiceRecorder && (
-              <div className=" absolute top-[15%]">
-                <VoiceRecoder
-                  onClick={handleSetReady}
-                  resultList={modeOneVoiceRecResult}
-                  // TEST
-                  onSetResult={setPlayerHand}
-                />
-              </div>
+              <VoiceRecoder
+                onClick={handleShowVoiceRecorder}
+                resultList={modeOneVoiceRecResult}
+                // TEST
+                onSetResult={setPlayerHand}
+              />
             )}
           </>
         )}
         {roomMode === MODE.MODE2 && (
           <>
-            {/* 음성 인식 기능 On */}
-            <VoiceRecognition
-              onSetResult={addMoodKeyword}
-              onAddRest={addUniqueRestaurant}
-              selectedFoodCategories={modeOneVoiceRecResult}
-              // TEST
-              onSetTestResult={setPlayerHand}
-            />
+            {showModeTwoModal && (
+              <ModeTwoExpainModal
+                onShowModal={setShowModeTwoModal}
+                SetShowVoiceRecorder={setModeTwoShowVoiceRecorder}
+              />
+            )}
+            {showModeTwoVoiceRecorder && (
+              <VoiceRecognition
+                onSetResult={addMoodKeyword}
+                onAddRest={addUniqueRestaurant}
+                selectedFoodCategories={modeOneVoiceRecResult}
+                // TEST
+                onSetTestResult={setPlayerHand}
+              />
+            )}
           </>
         )}
         {roomMode === MODE.MODE3 && (
