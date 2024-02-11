@@ -60,13 +60,20 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
       socket.off("all-player-ready", handleAllPlayerReady);
       socket.off("start-play-room-response", handleStartPlayRoomResponse);
     };
-  }, [navigator, setRoomDetail, guestStream, roomId, setRemoteStream]);
+  }, [navigator, setRoomDetail, guestStream, roomId]);
 
   useEffect(() => {
     if (isAllPlayerReady) {
       console.log("The Room Creator can now start the game.");
     }
   }, [isAllPlayerReady]);
+
+  useEffect(() => {
+    console.log("Remote stream:", guestStream);
+    if (guestStream) {
+      console.log("Tracks available:", guestStream.getTracks());
+    }
+  }, [guestStream]);
 
   const handleStartGame = () => {
     if (isAllPlayerReady) {
