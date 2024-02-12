@@ -3,10 +3,7 @@ import VoiceRecoder from "../../components/recorder/VoiceRecoder";
 import GameArea from "./GameArea";
 import PlayRoomContainer from "./PlayRoomContainer";
 import ModeOneExpainModal from "../../components/modal/ModeOneExpainModal";
-import {
-  getLocalStream,
-  getRemoteStream,
-} from "../../realtimeComunication/webRTCManager";
+
 import { useParams } from "react-router-dom";
 import socket from "../../realtimeComunication/socket";
 import { PlaceListArea } from "./PlaceListArea";
@@ -18,14 +15,12 @@ import VoiceRecognition from "./VoiceRecognition";
 import ModeTwoExpainModal from "../../components/modal/ModeTwoExpainModal";
 import RightSideUserVideoContainer from "../../components/video/RightSideUserVideoContainer";
 
-const PlayRoomPage = ({ roomDetail, setRoomDetail }) => {
+const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const { roomId } = useParams();
   const [showModal, setShowModal] = useState(true);
   const [showModeTwoModal, setShowModeTwoModal] = useState(true);
   const [showModeThreeModal, setShowModeThreeModal] = useState(true);
   const [roomMode, setRoomMode] = useState(MODE.MODE1);
-  const [localStream, setLocalStream] = useState(null);
-  const [remoteStrem, setRemoteStream] = useState(null);
   const [restaurantList, setRestaurantList] = useState(restaurantLists);
   const [isReady, setIsReady] = useState(false);
   const [roomReadyCount, setRoomReadyCount] = useState(0);
@@ -46,10 +41,10 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail }) => {
 
   useEffect(() => {
     socket.connect();
-    const local = getLocalStream();
-    setLocalStream(local);
-    const remote = getRemoteStream();
-    setRemoteStream(remote);
+    // const local = getLocalStream();
+    // setLocalStream(local);
+    // const remote = getRemoteStream();
+    // setRemoteStream(remote);
 
     // const parsedCoordinate = JSON.parse(
     //   localStorage.getItem("purposeCoordinate")
@@ -257,7 +252,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail }) => {
         {/* 별 */}
         <UserVideoContainer
           localStream={localStream}
-          remoteStrem={remoteStrem}
+          // remoteStrem={remoteStrem}
           showMic={showModeTwoVoiceRecorder}
         />
 
@@ -276,7 +271,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail }) => {
         />
         <RightSideUserVideoContainer
           localStream={localStream}
-          remoteStrem={remoteStrem}
+          // remoteStrem={remoteStrem}
           showMic={showModeTwoVoiceRecorder}
           onReady={handleSetReady}
         />
