@@ -85,6 +85,8 @@ export function usePeerConnection(localStream) {
       const pc = createPeerConnection(playerId);
       setPeerConnections((prev) => ({ ...prev, [playerId]: pc }));
 
+      console.log("in the handleUserJoined function, new Created peer is ", pc);
+
       pc.createOffer().then((offer) => {
         pc.setLocalDescription(offer);
         socket.emit("send-connection-offer", { roomId, playerId, offer });
@@ -120,11 +122,12 @@ export function usePeerConnection(localStream) {
 
     const handleReceiveCandidate = ({ fromPlayerId, candidate }) => {
       console.log(
-        "handleReceiveCandidate is callde",
+        "handleReceiveCandidate is called",
         (fromPlayerId, candidate)
       );
 
       const pc = peerConnections[fromPlayerId];
+      console.log("handleReceiveCandidate new pc is ", pc);
       if (pc) {
         pc.addIceCandidate(new RTCIceCandidate(candidate));
       }
@@ -147,7 +150,6 @@ export function usePeerConnection(localStream) {
   }, [createPeerConnection, localStream, peerConnections, roomId]);
 
   return {
-    peerConnections,
     remoteStreams,
   };
 }

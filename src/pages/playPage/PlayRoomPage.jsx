@@ -72,10 +72,6 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   }, []);
 
   useEffect(() => {
-    console.log("Updated modeOneVoiceRecResult:", modeOneVoiceRecResult);
-  }, [modeOneVoiceRecResult]);
-
-  useEffect(() => {
     socket.connect();
     socket.on("mode-change-response", handleModeChange);
     socket.on("receive-speech-foodCategory", handleReceiveFoodCategory);

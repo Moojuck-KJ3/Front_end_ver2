@@ -13,7 +13,7 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const navigator = useNavigate();
   const { roomId } = useParams();
   const [progressValue, setProgressValue] = useState(50);
-  const { peerConnections, remoteStreams } = usePeerConnection(localStream);
+  const { remoteStreams } = usePeerConnection(localStream);
 
   useEffect(() => {
     const handleAllPlayerReady = () => {
