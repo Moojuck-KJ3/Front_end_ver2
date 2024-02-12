@@ -7,17 +7,13 @@ import { useEffect, useState } from "react";
 import socket from "../../realtimeComunication/socket";
 import Typewriter from "../../components/type/TypeWriter";
 
-const WaitingPage = ({
-  localStream,
-  remoteStreams,
-  roomDetail,
-  setRoomDetail,
-}) => {
+const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   // 개발 끝나면, isAllPlayerReady False로 바꾸기
   const [isAllPlayerReady, setIsAllPlayerReady] = useState(true);
   const navigator = useNavigate();
   const { roomId } = useParams();
   const [progressValue, setProgressValue] = useState(50);
+  const { remoteStreams } = usePeerConnection(localStream);
 
   useEffect(() => {
     console.log("remoteStreams and PeerConnections!");

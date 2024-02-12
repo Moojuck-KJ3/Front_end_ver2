@@ -147,7 +147,6 @@ export function usePeerConnection(localStream) {
       socket.on("answer", handleReceiveAnswer);
       socket.on("send-candidate", handleReceiveCandidate);
     };
-
   }, [createPeerConnection, localStream, peerConnections, roomId]);
 
   return {

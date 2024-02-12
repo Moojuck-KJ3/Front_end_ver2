@@ -13,7 +13,6 @@ import { useEffect, useState } from "react";
 
 function App() {
   const { localStream } = useLocalCameraStream();
-  const { remoteStreams } = usePeerConnection(localStream);
 
   const [roomDetail, setRoomDetail] = useState({
     roomId: "",
@@ -48,7 +47,6 @@ function App() {
           element={
             <WaitingPage
               localStream={localStream}
-              remoteStreams={remoteStreams}
               roomDetail={roomDetail}
               setRoomDetail={setRoomDetail}
             />
@@ -59,7 +57,6 @@ function App() {
           element={
             <PlayRoomPage
               localStream={localStream}
-              remoteStreams={remoteStreams}
               roomDetail={roomDetail}
               setRoomDetail={setRoomDetail}
             />
