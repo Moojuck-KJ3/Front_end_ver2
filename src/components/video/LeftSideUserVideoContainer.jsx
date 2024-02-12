@@ -1,7 +1,7 @@
 import VideoContainer from "./VideoContainer";
 import MicIcon from "@mui/icons-material/Mic";
 
-const UserVideoContainer = ({ localStream, remoteStrem, showMic }) => {
+const LeftSideUserVideoContainer = ({ localStream, remoteStrem, showMic }) => {
   return (
     <div className=" flex flex-col w-1/5 min-w-[300px] h-full gap-4 ">
       <div className="flex flex-col justify-center bg-white p-4 mx-2  rounded-lg shadow-2xl border-2 relative">
@@ -15,8 +15,9 @@ const UserVideoContainer = ({ localStream, remoteStrem, showMic }) => {
       <div className="flex flex-col justify-center bg-white p-4 mx-2  rounded-lg shadow-2xl border-2 ">
         <VideoContainer mediaStream={remoteStrem} />
       </div>
+      {/* <div className='bg-white'>안녕</div> */}
     </div>
   );
 };
 
-export default UserVideoContainer;
+export default LeftSideUserVideoContainer;
