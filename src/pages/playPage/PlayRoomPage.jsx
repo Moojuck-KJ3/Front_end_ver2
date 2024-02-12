@@ -41,6 +41,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
 
   useEffect(() => {
     socket.connect();
+    console.log(roomDetail.playerStreams);
     // const local = getLocalStream();
     // setLocalStream(local);
     // const remote = getRemoteStream();

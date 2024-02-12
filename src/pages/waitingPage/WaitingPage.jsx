@@ -18,7 +18,11 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   useEffect(() => {
     console.log("remoteStreams and PeerConnections!");
     console.log(remoteStreams);
-  }, [remoteStreams]);
+    setRoomDetail((prevDetail) => ({
+      ...prevDetail,
+      playerStreams: { ...prevDetail.playerStreams, ...remoteStreams },
+    }));
+  }, [remoteStreams, setRoomDetail]);
 
   useEffect(() => {
     const handleAllPlayerReady = () => {

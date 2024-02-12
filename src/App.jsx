@@ -5,10 +5,7 @@ import ResisterPage from "./pages/authPage/ResisterPage";
 import CreateRoomPage from "./pages/createRoomPage/CreateRoomPage";
 import PlayRoomPage from "./pages/playPage/PlayRoomPage";
 import WaitingPage from "./pages/waitingPage/WaitingPage";
-import {
-  useLocalCameraStream,
-  usePeerConnection,
-} from "./realtimeComunication/webRTCManager";
+import { useLocalCameraStream } from "./realtimeComunication/webRTCManager";
 import { useEffect, useState } from "react";
 
 function App() {

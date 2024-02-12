@@ -64,11 +64,11 @@ export function usePeerConnection(localStream) {
     [localStream, roomId]
   );
 
-  // useEffect(() => {
-  //   console.log("New remoteStreams and PeerConnections!");
-  //   console.log(peerConnections);
-  //   console.log(remoteStreams);
-  // }, [peerConnections, remoteStreams]);
+  useEffect(() => {
+    console.log("New remoteStreams and PeerConnections!");
+    console.log(peerConnections);
+    console.log(remoteStreams);
+  }, [peerConnections, remoteStreams]);
 
   useEffect(() => {
     const handleConnection = () => {
