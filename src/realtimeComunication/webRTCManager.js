@@ -72,102 +72,48 @@ export function usePeerConnection(localStream) {
 
   useEffect(() => {
     const handleConnection = () => {
-      // console.log(
-      //   "handleConnection is called, now 'join-emit' routine is calling"
-      // );
       socket.emit("join-room", roomId);
     };
 
     const handleUserJoined = ({ playerId }) => {
-      // console.log("handleUserJoined is called", playerId);
       if (peerConnections[playerId]) return;
 
       const pc = createPeerConnection(playerId);
       setPeerConnections((prev) => ({ ...prev, [playerId]: pc }));
 
-      // console.log("in the handleUserJoined function, new Created peer is ", pc);
-      pc.createOffer().then((offer) => {
-        pc.setLocalDescription(offer)
-          .then(() => {
-            socket.emit("send-connection-offer", { roomId, playerId, offer });
-          })
-          .catch((error) => console.error("Failed to set local offer:", error));
-      });
+      const offer = pc.createOffer();
+      pc.setLocalDescription(offer);
+      socket.emit("send-connection-offer", { roomId, playerId, offer });
     };
 
     const handleReceiveOffer = async ({ fromPlayerId, offer }) => {
-      // console.log("handleReceiveOffer is callde", { fromPlayerId, offer });
-
-      let pc = peerConnections[fromPlayerId];
-      if (!pc) {
+      let pc;
+      if (!peerConnections[fromPlayerId]) {
         pc = createPeerConnection(fromPlayerId);
         setPeerConnections((prev) => ({ ...prev, [fromPlayerId]: pc }));
+      } else {
+        pc = peerConnections[fromPlayerId];
       }
 
-      try {
-        if (pc.signalingState === "stable") {
-          await pc.setRemoteDescription(new RTCSessionDescription(offer));
-          const answer = await pc.createAnswer();
-          await pc.setLocalDescription(answer);
-          socket.emit("answer", { roomId, playerId: fromPlayerId, answer });
-        } else {
-          console.log(
-            `PeerConnection is in an unexpected state: ${pc.signalingState}`
-          );
-        }
-      } catch (error) {
-        console.error(
-          "Error during offer reception and answer process:",
-          error
-        );
-      }
+      pc.setRemoteDescription(offer);
+      const answer = await pc.createAnswer();
+      pc.setLocalDescription(answer);
+      socket.emit("answer", { roomId, playerId: fromPlayerId, answer });
     };
-
-    //   if (!peerConnections[fromPlayerId]) {
-    //     pc = createPeerConnection(fromPlayerId);
-    //     setPeerConnections((prev) => ({ ...prev, [fromPlayerId]: pc }));
-    //   } else {
-    //     pc = peerConnections[fromPlayerId];
-    //   }
-    //   if (
-    //     pc.signalingState === "stable" ||
-    //     pc.signalingState === "have-local-offer"
-    //   ) {
-    //     pc.setRemoteDescription(new RTCSessionDescription(offer))
-    //       .then(() => console.log("Local description set successfully"))
-    //       .catch((error) =>
-    //         console.error("Failed to set local description:", error)
-    //       );
-    //   } else {
-    //     console.log(
-    //       `Cannot set local description in state: ${pc.signalingState}`
-    //     );
-    //   }
-
-    //   pc.createAnswer().then((answer) => {
-    //     pc.setLocalDescription(answer);
-    //     socket.emit("answer", { roomId, playerId: fromPlayerId, answer });
-    //   });
-    // };
 
     const handleReceiveAnswer = ({ fromPlayerId, answer }) => {
       const pc = peerConnections[fromPlayerId];
-      if (pc && pc.signalingState === "have-local-offer") {
-        pc.setRemoteDescription(new RTCSessionDescription(answer)).catch(
-          (error) => console.error("Failed to set remote answer:", error)
-        );
+      if (pc) {
+        pc.setRemoteDescription(answer);
       }
     };
 
     const handleReceiveCandidate = ({ fromPlayerId, candidate }) => {
       const pc = peerConnections[fromPlayerId];
       if (pc) {
-        pc.addIceCandidate(new RTCIceCandidate(candidate)).catch((error) =>
-          console.error("Failed to add ICE candidate:", error)
-        );
+        pc.addIceCandidate(candidate);
       }
     };
-
     socket.connect();
 
     socket.on("connect", handleConnection);
