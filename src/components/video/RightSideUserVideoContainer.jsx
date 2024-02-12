@@ -8,10 +8,6 @@ const RightSideUserVideoContainer = ({
   showMic,
   onReady,
 }) => {
-  const handleClickMic = () => {
-    console.log("handleClickMic is called");
-    onReady();
-  };
   return (
     <div className=" flex flex-col w-1/5 min-w-[300px] h-full gap-4 ">
       <div className="flex flex-col justify-center bg-white p-4 mx-2  rounded-lg shadow-2xl border-2 relative">
@@ -27,6 +23,12 @@ const RightSideUserVideoContainer = ({
       </div>
       <div className="flex flex-col justify-center bg-white p-4 mx-2  rounded-lg shadow-2xl border-2 ">
         <VideoContainer mediaStream={remoteStrem} />
+      </div>
+      <div className="flex flex-col flex-grow justify-between items-center bg-white p-4 mx-2  rounded-lg shadow-2xl border-2">
+        <div className=" text-2xl font-tenada border-">나의 선호도</div>
+        <div className=" text-2xl font-tenada">내가 가고 싶은 장소</div>
+
+        <div className="flex w-full"></div>
       </div>
     </div>
   );
