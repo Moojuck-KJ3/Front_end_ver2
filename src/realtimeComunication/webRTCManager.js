@@ -94,7 +94,7 @@ export function usePeerConnection(localStream) {
     };
 
     const handleReceiveOffer = ({ fromPlayerId, offer }) => {
-      console.log("handleReceiveOffer is callde", (fromPlayerId, offer));
+      console.log("handleReceiveOffer is callde", { fromPlayerId, offer });
 
       let pc;
       if (!peerConnections[fromPlayerId]) {
@@ -112,7 +112,7 @@ export function usePeerConnection(localStream) {
     };
 
     const handleReceiveAnswer = ({ fromPlayerId, answer }) => {
-      console.log("handleReceiveAnswer is callde", (fromPlayerId, answer));
+      console.log("handleReceiveAnswer is called", { fromPlayerId, answer });
 
       const pc = peerConnections[fromPlayerId];
       if (pc) {
@@ -121,10 +121,10 @@ export function usePeerConnection(localStream) {
     };
 
     const handleReceiveCandidate = ({ fromPlayerId, candidate }) => {
-      console.log(
-        "handleReceiveCandidate is called",
-        (fromPlayerId, candidate)
-      );
+      console.log("handleReceiveCandidate is called", {
+        fromPlayerId,
+        candidate,
+      });
 
       const pc = peerConnections[fromPlayerId];
       console.log("handleReceiveCandidate new pc is ", pc);
