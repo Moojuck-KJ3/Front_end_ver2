@@ -19,11 +19,19 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
       const username = JSON.parse(userDetails).username;
       setUserName(username);
     }
+    console.log("roomDetail", roomDetail);
 
     socket.on("create-room-response", (response) => {
       if (response) {
-        const { roomId } = response;
-        console.log(response);
+        const { roomId, playerId } = response;
+        console.log("create-room-response");
+        console.log(roomId);
+        console.log(playerId);
+        setRoomDetail((prev) => ({
+          ...prev,
+          roomId: roomId,
+          playerId: playerId,
+        }));
         navigate(`/waiting-friends/${roomId}`);
       } else {
         console.error(response.error);
@@ -32,7 +40,15 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
 
     socket.on("join-room-response", (response) => {
       if (response) {
-        const roomId = response;
+        const { roomId, playerId } = response;
+        console.log("join-room-response");
+        console.log(roomId);
+        console.log(playerId);
+        setRoomDetail((prev) => ({
+          ...prev,
+          roomId: roomId,
+          playerId: playerId,
+        }));
         navigate(`/waiting-friends/${roomId}`);
       } else {
         console.error(response.error);
@@ -43,7 +59,7 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
       socket.off("create-room-response");
       socket.off("join-room-response");
     };
-  }, []);
+  }, [setRoomDetail]);
 
   const handleOpenModal = () => {
     setIsModal(true);

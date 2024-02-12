@@ -32,8 +32,6 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
 
       setRoomDetail((prev) => ({
         ...prev,
-        roomId: roomId,
-        playerId: data.playerId,
         purposeCoordinate: {
           lat: data.coordinates[0],
           lng: data.coordinates[1],

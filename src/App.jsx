@@ -16,6 +16,7 @@ function App() {
     roomMemberCount: 0,
     playerId: null,
     participants: [],
+    playerStreams: {},
   });
 
   useEffect(() => {
