@@ -35,7 +35,7 @@ const AnimationStar = ({ x, y, size }) => {
 
   return (
     <div
-      className="w-4 h-4 absolute"
+      className="absolute"
       style={{
         transform: `translate(-50%, -50%) translate(${position.xp}px, ${position.yp}px)`,
       }}

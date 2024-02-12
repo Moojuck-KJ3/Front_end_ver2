@@ -1,5 +1,6 @@
 import React from "react";
 import AnimationStar from "./StarComponent";
+import LineAnimation from "./LineAnimation";
 
 const MAXLIMIT_RATE = 0.2;
 const MINVALUE = -1000;
@@ -28,6 +29,28 @@ const CombineAnimation = ({ onAnimationEnd, combinedplaceList }) => {
 
   return (
     <div className="relative">
+      {positions.map((position, i) => {
+        if (i % 2 === 0 && positions[i + 1]) {
+          return (
+            <LineAnimation
+              key={i}
+              startX={position.x}
+              startY={position.y}
+              endX={positions[i + 1].x}
+              endY={positions[i + 1].y}
+            />
+          );
+        }
+        return (
+          <LineAnimation
+            key={i}
+            startX={position.x}
+            startY={position.y}
+            endX={positions[positions.length - 1].x}
+            endY={positions[positions.length - 1].y}
+          />
+        );
+      })}
       {positions.map((position, i) => (
         <AnimationStar
           key={i}
