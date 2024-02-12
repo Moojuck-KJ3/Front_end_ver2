@@ -11,16 +11,28 @@ import CombineAnimation from "../combineAni/CombineAnimation";
 const ModeThreeCombineArea = ({ roomDetail }) => {
   const [draggedTagA, setDraggedTagA] = useState(null);
   const [draggedTagB, setDraggedTagB] = useState(null);
+  const [draggedTagC, setDraggedTagC] = useState(null);
+  const [draggedTagD, setDraggedTagD] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [showContent, setShowContent] = useState(false);
   const [isSpining, setIsSpining] = useState(false);
   const [combinedplaceList, setCombinedPlaceList] = useState([]);
-  const { roomId } = useParams();
-
-  // 애니메이션을 위한 것
   const [animationFinished, setAnimationFinished] = useState(false);
 
-  // 애니메이션이 종료될 때 호출될 콜백 함수
+  const { roomId } = useParams();
+
+  const testPositions = [
+    { x: -0.2, y: -0.2 },
+    { x: 0.2, y: -0.2 },
+    { x: -0.1, y: -0.1 },
+    { x: 0.1, y: -0.1 },
+    { x: 0, y: 0 }, // Center
+    { x: -0.1, y: 0.1 },
+    { x: 0.1, y: 0.1 },
+    { x: -0.2, y: 0.2 },
+    { x: 0.2, y: 0.2 },
+  ];
+
   const handleAnimationEnd = () => {
     setAnimationFinished(true);
   };
@@ -31,33 +43,33 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
       const delay = setTimeout(() => {
         setShowContent(true);
       }, 3000);
-
       return () => clearTimeout(delay);
     } else {
       setShowContent(false);
       setIsSpining(false);
     }
   }, [draggedTagA, draggedTagB]);
-
   const handleDragOver = (event) => {
     event.preventDefault();
     setIsDragging(true);
   };
-
   const handleDrop = (event, playerId) => {
     event.preventDefault();
-
     const restaurantData = event.dataTransfer.getData("restaurant");
     const parsedRestaurantData = JSON.parse(restaurantData);
-
     if (parsedRestaurantData) {
       if (playerId === 1) {
-        setDraggedTagA(parsedRestaurantData);
+        setDraggedTagA(restaurantData);
+        console.log(draggedTagA);
       } else if (playerId === 2) {
-        setDraggedTagB(parsedRestaurantData);
+        setDraggedTagB(restaurantData);
+      } else if (playerId === 3) {
+        setDraggedTagC(restaurantData);
+        console.log(draggedTagA);
+      } else if (playerId === 4) {
+        setDraggedTagD(restaurantData);
       }
     }
-
     socket.emit("user-selected-card", {
       roomId,
       playerId,
@@ -66,7 +78,6 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
     console.log("socket emited!");
     setIsDragging(false);
   };
-
   useEffect(() => {
     socket.connect();
     socket.on("other-user-selected-card", ({ playerId, restaurantData }) => {
@@ -76,13 +87,17 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
         console.log(draggedTagA);
       } else if (playerId === 2) {
         setDraggedTagB(restaurantData);
+      } else if (playerId === 3) {
+        setDraggedTagC(restaurantData);
+        console.log(draggedTagA);
+      } else if (playerId === 4) {
+        setDraggedTagD(restaurantData);
       }
     });
     return () => {
       socket.off("other-user-selected-card");
     };
   }, [socket]);
-
   useEffect(() => {
     if (draggedTagA && draggedTagB) {
       socket.emit("both-users-selected", {
@@ -100,15 +115,12 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
       });
     }
   }, [draggedTagA, draggedTagB, roomId]);
-
   useEffect(() => {
     socket.on("combined-result", handleCombineResult);
-
     return () => {
       socket.off("combined-result", handleCombineResult);
     };
   }, [socket]);
-
   const handleCombineResult = (data) => {
     console.log("Combined result received:", data.restaurantList);
     if (data) {
@@ -118,16 +130,16 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
       setCombinedPlaceList([]);
     }
   };
-
   const handleResetTarget = () => {
     setDraggedTagA(null);
     setDraggedTagB(null);
+    setDraggedTagC(null);
+    setDraggedTagD(null);
   };
-
   return (
     <div className="w-full h-full flex justify-center  items-center">
       {showContent ? (
-        <>
+        <div className="w-full h-full flex flex-col flex-grow justify-center items-center relative">
           {animationFinished && (
             <div onDragOver={handleResetTarget}>
               <ResultCardLists combinedplaceList={combinedplaceList} />
@@ -135,50 +147,76 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
           )}
 
           {/* 애니메이션이 끝나면 위의 ResultCardLists도 보여주려 한다 */}
+          {/* combinedplaceList */}
           <CombineAnimation
-            combinedplaceList={combinedplaceList}
+            combinedplaceList={testPositions}
             onAnimationEnd={handleAnimationEnd}
           />
-        </>
+        </div>
       ) : (
-        <div className="flex ">
-          <div
-            className={`w-48  juitems-center py-1 shadow-lg border-dashed border-2 border-white min-h-40 ${
-              isDragging ? "" : ""
-            }`}
-            onDragOver={handleDragOver}
-            onDrop={(event) => handleDrop(event, 1)}
-          >
-            {draggedTagA && <BigPlaceCard img={"/돈까스.png"} />}
+        <div className="flex flex-col w-full h-full justify-between items-center">
+          <div className="w-full justify-between flex p-10 ">
+            {/* USER A Target Area */}
+            <div
+              className={`w-48  juitems-center py-1 shadow-lg border-dashed border-2 border-white min-h-40 ${
+                isDragging ? "" : ""
+              }`}
+              onDragOver={handleDragOver}
+              onDrop={(event) => handleDrop(event, 1)}
+            >
+              {draggedTagA && <BigPlaceCard img={"/돈까스.png"} />}
+            </div>
+            {/* USER B Target Area */}
+            <div
+              className={`w-48 items-center py-1 shadow-lg border-dashed border-2 min-h-40 border-white ${
+                isDragging ? "" : ""
+              }`}
+              onDragOver={handleDragOver}
+              onDrop={(event) => handleDrop(event, 2)}
+            >
+              {draggedTagB && <BigPlaceCard img={"/돈까스.png"} />}
+            </div>
           </div>
-
-          <div className=" flex justify-center items-center mt-2 ">
-            <div>
+          {/* Middle */}
+          <div className="flex">
+            <div className=" flex justify-center items-center mt-2 ">
+              <div>
+                <MoreHorizIcon fontSize="large" style={{ color: "white" }} />
+              </div>
+              <button
+                className={`hover:scale-105 text-white font-semibold rounded-full p-2
+      px-2 ${isSpining && "animate-spin animate-infinite"}`}
+              >
+                {isSpining ? <LoopIcon /> : <HelpIcon />}
+              </button>
               <MoreHorizIcon fontSize="large" style={{ color: "white" }} />
             </div>
-            <button
-              className={`hover:scale-105 text-white font-semibold rounded-full p-2
-      px-2 ${isSpining && "animate-spin animate-infinite"}`}
-            >
-              {isSpining ? <LoopIcon /> : <HelpIcon />}
-            </button>
-            <MoreHorizIcon fontSize="large" style={{ color: "white" }} />
           </div>
-
-          {/* USER B Target Area */}
-          <div
-            className={`w-48 items-center py-1 shadow-lg border-dashed border-2 min-h-40 border-white ${
-              isDragging ? "" : ""
-            }`}
-            onDragOver={handleDragOver}
-            onDrop={(event) => handleDrop(event, 2)}
-          >
-            {draggedTagB && <BigPlaceCard img={"/돈까스.png"} />}
+          <div className=" w-full flex justify-between p-10">
+            {/* USER C Target Area */}
+            <div
+              className={`w-48  juitems-center py-1 shadow-lg border-dashed border-2 border-white min-h-40 ${
+                isDragging ? "" : ""
+              }`}
+              onDragOver={handleDragOver}
+              onDrop={(event) => handleDrop(event, 3)}
+            >
+              {draggedTagC && <BigPlaceCard img={"/돈까스.png"} />}
+            </div>
+            {/* USER D Target Area */}
+            <div
+              className={`w-48 items-center py-1 shadow-lg border-dashed border-2 min-h-40 border-white ${
+                isDragging ? "" : ""
+              }`}
+              onDragOver={handleDragOver}
+              onDrop={(event) => handleDrop(event, 4)}
+            >
+              {draggedTagD && <BigPlaceCard img={"/돈까스.png"} />}
+            </div>
           </div>
         </div>
       )}
     </div>
   );
 };
-
 export default ModeThreeCombineArea;

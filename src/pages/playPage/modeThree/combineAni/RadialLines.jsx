@@ -11,7 +11,7 @@ const RadialLines = ({ x, y }) => {
         key={angle}
         className="radial-line"
         style={{
-          transform: `rotate(${angle}deg) translateX(50%)`, // 회전과 위치 조정
+          transform: `translateX(50%) translateY(-50%) rotate(${angle}deg)`, // 회전 중심 변경
         }}
       />
     );
