@@ -75,13 +75,13 @@ export function usePeerConnection(localStream) {
       socket.emit("join-room", roomId);
     };
 
-    const handleUserJoined = ({ playerId }) => {
+    const handleUserJoined = async ({ playerId }) => {
       if (peerConnections[playerId]) return;
 
       const pc = createPeerConnection(playerId);
       setPeerConnections((prev) => ({ ...prev, [playerId]: pc }));
 
-      const offer = pc.createOffer();
+      const offer = await pc.createOffer();
       pc.setLocalDescription(offer);
       socket.emit("send-connection-offer", { roomId, playerId, offer });
     };
