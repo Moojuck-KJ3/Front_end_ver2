@@ -1,13 +1,27 @@
 import React from "react";
 import AnimationStar from "./StarComponent";
 
+const MAXLIMIT_RATE = 0.2;
+const MINVALUE = -1000;
+const MAXVALUE = 1000;
+
+function compressValue(value) {
+  let minRange = -MAXLIMIT_RATE;
+  let maxRange = MAXLIMIT_RATE;
+
+  let normalizedValue = (value - MINVALUE) / (MAXVALUE - MINVALUE); // 0~1 사이의 값으로 정규화
+  let compressedValue = normalizedValue * (maxRange - minRange) + minRange;
+
+  return compressedValue;
+}
+
 // 아마 입력 받을때
-// position 같은 요소를 생각해서 받아야 할듯
+// position의 값을 임의의 비율로 변환하므로 적당히 높은 값을 넣을것
 const CombineAnimation = ({ onAnimationEnd, combinedplaceList }) => {
   const positions = combinedplaceList.map((place) => {
     return {
-      x: place.x,
-      y: place.y,
+      x: compressValue(place.x),
+      y: compressValue(place.y),
       size: 3, // 나중에 사이즈 조절 필요(어떤 배열에 어떤 사이즈가 들어가야 하는지 확인 필요)
     };
   });

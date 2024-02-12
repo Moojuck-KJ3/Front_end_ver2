@@ -21,16 +21,17 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
 
   const { roomId } = useParams();
 
+  // 최대 기준 1000일때 0.2로 치환된다
   const testPositions = [
-    { x: -0.2, y: -0.2 },
-    { x: 0.2, y: -0.2 },
-    { x: -0.1, y: -0.1 },
-    { x: 0.1, y: -0.1 },
+    { x: -1000, y: -1000 },
+    { x: -500, y: -500 },
+    { x: 1000, y: -1000 },
+    { x: 500, y: -500 },
+    { x: -1000, y: 1000 },
+    { x: -500, y: 500 },
+    { x: 1000, y: 1000 },
+    { x: 500, y: 500 },
     { x: 0, y: 0 }, // Center
-    { x: -0.1, y: 0.1 },
-    { x: 0.1, y: 0.1 },
-    { x: -0.2, y: 0.2 },
-    { x: 0.2, y: 0.2 },
   ];
 
   const handleAnimationEnd = () => {
