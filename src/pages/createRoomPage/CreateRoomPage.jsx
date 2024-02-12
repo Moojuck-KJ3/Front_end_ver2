@@ -12,6 +12,7 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const [isModal, setIsModal] = useState(false);
   const [roomId, setRoomId] = useState("");
   const [userName, setUserName] = useState("");
+
   useEffect(() => {
     const userDetails = localStorage.getItem("user");
 
@@ -24,9 +25,6 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
     socket.on("create-room-response", (response) => {
       if (response) {
         const { roomId, playerId } = response;
-        console.log("create-room-response");
-        console.log(roomId);
-        console.log(playerId);
         setRoomDetail((prev) => ({
           ...prev,
           roomId: roomId,
@@ -41,9 +39,6 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
     socket.on("join-room-response", (response) => {
       if (response) {
         const { roomId, playerId } = response;
-        console.log("join-room-response");
-        console.log(roomId);
-        console.log(playerId);
         setRoomDetail((prev) => ({
           ...prev,
           roomId: roomId,
@@ -59,7 +54,7 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
       socket.off("create-room-response");
       socket.off("join-room-response");
     };
-  }, [setRoomDetail]);
+  }, [setRoomDetail, roomDetail, navigate]);
 
   const handleOpenModal = () => {
     setIsModal(true);
@@ -79,7 +74,6 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
     logout();
   };
   const handleShowExpainModal = () => {
-    // Todo 로그아웃 버튼
     alert("모달 구현해줘!~~");
   };
 

@@ -5,17 +5,21 @@ import ResisterPage from "./pages/authPage/ResisterPage";
 import CreateRoomPage from "./pages/createRoomPage/CreateRoomPage";
 import PlayRoomPage from "./pages/playPage/PlayRoomPage";
 import WaitingPage from "./pages/waitingPage/WaitingPage";
-import { useLocalCameraStream } from "./realtimeComunication/webRTCManager";
+import {
+  useLocalCameraStream,
+  usePeerConnection,
+} from "./realtimeComunication/webRTCManager";
 import { useEffect, useState } from "react";
 
 function App() {
   const { localStream } = useLocalCameraStream();
+  const { remoteStreams } = usePeerConnection(localStream);
+
   const [roomDetail, setRoomDetail] = useState({
     roomId: "",
     purposeCoordinate: { lat: null, lng: null },
     roomMemberCount: 0,
     playerId: null,
-    participants: [],
     playerStreams: {},
   });
 
@@ -44,6 +48,7 @@ function App() {
           element={
             <WaitingPage
               localStream={localStream}
+              remoteStreams={remoteStreams}
               roomDetail={roomDetail}
               setRoomDetail={setRoomDetail}
             />
@@ -54,6 +59,7 @@ function App() {
           element={
             <PlayRoomPage
               localStream={localStream}
+              remoteStreams={remoteStreams}
               roomDetail={roomDetail}
               setRoomDetail={setRoomDetail}
             />
