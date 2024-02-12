@@ -5,7 +5,6 @@ import PlayerHand from "./PlayerHand";
 import ModeThreeCombineArea from "./modeThree/card/ModeThreeCombineArea";
 import ShowDetailModal from "../../components/modal/ShowDetailModal";
 import FinalRestaurantDetails from "./FinalRestaurantDetails";
-import Star from "./StarComponent";
 
 const getRandomInt = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
@@ -59,13 +58,36 @@ export const PlaceListArea = ({
   } else {
     // Content for other roomModes
     content = stars.map((star, i) => (
-      <Star
+      <div
+        onClick={() => handleStarClick(star)}
+        onMouseEnter={() => setHoveredStarId(star.id)}
+        onMouseLeave={() => setHoveredStarId(null)}
+        className={`${star.className} relative`}
         key={i}
-        star={star}
-        handleStarClick={handleStarClick}
-        setHoveredStarId={setHoveredStarId}
-        hoveredStarId={hoveredStarId}
-      ></Star>
+        id={star.id}
+        style={{
+          position: "absolute",
+          top: `${star.y}%`,
+          left: `${star.x}%`,
+          transform: `scale(${star.size})`,
+        }}
+      >
+        <div className="text-yellow-400">
+          <FontAwesomeIcon icon={faStar} />
+        </div>
+        {hoveredStarId === star.id && (
+          <div
+            className="animate-fade  absolute z-10  items-center justify-center inline-block px-3 py-2 text-sm font-medium text-black bg-white rounded-lg shadow-sm -translate-x-1/2 left-1/2 bottom-full mb-2 "
+            style={{
+              transition: "opacity 300ms",
+              opacity: 1,
+              whiteSpace: "nowrap",
+            }}
+          >
+            <h1 className="font-tenada">{star.title}</h1>
+          </div>
+        )}
+      </div>
     ));
   }
 

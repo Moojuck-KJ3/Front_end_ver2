@@ -6,6 +6,7 @@ import HelpIcon from "@mui/icons-material/Help";
 import LoopIcon from "@mui/icons-material/Loop";
 import { useParams } from "react-router-dom";
 import socket from "../../../../realtimeComunication/socket";
+import CombineAnimation from "../combineAni/CombineAnimation";
 
 const ModeThreeCombineArea = ({ roomDetail }) => {
   const [draggedTagA, setDraggedTagA] = useState(null);
@@ -15,6 +16,14 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
   const [isSpining, setIsSpining] = useState(false);
   const [combinedplaceList, setCombinedPlaceList] = useState([]);
   const { roomId } = useParams();
+
+  // 애니메이션을 위한 것
+  const [animationFinished, setAnimationFinished] = useState(false);
+
+  // 애니메이션이 종료될 때 호출될 콜백 함수
+  const handleAnimationEnd = () => {
+    setAnimationFinished(true);
+  };
 
   useEffect(() => {
     if (draggedTagA && draggedTagB) {
@@ -118,9 +127,19 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
   return (
     <div className="w-full h-full flex justify-center  items-center">
       {showContent ? (
-        <div onDragOver={handleResetTarget}>
-          <ResultCardLists combinedplaceList={combinedplaceList} />
-        </div>
+        <>
+          {animationFinished && (
+            <div onDragOver={handleResetTarget}>
+              <ResultCardLists combinedplaceList={combinedplaceList} />
+            </div>
+          )}
+
+          {/* 애니메이션이 끝나면 위의 ResultCardLists도 보여주려 한다 */}
+          <CombineAnimation
+            combinedplaceList={combinedplaceList}
+            onAnimationEnd={handleAnimationEnd}
+          />
+        </>
       ) : (
         <div className="flex ">
           <div
