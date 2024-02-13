@@ -20,19 +20,6 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
 
   const { roomId } = useParams();
 
-  // 최대 기준 1000일때 0.2로 치환된다
-  const testPositions = [
-    { x: -1000, y: -900 },
-    { x: -500, y: -850 },
-    { x: 1000, y: -900 },
-    { x: 500, y: -600 },
-    { x: -1000, y: 650 },
-    { x: -500, y: 300 },
-    { x: 1000, y: 750 },
-    { x: 500, y: 500 },
-    { x: 0, y: 0 }, // Center
-  ];
-
   useEffect(() => {
     if (draggedTagA && draggedTagB) {
       setIsSpining(true);
@@ -122,6 +109,7 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
     };
   }, [socket]);
   const handleCombineResult = (data) => {
+    console.log("Combined result : ", data);
     console.log("Combined result received:", data.restaurantList);
     if (data) {
       setCombinedPlaceList(data.restaurantList);
@@ -142,7 +130,7 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
         <div className="w-full h-full flex flex-col flex-grow justify-center items-center relative">
           {/* 애니메이션에 absolute position 지정 */}
           <CombineAnimation
-            combinedplaceList={testPositions}
+            combinedplaceList={combinedplaceList}
             onDragOver={handleResetTarget}
           />
         </div>
