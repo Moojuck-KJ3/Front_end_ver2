@@ -8,7 +8,7 @@ export const logout = () => {
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_APP_BACKEND_PROD_URL + "/api", // main url
-  timeout: 7000,
+  timeout: 30000,
 });
 
 apiClient.interceptors.request.use(
@@ -89,7 +89,7 @@ export const register = async (data) => {
 
 export const getRestaurantList = async (roomId, data, retries = 3) => {
   const requestFunction = () =>
-    apiClient.post(`/restaurants/get?roomId=${roomId}`, data);
+    apiClient.post(`/restaurants?roomId=${roomId}`, data);
   return await retryRequest(requestFunction, retries);
 };
 

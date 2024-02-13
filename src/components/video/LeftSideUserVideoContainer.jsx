@@ -3,7 +3,27 @@ import MicIcon from "@mui/icons-material/Mic";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import VideocamIcon from "@mui/icons-material/Videocam";
 
-const LeftSideUserVideoContainer = ({ localStream, remoteStrem, showMic }) => {
+const LeftSideUserVideoContainer = ({
+  localStream,
+  remoteStrem,
+  showMic,
+  playerHand,
+}) => {
+  const handleDragStart = (event, restaurant) => {
+    console.log(restaurant);
+    console.log("handleDragStart");
+    const restaurantData = JSON.stringify({
+      restId: restaurant.id,
+      // name: restaurant.name,
+      thumbnailURL: restaurant.FoodUrl,
+      // category: restaurant.category,
+    });
+    console.log(restaurantData);
+
+    event.dataTransfer.setData("restaurant", restaurantData);
+    console.log(restaurantData);
+  };
+
   return (
     <div className=" flex flex-col w-1/5 min-w-[300px] h-full gap-4 ">
       <div className="flex flex-col justify-center bg-white p-4 mx-2 min-h-[300px]  rounded-lg shadow-2xl border-2 relative">
@@ -21,35 +41,37 @@ const LeftSideUserVideoContainer = ({ localStream, remoteStrem, showMic }) => {
         <div className="flex flex-col h-full w-full">
           <h1 className="text-2xl font-tenada">⭐️나의 선호도</h1>
           <div className="grid grid-cols-2 grid-rows-3 gap-3 ">
-            <div className="text-center font-tenada bg-gray-300 border-2 border-black border-dashed">
-              #한식
-            </div>
-            <div className="text-center font-tenada bg-gray-300 border-2 border-black border-dashed">
-              #한식
-            </div>
-            <div className="text-center font-tenada bg-gray-300 border-2 border-black border-dashed">
-              #한식
-            </div>
-            <div className="text-center font-tenada bg-gray-300 border-2 border-black border-dashed">
-              #한식
-            </div>
-            <div className="text-center font-tenada bg-gray-300 border-2 border-black border-dashed">
-              #한식
-            </div>
+            {playerHand.selectedFoodTag?.map((tag, index) => (
+              <div
+                key={index}
+                className="bg-gray-200 w-full h-full py-2 text-center items-center justify-center rounded-lg font-tenada"
+              >{`#${tag}`}</div>
+            ))}
+            {playerHand.selectedMoodTag?.map((tag, index) => (
+              <div
+                key={index}
+                className="bg-gray-200 w-full h-full py-2 text-center items-center justify-center rounded-lg font-tenada"
+              >{`#${tag}`}</div>
+            ))}
           </div>
         </div>
         <div className="flex flex-col h-full w-full">
           <h1 className="text-2xl font-tenada">✅나의 장소 Pick!</h1>
-          <div className="grid grid-cols-3 grid-rows-3 gap-3 h-full ">
-            <div className="text-center font-tenada bg-gray-300 border-2 border-black border-dashed"></div>
-            <div className="text-center font-tenada bg-gray-300 border-2 border-black border-dashed"></div>
-            <div className="text-center font-tenada bg-gray-300 border-2 border-black border-dashed"></div>
-            <div className="text-center font-tenada bg-gray-300 border-2 border-black border-dashed"></div>
-            <div className="text-center font-tenada bg-gray-300 border-2 border-black border-dashed"></div>
-            <div className="text-center font-tenada bg-gray-300 border-2 border-black border-dashed"></div>
-            <div className="text-center font-tenada bg-gray-300 border-2 border-black border-dashed"></div>
-            <div className="text-center font-tenada bg-gray-300 border-2 border-black border-dashed"></div>
-            <div className="text-center font-tenada bg-gray-300 border-2 border-black border-dashed"></div>
+          <div className="grid grid-cols-3 gap-1 justify-between">
+            {playerHand.selectedPlace?.map((place, index) => (
+              <div
+                key={index}
+                draggable
+                onDragStart={(event) => handleDragStart(event, place)}
+                className="w-full border-2 m-1 rounded-xl border-red-600 cursor-move"
+              >
+                <img
+                  className="w-full h-full rounded-lg object-cover"
+                  src={place.thumbnailImg}
+                  alt=""
+                />
+              </div>
+            ))}
           </div>
         </div>
 

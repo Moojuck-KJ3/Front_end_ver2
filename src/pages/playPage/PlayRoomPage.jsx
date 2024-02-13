@@ -7,7 +7,6 @@ import ModeOneExpainModal from "../../components/modal/ModeOneExpainModal";
 import { useParams } from "react-router-dom";
 import socket from "../../realtimeComunication/socket";
 import { PlaceListArea } from "./PlaceListArea";
-import { restaurantLists } from "./restaurantLists";
 import { Header } from "./Header";
 import ModeThreeModal from "../../components/modal/ModeThreeExpainModal";
 import VoiceRecognition from "./VoiceRecognition";
@@ -22,7 +21,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const [showModeTwoModal, setShowModeTwoModal] = useState(true);
   const [showModeThreeModal, setShowModeThreeModal] = useState(true);
   const [roomMode, setRoomMode] = useState(MODE.MODE1);
-  const [restaurantList, setRestaurantList] = useState(restaurantLists);
+  const [restaurantList, setRestaurantList] = useState([]);
   const [isReady, setIsReady] = useState(false);
   const [roomReadyCount, setRoomReadyCount] = useState(0);
   const [showVoiceRecorder, setShowVoiceRecorder] = useState(false);
@@ -31,18 +30,16 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const [modeOneVoiceRecResult, SetModeOneVoiceRecResult] = useState([]);
   const [modeTwoVoiceRecResult, SetModeTwoVoiceRecResult] = useState([]);
   const [playerHand, setPlayerHand] = useState({
-    selectedFoodTag: [],
-    selectedMoodTag: [],
+    selectedFoodTag: ["한식"],
+    selectedMoodTag: ["조용한 곳"],
     selectedPlace: [],
   });
-  const [combineResultList, setCombineResultList] = useState([]);
 
   // 조합 시 유저들이 선택한 레스토랑을 담을 리스트
   const [userSelectedCombineList, setUserSelectedCombineList] = useState([]);
 
   useEffect(() => {
     socket.connect();
-    console.log(roomDetail.playerStreams);
     // const local = getLocalStream();
     // setLocalStream(local);
     // const remote = getRemoteStream();
@@ -52,13 +49,14 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     //   localStorage.getItem("purposeCoordinate")
     // );
 
-    const sendData = {
-      purposeCoordinate: roomDetail.purposeCoordinate,
+    const coordinate = {
+      coordinates: [37.5001716373021, 127.029070884291],
     };
-
-    const getRestList = async (roomId, sendData) => {
+    console.log(coordinate);
+    const getRestList = async (roomId, coordinates) => {
       // default 재시도는 3
-      const response = await getRestaurantList(roomId, sendData);
+
+      const response = await getRestaurantList(roomId, coordinates);
 
       if (response.error) {
         console.log(response.exception);
@@ -66,11 +64,12 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
       }
       console.log(response);
       // 받아오는 data에 별 및 음식 관련 url 내용 추가
-      // setRestaurantList(response);
+      setRestaurantList(response.data.restaurantList);
+      // console.log(response.data.restaurantList);
       // console.log(restaurantList);
     };
 
-    getRestList(roomId, sendData);
+    getRestList(roomId, coordinate);
   }, []);
 
   useEffect(() => {
@@ -194,6 +193,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
       <GameArea>
         {/* 별 */}
         <LeftSideUserVideoContainer
+          playerHand={playerHand}
           localStream={localStream}
           // remoteStrem={remoteStrem}
           showMic={showModeTwoVoiceRecorder}

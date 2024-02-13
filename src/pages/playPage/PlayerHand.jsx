@@ -54,7 +54,7 @@ const PlayerHand = ({
               {playerHand.selectedFoodTag?.map((tag, index) => (
                 <li
                   key={index}
-                  className="bg-gray-200 w-5/6 mx-auto my-2 py-2 text-center rounded-lg font-tenada"
+                  className="bg-gray-200 w-5/6 mx-auto my-2 py-2 text-center rounded-lg font-tenada "
                 >{`#${tag}`}</li>
               ))}
             </ul>
@@ -102,15 +102,20 @@ const PlayerHand = ({
           )}`}
         >
           <div>
-            <h1 className="mt-1 font-tenada text-2xl ">조합하고 싶은 장소💫</h1>
-            <div className="grid grid-cols-3">
+            <h1 className="mt-1 font-tenada text-2xl ">가고 싶은 장소💫</h1>
+            <div className="grid grid-cols-3 gap-4">
               {playerHand.selectedPlace?.map((place, index) => (
                 <div
                   key={index}
-                  draggable
                   onDragStart={(event) => handleDragStart(event, place)}
+                  draggable
+                  className="w-full h-full justify-center items-center hover:scale-105 transition-all rounded-xl hover:cursor-pointer  hover: shadow-2xl"
                 >
-                  <PlaceCard place={place} />
+                  <img
+                    src={place.thumbnailImg}
+                    alt="thumbnailImg"
+                    className="w-full h-24  mx-auto object-cover rounded-xl animate-jump"
+                  />
                 </div>
               ))}
             </div>
