@@ -10,12 +10,12 @@ const WaitingFreindVideoContainer = ({ localStream, users }) => {
     <div className="grid grid-cols-2 gap-8">
       <div className="justify-center items-center">
         {/* <VideoFeed stream={localStream} /> */}
-        {/* <video
+        <video
           ref={localStream}
           autoPlay
           muted
           className="w-36 h-36 items-center shadow-lg border rounded-full object-cover"
-        /> */}
+        />
         {/* <h1 className="p-2 m-4 text-center text-gray-500 font-semibold border-2 rounded-2xl">
           유저 A 이름
         </h1> */}

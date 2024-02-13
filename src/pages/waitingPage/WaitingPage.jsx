@@ -240,7 +240,7 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
         <div className="h-full w-full mt-5 p-10 flex flex-col items-center  bg-white shadow-xl rounded-xl justify-center">
           {/* 비디오 */}
           <WaitingFreindVideoContainer
-            localStream={localStream}
+            localStream={localVideoRef}
             // remoteStreams={remoteStreams}
             users={users}
           />
