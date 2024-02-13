@@ -21,6 +21,7 @@ export const PlaceListArea = ({
   setRoomMode,
   handleSetReady,
   roomDetail,
+  imgUrls,
 }) => {
   const [stars, setStars] = useState([]);
   const [hoveredStarId, setHoveredStarId] = useState(null);
@@ -49,6 +50,8 @@ export const PlaceListArea = ({
     closeModal();
   };
 
+  //console.log("imgUrlLists : ", imgUrls);
+
   let content;
   if (roomMode === 3) {
     content = <ModeThreeCombineArea roomDetail={roomDetail} />;
@@ -74,7 +77,11 @@ export const PlaceListArea = ({
         <div className="text-yellow-400">
           {star.showComponentOne ? (
             <div className="w-20 h-20 animate-jump-in">
-              <img src="/Food.png" alt="" />
+              {star.signatureUrl ? (
+                <img src={star.signatureUrl} alt="" />
+              ) : (
+                <img src="/Food.png" alt="" />
+              )}
             </div>
           ) : (
             <div className="w-6 h-6 hover:bg-yellow-200 rounded-full cursor-pointer duration-500 ">
@@ -108,6 +115,23 @@ export const PlaceListArea = ({
       const matchesResultTag = resultFoodTags.some((tag) =>
         restaurant.food_category.startsWith(tag)
       );
+
+      let imageUrl;
+      const targetNames = resultFoodTags.filter((tag) =>
+        restaurant.food_category.startsWith(tag)
+      );
+
+      if (targetNames.length > 0) {
+        imageUrl = imgUrls.find((img) =>
+          targetNames.some((name) => img.name === name)
+        );
+
+        if (imageUrl === undefined) {
+          imageUrl = imgUrls.find((img) => img.name === "큰별");
+        }
+      } else {
+        imageUrl = imgUrls.find((img) => img.name === "작은별");
+      }
 
       // const matchesResultMoodTag = restaurant.mood.some((mood) =>
       //   resultMoodTags.includes(mood)
@@ -156,6 +180,7 @@ export const PlaceListArea = ({
         x: getRandomInt(5, 90),
         y: getRandomInt(5, 90),
         showComponentOne: matchesResultTag,
+        signatureUrl: imageUrl.imgUrl,
       };
     });
 
