@@ -23,26 +23,67 @@ let peers = {};
 export function usePeerConnection(localStream) {
   const { roomId } = useParams();
   const [remoteStreams, setRemoteStreams] = useState({});
+  const [peerInfo, setPeerInfo] = useState({});
+  const [selectedCandidates, setSelectedCandidates] = useState({});
+
+  useEffect(() => {
+    const icecandidateHandler = (playerId, event) => {
+      if (event.candidate) {
+        socket.emit("send-candidate", {
+          roomId,
+          playerId: playerId,
+          candidate: event.candidate,
+        });
+      }
+    };
+  });
+
+  const addStreamHandler = (event) => {
+    // Create a new video element for the incoming stream
+    // This part might need to be handled differently in React, for example by updating state to render new video elements
+  };
 
   const createPeerConnection = useCallback(
     (playerId) => {
       console.log("createPeerConnection is called", playerId);
-      const connection = new RTCPeerConnection({
-        iceServers: [
-          { urls: "stun:stun2.1.google.com:19302" },
-          {
-            urls: import.meta.env.VITE_APP_TURN_SERVER_URL,
-            username: import.meta.env.VITE_APP_TURN_SERVER_USERNAME,
-            credential: import.meta.env.VITE_APP_TURN_SERVER_CREDENTIALS,
-          },
-        ],
+      const newPeerInfo = { ...peerInfo };
+      newPeerInfo[playerId] = {
+        peerConnection: new RTCPeerConnection({
+          iceServers: [
+            { urls: "stun:stun2.1.google.com:19302" },
+            {
+              urls: import.meta.env.VITE_APP_TURN_SERVER_URL,
+              username: import.meta.env.VITE_APP_TURN_SERVER_USERNAME,
+              credential: import.meta.env.VITE_APP_TURN_SERVER_CREDENTIALS,
+            },
+          ],
+        }),
+      };
+
+      newPeerInfo[playerId].peerConnection.onicecandidate = (event) =>
+        icecandidateHandler(playerId, event);
+      newPeerInfo[playerId].peerConnection.ontrack = addStreamHandler;
+
+      localStream.getTracks().forEach((track) => {
+        newPeerInfo[playerId].peerConnection.addTrack(track, localStream);
       });
 
-      if (localStream) {
-        localStream.getTracks().forEach((track) => {
-          connection.addTrack(track, localStream);
-        });
-      }
+      // const connection = new RTCPeerConnection({
+      //   iceServers: [
+      //     { urls: "stun:stun2.1.google.com:19302" },
+      //     {
+      //       urls: import.meta.env.VITE_APP_TURN_SERVER_URL,
+      //       username: import.meta.env.VITE_APP_TURN_SERVER_USERNAME,
+      //       credential: import.meta.env.VITE_APP_TURN_SERVER_CREDENTIALS,
+      //     },
+      //   ],
+      // });
+
+      // if (localStream) {
+      //   localStream.getTracks().forEach((track) => {
+      //     connection.addTrack(track, localStream);
+      //   });
+      // }
 
       connection.onicecandidate = (event) => {
         console.log("emitting send-candidate", {
@@ -66,9 +107,9 @@ export function usePeerConnection(localStream) {
         }));
       };
 
-      peers[playerId] = connection;
-    },
-    [localStream, roomId]
+      // peers[playerId] = connection;
+    }
+    // [localStream, roomId]
   );
 
   useEffect(() => {
