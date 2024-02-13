@@ -5,7 +5,7 @@ const PlayRoomContainer = ({ children }) => {
         autoPlay
         loop
         muted
-        className="absolute -z-10 w-full h-full object-cover"
+        className="absolute -z-10 w-full h-screen object-cover"
       >
         <source src="/Background.mp4" type="video/mp4" />
       </video>

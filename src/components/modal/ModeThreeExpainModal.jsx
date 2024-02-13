@@ -1,28 +1,6 @@
-import { useState } from "react";
-import PlaceCombineArea from "../../pages/playPage/modeThree/card/PlaceCombineArea";
-
-const ModeThreeModal = ({
-  onShow,
-  onSetSelectedCombineList,
-  onSelectComplete,
-}) => {
-  const [restaurantData, setRestaurantData] = useState();
+const ModeThreeModal = ({ onShow }) => {
   const handleClick = () => {
     onShow(false);
-    // console.log(restaurantData);
-    // const userDetails = localStorage.getItem("user");
-    // const userId = JSON.parse(userDetails).id;
-
-    // const insertData = {
-    //   userId: userId,
-    //   restId: restaurantData.restId,
-    //   thumbnailURL: restaurantData.thumbnailURL,
-    // };
-
-    // onSetSelectedCombineList(insertData);
-
-    // 선택 완료 버튼을 눌렀기에 socket을 쏘기 위함
-    // onSelectComplete();
   };
   return (
     <div className="modal fixed w-full h-full -top-10 left-0 flex items-center justify-center ">

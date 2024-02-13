@@ -12,6 +12,7 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const [isModal, setIsModal] = useState(false);
   const [roomId, setRoomId] = useState("");
   const [userName, setUserName] = useState("");
+
   useEffect(() => {
     const userDetails = localStorage.getItem("user");
 
@@ -19,11 +20,17 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
       const username = JSON.parse(userDetails).username;
       setUserName(username);
     }
+    console.log("roomDetail", roomDetail);
 
     socket.on("create-room-response", (response) => {
       if (response) {
-        const { roomId } = response;
-        console.log(response);
+        const { roomId, playerId } = response;
+        setRoomDetail((prev) => ({
+          ...prev,
+          roomId: roomId,
+          playerId: playerId,
+          playerStreams: { ...prev.playerStreams, [playerId]: localStream },
+        }));
         navigate(`/waiting-friends/${roomId}`);
       } else {
         console.error(response.error);
@@ -32,7 +39,13 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
 
     socket.on("join-room-response", (response) => {
       if (response) {
-        const roomId = response;
+        const { roomId, playerId } = response;
+        setRoomDetail((prev) => ({
+          ...prev,
+          roomId: roomId,
+          playerId: playerId,
+          playerStreams: { ...prev.playerStreams, [playerId]: localStream },
+        }));
         navigate(`/waiting-friends/${roomId}`);
       } else {
         console.error(response.error);
@@ -43,7 +56,7 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
       socket.off("create-room-response");
       socket.off("join-room-response");
     };
-  }, []);
+  }, [setRoomDetail, roomDetail, navigate]);
 
   const handleOpenModal = () => {
     setIsModal(true);
@@ -63,7 +76,6 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
     logout();
   };
   const handleShowExpainModal = () => {
-    // Todo 로그아웃 버튼
     alert("모달 구현해줘!~~");
   };
 

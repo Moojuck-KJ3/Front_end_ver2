@@ -9,7 +9,7 @@ const PlayerHand = ({
 }) => {
   const getModeStyle = (modeValue) => {
     if (modeValue === roomMode) {
-      return "transform scale-105 border-4 border-blue-500"; // Current mode: Highlighted
+      return "transform scale-105 border-4 border-blue-600"; // Current mode: Highlighted
     } else if (modeValue < roomMode) {
       return " border-green-400 border-4 text-gray-600 opacity-50";
     }
@@ -20,15 +20,11 @@ const PlayerHand = ({
     console.log(restaurant);
     console.log("handleDragStart");
     const restaurantData = JSON.stringify({
-      restId: restaurant.id,
-      // name: restaurant.name,
-      thumbnailURL: restaurant.FoodUrl,
-      // category: restaurant.category,
+      _id: restaurant._id,
+      thumbnailImg: restaurant.thumbnailImg,
     });
-    console.log(restaurantData);
 
     event.dataTransfer.setData("restaurant", restaurantData);
-    console.log(restaurantData);
   };
 
   const handleClick = (i) => {
@@ -44,7 +40,7 @@ const PlayerHand = ({
       <div className="w-full h-full bg-white rounded-md shadow-inner flex ">
         <div
           onClick={() => handleClick(1)}
-          className={`w-1/4 flex flex-col justify-between text-center m-2 border-2 rounded-xl ${getModeStyle(
+          className={`w-1/4 flex flex-col justify-between text-center m-2 border-2 rounded-xl box ${getModeStyle(
             1
           )}`}
         >
@@ -54,7 +50,7 @@ const PlayerHand = ({
               {playerHand.selectedFoodTag?.map((tag, index) => (
                 <li
                   key={index}
-                  className="bg-gray-200 w-5/6 mx-auto my-2 py-2 text-center rounded-lg font-tenada"
+                  className="bg-gray-200 w-5/6 mx-auto my-2 py-2 text-center rounded-lg font-tenada "
                 >{`#${tag}`}</li>
               ))}
             </ul>
@@ -102,15 +98,20 @@ const PlayerHand = ({
           )}`}
         >
           <div>
-            <h1 className="mt-1 font-tenada text-2xl ">조합하고 싶은 장소💫</h1>
-            <div className="grid grid-cols-3">
+            <h1 className="mt-1 font-tenada text-2xl ">가고 싶은 장소💫</h1>
+            <div className="grid grid-cols-3 gap-4">
               {playerHand.selectedPlace?.map((place, index) => (
                 <div
                   key={index}
-                  draggable
                   onDragStart={(event) => handleDragStart(event, place)}
+                  draggable
+                  className="w-full h-full justify-center items-center hover:scale-105 transition-all rounded-xl hover:cursor-pointer  hover: shadow-2xl"
                 >
-                  <PlaceCard place={place} />
+                  <img
+                    src={place.thumbnailImg}
+                    alt="thumbnailImg"
+                    className="w-full h-24  mx-auto object-cover rounded-xl animate-jump"
+                  />
                 </div>
               ))}
             </div>

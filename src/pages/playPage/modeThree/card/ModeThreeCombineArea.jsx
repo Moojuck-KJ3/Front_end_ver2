@@ -10,12 +10,13 @@ import socket from "../../../../realtimeComunication/socket";
 const ModeThreeCombineArea = ({ roomDetail }) => {
   const [draggedTagA, setDraggedTagA] = useState(null);
   const [draggedTagB, setDraggedTagB] = useState(null);
+  const [draggedTagC, setDraggedTagC] = useState(null);
+  const [draggedTagD, setDraggedTagD] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [showContent, setShowContent] = useState(false);
   const [isSpining, setIsSpining] = useState(false);
   const [combinedplaceList, setCombinedPlaceList] = useState([]);
   const { roomId } = useParams();
-
   useEffect(() => {
     if (draggedTagA && draggedTagB) {
       setIsSpining(true);
@@ -37,18 +38,25 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
 
   const handleDrop = (event, playerId) => {
     event.preventDefault();
-
     const restaurantData = event.dataTransfer.getData("restaurant");
+
+    console.log("handleDrop is called ");
     const parsedRestaurantData = JSON.parse(restaurantData);
+    console.log(parsedRestaurantData);
 
     if (parsedRestaurantData) {
       if (playerId === 1) {
         setDraggedTagA(parsedRestaurantData);
+        console.log(draggedTagA);
       } else if (playerId === 2) {
         setDraggedTagB(parsedRestaurantData);
+      } else if (playerId === 3) {
+        setDraggedTagC(parsedRestaurantData);
+        console.log(draggedTagA);
+      } else if (playerId === 4) {
+        setDraggedTagD(parsedRestaurantData);
       }
     }
-
     socket.emit("user-selected-card", {
       roomId,
       playerId,
@@ -67,6 +75,11 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
         console.log(draggedTagA);
       } else if (playerId === 2) {
         setDraggedTagB(restaurantData);
+      } else if (playerId === 3) {
+        setDraggedTagC(restaurantData);
+        console.log(draggedTagA);
+      } else if (playerId === 4) {
+        setDraggedTagD(restaurantData);
       }
     });
     return () => {
@@ -113,48 +126,77 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
   const handleResetTarget = () => {
     setDraggedTagA(null);
     setDraggedTagB(null);
+    setDraggedTagC(null);
+    setDraggedTagD(null);
   };
 
   return (
-    <div className="w-full h-full flex justify-center  items-center">
+    <div className="w-full h-full flex justify-center items-center">
       {showContent ? (
         <div onDragOver={handleResetTarget}>
           <ResultCardLists combinedplaceList={combinedplaceList} />
         </div>
       ) : (
-        <div className="flex ">
-          <div
-            className={`w-48  juitems-center py-1 shadow-lg border-dashed border-2 border-white min-h-40 ${
-              isDragging ? "" : ""
-            }`}
-            onDragOver={handleDragOver}
-            onDrop={(event) => handleDrop(event, 1)}
-          >
-            {draggedTagA && <BigPlaceCard img={"/돈까스.png"} />}
-          </div>
+        <div className="flex flex-col w-full h-full justify-between items-center">
+          <div className="w-full justify-between flex p-10 ">
+            {/* USER A Target Area */}
+            <div
+              className={`w-48  juitems-center py-1 shadow-lg border-dashed border-2 border-white min-h-40 ${
+                isDragging ? "" : ""
+              }`}
+              onDragOver={handleDragOver}
+              onDrop={(event) => handleDrop(event, 1)}
+            >
+              {draggedTagA && <BigPlaceCard img={draggedTagA.thumbnailImg} />}
+            </div>
 
-          <div className=" flex justify-center items-center mt-2 ">
-            <div>
+            {/* USER B Target Area */}
+            <div
+              className={`w-48 items-center py-1 shadow-lg border-dashed border-2 min-h-40 border-white ${
+                isDragging ? "" : ""
+              }`}
+              onDragOver={handleDragOver}
+              onDrop={(event) => handleDrop(event, 2)}
+            >
+              {draggedTagB && <BigPlaceCard img={draggedTagB.thumbnailImg} />}
+            </div>
+          </div>
+          {/* Middle */}
+          <div className="flex">
+            <div className=" flex justify-center items-center mt-2 ">
+              <div>
+                <MoreHorizIcon fontSize="large" style={{ color: "white" }} />
+              </div>
+              <button
+                className={`hover:scale-105 text-white font-semibold rounded-full p-2
+      px-2 ${isSpining && "animate-spin animate-infinite"}`}
+              >
+                {isSpining ? <LoopIcon /> : <HelpIcon />}
+              </button>
               <MoreHorizIcon fontSize="large" style={{ color: "white" }} />
             </div>
-            <button
-              className={`hover:scale-105 text-white font-semibold rounded-full p-2
-      px-2 ${isSpining && "animate-spin animate-infinite"}`}
-            >
-              {isSpining ? <LoopIcon /> : <HelpIcon />}
-            </button>
-            <MoreHorizIcon fontSize="large" style={{ color: "white" }} />
           </div>
-
-          {/* USER B Target Area */}
-          <div
-            className={`w-48 items-center py-1 shadow-lg border-dashed border-2 min-h-40 border-white ${
-              isDragging ? "" : ""
-            }`}
-            onDragOver={handleDragOver}
-            onDrop={(event) => handleDrop(event, 2)}
-          >
-            {draggedTagB && <BigPlaceCard img={"/돈까스.png"} />}
+          <div className=" w-full flex justify-between p-10">
+            {/* USER C Target Area */}
+            <div
+              className={`w-48  juitems-center py-1 shadow-lg border-dashed border-2 border-white min-h-40 ${
+                isDragging ? "" : ""
+              }`}
+              onDragOver={handleDragOver}
+              onDrop={(event) => handleDrop(event, 3)}
+            >
+              {draggedTagC && <BigPlaceCard img={draggedTagC.thumbnailImg} />}
+            </div>
+            {/* USER D Target Area */}
+            <div
+              className={`w-48 items-center py-1 shadow-lg border-dashed border-2 min-h-40 border-white ${
+                isDragging ? "" : ""
+              }`}
+              onDragOver={handleDragOver}
+              onDrop={(event) => handleDrop(event, 4)}
+            >
+              {draggedTagD && <BigPlaceCard img={draggedTagD.thumbnailImg} />}
+            </div>
           </div>
         </div>
       )}
