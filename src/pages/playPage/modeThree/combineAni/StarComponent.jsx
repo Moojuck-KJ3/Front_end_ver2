@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-import "./StarComponent.css";
 
-const AnimationStar = ({ x, y, size }) => {
+const AnimationStar = ({ x, y, size, delay }) => {
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,

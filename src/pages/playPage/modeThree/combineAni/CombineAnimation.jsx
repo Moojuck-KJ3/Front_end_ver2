@@ -67,6 +67,13 @@ const CombineAnimation = ({ combinedplaceList, onDragOver }) => {
             x={position.x}
             y={position.y}
             size={position.size}
+            delay={`${
+              [0, 2, 4, 6].includes(i)
+                ? 0.5
+                : [1, 3, 5, 7].includes(i)
+                ? 1
+                : 1.5
+            }s`}
           />
         ))}
       </div>

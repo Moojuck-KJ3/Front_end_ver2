@@ -27,7 +27,7 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
     { x: 1000, y: -900 },
     { x: 500, y: -600 },
     { x: -1000, y: 650 },
-    { x: -550, y: 300 },
+    { x: -500, y: 300 },
     { x: 1000, y: 750 },
     { x: 500, y: 500 },
     { x: 0, y: 0 }, // Center
