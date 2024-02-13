@@ -24,7 +24,26 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const { roomId } = useParams();
   const [progressValue, setProgressValue] = useState(50);
   const pcsRef = useRef({});
+  const localVideoRef = useRef(null);
+  const localStreamRef = useRef();
   const [users, setUsers] = useState([]);
+
+  const getLocalStream = useCallback(async () => {
+    try {
+      const localStream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true,
+      });
+      localStreamRef.current = localStream;
+      if (localVideoRef.current) localVideoRef.current.srcObject = localStream;
+
+      socket.emit("join-room", {
+        roomId,
+      });
+    } catch (e) {
+      console.log(`getUserMedia error: ${e}`);
+    }
+  }, []);
 
   useEffect(() => {
     console.log("pcsRef");
@@ -64,11 +83,11 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
         );
       };
 
-      if (localStream) {
+      if (localStreamRef.current) {
         console.log("localstream add");
-        localStream.getTracks().forEach((track) => {
-          if (!localStream) return;
-          pc.addTrack(track, localStream);
+        localStreamRef.current.getTracks().forEach((track) => {
+          if (!localStreamRef.current) return;
+          pc.addTrack(track, localStreamRef.current);
         });
       } else {
         console.log("no local stream");
@@ -82,14 +101,12 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   }, []);
 
   useEffect(() => {
-    socket.emit("join-room", {
-      roomId,
-    });
+    getLocalStream();
     socket.on("all-users", (allUsers) => {
       console.log("all-users is called");
       allUsers.forEach(async (user) => {
         console.log(user);
-        if (!localStream) return;
+        if (!localStreamRef.current) return;
         const pc = createPeerConnection(user.socketId);
         if (!pc) return;
         pcsRef.current = { ...pcsRef.current, [user.socketId]: pc };
@@ -114,7 +131,7 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
     socket.on("send-connection-offer", async (data) => {
       const { sdp, offerSendID } = data;
       console.log("send-connection-offer");
-      if (!localStream) return;
+      if (!localStreamRef.current) return;
       const pc = createPeerConnection(offerSendID);
       if (!pc) return;
       pcsRef.current = { ...pcsRef.current, [offerSendID]: pc };
@@ -151,8 +168,7 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
       await pc.addIceCandidate(new RTCIceCandidate(data.candidate));
       console.log("candidate add success");
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [createPeerConnection, localStream]);
+  }, [createPeerConnection, getLocalStream]);
 
   useEffect(() => {
     const handleAllPlayerReady = () => {

@@ -1,6 +1,7 @@
 import { VideoFeed } from "./VideoFeed";
 
 const VideoContainer = ({ mediaStream }) => {
+  console.log(mediaStream);
   return (
     <video
       className="w-full h-full object-cover rounded-lg border-1 bg-gray-400"
