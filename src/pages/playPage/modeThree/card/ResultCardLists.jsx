@@ -62,7 +62,7 @@ export const DUMMY_PLACE = [
 
 const ResultCardLists = ({ combinedplaceList, positions }) => {
   console.log("ResultCardLists", combinedplaceList);
-  const [places, setPlaces] = useState(DUMMY_PLACE);
+  const [places, setPlaces] = useState(combinedplaceList); //DUMMY_PLACE
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
@@ -75,7 +75,7 @@ const ResultCardLists = ({ combinedplaceList, positions }) => {
     socket.on("likes-updated", (updatedPlace) => {
       setPlaces((currentPlaces) =>
         currentPlaces.map((place) =>
-          place.id === updatedPlace.id
+          place._id === updatedPlace._id
             ? { ...place, likes: updatedPlace.likes }
             : place
         )
@@ -89,7 +89,7 @@ const ResultCardLists = ({ combinedplaceList, positions }) => {
 
   const handleLike = (restaurantId) => {
     console.log("handleLike is called", restaurantId);
-    const restaurant = places.find((place) => place.id === restaurantId);
+    const restaurant = places.find((place) => place._id === restaurantId);
     const updatedLikes = restaurant.likes + 1;
 
     socket.emit("like-restaurant", {
@@ -104,7 +104,7 @@ const ResultCardLists = ({ combinedplaceList, positions }) => {
       <div className="grid grid-cols-3 grid-rows-3 gap-4">
         {places.map((place, i) => (
           <div
-            key={place.id}
+            key={place._id}
             onClick={() => handleCardClick(place)}
             className={`animate-fade animate-ease-in ${
               [0, 2, 4, 6].includes(i) ? "col-start-1" : "col-start-2"
@@ -123,10 +123,11 @@ const ResultCardLists = ({ combinedplaceList, positions }) => {
             }}
           >
             <ResultCard
-              title={place.title}
-              imgUrl={place.imgUrl}
-              id={place.id}
-              likesCount={place.likes}
+              // title={place.name}
+              // imgUrl={place.thumbnailImg}
+              // id={place.id}
+              // likesCount={place.likes}
+              place={place}
             />
           </div>
         ))}

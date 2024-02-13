@@ -30,13 +30,15 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const [modeOneVoiceRecResult, SetModeOneVoiceRecResult] = useState([]);
   const [modeTwoVoiceRecResult, SetModeTwoVoiceRecResult] = useState([]);
   const [playerHand, setPlayerHand] = useState({
-    selectedFoodTag: ["한식"],
+    selectedFoodTag: [], //"한식"
     selectedMoodTag: ["조용한 곳"],
     selectedPlace: [],
   });
 
   // 조합 시 유저들이 선택한 레스토랑을 담을 리스트
   const [userSelectedCombineList, setUserSelectedCombineList] = useState([]);
+
+  const [imgUrlList, setImgUrlList] = useState([]);
 
   useEffect(() => {
     socket.connect();
@@ -65,6 +67,8 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
       console.log(response);
       // 받아오는 data에 별 및 음식 관련 url 내용 추가
       setRestaurantList(response.data.restaurantList);
+      setImgUrlList(response.data.imgUrls);
+      console.log(response.data.imgUrls);
       // console.log(response.data.restaurantList);
       // console.log(restaurantList);
     };
@@ -211,6 +215,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
           setRoomMode={setRoomMode}
           handleSetReady={handleSetReady}
           roomDetail={roomDetail}
+          imgUrls={imgUrlList}
         />
         <RightSideUserVideoContainer
           localStream={localStream}

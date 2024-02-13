@@ -17,6 +17,19 @@ function compressValue(value) {
   return compressedValue;
 }
 
+// 최대 기준 1000일때 0.2로 치환된다
+const cardsPositions = [
+  { x: -1000, y: -900 },
+  { x: -500, y: -850 },
+  { x: 1000, y: -900 },
+  { x: 500, y: -600 },
+  { x: -1000, y: 650 },
+  { x: -500, y: 300 },
+  { x: 1000, y: 750 },
+  { x: 500, y: 500 },
+  { x: 0, y: 0 }, // Center
+];
+
 // 아마 입력 받을때
 // position의 값을 임의의 비율로 변환하므로 적당히 높은 값을 넣을것
 const CombineAnimation = ({ combinedplaceList, onDragOver }) => {
@@ -26,7 +39,7 @@ const CombineAnimation = ({ combinedplaceList, onDragOver }) => {
     setAnimationFinished(true);
   };
 
-  const positions = combinedplaceList.map((place) => {
+  const positions = cardsPositions.map((place) => {
     return {
       x: compressValue(place.x),
       y: compressValue(place.y),

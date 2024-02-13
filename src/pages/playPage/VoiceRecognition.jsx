@@ -39,7 +39,7 @@ const VoiceRecognition = ({
     // TEST
     onSetTestResult((prevPlayerHand) => ({
       ...prevPlayerHand,
-      selectedMoodTag: [...prevPlayerHand.selectedMoodTag, "조용한"],
+      selectedMoodTag: [...prevPlayerHand.selectedMoodTag], //, "조용한"
     }));
   };
 
