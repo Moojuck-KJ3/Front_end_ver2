@@ -1,6 +1,6 @@
 import { VideoFeed } from "../../../components/video/VideoFeed";
 
-const WaitingFreindVideoContainer = ({ localStream }) => {
+const WaitingFreindVideoContainer = ({ localStream, users }) => {
   return (
     <div className="grid grid-cols-2 gap-8">
       <div className="justify-center items-center">
@@ -9,6 +9,9 @@ const WaitingFreindVideoContainer = ({ localStream }) => {
           유저 A 이름
         </h1>
       </div>
+      {users.map((user, index) => (
+        <VideoFeed key={index} stream={user.stream} />
+      ))}
     </div>
   );
 };
