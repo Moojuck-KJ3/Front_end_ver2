@@ -26,6 +26,7 @@ export const PlaceListArea = ({
   const [hoveredStarId, setHoveredStarId] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+
   const handleStarClick = (star) => {
     setSelectedRestaurant(star);
     setIsModalVisible(true);
@@ -71,7 +72,15 @@ export const PlaceListArea = ({
         }}
       >
         <div className="text-yellow-400">
-          <FontAwesomeIcon icon={faStar} />
+          {star.showComponentOne ? (
+            <div className="w-20 h-20 animate-jump-in">
+              <img src="/Food.png" alt="" />
+            </div>
+          ) : (
+            <div className="w-6 h-6 hover:bg-yellow-200 rounded-full cursor-pointer duration-500 ">
+              {<FontAwesomeIcon icon={faStar} />}
+            </div>
+          )}
         </div>
         {hoveredStarId === star._id && (
           <div
@@ -96,7 +105,9 @@ export const PlaceListArea = ({
 
   useEffect(() => {
     const starsData = restaurantList.map((restaurant) => {
-      // const matchesResultTag = resultFoodTags.includes(restaurant.category);
+      const matchesResultTag = resultFoodTags.some((tag) =>
+        restaurant.food_category.startsWith(tag)
+      );
 
       // const matchesResultMoodTag = restaurant.mood.some((mood) =>
       //   resultMoodTags.includes(mood)
@@ -141,11 +152,10 @@ export const PlaceListArea = ({
 
       return {
         ...restaurant,
-        className:
-          "w-6 h-6 hover:bg-yellow-200 rounded-full cursor-pointer duration-500",
         size: 1,
-        x: getRandomInt(5, 95),
-        y: getRandomInt(5, 95),
+        x: getRandomInt(5, 90),
+        y: getRandomInt(5, 90),
+        showComponentOne: matchesResultTag,
       };
     });
 
