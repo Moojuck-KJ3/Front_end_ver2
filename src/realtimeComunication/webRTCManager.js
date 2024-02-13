@@ -23,58 +23,61 @@ export function usePeerConnection(localStream) {
   const [users, setUsers] = useState([]);
   const pcsRef = useRef({});
 
-  const createPeerConnection = useCallback((socketId) => {
-    console.log("createPeerConnection is called", socketId);
-    try {
-      const pc = new RTCPeerConnection({
-        iceServers: [
-          { urls: "stun:stun2.1.google.com:19302" },
-          {
-            urls: import.meta.env.VITE_APP_TURN_SERVER_URL,
-            username: import.meta.env.VITE_APP_TURN_SERVER_USERNAME,
-            credential: import.meta.env.VITE_APP_TURN_SERVER_CREDENTIALS,
-          },
-        ],
-      });
-
-      pc.onicecandidate = (event) => {
-        if (!event.candidate) return;
-        console.log("send-candidate is emitting!");
-        socket.emit("send-candidate", {
-          candidate: event.candidate,
-          candidateSendID: socket.id,
-          candidateReceiveID: socketId,
+  const createPeerConnection = useCallback(
+    (socketId) => {
+      console.log("createPeerConnection is called", socketId);
+      try {
+        const pc = new RTCPeerConnection({
+          iceServers: [
+            { urls: "stun:stun2.1.google.com:19302" },
+            {
+              urls: import.meta.env.VITE_APP_TURN_SERVER_URL,
+              username: import.meta.env.VITE_APP_TURN_SERVER_USERNAME,
+              credential: import.meta.env.VITE_APP_TURN_SERVER_CREDENTIALS,
+            },
+          ],
         });
-      };
 
-      pc.oniceconnectionstatechange = (e) => {
-        console.log(e);
-      };
+        pc.onicecandidate = (event) => {
+          if (!event.candidate) return;
+          console.log("send-candidate is emitting!");
+          socket.emit("send-candidate", {
+            candidate: event.candidate,
+            candidateSendID: socket.id,
+            candidateReceiveID: socketId,
+          });
+        };
 
-      pc.ontrack = (event) => {
-        console.log("ontrack success");
-        setUsers((oldUsers) =>
-          oldUsers
-            .filter((user) => user.socketId !== socketId)
-            .concat({
-              socketId: socketId,
-              stream: event.streams[0],
-            })
-        );
-      };
+        pc.oniceconnectionstatechange = (e) => {
+          console.log(e);
+        };
 
-      if (localStream) {
-        localStream.getTracks().forEach((track) => {
-          pc.addTrack(track, localStream);
-        });
+        pc.ontrack = (event) => {
+          console.log("ontrack success");
+          setUsers((oldUsers) =>
+            oldUsers
+              .filter((user) => user.socketId !== socketId)
+              .concat({
+                socketId: socketId,
+                stream: event.streams[0],
+              })
+          );
+        };
+
+        if (localStream) {
+          localStream.getTracks().forEach((track) => {
+            pc.addTrack(track, localStream);
+          });
+        }
+
+        return pc;
+      } catch (e) {
+        console.error(e);
+        return undefined;
       }
-
-      return pc;
-    } catch (e) {
-      console.error(e);
-      return undefined;
-    }
-  }, []);
+    },
+    [localStream]
+  );
 
   useEffect(() => {
     const handleConnection = () => {
