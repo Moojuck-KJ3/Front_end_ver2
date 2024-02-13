@@ -5,11 +5,11 @@ import ResisterPage from "./pages/authPage/ResisterPage";
 import CreateRoomPage from "./pages/createRoomPage/CreateRoomPage";
 import PlayRoomPage from "./pages/playPage/PlayRoomPage";
 import WaitingPage from "./pages/waitingPage/WaitingPage";
-// import { useLocalCameraStream } from "./realtimeComunication/webRTCManager";
+import { useLocalCameraStream } from "./realtimeComunication/webRTCManager";
 import { useEffect, useState } from "react";
 
 function App() {
-  // const { localStream } = useLocalCameraStream();
+  const { localStream } = useLocalCameraStream();
 
   const [roomDetail, setRoomDetail] = useState({
     roomId: "",
@@ -33,7 +33,7 @@ function App() {
           path="/entry"
           element={
             <CreateRoomPage
-              // localStream={localStream}
+              localStream={localStream}
               roomDetail={roomDetail}
               setRoomDetail={setRoomDetail}
             />
@@ -43,7 +43,7 @@ function App() {
           path="/waiting-friends/:roomId"
           element={
             <WaitingPage
-              // localStream={localStream}
+              localStream={localStream}
               roomDetail={roomDetail}
               setRoomDetail={setRoomDetail}
             />
@@ -53,7 +53,7 @@ function App() {
           path="/play-room/:roomId"
           element={
             <PlayRoomPage
-              // localStream={localStream}
+              localStream={localStream}
               roomDetail={roomDetail}
               setRoomDetail={setRoomDetail}
             />

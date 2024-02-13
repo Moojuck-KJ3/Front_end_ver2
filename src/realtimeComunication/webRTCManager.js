@@ -39,6 +39,9 @@ export function usePeerConnection() {
     }
   }, []);
 
+
+  
+
   const createPeerConnection = useCallback((socketId) => {
     try {
       console.log("createPeerConnection is called", socketId);
@@ -60,7 +63,6 @@ export function usePeerConnection() {
 
       pc.ontrack = (e) => {
         console.log("ontrack success");
-        console.log(users);
         setUsers((oldUsers) =>
           oldUsers
             .filter((user) => user.socketId !== socketId)
@@ -279,16 +281,18 @@ export function usePeerConnection() {
 //   };
 // }
 
-// export function useLocalCameraStream() {
-//   useEffect(() => {
-//     navigator.mediaDevices
-//       .getUserMedia({ video: true, audio: true })
-//       .then((stream) => {
-//         setLocalStream(stream);
-//       });
-//   }, []);
+export function useLocalCameraStream() {
+  const [localStream, setLocalStream] = useState(null);
 
-//   return {
-//     localStream,
-//   };
-// }
+  useEffect(() => {
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        setLocalStream(stream);
+      });
+  }, []);
+
+  return {
+    localStream,
+  };
+}

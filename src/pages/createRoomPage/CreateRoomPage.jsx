@@ -6,19 +6,14 @@ import socket from "../../realtimeComunication/socket";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { logout } from "../../api";
-import { usePeerConnection } from "../../realtimeComunication/webRTCManager";
 
-const CreateRoomPage = ({ roomDetail, setRoomDetail }) => {
+const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const navigate = useNavigate();
   const [isModal, setIsModal] = useState(false);
   const [roomId, setRoomId] = useState("");
   const [userName, setUserName] = useState("");
-  const { localStream, users } = usePeerConnection();
 
   useEffect(() => {
-    console.log("localStream");
-    console.log(localStream);
-
     const userDetails = localStorage.getItem("user");
 
     if (userDetails) {
