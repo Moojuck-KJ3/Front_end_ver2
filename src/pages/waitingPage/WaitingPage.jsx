@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import WaitingFreindVideoContainer from "../createRoomPage/video/WaitingFreindVideoContainer";
 import CreateRoomPageFooter from "../createRoomPage/CreateRoomPageFooter";
 import {
-  getRemoteStream,
+  // getRemoteStream,
   usePeerConnection,
 } from "../../realtimeComunication/webRTCManager";
 import CopyToClipboardButton from "./ClipboardClipboardCopyButton";
@@ -10,14 +10,14 @@ import { useEffect, useState } from "react";
 import socket from "../../realtimeComunication/socket";
 import Typewriter from "../../components/type/TypeWriter";
 
-const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
+const WaitingPage = ({ roomDetail, setRoomDetail }) => {
   // 개발 끝나면, isAllPlayerReady False로 바꾸기
   const [isAllPlayerReady, setIsAllPlayerReady] = useState(true);
   const navigator = useNavigate();
   const { roomId } = useParams();
   const [progressValue, setProgressValue] = useState(50);
-  const { remoteStreams } = usePeerConnection(localStream);
-  
+  const { localStream, users } = usePeerConnection();
+
   useEffect(() => {
     // console.log("remoteStreams and PeerConnections!");
     // setRoomDetail((prevDetail) => ({
@@ -25,11 +25,9 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
     //   playerStreams: { ...prevDetail.playerStreams, ...remoteStreams },
     // }));
 
-    console.log("getRemoteStream");
-    console.log(getRemoteStream());
-    console.log("remoteStreams");
-    console.log(remoteStreams);
-  }, [remoteStreams]);
+    console.log("users");
+    console.log(users);
+  }, [users]);
 
   useEffect(() => {
     const handleAllPlayerReady = () => {
