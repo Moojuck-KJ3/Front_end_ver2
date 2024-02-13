@@ -100,7 +100,7 @@ const WaitingPage = ({ roomDetail, setRoomDetail }) => {
           {/* 비디오 */}
           <WaitingFreindVideoContainer
             localStream={localStream}
-            remoteStreams={remoteStreams}
+            // remoteStreams={remoteStreams}
           />
           {/* 버튼 */}
           <CreateRoomPageFooter
