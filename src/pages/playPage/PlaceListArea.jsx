@@ -26,9 +26,7 @@ export const PlaceListArea = ({
   const [hoveredStarId, setHoveredStarId] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
-
   const handleStarClick = (star) => {
-    console.log(star);
     setSelectedRestaurant(star);
     setIsModalVisible(true);
   };
@@ -60,11 +58,11 @@ export const PlaceListArea = ({
     content = stars.map((star, i) => (
       <div
         onClick={() => handleStarClick(star)}
-        onMouseEnter={() => setHoveredStarId(star.id)}
+        onMouseEnter={() => setHoveredStarId(star._id)}
         onMouseLeave={() => setHoveredStarId(null)}
-        className={`${star.className} relative`}
+        className={`${star.className} relative animate-fade `}
         key={i}
-        id={star.id}
+        id={star._id}
         style={{
           position: "absolute",
           top: `${star.y}%`,
@@ -75,16 +73,21 @@ export const PlaceListArea = ({
         <div className="text-yellow-400">
           <FontAwesomeIcon icon={faStar} />
         </div>
-        {hoveredStarId === star.id && (
+        {hoveredStarId === star._id && (
           <div
-            className="animate-fade  absolute z-10  items-center justify-center inline-block px-3 py-2 text-sm font-medium text-black bg-white rounded-lg shadow-sm -translate-x-1/2 left-1/2 bottom-full mb-2 "
+            className="animate-fade absolute items-center justify-center inline-block px-3 py-2 font-2xl font-medium text-black bg-white rounded-lg shadow-sm -translate-x-1/2 left-1/2 bottom-full mb-2 "
             style={{
               transition: "opacity 300ms",
               opacity: 1,
               whiteSpace: "nowrap",
             }}
           >
-            <h1 className="font-tenada">{star.title}</h1>
+            <h1 className="font-tenada ">{star.name}</h1>
+            <img
+              className="rounded-lg"
+              src={star.thumbnailImg}
+              alt="thumbnailImg"
+            />
           </div>
         )}
       </div>
@@ -93,60 +96,56 @@ export const PlaceListArea = ({
 
   useEffect(() => {
     const starsData = restaurantList.map((restaurant) => {
-      const matchesResultTag = resultFoodTags.includes(restaurant.category);
+      // const matchesResultTag = resultFoodTags.includes(restaurant.category);
 
-      const matchesResultMoodTag = restaurant.mood.some((mood) =>
-        resultMoodTags.includes(mood)
-      );
+      // const matchesResultMoodTag = restaurant.mood.some((mood) =>
+      //   resultMoodTags.includes(mood)
+      // );
 
-      const combineListMatch = selectedCombineList.find(
-        (combineItem) => combineItem.restId === restaurant.restId
-      );
+      // const combineListMatch = selectedCombineList.find(
+      //   (combineItem) => combineItem.restId === restaurant.restId
+      // );
 
-      let imageUrl;
-      if (combineListMatch) {
-        imageUrl = combineListMatch.thumbnailURL;
-      } else if (matchesResultTag && matchesResultMoodTag) {
-        imageUrl = restaurant.FoodUrl;
-      } else if (matchesResultTag) {
-        imageUrl = restaurant.BigStarUrl;
-      } else {
-        imageUrl = restaurant.miniStarUrl;
-      }
+      // let imageUrl;
+      // if (combineListMatch) {
+      //   imageUrl = combineListMatch.thumbnailURL;
+      // } else if (matchesResultTag && matchesResultMoodTag) {
+      //   imageUrl = restaurant.FoodUrl;
+      // } else if (matchesResultTag) {
+      //   imageUrl = restaurant.BigStarUrl;
+      // } else {
+      //   imageUrl = restaurant.miniStarUrl;
+      // }
 
-      let size;
-      if (combineListMatch) {
-        size = 6;
-      } else if (matchesResultTag && matchesResultMoodTag) {
-        size = 6;
-      } else if (matchesResultTag) {
-        size = 4;
-      } else {
-        size = 1;
-      }
+      // let size;
+      // if (combineListMatch) {
+      //   size = 6;
+      // } else if (matchesResultTag && matchesResultMoodTag) {
+      //   size = 6;
+      // } else if (matchesResultTag) {
+      //   size = 4;
+      // } else {
+      //   size = 1;
+      // }
 
-      let className;
-      if (combineListMatch) {
-        className = "w-4 h-4 rounded-full cursor-pointer duration-500";
-      } else if (matchesResultTag && matchesResultMoodTag) {
-        className = `w-4 h-4 hover:bg-yellow-200 rounded-full cursor-pointer duration-500 `;
-      } else if (matchesResultTag) {
-        className = `w-4 h-4 hover:bg-yellow-200 rounded-full cursor-pointer duration-500 ju`;
-      } else {
-        className = `w-6 h-6 hover:bg-yellow-200 rounded-full cursor-pointer duration-500  `;
-      }
+      // let className;
+      // if (combineListMatch) {
+      //   className = "w-4 h-4 rounded-full cursor-pointer duration-500";
+      // } else if (matchesResultTag && matchesResultMoodTag) {
+      //   className = `w-4 h-4 hover:bg-yellow-200 rounded-full cursor-pointer duration-500 `;
+      // } else if (matchesResultTag) {
+      //   className = `w-4 h-4 hover:bg-yellow-200 rounded-full cursor-pointer duration-500 ju`;
+      // } else {
+      //   className = `w-6 h-6 hover:bg-yellow-200 rounded-full cursor-pointer duration-500  `;
+      // }
 
       return {
-        id: restaurant.restId,
-        title: "토니모리",
-        x: getRandomInt(10, 90),
-        y: getRandomInt(10, 90),
-        className: className,
-        size: size,
-        imageUrl: imageUrl,
-        miniStarUrl: restaurant.miniStarUrl,
-        BigStarUrl: restaurant.BigStarUrl,
-        FoodUrl: restaurant.FoodUrl,
+        ...restaurant,
+        className:
+          "w-6 h-6 hover:bg-yellow-200 rounded-full cursor-pointer duration-500",
+        size: 1,
+        x: getRandomInt(5, 95),
+        y: getRandomInt(5, 95),
       };
     });
 

@@ -3,30 +3,25 @@ import VoiceRecoder from "../../components/recorder/VoiceRecoder";
 import GameArea from "./GameArea";
 import PlayRoomContainer from "./PlayRoomContainer";
 import ModeOneExpainModal from "../../components/modal/ModeOneExpainModal";
-import {
-  getLocalStream,
-  getRemoteStream,
-} from "../../realtimeComunication/webRTCManager";
+
 import { useParams } from "react-router-dom";
 import socket from "../../realtimeComunication/socket";
 import { PlaceListArea } from "./PlaceListArea";
-import { restaurantLists } from "./restaurantLists";
 import { Header } from "./Header";
 import ModeThreeModal from "../../components/modal/ModeThreeExpainModal";
-import UserVideoContainer from "../../components/video/UserVideoContainer";
 import VoiceRecognition from "./VoiceRecognition";
 import ModeTwoExpainModal from "../../components/modal/ModeTwoExpainModal";
 import RightSideUserVideoContainer from "../../components/video/RightSideUserVideoContainer";
+import LeftSideUserVideoContainer from "../../components/video/LeftSideUserVideoContainer";
+import { getRestaurantList } from "../../api";
 
-const PlayRoomPage = ({ roomDetail, setRoomDetail }) => {
+const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const { roomId } = useParams();
   const [showModal, setShowModal] = useState(true);
   const [showModeTwoModal, setShowModeTwoModal] = useState(true);
   const [showModeThreeModal, setShowModeThreeModal] = useState(true);
   const [roomMode, setRoomMode] = useState(MODE.MODE1);
-  const [localStream, setLocalStream] = useState(null);
-  const [remoteStrem, setRemoteStream] = useState(null);
-  const [restaurantList, setRestaurantList] = useState(restaurantLists);
+  const [restaurantList, setRestaurantList] = useState([]);
   const [isReady, setIsReady] = useState(false);
   const [roomReadyCount, setRoomReadyCount] = useState(0);
   const [showVoiceRecorder, setShowVoiceRecorder] = useState(false);
@@ -35,63 +30,56 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail }) => {
   const [modeOneVoiceRecResult, SetModeOneVoiceRecResult] = useState([]);
   const [modeTwoVoiceRecResult, SetModeTwoVoiceRecResult] = useState([]);
   const [playerHand, setPlayerHand] = useState({
-    selectedFoodTag: [],
-    selectedMoodTag: [],
+    selectedFoodTag: ["한식"],
+    selectedMoodTag: ["조용한 곳"],
     selectedPlace: [],
   });
-  const [combineResultList, setCombineResultList] = useState([]);
 
   // 조합 시 유저들이 선택한 레스토랑을 담을 리스트
   const [userSelectedCombineList, setUserSelectedCombineList] = useState([]);
 
   useEffect(() => {
     socket.connect();
-    const local = getLocalStream();
-    setLocalStream(local);
-    const remote = getRemoteStream();
-    setRemoteStream(remote);
+    // const local = getLocalStream();
+    // setLocalStream(local);
+    // const remote = getRemoteStream();
+    // setRemoteStream(remote);
 
     // const parsedCoordinate = JSON.parse(
     //   localStorage.getItem("purposeCoordinate")
     // );
 
-    // const sendData = {
-    //   purposeCoordinate: parsedCoordinate,
-    // };
+    const coordinate = {
+      coordinates: [37.5001716373021, 127.029070884291],
+    };
+    console.log(coordinate);
+    const getRestList = async (roomId, coordinates) => {
+      // default 재시도는 3
 
-    // const getRestList = async (roomId, sendData) => {
-    //   // default 재시도는 3
-    //   const response = await getRestaurantList(roomId, sendData);
+      const response = await getRestaurantList(roomId, coordinates);
 
-    //   if (response.error) {
-    //     console.log(response.exception);
-    //     return;
-    //   }
+      if (response.error) {
+        console.log(response.exception);
+        return;
+      }
+      console.log(response);
+      // 받아오는 data에 별 및 음식 관련 url 내용 추가
+      setRestaurantList(response.data.restaurantList);
+      // console.log(response.data.restaurantList);
+      // console.log(restaurantList);
+    };
 
-    //   // 받아오는 data에 별 및 음식 관련 url 내용 추가
-    //   setRestaurantList(response);
-    //   console.log(restaurantList);
-    // };
-
-    // getRestList(roomId, sendData);
+    getRestList(roomId, coordinate);
   }, []);
-
-  useEffect(() => {
-    console.log("Updated modeOneVoiceRecResult:", modeOneVoiceRecResult);
-  }, [modeOneVoiceRecResult]);
 
   useEffect(() => {
     socket.connect();
     socket.on("mode-change-response", handleModeChange);
     socket.on("receive-speech-foodCategory", handleReceiveFoodCategory);
-    socket.on("combine-response", handleCombineTryResponse);
-    socket.on("combine-result", handleCombineResult);
 
     return () => {
       socket.off("mode-change-response", handleModeChange);
       socket.off("receive-speech-foodCategory", handleReceiveFoodCategory);
-      socket.off("combine-response", handleCombineTryResponse);
-      socket.off("combine-result", handleCombineResult);
     };
   }, [roomId]);
 
@@ -188,57 +176,6 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail }) => {
     });
   };
 
-  const addSelectedCombineList = (combineData) => {
-    // userId가 중복되지 않는 경우에 추가
-    if (
-      !userSelectedCombineList.some(
-        (item) => item.userId === combineData.userId
-      )
-    ) {
-      // rest Id는 같아도 된다
-      setUserSelectedCombineList([...userSelectedCombineList, combineData]);
-    }
-  };
-
-  // 조합 모달에서 선택 완료 버튼을 눌렀을 때, socket을 emit하는 용도의 함수
-  const handleCombineSelectComplete = () => {
-    console.log("handleCombineSelectComplete is called");
-
-    const broadCombineDoneData = {
-      roomId: roomId,
-      combineSelects: userSelectedCombineList,
-    };
-
-    socket.emit("combine-try", broadCombineDoneData);
-  };
-
-  const handleCombineTryResponse = (data) => {
-    console.log("handleCombineTryResponse is called, data : ", data);
-    const roomMemberCount = JSON.parse(localStorage.getItem("roomMemberCount"));
-
-    if (roomMemberCount < data.combineSelects.length) {
-      if (data.combineSelects.length > 0) {
-        setCombineResultList(data.combineSelects);
-      }
-    } else {
-      // 모두 선택 완료하였기에 combine-ready를 emit
-      const broadCombineReadyData = {
-        roomId: roomId,
-        combineSelects: userSelectedCombineList,
-      };
-
-      socket.emit("combine-ready", broadCombineReadyData);
-    }
-  };
-
-  // 조합 결과를 받는 함수 (현재는 아마 5개)
-  const handleCombineResult = (data) => {
-    console.log("handleCombineResult is called, data : ", data);
-    if (data.restaruntList.length > 0) {
-      setCombineResultList(data.restaruntList);
-    }
-  };
-
   const handleShowVoiceRecorder = () => {
     if (roomMode == 1) {
       setShowVoiceRecorder(false);
@@ -255,9 +192,10 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail }) => {
       {/* 컨텐츠 시작 */}
       <GameArea>
         {/* 별 */}
-        <UserVideoContainer
+        <LeftSideUserVideoContainer
+          playerHand={playerHand}
           localStream={localStream}
-          remoteStrem={remoteStrem}
+          // remoteStrem={remoteStrem}
           showMic={showModeTwoVoiceRecorder}
         />
 
@@ -276,7 +214,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail }) => {
         />
         <RightSideUserVideoContainer
           localStream={localStream}
-          remoteStrem={remoteStrem}
+          // remoteStrem={remoteStrem}
           showMic={showModeTwoVoiceRecorder}
           onReady={handleSetReady}
         />
@@ -324,11 +262,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail }) => {
           <>
             {/* 조합 모달 */}
             {showModeThreeModal && (
-              <ModeThreeModal
-                onShow={setShowModeThreeModal}
-                onSetSelectedCombineList={addSelectedCombineList}
-                onSelectComplete={handleCombineSelectComplete}
-              />
+              <ModeThreeModal onShow={setShowModeThreeModal} />
             )}
           </>
         )}

@@ -10,12 +10,13 @@ import { useEffect, useState } from "react";
 
 function App() {
   const { localStream } = useLocalCameraStream();
+
   const [roomDetail, setRoomDetail] = useState({
     roomId: "",
     purposeCoordinate: { lat: null, lng: null },
     roomMemberCount: 0,
     playerId: null,
-    participants: [],
+    playerStreams: {},
   });
 
   useEffect(() => {
