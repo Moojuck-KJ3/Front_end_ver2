@@ -2,6 +2,12 @@ import { useParams } from "react-router-dom";
 import socket from "./socket";
 import { useCallback, useEffect, useState } from "react";
 
+export let global_remote = {};
+
+export const getRemoteStream = () => {
+  return global_remote;
+};
+
 export function useLocalCameraStream() {
   const [localStream, setLocalStream] = useState(null);
 
@@ -25,8 +31,8 @@ export function usePeerConnection(localStream) {
   const [remoteStreams, setRemoteStreams] = useState({});
 
   const createPeerConnection = useCallback(
-    (playerId) => {
-      console.log("createPeerConnection is called", playerId);
+    (socketId) => {
+      console.log("createPeerConnection is called", socketId);
       const connection = new RTCPeerConnection({
         iceServers: [
           { urls: "stun:stun2.1.google.com:19302" },
@@ -48,7 +54,7 @@ export function usePeerConnection(localStream) {
         if (event.candidate) {
           socket.emit("send-candidate", {
             roomId,
-            playerId: playerId,
+            socketId: socketId,
             candidate: event.candidate,
           });
         }
@@ -57,11 +63,12 @@ export function usePeerConnection(localStream) {
       connection.ontrack = (event) => {
         setRemoteStreams((prevStreams) => ({
           ...prevStreams,
-          [playerId]: event.streams[0],
+          [socketId]: event.streams[0],
         }));
+        global_remote[socketId] = event.streams[0];
       };
 
-      peers[playerId] = connection;
+      peers[socketId] = connection;
     },
     [localStream, roomId]
   );
@@ -78,42 +85,46 @@ export function usePeerConnection(localStream) {
       socket.emit("join-room", roomId);
     };
 
-    const handleUserJoined = async ({ playerId }) => {
-      console.log("handleUserJoined is called!", playerId);
-      createPeerConnection(playerId);
+    const handleUserJoined = async ({ socketId }) => {
+      console.log("handleUserJoined is called!", socketId);
+
+      if (!peers[socketId]) {
+        createPeerConnection(socketId);
+      }
+
       console.log("peers", peers);
-      if (peers[playerId]) {
+      if (peers[socketId]) {
         try {
-          const offer = await peers[playerId].createOffer();
-          peers[playerId].setLocalDescription(offer);
-          console.log(`${playerId}is setted setLocalDescription`);
+          const offer = await peers[socketId].createOffer();
+          peers[socketId].setLocalDescription(offer);
+          console.log(`${socketId}is setted setLocalDescription`);
           console.log(`send-connection-offer is begin`);
 
-          socket.emit("send-connection-offer", { roomId, playerId, offer });
+          socket.emit("send-connection-offer", { roomId, socketId, offer });
         } catch (error) {
           console.error("Error handling handleUserJoined data:", error);
         }
       }
     };
 
-    const handleReceiveOffer = async ({ fromPlayerId, offer }) => {
+    const handleReceiveOffer = async ({ fromSocketId, offer }) => {
       console.log(
-        `handleReceiveOffer is called, fromPlayerId is ${fromPlayerId}`
+        `handleReceiveOffer is called, fromPlayerId is ${fromSocketId}`
       );
 
-      if (!peers[fromPlayerId]) {
-        createPeerConnection(fromPlayerId);
+      if (!peers[fromSocketId]) {
+        createPeerConnection(fromSocketId);
       }
 
       try {
-        peers[fromPlayerId].setRemoteDescription(offer);
-        const answer = await peers[fromPlayerId].createAnswer();
-        peers[fromPlayerId].setLocalDescription(answer);
+        peers[fromSocketId].setRemoteDescription(offer);
+        const answer = await peers[fromSocketId].createAnswer();
+        peers[fromSocketId].setLocalDescription(answer);
         console.log(
-          `fromPlayerId ${fromPlayerId}is setRemoteDescription and setLocalDescription`
+          `fromPlayerId ${fromSocketId}is setRemoteDescription and setLocalDescription`
         );
 
-        socket.emit("answer", { roomId, playerId: fromPlayerId, answer });
+        socket.emit("answer", { roomId, playerId: fromSocketId, answer });
       } catch (error) {
         console.error(
           "Error during offer reception and answer process:",
@@ -122,21 +133,21 @@ export function usePeerConnection(localStream) {
       }
     };
 
-    const handleReceiveAnswer = ({ fromPlayerId, answer }) => {
-      `handleReceiveAnswer is called, responese is ${(fromPlayerId, answer)}`;
+    const handleReceiveAnswer = ({ fromSocketId, answer }) => {
+      `handleReceiveAnswer is called, responese is ${(fromSocketId, answer)}`;
 
-      if (peers[fromPlayerId]) {
-        peers[fromPlayerId].setRemoteDescription(answer);
+      if (peers[fromSocketId]) {
+        peers[fromSocketId].setRemoteDescription(answer);
       }
     };
 
-    const handleReceiveCandidate = ({ fromPlayerId, candidate }) => {
+    const handleReceiveCandidate = ({ fromSocketId, candidate }) => {
       `handleReceiveAnswer is called, responese is ${
-        (fromPlayerId, candidate)
+        (fromSocketId, candidate)
       }`;
 
-      if (peers[fromPlayerId]) {
-        peers[fromPlayerId].addIceCandidate(candidate);
+      if (peers[fromSocketId]) {
+        peers[fromSocketId].addIceCandidate(candidate);
       }
     };
     socket.connect();
@@ -148,11 +159,11 @@ export function usePeerConnection(localStream) {
     socket.on("send-candidate", handleReceiveCandidate);
 
     return () => {
-      socket.on("connect", handleConnection);
-      socket.on("user-joined", handleUserJoined);
-      socket.on("send-connection-offer", handleReceiveOffer);
-      socket.on("answer", handleReceiveAnswer);
-      socket.on("send-candidate", handleReceiveCandidate);
+      socket.off("connect", handleConnection);
+      socket.off("user-joined", handleUserJoined);
+      socket.off("send-connection-offer", handleReceiveOffer);
+      socket.off("answer", handleReceiveAnswer);
+      socket.off("send-candidate", handleReceiveCandidate);
     };
   }, [createPeerConnection, localStream, roomId]);
 

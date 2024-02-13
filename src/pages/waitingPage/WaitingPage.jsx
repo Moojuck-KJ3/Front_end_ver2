@@ -1,7 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
 import WaitingFreindVideoContainer from "../createRoomPage/video/WaitingFreindVideoContainer";
 import CreateRoomPageFooter from "../createRoomPage/CreateRoomPageFooter";
-import { usePeerConnection } from "../../realtimeComunication/webRTCManager";
+import {
+  getRemoteStream,
+  usePeerConnection,
+} from "../../realtimeComunication/webRTCManager";
 import CopyToClipboardButton from "./ClipboardClipboardCopyButton";
 import { useEffect, useState } from "react";
 import socket from "../../realtimeComunication/socket";
@@ -14,15 +17,19 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const { roomId } = useParams();
   const [progressValue, setProgressValue] = useState(50);
   const { remoteStreams } = usePeerConnection(localStream);
-
+  
   useEffect(() => {
-    console.log("remoteStreams and PeerConnections!");
+    // console.log("remoteStreams and PeerConnections!");
+    // setRoomDetail((prevDetail) => ({
+    //   ...prevDetail,
+    //   playerStreams: { ...prevDetail.playerStreams, ...remoteStreams },
+    // }));
+
+    console.log("getRemoteStream");
+    console.log(getRemoteStream());
+    console.log("remoteStreams");
     console.log(remoteStreams);
-    setRoomDetail((prevDetail) => ({
-      ...prevDetail,
-      playerStreams: { ...prevDetail.playerStreams, ...remoteStreams },
-    }));
-  }, [remoteStreams, setRoomDetail]);
+  }, [remoteStreams]);
 
   useEffect(() => {
     const handleAllPlayerReady = () => {
