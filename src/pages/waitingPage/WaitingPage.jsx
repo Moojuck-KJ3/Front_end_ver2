@@ -26,6 +26,13 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const pcsRef = useRef({});
   const [users, setUsers] = useState([]);
 
+  useEffect(() => {
+    console.log("pcsRef");
+    console.log(pcsRef);
+    console.log("users");
+    console.log(users);
+  }, [pcsRef, users]);
+
   const createPeerConnection = useCallback((socketId) => {
     try {
       console.log("createPeerConnection is called", socketId);
@@ -75,15 +82,9 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   }, []);
 
   useEffect(() => {
-    console.log("pcsRef");
-    console.log(pcsRef);
-    console.log("users");
-    console.log(users);
-    const handleConnection = () => {
-      console.log("join-room is called");
-      socket.emit("join-room", roomId);
-    };
-    socket.on("connect", handleConnection);
+    socket.emit("join-room", {
+      roomId,
+    });
     socket.on("all-users", (allUsers) => {
       console.log("all-users is called");
       allUsers.forEach(async (user) => {

@@ -259,7 +259,7 @@ export function usePeerConnection() {
 //         peers[fromSocketId].addIceCandidate(candidate);
 //       }
 //     };
-//     socket.connect();
+    // socket.connect();
 
 //     socket.on("connect", handleConnection);
 //     socket.on("user-joined", handleUserJoined);
