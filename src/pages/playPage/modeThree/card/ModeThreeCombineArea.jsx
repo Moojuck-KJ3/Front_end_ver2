@@ -17,7 +17,6 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
   const [isSpining, setIsSpining] = useState(false);
   const [combinedplaceList, setCombinedPlaceList] = useState([]);
   const { roomId } = useParams();
-
   useEffect(() => {
     if (draggedTagA && draggedTagB) {
       setIsSpining(true);
@@ -39,21 +38,23 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
 
   const handleDrop = (event, playerId) => {
     event.preventDefault();
-
     const restaurantData = event.dataTransfer.getData("restaurant");
+
+    console.log("handleDrop is called ");
     const parsedRestaurantData = JSON.parse(restaurantData);
+    console.log(parsedRestaurantData);
 
     if (parsedRestaurantData) {
       if (playerId === 1) {
-        setDraggedTagA(restaurantData);
+        setDraggedTagA(parsedRestaurantData);
         console.log(draggedTagA);
       } else if (playerId === 2) {
-        setDraggedTagB(restaurantData);
+        setDraggedTagB(parsedRestaurantData);
       } else if (playerId === 3) {
-        setDraggedTagC(restaurantData);
+        setDraggedTagC(parsedRestaurantData);
         console.log(draggedTagA);
       } else if (playerId === 4) {
-        setDraggedTagD(restaurantData);
+        setDraggedTagD(parsedRestaurantData);
       }
     }
     socket.emit("user-selected-card", {
@@ -146,7 +147,7 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
               onDragOver={handleDragOver}
               onDrop={(event) => handleDrop(event, 1)}
             >
-              {draggedTagA && <BigPlaceCard img={"/돈까스.png"} />}
+              {draggedTagA && <BigPlaceCard img={draggedTagA.thumbnailImg} />}
             </div>
 
             {/* USER B Target Area */}
@@ -157,7 +158,7 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
               onDragOver={handleDragOver}
               onDrop={(event) => handleDrop(event, 2)}
             >
-              {draggedTagB && <BigPlaceCard img={"/돈까스.png"} />}
+              {draggedTagB && <BigPlaceCard img={draggedTagB.thumbnailImg} />}
             </div>
           </div>
           {/* Middle */}
@@ -184,7 +185,7 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
               onDragOver={handleDragOver}
               onDrop={(event) => handleDrop(event, 3)}
             >
-              {draggedTagC && <BigPlaceCard img={"/돈까스.png"} />}
+              {draggedTagC && <BigPlaceCard img={draggedTagC.thumbnailImg} />}
             </div>
             {/* USER D Target Area */}
             <div
@@ -194,7 +195,7 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
               onDragOver={handleDragOver}
               onDrop={(event) => handleDrop(event, 4)}
             >
-              {draggedTagD && <BigPlaceCard img={"/돈까스.png"} />}
+              {draggedTagD && <BigPlaceCard img={draggedTagD.thumbnailImg} />}
             </div>
           </div>
         </div>

@@ -20,15 +20,11 @@ const PlayerHand = ({
     console.log(restaurant);
     console.log("handleDragStart");
     const restaurantData = JSON.stringify({
-      restId: restaurant.id,
-      // name: restaurant.name,
-      thumbnailURL: restaurant.FoodUrl,
-      // category: restaurant.category,
+      _id: restaurant._id,
+      thumbnailImg: restaurant.thumbnailImg,
     });
-    console.log(restaurantData);
 
     event.dataTransfer.setData("restaurant", restaurantData);
-    console.log(restaurantData);
   };
 
   const handleClick = (i) => {

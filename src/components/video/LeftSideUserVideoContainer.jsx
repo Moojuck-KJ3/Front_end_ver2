@@ -10,18 +10,19 @@ const LeftSideUserVideoContainer = ({
   playerHand,
 }) => {
   const handleDragStart = (event, restaurant) => {
-    console.log(restaurant);
+    event.preventDefault();
+
     console.log("handleDragStart");
+    console.log(restaurant);
+
     const restaurantData = JSON.stringify({
-      restId: restaurant.id,
-      // name: restaurant.name,
-      thumbnailURL: restaurant.FoodUrl,
-      // category: restaurant.category,
+      _id: restaurant._id,
+      thumbnailImg: restaurant.thumbnailImg,
     });
     console.log(restaurantData);
 
     event.dataTransfer.setData("restaurant", restaurantData);
-    console.log(restaurantData);
+    // console.log(restaurantData);
   };
 
   return (
