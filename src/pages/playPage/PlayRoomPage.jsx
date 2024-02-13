@@ -14,6 +14,7 @@ import VoiceRecognition from "./VoiceRecognition";
 import ModeTwoExpainModal from "../../components/modal/ModeTwoExpainModal";
 import RightSideUserVideoContainer from "../../components/video/RightSideUserVideoContainer";
 import LeftSideUserVideoContainer from "../../components/video/LeftSideUserVideoContainer";
+import { getRestaurantList } from "../../api";
 
 const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const { roomId } = useParams();
@@ -51,25 +52,25 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     //   localStorage.getItem("purposeCoordinate")
     // );
 
-    // const sendData = {
-    //   purposeCoordinate: parsedCoordinate,
-    // };
+    const sendData = {
+      purposeCoordinate: roomDetail.purposeCoordinate,
+    };
 
-    // const getRestList = async (roomId, sendData) => {
-    //   // default 재시도는 3
-    //   const response = await getRestaurantList(roomId, sendData);
+    const getRestList = async (roomId, sendData) => {
+      // default 재시도는 3
+      const response = await getRestaurantList(roomId, sendData);
 
-    //   if (response.error) {
-    //     console.log(response.exception);
-    //     return;
-    //   }
+      if (response.error) {
+        console.log(response.exception);
+        return;
+      }
+      console.log(response);
+      // 받아오는 data에 별 및 음식 관련 url 내용 추가
+      // setRestaurantList(response);
+      // console.log(restaurantList);
+    };
 
-    //   // 받아오는 data에 별 및 음식 관련 url 내용 추가
-    //   setRestaurantList(response);
-    //   console.log(restaurantList);
-    // };
-
-    // getRestList(roomId, sendData);
+    getRestList(roomId, sendData);
   }, []);
 
   useEffect(() => {
