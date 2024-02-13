@@ -133,9 +133,18 @@ export const PlaceListArea = ({
         imageUrl = imgUrls.find((img) => img.name === "작은별");
       }
 
-      // const matchesResultMoodTag = restaurant.mood.some((mood) =>
-      //   resultMoodTags.includes(mood)
-      // );
+      let matchesResultMoodTag = true;
+      if (roomMode === 2) {
+        //console.log("restaurant : ", restaurant);
+        if (restaurant.moodKeywords !== undefined) {
+          //console.log("resultMoodTags : ", resultMoodTags);
+          matchesResultMoodTag = restaurant.moodKeywords?.some((moodKeyword) =>
+            resultMoodTags.includes(moodKeyword)
+          );
+        } else {
+          matchesResultMoodTag = false;
+        }
+      }
 
       // const combineListMatch = selectedCombineList.find(
       //   (combineItem) => combineItem.restId === restaurant.restId
@@ -179,7 +188,7 @@ export const PlaceListArea = ({
         size: 1,
         x: getRandomInt(5, 90),
         y: getRandomInt(5, 90),
-        showComponentOne: matchesResultTag,
+        showComponentOne: matchesResultTag && matchesResultMoodTag,
         signatureUrl: imageUrl.imgUrl,
       };
     });
