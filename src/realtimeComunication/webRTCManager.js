@@ -33,6 +33,7 @@ export function usePeerConnection() {
       socket.emit("join-room", {
         roomId,
       });
+      console.log("join-room is called");
     } catch (e) {
       console.log(`getUserMedia error: ${e}`);
     }
@@ -45,12 +46,12 @@ export function usePeerConnection() {
 
       pc.onicecandidate = (e) => {
         if (!e.candidate) return;
-        console.log("send-candidate");
         socket.emit("send-candidate", {
           candidate: e.candidate,
           candidateSendID: socket.id,
           candidateReceiveID: socketId,
         });
+        console.log("send-candidate is called");
       };
 
       pc.oniceconnectionstatechange = (e) => {
@@ -59,11 +60,12 @@ export function usePeerConnection() {
 
       pc.ontrack = (e) => {
         console.log("ontrack success");
+        console.log(users);
         setUsers((oldUsers) =>
           oldUsers
-            .filter((user) => user.id !== socketId)
+            .filter((user) => user.socketId !== socketId)
             .concat({
-              id: socketId,
+              socketId: socketId,
               stream: e.streams[0],
             })
         );
@@ -87,9 +89,18 @@ export function usePeerConnection() {
   }, []);
 
   useEffect(() => {
+    console.log("users");
+    console.log(users);
+    console.log("pcsinfo");
+    console.log(pcsinfo);
+  }, []);
+
+  useEffect(() => {
     getLocalStream();
     socket.on("all-users", (allUsers) => {
+      console.log("all-users is called");
       allUsers.forEach(async (user) => {
+        console.log(user);
         if (!localStream) return;
         const pc = createPeerConnection(user.socketId);
         if (!pc) return;

@@ -19,17 +19,9 @@ const WaitingPage = ({ roomDetail, setRoomDetail }) => {
   const { localStream, users } = usePeerConnection();
 
   useEffect(() => {
-    // console.log("remoteStreams and PeerConnections!");
-    // setRoomDetail((prevDetail) => ({
-    //   ...prevDetail,
-    //   playerStreams: { ...prevDetail.playerStreams, ...remoteStreams },
-    // }));
-
     console.log("users");
     console.log(users);
-  }, [users]);
 
-  useEffect(() => {
     const handleAllPlayerReady = () => {
       console.log("All players are ready");
       setIsAllPlayerReady(true);
