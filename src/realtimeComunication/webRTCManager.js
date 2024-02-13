@@ -85,7 +85,7 @@ export function usePeerConnection(localStream) {
         try {
           const offer = await peers[playerId].createOffer();
           peers[playerId].setLocalDescription(offer);
-          console.log(`${peers[playerId]}is setted setLocalDescription`);
+          console.log(`${playerId}is setted setLocalDescription`);
           console.log(`send-connection-offer is begin`);
 
           socket.emit("send-connection-offer", { roomId, playerId, offer });
