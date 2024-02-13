@@ -92,7 +92,7 @@ export function usePeerConnection(localStream) {
         try {
           const offer = await pc.createOffer();
           console.log("create offer success");
-          pc.setLocalDescription(offer);
+          await pc.setLocalDescription(offer);
           console.log(`send-connection-offer is emitting`);
           socket.emit("send-connection-offer", {
             sdp: offer,
@@ -113,10 +113,10 @@ export function usePeerConnection(localStream) {
       if (!pc) return;
       pcsRef.current = { ...pcsRef.current, [offerSendID]: pc };
       try {
-        pc.setRemoteDescription(sdp);
+        await pc.setRemoteDescription(sdp);
         console.log("answer set remote description success");
         const answer = await pc.createAnswer();
-        pc.setLocalDescription(answer);
+        await pc.setLocalDescription(answer);
 
         console.log(`answer is emitting`);
         socket.emit("answer", {
@@ -142,6 +142,7 @@ export function usePeerConnection(localStream) {
 
     const handleReceiveCandidate = async (data) => {
       console.log("handleReceiveCandidate is called ");
+      console.log(data);
       const pc = pcsRef.current[data.candidateSendID];
       if (!pc) return;
       await pc.addIceCandidate(data.candidate);
