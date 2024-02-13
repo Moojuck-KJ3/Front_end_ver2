@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 
-function LineAnimation({ startX, startY, endX, endY }) {
+function LineAnimation({ startX, startY, endX, endY, onAnimationFirstEnd }) {
   const lineRef1 = useRef(null);
   const lineRef2 = useRef(null);
 
@@ -20,7 +20,11 @@ function LineAnimation({ startX, startY, endX, endY }) {
       rotation: angle,
       transformOrigin: "left center",
     });
-    gsap.to(lineRef1.current, { scaleX: 1, duration: 2 });
+    gsap.to(lineRef1.current, {
+      scaleX: 1,
+      duration: 2,
+      onComplete: onAnimationFirstEnd,
+    });
     gsap.to(lineRef2.current, { scaleX: 1, duration: 2, delay: 2 });
 
     // 색상 애니메이션

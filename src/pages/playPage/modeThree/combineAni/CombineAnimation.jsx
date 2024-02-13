@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import AnimationStar from "./StarComponent";
 import LineAnimation from "./LineAnimation";
+import ResultCardLists from "../card/ResultCardLists";
 
 const MAXLIMIT_RATE = 0.2;
 const MINVALUE = -1000;
@@ -18,7 +19,13 @@ function compressValue(value) {
 
 // 아마 입력 받을때
 // position의 값을 임의의 비율로 변환하므로 적당히 높은 값을 넣을것
-const CombineAnimation = ({ onAnimationEnd, combinedplaceList }) => {
+const CombineAnimation = ({ combinedplaceList, onDragOver }) => {
+  const [animationFinished, setAnimationFinished] = useState(false);
+
+  const handleAnimationFirstEnd = () => {
+    setAnimationFinished(true);
+  };
+
   const positions = combinedplaceList.map((place) => {
     return {
       x: compressValue(place.x),
@@ -29,36 +36,51 @@ const CombineAnimation = ({ onAnimationEnd, combinedplaceList }) => {
 
   return (
     <div className="relative">
-      {positions.map((position, i) => {
-        if (i % 2 === 0 && positions[i + 1]) {
+      <div style={{ position: "absolute", zIndex: 1 }}>
+        {positions.map((position, i) => {
+          if (i % 2 === 0 && positions[i + 1]) {
+            return (
+              <LineAnimation
+                key={i}
+                startX={position.x}
+                startY={position.y}
+                endX={positions[i + 1].x}
+                endY={positions[i + 1].y}
+                onAnimationFirstEnd={handleAnimationFirstEnd}
+              />
+            );
+          }
           return (
             <LineAnimation
               key={i}
               startX={position.x}
               startY={position.y}
-              endX={positions[i + 1].x}
-              endY={positions[i + 1].y}
+              endX={positions[positions.length - 1].x}
+              endY={positions[positions.length - 1].y}
+              onAnimationFirstEnd={handleAnimationFirstEnd}
             />
           );
-        }
-        return (
-          <LineAnimation
+        })}
+        {positions.map((position, i) => (
+          <AnimationStar
             key={i}
-            startX={position.x}
-            startY={position.y}
-            endX={positions[positions.length - 1].x}
-            endY={positions[positions.length - 1].y}
+            x={position.x}
+            y={position.y}
+            size={position.size}
           />
-        );
-      })}
-      {positions.map((position, i) => (
-        <AnimationStar
-          key={i}
-          x={position.x}
-          y={position.y}
-          size={position.size}
-        />
-      ))}
+        ))}
+      </div>
+      {animationFinished && (
+        <div
+          onDragOver={onDragOver}
+          style={{ position: "absolute", zIndex: 2 }}
+        >
+          <ResultCardLists
+            combinedplaceList={combinedplaceList}
+            positions={positions}
+          />
+        </div>
+      )}
     </div>
   );
 };

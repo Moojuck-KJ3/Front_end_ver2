@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import BigPlaceCard from "./BigPlaceCard";
-import ResultCardLists from "./ResultCardLists";
+
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import HelpIcon from "@mui/icons-material/Help";
 import LoopIcon from "@mui/icons-material/Loop";
@@ -17,7 +17,6 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
   const [showContent, setShowContent] = useState(false);
   const [isSpining, setIsSpining] = useState(false);
   const [combinedplaceList, setCombinedPlaceList] = useState([]);
-  const [animationFinished, setAnimationFinished] = useState(false);
 
   const { roomId } = useParams();
 
@@ -33,10 +32,6 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
     { x: 500, y: 500 },
     { x: 0, y: 0 }, // Center
   ];
-
-  const handleAnimationEnd = () => {
-    setAnimationFinished(true);
-  };
 
   useEffect(() => {
     if (draggedTagA && draggedTagB) {
@@ -141,17 +136,10 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
     <div className="w-full h-full flex justify-center  items-center">
       {showContent ? (
         <div className="w-full h-full flex flex-col flex-grow justify-center items-center relative">
-          {animationFinished && (
-            <div onDragOver={handleResetTarget}>
-              <ResultCardLists combinedplaceList={combinedplaceList} />
-            </div>
-          )}
-
-          {/* 애니메이션이 끝나면 위의 ResultCardLists도 보여주려 한다 */}
-          {/* combinedplaceList */}
+          {/* 애니메이션에 absolute position 지정 */}
           <CombineAnimation
             combinedplaceList={testPositions}
-            onAnimationEnd={handleAnimationEnd}
+            onDragOver={handleResetTarget}
           />
         </div>
       ) : (
