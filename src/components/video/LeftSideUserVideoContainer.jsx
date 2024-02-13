@@ -6,7 +6,7 @@ import VideocamIcon from "@mui/icons-material/Videocam";
 const LeftSideUserVideoContainer = ({ localStream, remoteStrem, showMic }) => {
   return (
     <div className=" flex flex-col w-1/5 min-w-[300px] h-full gap-4 ">
-      <div className="flex flex-col justify-center bg-white p-4 mx-2  rounded-lg shadow-2xl border-2 relative">
+      <div className="flex flex-col justify-center bg-white p-4 mx-2 min-h-[300px]  rounded-lg shadow-2xl border-2 relative">
         <VideoContainer mediaStream={localStream} />
         {showMic && (
           <button className="w-10 h-10 bg-green-500 rounded-full absolute top-6 right-6 animate-fade">
@@ -14,7 +14,7 @@ const LeftSideUserVideoContainer = ({ localStream, remoteStrem, showMic }) => {
           </button>
         )}
       </div>
-      <div className="flex flex-col justify-center bg-white p-4 mx-2  rounded-lg shadow-2xl border-2 ">
+      <div className="flex flex-col justify-center bg-white p-4 mx-2 min-h-[300px] rounded-lg shadow-2xl border-2 ">
         <VideoContainer mediaStream={remoteStrem} />
       </div>
       <div className="flex flex-col flex-grow justify-between items-center bg-white p-3 mx-2  rounded-lg shadow-2xl border-2">

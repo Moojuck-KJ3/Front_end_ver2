@@ -9,7 +9,7 @@ const PlayerHand = ({
 }) => {
   const getModeStyle = (modeValue) => {
     if (modeValue === roomMode) {
-      return "transform scale-105 border-4 border-blue-500"; // Current mode: Highlighted
+      return "transform scale-105 border-4 border-blue-600"; // Current mode: Highlighted
     } else if (modeValue < roomMode) {
       return " border-green-400 border-4 text-gray-600 opacity-50";
     }
@@ -44,7 +44,7 @@ const PlayerHand = ({
       <div className="w-full h-full bg-white rounded-md shadow-inner flex ">
         <div
           onClick={() => handleClick(1)}
-          className={`w-1/4 flex flex-col justify-between text-center m-2 border-2 rounded-xl ${getModeStyle(
+          className={`w-1/4 flex flex-col justify-between text-center m-2 border-2 rounded-xl box ${getModeStyle(
             1
           )}`}
         >
