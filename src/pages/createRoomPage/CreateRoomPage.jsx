@@ -29,6 +29,7 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
           ...prev,
           roomId: roomId,
           playerId: playerId,
+          playerStreams: { ...prev.playerStreams, [playerId]: localStream },
         }));
         navigate(`/waiting-friends/${roomId}`);
       } else {
@@ -43,6 +44,7 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
           ...prev,
           roomId: roomId,
           playerId: playerId,
+          playerStreams: { ...prev.playerStreams, [playerId]: localStream },
         }));
         navigate(`/waiting-friends/${roomId}`);
       } else {
