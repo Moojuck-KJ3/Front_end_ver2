@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import BigPlaceCard from "./BigPlaceCard";
-import ResultCardLists from "./ResultCardLists";
+
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import HelpIcon from "@mui/icons-material/Help";
 import LoopIcon from "@mui/icons-material/Loop";
 import { useParams } from "react-router-dom";
 import socket from "../../../../realtimeComunication/socket";
+import CombineAnimation from "../combineAni/CombineAnimation";
 
 const ModeThreeCombineArea = ({ roomDetail }) => {
   const [draggedTagA, setDraggedTagA] = useState(null);
@@ -16,26 +17,38 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
   const [showContent, setShowContent] = useState(false);
   const [isSpining, setIsSpining] = useState(false);
   const [combinedplaceList, setCombinedPlaceList] = useState([]);
+
   const { roomId } = useParams();
+
+  // 최대 기준 1000일때 0.2로 치환된다
+  const testPositions = [
+    { x: -1000, y: -900 },
+    { x: -500, y: -850 },
+    { x: 1000, y: -900 },
+    { x: 500, y: -600 },
+    { x: -1000, y: 650 },
+    { x: -500, y: 300 },
+    { x: 1000, y: 750 },
+    { x: 500, y: 500 },
+    { x: 0, y: 0 }, // Center
+  ];
+
   useEffect(() => {
     if (draggedTagA && draggedTagB) {
       setIsSpining(true);
       const delay = setTimeout(() => {
         setShowContent(true);
       }, 3000);
-
       return () => clearTimeout(delay);
     } else {
       setShowContent(false);
       setIsSpining(false);
     }
   }, [draggedTagA, draggedTagB]);
-
   const handleDragOver = (event) => {
     event.preventDefault();
     setIsDragging(true);
   };
-
   const handleDrop = (event, playerId) => {
     event.preventDefault();
     const restaurantData = event.dataTransfer.getData("restaurant");
@@ -65,7 +78,6 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
     console.log("socket emited!");
     setIsDragging(false);
   };
-
   useEffect(() => {
     socket.connect();
     socket.on("other-user-selected-card", ({ playerId, restaurantData }) => {
@@ -86,7 +98,6 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
       socket.off("other-user-selected-card");
     };
   }, [socket]);
-
   useEffect(() => {
     if (draggedTagA && draggedTagB) {
       socket.emit("both-users-selected", {
@@ -104,15 +115,12 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
       });
     }
   }, [draggedTagA, draggedTagB, roomId]);
-
   useEffect(() => {
     socket.on("combined-result", handleCombineResult);
-
     return () => {
       socket.off("combined-result", handleCombineResult);
     };
   }, [socket]);
-
   const handleCombineResult = (data) => {
     console.log("Combined result received:", data.restaurantList);
     if (data) {
@@ -122,19 +130,21 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
       setCombinedPlaceList([]);
     }
   };
-
   const handleResetTarget = () => {
     setDraggedTagA(null);
     setDraggedTagB(null);
     setDraggedTagC(null);
     setDraggedTagD(null);
   };
-
   return (
     <div className="w-full h-full flex justify-center items-center">
       {showContent ? (
-        <div onDragOver={handleResetTarget}>
-          <ResultCardLists combinedplaceList={combinedplaceList} />
+        <div className="w-full h-full flex flex-col flex-grow justify-center items-center relative">
+          {/* 애니메이션에 absolute position 지정 */}
+          <CombineAnimation
+            combinedplaceList={testPositions}
+            onDragOver={handleResetTarget}
+          />
         </div>
       ) : (
         <div className="flex flex-col w-full h-full justify-between items-center">
@@ -203,5 +213,4 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
     </div>
   );
 };
-
 export default ModeThreeCombineArea;

@@ -34,9 +34,33 @@ export const DUMMY_PLACE = [
     imgUrl: "/국밥.png",
     likes: 0,
   },
+  {
+    id: "item6",
+    title: "돈까스",
+    imgUrl: "/국밥.png",
+    likes: 0,
+  },
+  {
+    id: "item7",
+    title: "돈까스",
+    imgUrl: "/국밥.png",
+    likes: 0,
+  },
+  {
+    id: "item8",
+    title: "돈까스",
+    imgUrl: "/국밥.png",
+    likes: 0,
+  },
+  {
+    id: "item9",
+    title: "돈까스",
+    imgUrl: "/국밥.png",
+    likes: 0,
+  },
 ];
 
-const ResultCardLists = ({ combinedplaceList }) => {
+const ResultCardLists = ({ combinedplaceList, positions }) => {
   console.log("ResultCardLists", combinedplaceList);
   const [places, setPlaces] = useState(DUMMY_PLACE);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -77,78 +101,36 @@ const ResultCardLists = ({ combinedplaceList }) => {
 
   return (
     <>
-      <ul className="flex gap-10 roun">
-        <li
-          id={places[0].id}
-          onClick={() => handleCardClick(places[0])}
-          key={0}
-          className="animate-fade animate-ease-in"
-          style={{ animationDelay: `${0.5 * 1}s` }}
-        >
-          <ResultCard
-            title={places[0].title}
-            imgUrl={places[0].imgUrl}
-            id={places[0].id}
-            likesCount={places[0].likes}
-          />
-        </li>
-        <li
-          id={places[1].id}
-          onClick={() => handleCardClick(places[1])}
-          key={1}
-          className="animate-fade animate-ease-in"
-          style={{ animationDelay: `${0.5 * 2}s` }}
-        >
-          <ResultCard
-            title={places[1].title}
-            imgUrl={places[1].imgUrl}
-            id={places[1].id}
-            likesCount={places[1].likes}
-          />
-        </li>
-        <li
-          id={places[2].id}
-          onClick={() => handleCardClick(places[2])}
-          key={2}
-          className="animate-fade animate-ease-in"
-          style={{ animationDelay: `${0.5 * 3}s` }}
-        >
-          <ResultCard
-            title={DUMMY_PLACE[2].title}
-            imgUrl={DUMMY_PLACE[2].imgUrl}
-            id={places[2].id}
-            likesCount={places[2].likes}
-          />
-        </li>
-        <li
-          id={places[3].id}
-          onClick={() => handleCardClick(places[3])}
-          key={3}
-          className="animate-fade animate-ease-in"
-          style={{ animationDelay: `${0.5 * 2}s` }}
-        >
-          <ResultCard
-            title={places[3].title}
-            imgUrl={places[3].imgUrl}
-            id={places[3].id}
-            likesCount={places[3].likes}
-          />
-        </li>
-        <li
-          id={places[4].id}
-          onClick={() => handleCardClick(places[4])}
-          key={4}
-          className="animate-fade animate-ease-in"
-          style={{ animationDelay: `${0.5 * 1}s` }}
-        >
-          <ResultCard
-            title={places[4].title}
-            imgUrl={places[4].imgUrl}
-            id={places[4].id}
-            likesCount={places[4].likes}
-          />
-        </li>
-      </ul>
+      <div className="grid grid-cols-3 grid-rows-3 gap-4">
+        {places.map((place, i) => (
+          <div
+            key={place.id}
+            onClick={() => handleCardClick(place)}
+            className={`animate-fade animate-ease-in ${
+              [0, 2, 4, 6].includes(i) ? "col-start-1" : "col-start-2"
+            }`}
+            style={{
+              animationDelay: `${
+                [0, 2, 4, 6].includes(i)
+                  ? 0
+                  : [1, 3, 5, 7].includes(i)
+                  ? 0.5
+                  : 1
+              }s`,
+              position: "absolute",
+              left: `${positions[i].x * window.innerWidth - 75}px`,
+              top: `${positions[i].y * window.innerHeight - 75}px`,
+            }}
+          >
+            <ResultCard
+              title={place.title}
+              imgUrl={place.imgUrl}
+              id={place.id}
+              likesCount={place.likes}
+            />
+          </div>
+        ))}
+      </div>
       {isModalOpen && (
         <ShowDetailWithLikeModal
           restaurant={selectedRestaurant}
