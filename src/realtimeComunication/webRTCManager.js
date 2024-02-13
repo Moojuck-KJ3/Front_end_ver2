@@ -26,6 +26,7 @@ export function usePeerConnection(localStream) {
 
   const createPeerConnection = useCallback(
     (playerId) => {
+      console.log("createPeerConnection is called", playerId);
       const connection = new RTCPeerConnection({
         iceServers: [
           { urls: "stun:stun2.1.google.com:19302" },
@@ -44,6 +45,11 @@ export function usePeerConnection(localStream) {
       }
 
       connection.onicecandidate = (event) => {
+        console.log("emitting send-candidate", {
+          roomId,
+          playerId: playerId,
+          candidate: event.candidate,
+        });
         if (event.candidate) {
           socket.emit("send-candidate", {
             roomId,
@@ -80,14 +86,13 @@ export function usePeerConnection(localStream) {
     const handleUserJoined = async ({ playerId }) => {
       console.log("handleUserJoined is called!", playerId);
       createPeerConnection(playerId);
-      console.log("peers", peers);
+      console.log("current peer list", peers);
       if (peers[playerId]) {
         try {
           const offer = await peers[playerId].createOffer();
           peers[playerId].setLocalDescription(offer);
           console.log(`${playerId}is setted setLocalDescription`);
           console.log(`send-connection-offer is begin`);
-
           socket.emit("send-connection-offer", { roomId, playerId, offer });
         } catch (error) {
           console.error("Error handling handleUserJoined data:", error);
@@ -112,6 +117,11 @@ export function usePeerConnection(localStream) {
           `fromPlayerId ${fromPlayerId}is setRemoteDescription and setLocalDescription`
         );
 
+        console.log("now emiting answer is called", {
+          roomId,
+          playerId: fromPlayerId,
+          answer,
+        });
         socket.emit("answer", { roomId, playerId: fromPlayerId, answer });
       } catch (error) {
         console.error(
@@ -122,7 +132,9 @@ export function usePeerConnection(localStream) {
     };
 
     const handleReceiveAnswer = ({ fromPlayerId, answer }) => {
-      `handleReceiveAnswer is called, responese is ${(fromPlayerId, answer)}`;
+      console.log(
+        `handleReceiveAnswer is called, fromPlayerId is ${fromPlayerId}`
+      );
 
       if (peers[fromPlayerId]) {
         peers[fromPlayerId].setRemoteDescription(answer);

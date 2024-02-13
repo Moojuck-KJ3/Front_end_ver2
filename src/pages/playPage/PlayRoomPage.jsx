@@ -30,7 +30,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const [modeOneVoiceRecResult, SetModeOneVoiceRecResult] = useState([]);
   const [modeTwoVoiceRecResult, SetModeTwoVoiceRecResult] = useState([]);
   const [playerHand, setPlayerHand] = useState({
-    selectedFoodTag: ["한식"],
+    selectedFoodTag: [],
     selectedMoodTag: ["조용한 곳"],
     selectedPlace: [],
   });
