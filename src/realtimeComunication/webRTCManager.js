@@ -97,7 +97,7 @@ export function usePeerConnection(localStream) {
 
     const handleReceiveOffer = async ({ fromPlayerId, offer }) => {
       console.log(
-        `handleReceiveOffer is called, responese is ${(fromPlayerId, offer)}`
+        `handleReceiveOffer is called, fromPlayerId is ${fromPlayerId}`
       );
 
       if (!peers[fromPlayerId]) {
@@ -109,7 +109,7 @@ export function usePeerConnection(localStream) {
         const answer = await peers[fromPlayerId].createAnswer();
         peers[fromPlayerId].setLocalDescription(answer);
         console.log(
-          `${peers[fromPlayerId]}is setRemoteDescription and setLocalDescription`
+          `fromPlayerId ${fromPlayerId}is setRemoteDescription and setLocalDescription`
         );
 
         socket.emit("answer", { roomId, playerId: fromPlayerId, answer });
