@@ -118,8 +118,8 @@ const ResultCardLists = ({ combinedplaceList, positions }) => {
                   : 1
               }s`,
               position: "absolute",
-              left: `${positions[i].x * window.innerWidth - 50}px`,
-              top: `${positions[i].y * window.innerHeight - 50}px`,
+              left: `${positions[i].x * window.innerWidth - 75}px`,
+              top: `${positions[i].y * window.innerHeight - 75}px`,
             }}
           >
             <ResultCard
