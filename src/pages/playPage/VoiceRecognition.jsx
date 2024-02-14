@@ -24,16 +24,25 @@ const VoiceRecognition = ({
   };
 
   const handleReceiveSpeechKeyword = (data) => {
-    console.log("receive speech keyword Datas : ", data);
-    if (data.keywords.length > 0) {
+    console.log(
+      "receive speech keyword Datas : ",
+      data.keywords[0]?.top_5_moods
+    );
+    if (data.keywords[0]?.top_5_moods.length > 0) {
       onSetPlayerResult((prevPlayerHand) => ({
         ...prevPlayerHand,
-        selectedMoodTag: [...prevPlayerHand.selectedMoodTag, ...data.keywords],
+        selectedMoodTag: [
+          ...prevPlayerHand.selectedMoodTag,
+          ...data.keywords[0].top_5_moods,
+        ],
       }));
 
       onSetAllUserPlayerHand((prevAllUserHand) => ({
         ...prevAllUserHand,
-        selectedMoodTag: [...prevAllUserHand.selectedMoodTag, ...data.keywords],
+        selectedMoodTag: [
+          ...prevAllUserHand.selectedMoodTag,
+          ...data.keywords[0].top_5_moods,
+        ],
       }));
     }
     onSetResultRestaurant(data.restaurantList);

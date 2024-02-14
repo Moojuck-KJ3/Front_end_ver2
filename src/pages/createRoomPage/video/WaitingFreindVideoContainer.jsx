@@ -10,8 +10,13 @@ const WaitingFreindVideoContainer = ({ localStream, users }) => {
           Player 1
         </h1>
       </div>
-      {users.slice(1).map((user) => (
-        <VideoFeed key={user.socketId} stream={user.stream} />
+      {users.slice(1).map((user, index) => (
+        <div key={index} className="justify-center items-center">
+          <VideoFeed key={user.socketId} stream={user.stream} />
+          <h1 className="p-2 m-4 text-center text-gray-500 font-semibold border-2 rounded-2xl">
+            {`Player ${index + 2}`}
+          </h1>
+        </div>
       ))}
     </div>
   );

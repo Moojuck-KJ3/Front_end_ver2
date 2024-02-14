@@ -113,24 +113,24 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     getRestList(roomId, coordinate);
   }, []);
 
-  const handleAddSelectedRestaurant = useCallback((selectedRestaurant) => {
-    console.log("select-restaurant", selectedRestaurant);
-    setAllUserPlayerHand((prevAllUserHand) => {
-      const updatedHand = {
-        ...prevAllUserHand,
-        selectedPlace: [...prevAllUserHand.selectedPlace, selectedRestaurant],
-      };
+  const handleAddSelectedRestaurant = useCallback((data) => {
+    console.log("select-restaurant", data);
+    // setAllUserPlayerHand((prevAllUserHand) => {
+    //   const updatedHand = {
+    //     ...prevAllUserHand,
+    //     selectedPlace: [...prevAllUserHand.selectedPlace, selectedRestaurant],
+    //   };
 
-      return updatedHand;
-    });
+    //   return updatedHand;
+    // });
   }, []);
 
-  const handleAddSelectedFoodCategories = useCallback((resultList) => {
-    console.log("select-foodCategories", resultList);
+  const handleAddSelectedFoodCategories = useCallback((data) => {
+    console.log("select-foodCategories", data);
     setAllUserPlayerHand((prevAllUserHand) => {
       const updatedHand = {
         ...prevAllUserHand,
-        selectedPlace: [...prevAllUserHand.selectedPlace, ...resultList],
+        selectedFoodTag: [...prevAllUserHand.selectedFoodTag, ...data],
       };
 
       return updatedHand;

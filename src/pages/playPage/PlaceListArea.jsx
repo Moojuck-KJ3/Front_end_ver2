@@ -6,6 +6,7 @@ import ModeThreeCombineArea from "./modeThree/card/ModeThreeCombineArea";
 import ShowDetailModal from "../../components/modal/ShowDetailModal";
 import FinalRestaurantDetails from "./FinalRestaurantDetails";
 import { useSocket } from "../../realtimeComunication/SocketContext";
+import { useParams } from "react-router-dom";
 
 const getRandomInt = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
@@ -30,6 +31,7 @@ export const PlaceListArea = ({
   const [hoveredStarId, setHoveredStarId] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+  const { roomId } = useParams();
 
   const handleStarClick = (star) => {
     setSelectedRestaurant(star);
@@ -41,13 +43,15 @@ export const PlaceListArea = ({
   };
 
   const addToPlayerHand = (selectedRestaurant) => {
-    socket.emit("select-restaurant", selectedRestaurant);
+    const data = { roomId, selectedRestaurant };
+    console.log(roomId);
+    socket.emit("select-restaurant", roomId);
     console.log("select-restaurant is emitted");
 
     setPlayerHand((prevPlayerHand) => {
       const updatedHand = {
         ...prevPlayerHand,
-        selectedPlace: [selectedRestaurant],
+        selectedPlace: [...prevPlayerHand.selectedPlace, selectedRestaurant],
       };
       return updatedHand;
     });

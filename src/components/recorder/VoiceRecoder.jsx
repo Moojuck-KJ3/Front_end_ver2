@@ -17,7 +17,6 @@ const VoiceRecoder = ({
   const [timeLeft, setTimeLeft] = useState(5);
   const recognitionRef = useRef(null);
   const serverSendScript = useRef("");
-
   const { roomId } = useParams();
   const startRecording = () => {
     setTranscript("");
@@ -84,15 +83,11 @@ const VoiceRecoder = ({
   };
 
   const handleReady = () => {
-    socket.emit("select-foodCategories", resultList);
+    socket.emit("select-foodCategories", { roomId, resultList });
     console.log("select-foodCategories is emitted");
     onSetResult((prevPlayerHand) => ({
       ...prevPlayerHand,
       selectedFoodTag: [...prevPlayerHand.selectedFoodTag, ...resultList],
-    }));
-    onSetAllUserPlayerHand((prevAllUserHand) => ({
-      ...prevAllUserHand,
-      selectedFoodTag: [...prevAllUserHand.selectedFoodTag, ...resultList],
     }));
 
     onClick();
