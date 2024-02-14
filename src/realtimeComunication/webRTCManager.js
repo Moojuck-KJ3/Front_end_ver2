@@ -80,6 +80,11 @@ export function usePeerConnection(localStream) {
   );
 
   useEffect(() => {
+    const handleConnection = () => {
+      console.log("join-room is called");
+      socket.emit("join-room", roomId);
+    };
+
     const handleAllUsers = async (allUsers) => {
       console.log("handleAllUsers is called!");
       allUsers.forEach(async (user) => {
@@ -145,18 +150,24 @@ export function usePeerConnection(localStream) {
       if (!pc) return;
       await pc.addIceCandidate(data.candidate);
       console.log("candidate add success");
+      // if (peers[fromPlayerId]) {
+      //   peers[fromPlayerId].addIceCandidate(candidate);
+      // }
     };
 
+    socket.connect();
+    socket.on("connect", handleConnection);
     socket.on("all-users", handleAllUsers);
     socket.on("send-connection-offer", handleReceiveOffer);
     socket.on("answer", handleReceiveAnswer);
     socket.on("send-candidate", handleReceiveCandidate);
 
     return () => {
-      socket.on("all-users", handleAllUsers);
-      socket.off("send-connection-offer", handleReceiveOffer);
-      socket.off("answer", handleReceiveAnswer);
-      socket.off("send-candidate", handleReceiveCandidate);
+      socket.on("connect", handleConnection);
+      socket.on("user-joined", handleAllUsers);
+      socket.on("send-connection-offer", handleReceiveOffer);
+      socket.on("answer", handleReceiveAnswer);
+      socket.on("send-candidate", handleReceiveCandidate);
     };
   }, [createPeerConnection, localStream, roomId]);
 

@@ -21,23 +21,6 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   }, [users]);
 
   useEffect(() => {
-    const joinRoom = () => {
-      console.log("join-room is called");
-      console.log(roomId);
-      socket.emit("join-room", { roomId });
-    };
-    if (socket.connected) {
-      joinRoom();
-    } else {
-      socket.on("connect", joinRoom);
-
-      return () => {
-        socket.off("connect", joinRoom);
-      };
-    }
-  }, [roomId]);
-
-  useEffect(() => {
     const handleAllPlayerReady = () => {
       console.log("All players are ready");
       setIsAllPlayerReady(true);
@@ -58,11 +41,9 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
       navigator(`/play-room/${roomId}`);
     };
 
-    if (!socket.connected) {
-      socket.connect();
-    }
     socket.on("all-player-ready", handleAllPlayerReady);
     socket.on("start-play-room-response", handleStartPlayRoomResponse);
+
     return () => {
       socket.off("all-player-ready", handleAllPlayerReady);
       socket.off("start-play-room-response", handleStartPlayRoomResponse);
