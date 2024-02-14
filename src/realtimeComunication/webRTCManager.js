@@ -150,9 +150,6 @@ export function usePeerConnection(localStream) {
       if (!pc) return;
       await pc.addIceCandidate(data.candidate);
       console.log("candidate add success");
-      // if (peers[fromPlayerId]) {
-      //   peers[fromPlayerId].addIceCandidate(candidate);
-      // }
     };
 
     socket.connect();
@@ -163,11 +160,11 @@ export function usePeerConnection(localStream) {
     socket.on("send-candidate", handleReceiveCandidate);
 
     return () => {
-      socket.on("connect", handleConnection);
-      socket.on("user-joined", handleAllUsers);
-      socket.on("send-connection-offer", handleReceiveOffer);
-      socket.on("answer", handleReceiveAnswer);
-      socket.on("send-candidate", handleReceiveCandidate);
+      socket.off("connect", handleConnection);
+      socket.off("user-joined", handleAllUsers);
+      socket.off("send-connection-offer", handleReceiveOffer);
+      socket.off("answer", handleReceiveAnswer);
+      socket.off("send-candidate", handleReceiveCandidate);
     };
   }, [createPeerConnection, localStream, roomId]);
 

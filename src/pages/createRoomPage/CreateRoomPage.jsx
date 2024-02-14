@@ -24,12 +24,10 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
 
     socket.on("create-room-response", (response) => {
       if (response) {
-        const { roomId, playerId } = response;
+        const { roomId } = response;
         setRoomDetail((prev) => ({
           ...prev,
           roomId: roomId,
-          playerId: playerId,
-          playerStreams: { ...prev.playerStreams, [playerId]: localStream },
         }));
         navigate(`/waiting-friends/${roomId}`);
       } else {
@@ -37,14 +35,12 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
       }
     });
 
-    socket.on("join-room-response", (response) => {
+    socket.on("enter-waiting-room-response", (response) => {
       if (response) {
-        const { roomId, playerId } = response;
+        const { roomId } = response;
         setRoomDetail((prev) => ({
           ...prev,
           roomId: roomId,
-          playerId: playerId,
-          playerStreams: { ...prev.playerStreams, [playerId]: localStream },
         }));
         navigate(`/waiting-friends/${roomId}`);
       } else {
@@ -54,7 +50,7 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
 
     return () => {
       socket.off("create-room-response");
-      socket.off("join-room-response");
+      socket.off("enter-waiting-room-response");
     };
   }, [setRoomDetail, roomDetail, navigate]);
 
@@ -64,12 +60,13 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
 
   const handleRoomCreate = async (event) => {
     event.preventDefault();
+    console.log("create-room is emited");
     socket.emit("create-room");
     setIsModal(false);
   };
 
   const handleRoomJoin = () => {
-    socket.emit("join-room", { roomId });
+    socket.emit("enter-waiting-room", { roomId });
   };
 
   const handleLogout = () => {
