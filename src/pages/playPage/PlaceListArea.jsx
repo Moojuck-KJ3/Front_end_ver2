@@ -25,6 +25,7 @@ export const PlaceListArea = ({
   handleSetReady,
   roomDetail,
   imgUrls,
+  modeTwoResultRestList,
 }) => {
   const socket = useSocket();
   const [stars, setStars] = useState([]);
@@ -72,7 +73,9 @@ export const PlaceListArea = ({
         onMouseEnter={() => setHoveredStarId(star._id)}
         onMouseLeave={() => setHoveredStarId(null)}
         className={`${star.className} relative animate-fade ${
-          !star.showComponentOne ? "animate-opacityPulse moveToBottomRight" : ""
+          !star.signatureUrl && roomMode === 2
+            ? "animate-opacityPulse moveToBottomRight"
+            : ""
         }`}
         key={i}
         id={star._id}
@@ -81,8 +84,8 @@ export const PlaceListArea = ({
           top: `${star.y}%`,
           left: `${star.x}%`,
           transform: `scale(${star.size})`,
-          opacity: !star.showComponentOne ? 0 : 1,
-          pointerEvents: !star.showComponentOne ? "none" : "auto",
+          opacity: !star.signatureUrl && roomMode === 2 ? 0 : 1,
+          pointerEvents: !star.signatureUrl && roomMode === 2 ? "none" : "auto",
         }}
       >
         <div className={`absolute w-20.5 h-20.5 bg-white`}></div>
@@ -92,7 +95,7 @@ export const PlaceListArea = ({
               <img src={star.signatureUrl} alt="" />
             </div>
           ) : (
-            <div className="w-6 h-6 hover:bg-yellow-200 rounded-full cursor-pointer duration-500 ">
+            <div className="w-6 h-6 hover:bg-yellow-200 rounded-full cursor-pointer duration-500 opacity-70">
               {<FontAwesomeIcon icon={faStar} />}
             </div>
           )}
@@ -135,17 +138,23 @@ export const PlaceListArea = ({
 
       let matchesResultMoodTag = true;
       if (roomMode === 2) {
+        console.log("modeTwoResultRestList", modeTwoResultRestList);
         if (matchesResultTag && restaurant.moodKeywords !== undefined) {
           matchesResultMoodTag = restaurant.moodKeywords?.some((moodKeyword) =>
             allUserSelectedMoodTags.includes(moodKeyword)
           );
 
-          const tempImgUrl = imgUrls.find((img) =>
-            targetNames.some((name) => img.name === name)
-          );
+          const restaurantExistsInModeTwoResult =
+            modeTwoResultRestList.includes(restaurant.id);
 
-          if (tempImgUrl) {
-            imageUrl = tempImgUrl;
+          if (restaurantExistsInModeTwoResult) {
+            const tempImgUrl = imgUrls.find((img) =>
+              targetNames.some((name) => img.name === name)
+            );
+
+            if (tempImgUrl) {
+              imageUrl = tempImgUrl;
+            }
           }
         } else {
           matchesResultMoodTag = false;
@@ -157,7 +166,6 @@ export const PlaceListArea = ({
         size: 1,
         x: getRandomInt(5, 90),
         y: getRandomInt(5, 90),
-        showComponentOne: matchesResultMoodTag,
         signatureUrl: imageUrl?.imgUrl,
       };
     });

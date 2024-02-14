@@ -35,7 +35,7 @@ export default {
         opacityPulse: {
           "0%": { opacity: 0.7, transform: "translate(0, 0)" },
           "50%": { opacity: 0.3 },
-          "100%": { opacity: 0, transform: "translate(5px, 5px)" },
+          "100%": { opacity: 0, transform: "translate(15px, 15px)" },
         },
       },
     },
