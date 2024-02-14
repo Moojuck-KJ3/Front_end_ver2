@@ -13,16 +13,12 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const navigator = useNavigate();
   const { roomId } = useParams();
   const [progressValue, setProgressValue] = useState(50);
-  const { remoteStreams } = usePeerConnection(localStream);
+  const { users } = usePeerConnection(localStream);
 
   useEffect(() => {
-    console.log("remoteStreams and PeerConnections!");
-    console.log(remoteStreams);
-    setRoomDetail((prevDetail) => ({
-      ...prevDetail,
-      playerStreams: { ...prevDetail.playerStreams, ...remoteStreams },
-    }));
-  }, [remoteStreams, setRoomDetail]);
+    console.log("new users!");
+    console.log(users);
+  }, [users]);
 
   useEffect(() => {
     const handleAllPlayerReady = () => {
@@ -95,7 +91,8 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
           {/* 비디오 */}
           <WaitingFreindVideoContainer
             localStream={localStream}
-            remoteStreams={remoteStreams}
+            // remoteStreams={remoteStreams}
+            users={users}
           />
           {/* 버튼 */}
           <CreateRoomPageFooter
