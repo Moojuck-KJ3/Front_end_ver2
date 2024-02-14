@@ -155,15 +155,16 @@ export function usePeerConnection(localStream) {
       // }
     };
 
-    socket.connect();
-    socket.on("connect", handleConnection);
+    // socket.connect();
+    // socket.on("connect", handleConnection);
+    handleConnection();
     socket.on("all-users", handleAllUsers);
     socket.on("send-connection-offer", handleReceiveOffer);
     socket.on("answer", handleReceiveAnswer);
     socket.on("send-candidate", handleReceiveCandidate);
 
     return () => {
-      socket.off("connect", handleConnection);
+      // socket.off("connect", handleConnection);
       socket.off("user-joined", handleAllUsers);
       socket.off("send-connection-offer", handleReceiveOffer);
       socket.off("answer", handleReceiveAnswer);
