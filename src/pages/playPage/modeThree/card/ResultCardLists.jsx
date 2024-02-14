@@ -66,7 +66,6 @@ const ResultCardLists = ({ combinedplaceList, positions }) => {
   const [places, setPlaces] = useState(combinedplaceList); //DUMMY_PLACE
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
-  const socket = useSocket();
 
   const handleCardClick = (restaurant) => {
     setSelectedRestaurant(restaurant);

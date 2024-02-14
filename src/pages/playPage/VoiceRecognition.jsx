@@ -11,7 +11,6 @@ const VoiceRecognition = ({
   const socket = useSocket();
   const recognitionRef = useRef(null);
   const { roomId } = useParams();
-  const socket = useSocket();
 
   const handleSetMoodTags = (text) => {
     const serverSendData = {

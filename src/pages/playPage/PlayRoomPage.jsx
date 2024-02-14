@@ -3,7 +3,6 @@ import VoiceRecoder from "../../components/recorder/VoiceRecoder";
 import GameArea from "./GameArea";
 import PlayRoomContainer from "./PlayRoomContainer";
 import ModeOneExpainModal from "../../components/modal/ModeOneExpainModal";
-
 import { useParams } from "react-router-dom";
 import { PlaceListArea } from "./PlaceListArea";
 import { Header } from "./Header";

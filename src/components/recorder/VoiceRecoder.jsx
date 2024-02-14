@@ -17,7 +17,6 @@ const VoiceRecoder = ({
   const [timeLeft, setTimeLeft] = useState(5);
   const recognitionRef = useRef(null);
   const serverSendScript = useRef("");
-  const socket = useSocket();
 
   const { roomId } = useParams();
   const startRecording = () => {

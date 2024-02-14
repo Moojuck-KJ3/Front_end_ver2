@@ -7,7 +7,6 @@ import LoopIcon from "@mui/icons-material/Loop";
 import { useParams } from "react-router-dom";
 import { useSocket } from "../../../../realtimeComunication/SocketContext";
 import CombineAnimation from "../combineAni/CombineAnimation";
-import { useSocket } from "../../../../realtimeComunication/SocketContext";
 
 const ModeThreeCombineArea = ({ roomDetail }) => {
   const socket = useSocket();
@@ -19,10 +18,7 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
   const [showContent, setShowContent] = useState(false);
   const [isSpining, setIsSpining] = useState(false);
   const [combinedplaceList, setCombinedPlaceList] = useState([]);
-
   const { roomId } = useParams();
-
-  const socket = useSocket();
 
   useEffect(() => {
     if (draggedTagA && draggedTagB) {

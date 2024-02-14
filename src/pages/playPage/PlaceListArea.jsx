@@ -31,8 +31,6 @@ export const PlaceListArea = ({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
-  const socket = useSocket();
-
   const handleStarClick = (star) => {
     setSelectedRestaurant(star);
     setIsModalVisible(true);
