@@ -1,8 +1,8 @@
 import PlaceCard from "./modeThree/card/PlaceCard";
 
 const PlayerHand = ({
-  playerHand,
-  setPlayerHand,
+  allUserPlayerHand,
+  onSetAllUserPlayerHand,
   roomMode,
   setRoomMode,
   handleSetReady,
@@ -35,6 +35,22 @@ const PlayerHand = ({
     handleSetReady();
   };
 
+  const countTags = (tags) => {
+    const tagCounts = new Map();
+    tags.forEach((tag) => {
+      tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+    });
+    return tagCounts;
+  };
+
+  const moodTagCounts = allUserPlayerHand.selectedMoodTag
+    ? countTags(allUserPlayerHand.selectedMoodTag)
+    : new Map();
+
+  const foodTagCounts = allUserPlayerHand.selectedFoodTag
+    ? countTags(allUserPlayerHand.selectedFoodTag)
+    : new Map();
+
   return (
     <div className="w-full h-1/3">
       <div className="w-full h-full bg-white rounded-md shadow-inner flex ">
@@ -47,12 +63,22 @@ const PlayerHand = ({
           <div>
             <h1 className="mt-2 font-tenada text-2xl">선호하는 음식🍔</h1>
             <ul>
-              {playerHand.selectedFoodTag?.map((tag, index) => (
-                <li
-                  key={index}
-                  className="bg-gray-200 w-5/6 mx-auto my-2 py-2 text-center rounded-lg font-tenada "
-                >{`#${tag}`}</li>
-              ))}
+              {[...foodTagCounts]
+                .sort((a, b) => b[1] - a[1]) // Sort by count in descending order
+                .map(([tag, count], index) => (
+                  <li
+                    key={index}
+                    className="bg-gray-200 flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg font-tenada"
+                  >
+                    <span className="text-lg font-semibold ml-2">{`${
+                      index + 1
+                    }. `}</span>
+                    <h1 className="flex-grow text-center text-xl">{`#${tag}`}</h1>
+                    <p className="bg-green-400 font-semibold text-white mr-3 w-7 h-7 text-center rounded-full flex items-center justify-center">
+                      {count}
+                    </p>
+                  </li>
+                ))}
             </ul>
           </div>
           {roomMode === 1 && (
@@ -73,14 +99,24 @@ const PlayerHand = ({
         >
           <div>
             <h1 className="mt-1 font-tenada text-2xl ">선호하는 분위기👀</h1>
-            <ul className="">
-              {playerHand.selectedMoodTag?.map((tag, index) => (
-                <li
-                  key={index}
-                  className="bg-gray-200 w-5/6 mx-auto my-2 py-2 text-center rounded-lg font-tenada"
-                >{`#${tag}`}</li>
-              ))}
-            </ul>
+            <div className="">
+              {[...moodTagCounts]
+                .sort((a, b) => b[1] - a[1])
+                .map(([tag, count], index) => (
+                  <div
+                    key={index}
+                    className="bg-gray-200 flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg font-tenada"
+                  >
+                    <span className="text-lg font-semibold ml-2">{`${
+                      index + 1
+                    }. `}</span>
+                    <h1 className="flex-grow text-center text-xl">{`#${tag}`}</h1>
+                    <p className="bg-green-400 font-semibold text-white mr-3 w-7 h-7 text-center rounded-full flex items-center justify-center">
+                      {count}
+                    </p>
+                  </div>
+                ))}
+            </div>
           </div>
           {roomMode === 2 && (
             <button
@@ -100,7 +136,7 @@ const PlayerHand = ({
           <div>
             <h1 className="mt-1 font-tenada text-2xl ">가고 싶은 장소💫</h1>
             <div className="grid grid-cols-3 gap-4">
-              {playerHand.selectedPlace?.map((place, index) => (
+              {allUserPlayerHand.selectedPlace?.map((place, index) => (
                 <div
                   key={index}
                   onDragStart={(event) => handleDragStart(event, place)}

@@ -29,48 +29,34 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     useState(false);
   const [modeOneVoiceRecResult, SetModeOneVoiceRecResult] = useState([]);
   const [modeTwoVoiceRecResult, SetModeTwoVoiceRecResult] = useState([]);
+  console.log("modeTwoVoiceRecResult", modeTwoVoiceRecResult);
   const [playerHand, setPlayerHand] = useState({
-    selectedFoodTag: [], //"한식"
-    selectedMoodTag: ["조용한 곳"],
+    selectedFoodTag: ["일식"], //"한식"
+    selectedMoodTag: ["분위기 좋은"],
     selectedPlace: [],
   });
-
-  // 조합 시 유저들이 선택한 레스토랑을 담을 리스트
-  const [userSelectedCombineList, setUserSelectedCombineList] = useState([]);
-
+  const [allUserPlayerHand, setAllUserPlayerHand] = useState({
+    selectedFoodTag: ["한식"], //"한식"
+    selectedMoodTag: ["조용한"],
+    selectedPlace: [],
+  });
   const [imgUrlList, setImgUrlList] = useState([]);
 
   useEffect(() => {
     socket.connect();
-    // const local = getLocalStream();
-    // setLocalStream(local);
-    // const remote = getRemoteStream();
-    // setRemoteStream(remote);
-
-    // const parsedCoordinate = JSON.parse(
-    //   localStorage.getItem("purposeCoordinate")
-    // );
-
     const coordinate = {
       coordinates: [37.5001716373021, 127.029070884291],
     };
     console.log(coordinate);
     const getRestList = async (roomId, coordinates) => {
-      // default 재시도는 3
-
       const response = await getRestaurantList(roomId, coordinates);
 
       if (response.error) {
         console.log(response.exception);
         return;
       }
-      console.log(response);
-      // 받아오는 data에 별 및 음식 관련 url 내용 추가
       setRestaurantList(response.data.restaurantList);
       setImgUrlList(response.data.imgUrls);
-      console.log(response.data.imgUrls);
-      // console.log(response.data.restaurantList);
-      // console.log(restaurantList);
     };
 
     getRestList(roomId, coordinate);
@@ -78,14 +64,42 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
 
   useEffect(() => {
     socket.connect();
+    socket.on("select-restaurant", handleAddSelectedRestaurant);
+    socket.on("select-foodCategories", handleAddSelectedFoodCategories);
     socket.on("mode-change-response", handleModeChange);
     socket.on("receive-speech-foodCategory", handleReceiveFoodCategory);
 
     return () => {
+      socket.off("select-restaurant", handleAddSelectedRestaurant);
+      socket.off("select-foodCategories", handleAddSelectedFoodCategories);
       socket.off("mode-change-response", handleModeChange);
       socket.off("receive-speech-foodCategory", handleReceiveFoodCategory);
     };
   }, [roomId]);
+
+  const handleAddSelectedRestaurant = useCallback((selectedRestaurant) => {
+    console.log("select-restaurant", selectedRestaurant);
+    setAllUserPlayerHand((prevAllUserHand) => {
+      const updatedHand = {
+        ...prevAllUserHand,
+        selectedPlace: [...prevAllUserHand.selectedPlace, selectedRestaurant],
+      };
+
+      return updatedHand;
+    });
+  }, []);
+
+  const handleAddSelectedFoodCategories = useCallback((resultList) => {
+    console.log("select-foodCategories", resultList);
+    setAllUserPlayerHand((prevAllUserHand) => {
+      const updatedHand = {
+        ...prevAllUserHand,
+        selectedPlace: [...prevAllUserHand.selectedPlace, ...resultList],
+      };
+
+      return updatedHand;
+    });
+  }, []);
 
   const handleReceiveFoodCategory = useCallback((data) => {
     console.log("Received food categories:", data.foodCategories);
@@ -118,68 +132,6 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     });
   };
 
-  // 중복되지 않는 데이터만 추가
-  // restData 는 배열이 아닌 '요소'만 받는다
-  const addUniqueRestaurant = (restData) => {
-    // 기존 배열에 동일한 id를 가진 객체가 있는지 확인
-    if (!restaurantList.some((item) => item.id === restData.id)) {
-      // 중복되지 않는 경우에만 요소를 추가
-      setRestaurantList([...restaurantList, restData]);
-    }
-  };
-
-  // 문자열 배열이므로 이 방식으로 중복을 검사한다
-  const addFoodCategory = (foodCategory) => {
-    setPlayerHand((prevPlayerHand) => {
-      if (Array.isArray(foodCategory)) {
-        // foodCategory가 배열인 경우 각 요소를 검사하여 prevPlayerHand에 추가
-        return {
-          ...prevPlayerHand,
-          selectedFoodTag: [
-            ...prevPlayerHand.selectedFoodTag,
-            ...foodCategory.filter(
-              (category) => !prevPlayerHand.selectedFoodTag.includes(category)
-            ),
-          ],
-        };
-      } else {
-        // foodCategory가 문자열인 경우 단일 요소를 검사하여 prevPlayerHand에 추가
-        return {
-          ...prevPlayerHand,
-          selectedFoodTag: prevPlayerHand.selectedFoodTag.includes(foodCategory)
-            ? prevPlayerHand.selectedFoodTag
-            : [...prevPlayerHand.selectedFoodTag, foodCategory],
-        };
-      }
-    });
-  };
-
-  // 문자열 배열이므로 이 방식으로 중복을 검사한다
-  const addMoodKeyword = (moodKeyword) => {
-    setPlayerHand((prevPlayerHand) => {
-      if (Array.isArray(moodKeyword)) {
-        // moodKeyword가 배열인 경우 각 요소를 검사하여 prevPlayerHand에 추가
-        return {
-          ...prevPlayerHand,
-          selectedMoodTag: [
-            ...prevPlayerHand.selectedMoodTag,
-            ...moodKeyword.filter(
-              (keyword) => !prevPlayerHand.selectedMoodTag.includes(keyword)
-            ),
-          ],
-        };
-      } else {
-        // moodKeyword가 문자열인 경우 단일 요소를 검사하여 prevPlayerHand에 추가
-        return {
-          ...prevPlayerHand,
-          selectedMoodTag: prevPlayerHand.selectedMoodTag.includes(moodKeyword)
-            ? prevPlayerHand.selectedMoodTag
-            : [...prevPlayerHand.selectedMoodTag, moodKeyword],
-        };
-      }
-    });
-  };
-
   const handleShowVoiceRecorder = () => {
     if (roomMode == 1) {
       setShowVoiceRecorder(false);
@@ -205,10 +157,11 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
 
         <PlaceListArea
           restaurantList={restaurantList}
-          resultFoodTags={playerHand.selectedFoodTag}
-          resultMoodTags={playerHand.selectedMoodTag}
-          resultPlaceTags={playerHand.selectedPlace}
-          selectedCombineList={userSelectedCombineList}
+          allUserSelectedFoodTags={allUserPlayerHand.selectedFoodTag}
+          allUserSelectedMoodTags={allUserPlayerHand.selectedMoodTag}
+          allUserSelectedPlaceTags={allUserPlayerHand.selectedPlace}
+          allUserPlayerHand={allUserPlayerHand}
+          setAllUserPlayerHand={setAllUserPlayerHand}
           playerHand={playerHand}
           setPlayerHand={setPlayerHand}
           roomMode={roomMode}
@@ -238,8 +191,8 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
               <VoiceRecoder
                 onClick={handleShowVoiceRecorder}
                 resultList={modeOneVoiceRecResult}
-                // TEST
                 onSetResult={setPlayerHand}
+                onSetAllUserPlayerHand={setAllUserPlayerHand}
               />
             )}
           </>
@@ -254,11 +207,10 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
             )}
             {showModeTwoVoiceRecorder && (
               <VoiceRecognition
-                onSetResult={addMoodKeyword}
-                onAddRest={addUniqueRestaurant}
-                selectedFoodCategories={modeOneVoiceRecResult}
-                // TEST
-                onSetTestResult={setPlayerHand}
+                onSetResultRestaurant={SetModeTwoVoiceRecResult}
+                userSelectedFoodCategories={playerHand.selectedFoodTag}
+                onSetPlayerResult={setPlayerHand}
+                onSetAllUserPlayerHand={setAllUserPlayerHand}
               />
             )}
           </>

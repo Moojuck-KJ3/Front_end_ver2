@@ -4,7 +4,12 @@ import Timer from "./Timer";
 import { useParams } from "react-router";
 import socket from "../../realtimeComunication/socket";
 
-const VoiceRecoder = ({ onClick, onSetResult, resultList }) => {
+const VoiceRecoder = ({
+  onClick,
+  onSetResult,
+  resultList,
+  onSetAllUserPlayerHand,
+}) => {
   //onSetResult
   console.log(resultList);
   const [isRecording, setIsRecording] = useState(false);
@@ -80,13 +85,17 @@ const VoiceRecoder = ({ onClick, onSetResult, resultList }) => {
   };
 
   const handleReady = () => {
+    socket.emit("select-foodCategories", resultList);
+    console.log("select-foodCategories is emitted");
     onSetResult((prevPlayerHand) => ({
       ...prevPlayerHand,
-      selectedFoodTag: [
-        ...prevPlayerHand.selectedFoodTag,
-        ...resultList, // Assuming `result` holds the updated list based on `resultList` props
-      ],
+      selectedFoodTag: [...prevPlayerHand.selectedFoodTag, ...resultList],
     }));
+    // onSetAllUserPlayerHand((prevAllUserHand) => ({
+    //   ...prevAllUserHand,
+    //   selectedFoodTag: [...prevAllUserHand.selectedFoodTag, ...resultList],
+    // }));
+
     onClick();
   };
 

@@ -8,7 +8,7 @@ export const logout = () => {
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_APP_BACKEND_PROD_URL + "/api", // main url
-  timeout: 30000,
+  timeout: 10000,
 });
 
 apiClient.interceptors.request.use(

@@ -39,9 +39,10 @@ const LeftSideUserVideoContainer = ({
         <VideoContainer mediaStream={remoteStrem} />
       </div>
       <div className="flex flex-col flex-grow justify-between items-center bg-white p-3 mx-2  rounded-lg shadow-2xl border-2">
-        <div className="flex flex-col h-full w-full">
-          <h1 className="text-2xl font-tenada">⭐️나의 선호도</h1>
-          <div className="grid grid-cols-2 grid-rows-3 gap-3 ">
+        <h1 className="text-2xl font-tenada">⭐️나의 선호도</h1>
+
+        <div className="flex-grow h-full w-full overflow-y-auto m-2">
+          <div className="grid grid-cols-2 grid-rows-3 gap-3 overflow-y-auto max-h-98">
             {playerHand.selectedFoodTag?.map((tag, index) => (
               <div
                 key={index}
@@ -56,8 +57,9 @@ const LeftSideUserVideoContainer = ({
             ))}
           </div>
         </div>
+        <h1 className="text-2xl font-tenada">✅나의 장소 Pick!</h1>
+
         <div className="flex flex-col h-full w-full">
-          <h1 className="text-2xl font-tenada">✅나의 장소 Pick!</h1>
           <div className="grid grid-cols-3 gap-1 justify-between">
             {playerHand.selectedPlace?.map((place, index) => (
               <div

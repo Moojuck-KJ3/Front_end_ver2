@@ -5,18 +5,20 @@ import PlayerHand from "./PlayerHand";
 import ModeThreeCombineArea from "./modeThree/card/ModeThreeCombineArea";
 import ShowDetailModal from "../../components/modal/ShowDetailModal";
 import FinalRestaurantDetails from "./FinalRestaurantDetails";
+import socket from "../../realtimeComunication/socket";
 
 const getRandomInt = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
 
 export const PlaceListArea = ({
   restaurantList,
-  resultFoodTags,
-  resultMoodTags,
-  resultPlaceTags,
-  selectedCombineList,
+  allUserSelectedFoodTags,
+  allUserSelectedMoodTags,
+  allUserSelectedPlaceTags,
   playerHand,
   setPlayerHand,
+  allUserPlayerHand,
+  setAllUserPlayerHand,
   roomMode,
   setRoomMode,
   handleSetReady,
@@ -28,7 +30,6 @@ export const PlaceListArea = ({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
-
   const handleStarClick = (star) => {
     setSelectedRestaurant(star);
     setIsModalVisible(true);
@@ -39,19 +40,28 @@ export const PlaceListArea = ({
   };
 
   const addToPlayerHand = (selectedRestaurant) => {
+    socket.emit("select-restaurant", selectedRestaurant);
+    console.log("select-restaurant is emitted");
+
     setPlayerHand((prevPlayerHand) => {
       const updatedHand = {
         ...prevPlayerHand,
-        selectedPlace: [...prevPlayerHand.selectedPlace, selectedRestaurant],
+        selectedPlace: [selectedRestaurant],
       };
-
       return updatedHand;
     });
 
+    // setAllUserPlayerHand((prevAllUserHand) => {
+    //   const updatedHand = {
+    //     ...prevAllUserHand,
+    //     selectedPlace: [...prevAllUserHand.selectedPlace, selectedRestaurant],
+    //   };
+
+    //   return updatedHand;
+    // });
+
     closeModal();
   };
-
-  //console.log("imgUrlLists : ", imgUrls);
 
   let content;
   if (roomMode === 3) {
@@ -113,12 +123,12 @@ export const PlaceListArea = ({
 
   useEffect(() => {
     const starsData = restaurantList.map((restaurant) => {
-      const matchesResultTag = resultFoodTags.some((tag) =>
+      const matchesResultTag = allUserSelectedFoodTags.some((tag) =>
         restaurant.food_category.startsWith(tag)
       );
 
       let imageUrl;
-      const targetNames = resultFoodTags.filter((tag) =>
+      const targetNames = allUserSelectedFoodTags.filter((tag) =>
         restaurant.food_category.startsWith(tag)
       );
 
@@ -140,49 +150,12 @@ export const PlaceListArea = ({
         if (restaurant.moodKeywords !== undefined) {
           //console.log("resultMoodTags : ", resultMoodTags);
           matchesResultMoodTag = restaurant.moodKeywords?.some((moodKeyword) =>
-            resultMoodTags.includes(moodKeyword)
+            allUserSelectedMoodTags.includes(moodKeyword)
           );
         } else {
           matchesResultMoodTag = false;
         }
       }
-
-      // const combineListMatch = selectedCombineList.find(
-      //   (combineItem) => combineItem.restId === restaurant.restId
-      // );
-
-      // let imageUrl;
-      // if (combineListMatch) {
-      //   imageUrl = combineListMatch.thumbnailURL;
-      // } else if (matchesResultTag && matchesResultMoodTag) {
-      //   imageUrl = restaurant.FoodUrl;
-      // } else if (matchesResultTag) {
-      //   imageUrl = restaurant.BigStarUrl;
-      // } else {
-      //   imageUrl = restaurant.miniStarUrl;
-      // }
-
-      // let size;
-      // if (combineListMatch) {
-      //   size = 6;
-      // } else if (matchesResultTag && matchesResultMoodTag) {
-      //   size = 6;
-      // } else if (matchesResultTag) {
-      //   size = 4;
-      // } else {
-      //   size = 1;
-      // }
-
-      // let className;
-      // if (combineListMatch) {
-      //   className = "w-4 h-4 rounded-full cursor-pointer duration-500";
-      // } else if (matchesResultTag && matchesResultMoodTag) {
-      //   className = `w-4 h-4 hover:bg-yellow-200 rounded-full cursor-pointer duration-500 `;
-      // } else if (matchesResultTag) {
-      //   className = `w-4 h-4 hover:bg-yellow-200 rounded-full cursor-pointer duration-500 ju`;
-      // } else {
-      //   className = `w-6 h-6 hover:bg-yellow-200 rounded-full cursor-pointer duration-500  `;
-      // }
 
       return {
         ...restaurant,
@@ -195,7 +168,7 @@ export const PlaceListArea = ({
     });
 
     setStars(starsData);
-  }, [restaurantList, resultFoodTags, resultMoodTags, selectedCombineList]);
+  }, [restaurantList, allUserSelectedFoodTags, allUserSelectedMoodTags]);
 
   return (
     <div className="flex flex-col flex-grow bg-white border-8 rounded-2xl">
@@ -203,8 +176,8 @@ export const PlaceListArea = ({
         {content}
       </div>
       <PlayerHand
-        playerHand={playerHand}
-        setPlayerHand={setPlayerHand}
+        allUserPlayerHand={allUserPlayerHand}
+        onSetAllUserPlayerHand={setAllUserPlayerHand}
         roomMode={roomMode}
         setRoomMode={setRoomMode}
         handleSetReady={handleSetReady}
