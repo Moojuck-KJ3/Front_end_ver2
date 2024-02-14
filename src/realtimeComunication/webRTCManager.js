@@ -82,7 +82,7 @@ export function usePeerConnection(localStream) {
   useEffect(() => {
     const handleConnection = () => {
       console.log("join-room is called");
-      socket.emit("join-room", roomId);
+      socket.emit("join-room", { roomId });
     };
 
     const handleAllUsers = async (allUsers) => {
@@ -163,11 +163,11 @@ export function usePeerConnection(localStream) {
     socket.on("send-candidate", handleReceiveCandidate);
 
     return () => {
-      socket.on("connect", handleConnection);
-      socket.on("user-joined", handleAllUsers);
-      socket.on("send-connection-offer", handleReceiveOffer);
-      socket.on("answer", handleReceiveAnswer);
-      socket.on("send-candidate", handleReceiveCandidate);
+      socket.off("connect", handleConnection);
+      socket.off("user-joined", handleAllUsers);
+      socket.off("send-connection-offer", handleReceiveOffer);
+      socket.off("answer", handleReceiveAnswer);
+      socket.off("send-candidate", handleReceiveCandidate);
     };
   }, [createPeerConnection, localStream, roomId]);
 
