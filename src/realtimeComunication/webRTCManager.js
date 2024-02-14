@@ -27,7 +27,7 @@ export function usePeerConnection(localStream) {
 
   const createPeerConnection = useCallback(
     (socketId) => {
-      console.log("createPeerConnection is called", socketId);
+      // console.log("createPeerConnection is called", socketId);
       try {
         const pc = new RTCPeerConnection({
           iceServers: [
@@ -42,7 +42,7 @@ export function usePeerConnection(localStream) {
 
         pc.onicecandidate = (event) => {
           if (!event.candidate) return;
-          console.log("send-candidate is emitting!");
+          // console.log("send-candidate is emitting!");
           socket.emit("send-candidate", {
             candidate: event.candidate,
             candidateSendID: socket.id,
@@ -50,12 +50,12 @@ export function usePeerConnection(localStream) {
           });
         };
 
-        pc.oniceconnectionstatechange = (e) => {
-          console.log(e);
-        };
+        // pc.oniceconnectionstatechange = (e) => {
+        //   console.log(e);
+        // };
 
         pc.ontrack = (event) => {
-          console.log("ontrack success");
+          // console.log("ontrack success");
           setUsers((oldUsers) =>
             oldUsers
               .filter((user) => user.socketId !== socketId)
@@ -85,12 +85,12 @@ export function usePeerConnection(localStream) {
     if (!socket) return;
 
     const handleConnection = () => {
-      console.log("join-room is called");
+      // console.log("join-room is called");
       socket.emit("join-room", { roomId });
     };
 
     const handleAllUsers = async (allUsers) => {
-      console.log("handleAllUsers is called!");
+      // console.log("handleAllUsers is called!");
       allUsers.forEach(async (user) => {
         if (!localStream) return;
         const pc = createPeerConnection(user.socketId);
@@ -98,9 +98,9 @@ export function usePeerConnection(localStream) {
         pcsRef.current = { ...pcsRef.current, [user.socketId]: pc };
         try {
           const offer = await pc.createOffer();
-          console.log("create offer success");
+          // console.log("create offer success");
           await pc.setLocalDescription(offer);
-          console.log(`send-connection-offer is emitting`);
+          // console.log(`send-connection-offer is emitting`);
           socket.emit("send-connection-offer", {
             sdp: offer,
             offerSendID: socket.id,
@@ -114,18 +114,18 @@ export function usePeerConnection(localStream) {
 
     const handleReceiveOffer = async (data) => {
       const { sdp, offerSendID } = data;
-      console.log("handleReceiveOffer is called ", offerSendID);
+      // console.log("handleReceiveOffer is called ", offerSendID);
       if (!localStream) return;
       const pc = createPeerConnection(offerSendID);
       if (!pc) return;
       pcsRef.current = { ...pcsRef.current, [offerSendID]: pc };
       try {
         await pc.setRemoteDescription(sdp);
-        console.log("answer set remote description success");
+        // console.log("answer set remote description success");
         const answer = await pc.createAnswer();
         await pc.setLocalDescription(answer);
 
-        console.log(`answer is emitting`);
+        // console.log(`answer is emitting`);
         socket.emit("answer", {
           sdp: answer,
           answerSendID: socket.id,
@@ -141,19 +141,19 @@ export function usePeerConnection(localStream) {
 
     const handleReceiveAnswer = (data) => {
       const { sdp, answerSendID } = data;
-      console.log("handleReceiveAnswer is called ", answerSendID);
+      // console.log("handleReceiveAnswer is called ", answerSendID);
       const pc = pcsRef.current[answerSendID];
       if (!pc) return;
       pc.setRemoteDescription(sdp);
     };
 
     const handleReceiveCandidate = async (data) => {
-      console.log("handleReceiveCandidate is called ");
-      console.log(data);
+      // console.log("handleReceiveCandidate is called ");
+      // console.log(data);
       const pc = pcsRef.current[data.candidateSendID];
       if (!pc) return;
       await pc.addIceCandidate(data.candidate);
-      console.log("candidate add success");
+      // console.log("candidate add success");
       // if (peers[fromPlayerId]) {
       //   peers[fromPlayerId].addIceCandidate(candidate);
       // }

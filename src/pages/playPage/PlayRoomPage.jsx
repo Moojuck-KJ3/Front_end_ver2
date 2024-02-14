@@ -5,7 +5,7 @@ import PlayRoomContainer from "./PlayRoomContainer";
 import ModeOneExpainModal from "../../components/modal/ModeOneExpainModal";
 
 import { useParams } from "react-router-dom";
-import socket from "../../realtimeComunication/socket";
+// import socket from "../../realtimeComunication/socket";
 import { PlaceListArea } from "./PlaceListArea";
 import { Header } from "./Header";
 import ModeThreeModal from "../../components/modal/ModeThreeExpainModal";
@@ -14,8 +14,10 @@ import ModeTwoExpainModal from "../../components/modal/ModeTwoExpainModal";
 import RightSideUserVideoContainer from "../../components/video/RightSideUserVideoContainer";
 import LeftSideUserVideoContainer from "../../components/video/LeftSideUserVideoContainer";
 import { getRestaurantList } from "../../api";
+import { useSocket } from "../../realtimeComunication/SocketContext";
 
 const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
+  const socket = useSocket();
   const { roomId } = useParams();
   const [showModal, setShowModal] = useState(true);
   const [showModeTwoModal, setShowModeTwoModal] = useState(true);
@@ -29,7 +31,8 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     useState(false);
   const [modeOneVoiceRecResult, SetModeOneVoiceRecResult] = useState([]);
   const [modeTwoVoiceRecResult, SetModeTwoVoiceRecResult] = useState([]);
-  console.log("modeTwoVoiceRecResult", modeTwoVoiceRecResult);
+  console.log(roomDetail.userStreams);
+
   const [playerHand, setPlayerHand] = useState({
     selectedFoodTag: ["일식"], //"한식"
     selectedMoodTag: ["분위기 좋은"],
@@ -43,7 +46,6 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const [imgUrlList, setImgUrlList] = useState([]);
 
   useEffect(() => {
-    socket.connect();
     const coordinate = {
       coordinates: [37.5001716373021, 127.029070884291],
     };
@@ -63,7 +65,8 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   }, []);
 
   useEffect(() => {
-    socket.connect();
+    if (!socket) return;
+
     socket.on("select-restaurant", handleAddSelectedRestaurant);
     socket.on("select-foodCategories", handleAddSelectedFoodCategories);
     socket.on("mode-change-response", handleModeChange);
@@ -75,7 +78,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
       socket.off("mode-change-response", handleModeChange);
       socket.off("receive-speech-foodCategory", handleReceiveFoodCategory);
     };
-  }, [roomId]);
+  }, [socket, roomId]);
 
   const handleAddSelectedRestaurant = useCallback((selectedRestaurant) => {
     console.log("select-restaurant", selectedRestaurant);

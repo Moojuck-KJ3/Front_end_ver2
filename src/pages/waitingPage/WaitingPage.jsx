@@ -18,8 +18,12 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const socket = useSocket();
 
   useEffect(() => {
-    console.log("new users!");
-    console.log(users);
+    setRoomDetail((prev) => ({
+      ...prev,
+      userStreams: users,
+    }));
+    console.log("new userStreams!");
+    console.log(roomDetail.userStreams);
   }, [users]);
 
   useEffect(() => {
