@@ -82,7 +82,7 @@ export function usePeerConnection(localStream) {
   useEffect(() => {
     const handleConnection = () => {
       console.log("join-room is called");
-      socket.emit("join-room", roomId);
+      socket.emit("join-room", { roomId });
     };
 
     const handleAllUsers = async (allUsers) => {
