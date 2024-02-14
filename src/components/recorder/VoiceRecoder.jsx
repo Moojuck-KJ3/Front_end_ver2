@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import VoiceRecoderContainer from "./VoiceRecoderContainer";
 import Timer from "./Timer";
 import { useParams } from "react-router";
-import socket from "../../realtimeComunication/socket";
+import { useSocket } from "../../realtimeComunication/SocketContext";
 
 const VoiceRecoder = ({
   onClick,
@@ -18,6 +18,7 @@ const VoiceRecoder = ({
   const [timeLeft, setTimeLeft] = useState(5);
   const recognitionRef = useRef(null);
   const serverSendScript = useRef("");
+  const socket = useSocket();
 
   const { roomId } = useParams();
   const startRecording = () => {

@@ -5,7 +5,7 @@ import PlayerHand from "./PlayerHand";
 import ModeThreeCombineArea from "./modeThree/card/ModeThreeCombineArea";
 import ShowDetailModal from "../../components/modal/ShowDetailModal";
 import FinalRestaurantDetails from "./FinalRestaurantDetails";
-import socket from "../../realtimeComunication/socket";
+import { useSocket } from "../../realtimeComunication/SocketContext";
 
 const getRandomInt = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
@@ -29,6 +29,8 @@ export const PlaceListArea = ({
   const [hoveredStarId, setHoveredStarId] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+
+  const socket = useSocket();
 
   const handleStarClick = (star) => {
     setSelectedRestaurant(star);
@@ -91,9 +93,15 @@ export const PlaceListArea = ({
       >
         <div className={`absolute w-20.5 h-20.5 bg-white`}></div>
         <div className="text-yellow-400">
-          <div className={`w-20 h-20 animate-jump-in `}>
-            <img src={star.signatureUrl} alt="" />
-          </div>
+          {star.signatureUrl ? (
+            <div className="w-20 h-20 animate-jump-in">
+              <img src={star.signatureUrl} alt="" />
+            </div>
+          ) : (
+            <div className="w-6 h-6 hover:bg-yellow-200 rounded-full cursor-pointer duration-500 ">
+              {<FontAwesomeIcon icon={faStar} />}
+            </div>
+          )}
         </div>
         {hoveredStarId === star._id && (
           <div
@@ -125,7 +133,7 @@ export const PlaceListArea = ({
         restaurant.food_category.startsWith(tag)
       );
 
-      let imageUrl = imgUrls.find((img) => img.name === "작은별");
+      let imageUrl = null;
       const targetNames = allUserSelectedFoodTags.filter((tag) =>
         restaurant.food_category.startsWith(tag)
       );
@@ -159,7 +167,7 @@ export const PlaceListArea = ({
         x: getRandomInt(5, 90),
         y: getRandomInt(5, 90),
         showComponentOne: matchesResultMoodTag,
-        signatureUrl: imageUrl.imgUrl,
+        signatureUrl: imageUrl?.imgUrl,
       };
     });
 
