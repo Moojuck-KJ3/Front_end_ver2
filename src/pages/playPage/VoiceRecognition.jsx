@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-
 import { useParams } from "react-router-dom";
 import { useSocket } from "../../realtimeComunication/SocketContext";
 
@@ -12,6 +11,7 @@ const VoiceRecognition = ({
   const socket = useSocket();
   const recognitionRef = useRef(null);
   const { roomId } = useParams();
+  const socket = useSocket();
 
   const handleSetMoodTags = (text) => {
     const serverSendData = {
@@ -70,6 +70,8 @@ const VoiceRecognition = ({
   };
 
   useEffect(() => {
+    if (!socket) return;
+
     setupSpeechRecognition();
     socket.on("receive-speech-keyword", handleReceiveSpeechKeyword);
 
@@ -83,7 +85,7 @@ const VoiceRecognition = ({
 
       socket.off("receive-speech-keyword", handleReceiveSpeechKeyword);
     };
-  }, []);
+  }, [socket]);
 
   return <div></div>;
 };

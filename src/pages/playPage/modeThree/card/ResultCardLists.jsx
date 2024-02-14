@@ -61,6 +61,7 @@ export const DUMMY_PLACE = [
 ];
 
 const ResultCardLists = ({ combinedplaceList, positions }) => {
+  const socket = useSocket();
   console.log("ResultCardLists", combinedplaceList);
   const [places, setPlaces] = useState(combinedplaceList); //DUMMY_PLACE
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -73,6 +74,8 @@ const ResultCardLists = ({ combinedplaceList, positions }) => {
   };
 
   useEffect(() => {
+    if (!socket) return;
+
     socket.on("likes-updated", (updatedPlace) => {
       setPlaces((currentPlaces) =>
         currentPlaces.map((place) =>
@@ -86,7 +89,7 @@ const ResultCardLists = ({ combinedplaceList, positions }) => {
     return () => {
       socket.off("likes-updated");
     };
-  }, []);
+  }, [socket]);
 
   const handleLike = (restaurantId) => {
     console.log("handleLike is called", restaurantId);

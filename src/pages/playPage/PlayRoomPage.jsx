@@ -5,7 +5,6 @@ import PlayRoomContainer from "./PlayRoomContainer";
 import ModeOneExpainModal from "../../components/modal/ModeOneExpainModal";
 
 import { useParams } from "react-router-dom";
-// import socket from "../../realtimeComunication/socket";
 import { PlaceListArea } from "./PlaceListArea";
 import { Header } from "./Header";
 import ModeThreeModal from "../../components/modal/ModeThreeExpainModal";
@@ -40,9 +39,61 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const [allUserPlayerHand, setAllUserPlayerHand] = useState({
     selectedFoodTag: [], //"한식", "중식", "일식", "이탈리안"
     selectedMoodTag: ["조용한"],
-    selectedPlace: [],
+    selectedPlace: [
+      {
+        address: "서울 강남구 논현로76길 6 노마빌딩 1층",
+        food_category: "일식",
+        images: [
+          "https://ldb-phinf.pstatic.net/20211231_39/1640950618449LAgdc_PNG/KakaoTalk_20211231_202328098_05.png",
+        ],
+        isDelivery: false,
+        isTakeOut: null,
+        name: "김영태스시&사시미마을 강남본점",
+        options: "단체 이용 가능,예약,포장,남/녀 화장실 구분",
+        phone_number: "02-554-7002",
+        rating: "4.22",
+        ratingCount: "196",
+        thumbnailImg:
+          "https://ldb-phinf.pstatic.net/20211231_39/1640950618449LAgdc_PNG/KakaoTalk_20211231_202328098_05.png",
+        _id: "65ad3daf5a419523bb358628",
+      },
+    ],
+    finalPlace: [
+      {
+        address: "서울 강남구 논현로76길 6 노마빌딩 1층",
+        food_category: "일식",
+        images: [
+          "https://ldb-phinf.pstatic.net/20211231_39/1640950618449LAgdc_PNG/KakaoTalk_20211231_202328098_05.png",
+        ],
+        isDelivery: false,
+        isTakeOut: null,
+        name: "김영태스시&사시미마을 강남본점",
+        options: "단체 이용 가능,예약,포장,남/녀 화장실 구분",
+        phone_number: "02-554-7002",
+        rating: "4.22",
+        ratingCount: "196",
+        thumbnailImg:
+          "https://ldb-phinf.pstatic.net/20211231_39/1640950618449LAgdc_PNG/KakaoTalk_20211231_202328098_05.png",
+        _id: "65ad3daf5a419523bb358628",
+      },
+    ],
   });
   const [imgUrlList, setImgUrlList] = useState([]);
+
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("select-restaurant", handleAddSelectedRestaurant);
+    socket.on("select-foodCategories", handleAddSelectedFoodCategories);
+    socket.on("mode-change-response", handleModeChange);
+    socket.on("receive-speech-foodCategory", handleReceiveFoodCategory);
+
+    return () => {
+      socket.off("select-restaurant", handleAddSelectedRestaurant);
+      socket.off("select-foodCategories", handleAddSelectedFoodCategories);
+      socket.off("mode-change-response", handleModeChange);
+      socket.off("receive-speech-foodCategory", handleReceiveFoodCategory);
+    };
+  }, [socket]);
 
   useEffect(() => {
     const coordinate = {
@@ -62,22 +113,6 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
 
     getRestList(roomId, coordinate);
   }, []);
-
-  useEffect(() => {
-    if (!socket) return;
-
-    socket.on("select-restaurant", handleAddSelectedRestaurant);
-    socket.on("select-foodCategories", handleAddSelectedFoodCategories);
-    socket.on("mode-change-response", handleModeChange);
-    socket.on("receive-speech-foodCategory", handleReceiveFoodCategory);
-
-    return () => {
-      socket.off("select-restaurant", handleAddSelectedRestaurant);
-      socket.off("select-foodCategories", handleAddSelectedFoodCategories);
-      socket.off("mode-change-response", handleModeChange);
-      socket.off("receive-speech-foodCategory", handleReceiveFoodCategory);
-    };
-  }, [socket, roomId]);
 
   const handleAddSelectedRestaurant = useCallback((selectedRestaurant) => {
     console.log("select-restaurant", selectedRestaurant);
@@ -104,7 +139,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   }, []);
 
   const handleReceiveFoodCategory = useCallback((data) => {
-    console.log("Received food categories:", data.foodCategories);
+    console.log("Received food categories:", data);
     SetModeOneVoiceRecResult(data.foodCategories);
   }, []);
 
@@ -142,6 +177,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
       setModeTwoShowVoiceRecorder(false);
     }
   };
+
   return (
     <PlayRoomContainer>
       {/* 스텝바 */}

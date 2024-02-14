@@ -168,15 +168,22 @@ const PlayerHand = ({
             4
           )}`}
         >
-          <h1 className="mt-1 font-tenada text-2xl ">최종 목적지⛳️</h1>
-          <ul className="">
-            {/* {playerHand.selectedMoodTag?.map((tag, index) => (
-              <li
-                key={index}
-                className="bg-gray-200 w-full my-2 text-center rounded-lg font-tenada"
-              >{`#${tag}`}</li>
-            ))} */}
-          </ul>
+          <div>
+            <h1 className="mt-1 font-tenada text-2xl ">최종 목적지⛳️</h1>
+            <ul className="">
+              {allUserPlayerHand.finalPlace?.map((Place, index) => (
+                <li
+                  key={index}
+                  className="bg-white shadow-2xl flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg font-tenada"
+                >
+                  <span className="text-lg font-semibold ml-2">{`${
+                    index + 1
+                  }. `}</span>
+                  <h1 className="ml-2 p-1 flex-grow text-center text-xl truncate">{`${Place.name}`}</h1>
+                </li>
+              ))}
+            </ul>
+          </div>
           {roomMode === 4 && (
             <button
               onClick={handleReady}

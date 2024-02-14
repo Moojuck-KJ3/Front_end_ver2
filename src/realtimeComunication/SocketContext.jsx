@@ -15,6 +15,7 @@ export const SocketProvider = ({ children }) => {
       const jwtToken = userDetail ? userDetail.token : null;
 
       if (jwtToken) {
+        
         const newSocket = io(import.meta.env.VITE_APP_BACKEND_PROD_URL, {
           auth: { token: jwtToken },
         });

@@ -25,6 +25,7 @@ export const PlaceListArea = ({
   roomDetail,
   imgUrls,
 }) => {
+  const socket = useSocket();
   const [stars, setStars] = useState([]);
   const [hoveredStarId, setHoveredStarId] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -53,15 +54,6 @@ export const PlaceListArea = ({
       return updatedHand;
     });
 
-    // setAllUserPlayerHand((prevAllUserHand) => {
-    //   const updatedHand = {
-    //     ...prevAllUserHand,
-    //     selectedPlace: [...prevAllUserHand.selectedPlace, selectedRestaurant],
-    //   };
-
-    //   return updatedHand;
-    // });
-
     closeModal();
   };
 
@@ -69,7 +61,7 @@ export const PlaceListArea = ({
   if (roomMode === 3) {
     content = <ModeThreeCombineArea roomDetail={roomDetail} />;
   } else if (roomMode === 4) {
-    content = <FinalRestaurantDetails />;
+    content = <FinalRestaurantDetails allUserPlayerHand={allUserPlayerHand} />;
   } else {
     // Content for other roomModes
     content = stars.map((star, i) => (
@@ -125,9 +117,6 @@ export const PlaceListArea = ({
   }
 
   useEffect(() => {
-    console.log("allUserSelectedFoodTags", allUserSelectedFoodTags);
-    console.log("allUserSelectedMoodTags", allUserSelectedMoodTags);
-
     const starsData = restaurantList.map((restaurant) => {
       const matchesResultTag = allUserSelectedFoodTags.some((tag) =>
         restaurant.food_category.startsWith(tag)

@@ -105,7 +105,7 @@ export function usePeerConnection(localStream) {
             sdp: offer,
             offerSendID: socket.id,
             offerReceiveID: user.socketId,
-          });
+          }); 
         } catch (error) {
           console.error("Error handling handleUserJoined data:", error);
         }

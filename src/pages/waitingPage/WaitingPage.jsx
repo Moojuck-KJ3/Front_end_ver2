@@ -4,7 +4,6 @@ import CreateRoomPageFooter from "../createRoomPage/CreateRoomPageFooter";
 import { usePeerConnection } from "../../realtimeComunication/webRTCManager";
 import CopyToClipboardButton from "./ClipboardClipboardCopyButton";
 import { useEffect, useState } from "react";
-// import socket from "../../realtimeComunication/socket";
 import Typewriter from "../../components/type/TypeWriter";
 import { useSocket } from "../../realtimeComunication/SocketContext";
 

@@ -7,8 +7,10 @@ import LoopIcon from "@mui/icons-material/Loop";
 import { useParams } from "react-router-dom";
 import { useSocket } from "../../../../realtimeComunication/SocketContext";
 import CombineAnimation from "../combineAni/CombineAnimation";
+import { useSocket } from "../../../../realtimeComunication/SocketContext";
 
 const ModeThreeCombineArea = ({ roomDetail }) => {
+  const socket = useSocket();
   const [draggedTagA, setDraggedTagA] = useState(null);
   const [draggedTagB, setDraggedTagB] = useState(null);
   const [draggedTagC, setDraggedTagC] = useState(null);
@@ -34,10 +36,12 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
       setIsSpining(false);
     }
   }, [draggedTagA, draggedTagB]);
+
   const handleDragOver = (event) => {
     event.preventDefault();
     setIsDragging(true);
   };
+
   const handleDrop = (event, playerId) => {
     event.preventDefault();
     const restaurantData = event.dataTransfer.getData("restaurant");
@@ -59,34 +63,15 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
         setDraggedTagD(parsedRestaurantData);
       }
     }
+
     socket.emit("user-selected-card", {
       roomId,
       playerId,
       restaurantData: parsedRestaurantData,
     });
-    console.log("socket emited!");
     setIsDragging(false);
   };
-  useEffect(() => {
-    socket.connect();
-    socket.on("other-user-selected-card", ({ playerId, restaurantData }) => {
-      console.log("other-user-selected-card is called,!");
-      if (playerId === 1) {
-        setDraggedTagA(restaurantData);
-        console.log(draggedTagA);
-      } else if (playerId === 2) {
-        setDraggedTagB(restaurantData);
-      } else if (playerId === 3) {
-        setDraggedTagC(restaurantData);
-        console.log(draggedTagA);
-      } else if (playerId === 4) {
-        setDraggedTagD(restaurantData);
-      }
-    });
-    return () => {
-      socket.off("other-user-selected-card");
-    };
-  }, [socket]);
+
   useEffect(() => {
     if (draggedTagA && draggedTagB) {
       socket.emit("both-users-selected", {
@@ -103,10 +88,29 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
         ],
       });
     }
-  }, [draggedTagA, draggedTagB, roomId]);
+  }, [draggedTagA, draggedTagB, roomId, socket]);
+
   useEffect(() => {
+    if (!socket) return;
+
+    socket.on("other-user-selected-card", ({ playerId, restaurantData }) => {
+      console.log("other-user-selected-card is called,!");
+      if (playerId === 1) {
+        setDraggedTagA(restaurantData);
+        console.log(draggedTagA);
+      } else if (playerId === 2) {
+        setDraggedTagB(restaurantData);
+      } else if (playerId === 3) {
+        setDraggedTagC(restaurantData);
+        console.log(draggedTagA);
+      } else if (playerId === 4) {
+        setDraggedTagD(restaurantData);
+      }
+    });
+
     socket.on("combined-result", handleCombineResult);
     return () => {
+      socket.off("other-user-selected-card");
       socket.off("combined-result", handleCombineResult);
     };
   }, [socket]);

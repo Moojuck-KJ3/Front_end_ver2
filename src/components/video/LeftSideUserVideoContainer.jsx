@@ -11,18 +11,12 @@ const LeftSideUserVideoContainer = ({
 }) => {
   const handleDragStart = (event, restaurant) => {
     event.preventDefault();
-
-    console.log("handleDragStart");
-    console.log(restaurant);
-
     const restaurantData = JSON.stringify({
-      _id: restaurant._id,
+      id: restaurant._id,
       thumbnailImg: restaurant.thumbnailImg,
     });
-    console.log(restaurantData);
 
     event.dataTransfer.setData("restaurant", restaurantData);
-    // console.log(restaurantData);
   };
 
   return (

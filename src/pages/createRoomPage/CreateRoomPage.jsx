@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import InputWithLabel from "../../components/InputWithLable";
 import { useNavigate } from "react-router-dom";
 import CreateRoomModal from "./modal/CreateRoomModal";
-// import socket from "../../realtimeComunication/socket";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { logout } from "../../api";
@@ -10,10 +9,17 @@ import { useSocket } from "../../realtimeComunication/SocketContext";
 
 const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const navigate = useNavigate();
+  const videoRef = useRef(null);
   const [isModal, setIsModal] = useState(false);
   const [roomId, setRoomId] = useState("");
   const [userName, setUserName] = useState("");
   const socket = useSocket();
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.srcObject = localStream;
+    }
+  }, [localStream]);
 
   useEffect(() => {
     if (!socket) return;
@@ -94,11 +100,7 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
               <div className="mt-2 w-full h-full">
                 <video
                   className="w-full h-[250px] items-center border-4 bg-gray-300 border-white shadow-xl rounded-lg object-fill"
-                  ref={(ref) => {
-                    if (ref) {
-                      ref.srcObject = localStream;
-                    }
-                  }}
+                  ref={videoRef}
                   autoPlay={true}
                   muted={false}
                 />

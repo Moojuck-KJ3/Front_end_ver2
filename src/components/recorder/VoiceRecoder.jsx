@@ -10,8 +10,7 @@ const VoiceRecoder = ({
   resultList,
   onSetAllUserPlayerHand,
 }) => {
-  //onSetResult
-  console.log(resultList);
+  const socket = useSocket();
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [showTimer, setShowTimer] = useState(true);
