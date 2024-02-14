@@ -24,12 +24,10 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
 
     socket.on("create-room-response", (response) => {
       if (response) {
-        const { roomId, playerId } = response;
+        const { roomId } = response;
         setRoomDetail((prev) => ({
           ...prev,
           roomId: roomId,
-          playerId: playerId,
-          playerStreams: { ...prev.playerStreams, [playerId]: localStream },
         }));
         navigate(`/waiting-friends/${roomId}`);
       } else {
@@ -39,12 +37,10 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
 
     socket.on("join-room-response", (response) => {
       if (response) {
-        const { roomId, playerId } = response;
+        const { roomId } = response;
         setRoomDetail((prev) => ({
           ...prev,
           roomId: roomId,
-          playerId: playerId,
-          playerStreams: { ...prev.playerStreams, [playerId]: localStream },
         }));
         navigate(`/waiting-friends/${roomId}`);
       } else {
