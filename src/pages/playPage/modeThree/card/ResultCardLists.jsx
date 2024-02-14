@@ -2,91 +2,37 @@ import { useEffect, useState } from "react";
 import ResultCard from "./ResultCard";
 import ShowDetailWithLikeModal from "../../../../components/modal/ShowDetailWithLikeModal";
 import { useSocket } from "../../../../realtimeComunication/SocketContext";
-
-export const DUMMY_PLACE = [
-  {
-    id: "item1",
-    title: "토니모리",
-    imgUrl: "/초밥.png",
-    likes: 0,
-  },
-  {
-    id: "item2",
-    title: "역전할맥",
-    imgUrl: "/돈까스.png",
-    likes: 0,
-  },
-  {
-    id: "item3",
-    title: "교촌치킨",
-    imgUrl: "/샤브샤브.png",
-    likes: 0,
-  },
-  {
-    id: "item4",
-    title: "할매국밥",
-    imgUrl: "/된장찌개.png",
-    likes: 0,
-  },
-  {
-    id: "item5",
-    title: "돈까스",
-    imgUrl: "/국밥.png",
-    likes: 0,
-  },
-  {
-    id: "item6",
-    title: "돈까스",
-    imgUrl: "/국밥.png",
-    likes: 0,
-  },
-  {
-    id: "item7",
-    title: "돈까스",
-    imgUrl: "/국밥.png",
-    likes: 0,
-  },
-  {
-    id: "item8",
-    title: "돈까스",
-    imgUrl: "/국밥.png",
-    likes: 0,
-  },
-  {
-    id: "item9",
-    title: "돈까스",
-    imgUrl: "/국밥.png",
-    likes: 0,
-  },
-];
+import { useParams } from "react-router-dom";
 
 const ResultCardLists = ({ combinedplaceList, positions }) => {
   const socket = useSocket();
   console.log("ResultCardLists", combinedplaceList);
-  const [places, setPlaces] = useState(combinedplaceList); //DUMMY_PLACE
+  const [places, setPlaces] = useState(combinedplaceList);
+  const { roomId } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
-
   const handleCardClick = (restaurant) => {
     setSelectedRestaurant(restaurant);
+    console.log(selectedRestaurant);
+
     setIsModalOpen(true);
   };
 
   useEffect(() => {
     if (!socket) return;
 
-    socket.on("likes-updated", (updatedPlace) => {
+    socket.on("like-updated", (data) => {
+      console.log("like-updated", data.restId);
+      console.log("like-updated", data.likes);
       setPlaces((currentPlaces) =>
         currentPlaces.map((place) =>
-          place._id === updatedPlace._id
-            ? { ...place, likes: updatedPlace.likes }
-            : place
+          place._id === data.restId ? { ...place, likes: data.likes } : place
         )
       );
     });
 
     return () => {
-      socket.off("likes-updated");
+      socket.off("like-updated");
     };
   }, [socket]);
 
@@ -97,6 +43,7 @@ const ResultCardLists = ({ combinedplaceList, positions }) => {
 
     socket.emit("like-restaurant", {
       restId: restaurantId,
+      roomId: roomId,
       likes: updatedLikes,
     });
     setIsModalOpen(false);
@@ -139,7 +86,7 @@ const ResultCardLists = ({ combinedplaceList, positions }) => {
         <ShowDetailWithLikeModal
           restaurant={selectedRestaurant}
           closeModal={() => setIsModalOpen(false)}
-          onLike={() => handleLike(selectedRestaurant.id)}
+          onLike={() => handleLike(selectedRestaurant._id)}
         />
       )}
     </>

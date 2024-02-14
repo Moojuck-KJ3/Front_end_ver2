@@ -2,7 +2,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 
 //title, imgUrl, id, likesCount
 const ResultCard = ({ place }) => {
-  console.log("place", place);
+  // console.log("place", place);
   return (
     <div
       className={`w-[160px] h-[180px] bg-transparent cursor-pointer group perspective relative`}

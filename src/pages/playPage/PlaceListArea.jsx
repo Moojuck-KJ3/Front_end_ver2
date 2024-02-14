@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import PlayerHand from "./PlayerHand";
@@ -44,11 +44,6 @@ export const PlaceListArea = ({
   };
 
   const addToPlayerHand = (selectedRestaurant) => {
-    const data = { roomId, selectedRestaurant };
-    console.log(roomId);
-    socket.emit("select-restaurant", roomId);
-    console.log("select-restaurant is emitted");
-
     setPlayerHand((prevPlayerHand) => {
       const updatedHand = {
         ...prevPlayerHand,
@@ -56,7 +51,9 @@ export const PlaceListArea = ({
       };
       return updatedHand;
     });
-
+    console.log("select-restaurant is emitted");
+    console.log({ roomId, selectedRestaurant });
+    socket.emit("select-restaurant", { roomId, selectedRestaurant });
     closeModal();
   };
 

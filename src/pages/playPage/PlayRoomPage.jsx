@@ -31,32 +31,14 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const [modeTwoVoiceRecResult, SetModeTwoVoiceRecResult] = useState([]);
 
   const [playerHand, setPlayerHand] = useState({
-    selectedFoodTag: ["일식"], //"한식"
-    selectedMoodTag: ["분위기 좋은"],
+    selectedFoodTag: [], //"한식"
+    selectedMoodTag: [],
     selectedPlace: [],
   });
   const [allUserPlayerHand, setAllUserPlayerHand] = useState({
     selectedFoodTag: [], //"한식", "중식", "일식", "이탈리안"
-    selectedMoodTag: ["조용한"],
-    selectedPlace: [
-      {
-        address: "서울 강남구 논현로76길 6 노마빌딩 1층",
-        food_category: "일식",
-        images: [
-          "https://ldb-phinf.pstatic.net/20211231_39/1640950618449LAgdc_PNG/KakaoTalk_20211231_202328098_05.png",
-        ],
-        isDelivery: false,
-        isTakeOut: null,
-        name: "김영태스시&사시미마을 강남본점",
-        options: "단체 이용 가능,예약,포장,남/녀 화장실 구분",
-        phone_number: "02-554-7002",
-        rating: "4.22",
-        ratingCount: "196",
-        thumbnailImg:
-          "https://ldb-phinf.pstatic.net/20211231_39/1640950618449LAgdc_PNG/KakaoTalk_20211231_202328098_05.png",
-        _id: "65ad3daf5a419523bb358628",
-      },
-    ],
+    selectedMoodTag: [],
+    selectedPlace: [],
     finalPlace: [
       {
         address: "서울 강남구 논현로76길 6 노마빌딩 1층",
@@ -113,16 +95,16 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     getRestList(roomId, coordinate);
   }, []);
 
-  const handleAddSelectedRestaurant = useCallback((data) => {
-    console.log("select-restaurant", data);
-    // setAllUserPlayerHand((prevAllUserHand) => {
-    //   const updatedHand = {
-    //     ...prevAllUserHand,
-    //     selectedPlace: [...prevAllUserHand.selectedPlace, selectedRestaurant],
-    //   };
+  const handleAddSelectedRestaurant = useCallback((selectedRestaurant) => {
+    console.log("select-restaurant", selectedRestaurant);
+    setAllUserPlayerHand((prevAllUserHand) => {
+      const updatedHand = {
+        ...prevAllUserHand,
+        selectedPlace: [...prevAllUserHand.selectedPlace, selectedRestaurant],
+      };
 
-    //   return updatedHand;
-    // });
+      return updatedHand;
+    });
   }, []);
 
   const handleAddSelectedFoodCategories = useCallback((data) => {
