@@ -206,6 +206,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
           handleSetReady={handleSetReady}
           roomDetail={roomDetail}
           imgUrls={imgUrlList}
+          modeTwoResultRestList={modeTwoVoiceRecResult}
         />
         <RightSideUserVideoContainer
           // localStream={localStream}
