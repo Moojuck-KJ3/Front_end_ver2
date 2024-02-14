@@ -14,11 +14,15 @@ const ShowDetailWithLikeModal = ({ restaurant, closeModal, onLike }) => {
           <div className="modal-content py-4 text-left px-6">
             <div className="flex justify-between items-center pb-3">
               <p className="text-2xl font-bold  font-tenada">
-                {restaurant.title}
+                {restaurant.name}
               </p>
             </div>
             <div className="flex justify-center rounded-xl ">
-              <img className="rounded-xl" src="/돈까스.png" alt="" />
+              <img
+                className="rounded-xl"
+                src={restaurant.thumbnailImg}
+                alt=""
+              />
             </div>
 
             <div className="mt-4 flex justify-end gap-2">
