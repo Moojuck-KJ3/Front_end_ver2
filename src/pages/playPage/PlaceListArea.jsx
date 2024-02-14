@@ -117,6 +117,9 @@ export const PlaceListArea = ({
   }
 
   useEffect(() => {
+    console.log("allUserSelectedFoodTags", allUserSelectedFoodTags);
+    console.log("allUserSelectedMoodTags", allUserSelectedMoodTags);
+
     const starsData = restaurantList.map((restaurant) => {
       const matchesResultTag = allUserSelectedFoodTags.some((tag) =>
         restaurant.food_category.startsWith(tag)
@@ -133,7 +136,7 @@ export const PlaceListArea = ({
 
       let matchesResultMoodTag = true;
       if (roomMode === 2) {
-        if (restaurant.moodKeywords !== undefined) {
+        if (matchesResultTag && restaurant.moodKeywords !== undefined) {
           matchesResultMoodTag = restaurant.moodKeywords?.some((moodKeyword) =>
             allUserSelectedMoodTags.includes(moodKeyword)
           );
@@ -155,7 +158,7 @@ export const PlaceListArea = ({
         size: 1,
         x: getRandomInt(5, 90),
         y: getRandomInt(5, 90),
-        showComponentOne: matchesResultTag && matchesResultMoodTag,
+        showComponentOne: matchesResultMoodTag,
         signatureUrl: imageUrl.imgUrl,
       };
     });

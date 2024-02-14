@@ -91,10 +91,10 @@ const VoiceRecoder = ({
       ...prevPlayerHand,
       selectedFoodTag: [...prevPlayerHand.selectedFoodTag, ...resultList],
     }));
-    // onSetAllUserPlayerHand((prevAllUserHand) => ({
-    //   ...prevAllUserHand,
-    //   selectedFoodTag: [...prevAllUserHand.selectedFoodTag, ...resultList],
-    // }));
+    onSetAllUserPlayerHand((prevAllUserHand) => ({
+      ...prevAllUserHand,
+      selectedFoodTag: [...prevAllUserHand.selectedFoodTag, ...resultList],
+    }));
 
     onClick();
   };

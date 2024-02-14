@@ -36,7 +36,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     selectedPlace: [],
   });
   const [allUserPlayerHand, setAllUserPlayerHand] = useState({
-    selectedFoodTag: ["한식"], //"한식"
+    selectedFoodTag: [], //"한식", "중식", "일식", "이탈리안"
     selectedMoodTag: ["조용한"],
     selectedPlace: [],
   });
