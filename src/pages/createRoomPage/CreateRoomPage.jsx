@@ -23,13 +23,12 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
     console.log("roomDetail", roomDetail);
 
     socket.on("create-room-response", (response) => {
+      console.log("create-room-response", response);
       if (response) {
-        const { roomId, playerId } = response;
+        const { roomId } = response;
         setRoomDetail((prev) => ({
           ...prev,
           roomId: roomId,
-          playerId: playerId,
-          playerStreams: { ...prev.playerStreams, [playerId]: localStream },
         }));
         navigate(`/waiting-friends/${roomId}`);
       } else {
@@ -37,14 +36,13 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
       }
     });
 
-    socket.on("join-room-response", (response) => {
+    socket.on("enter-waiting-room", (response) => {
+      console.log("enter-waiting-room", response);
       if (response) {
-        const { roomId, playerId } = response;
+        const { roomId } = response;
         setRoomDetail((prev) => ({
           ...prev,
           roomId: roomId,
-          playerId: playerId,
-          playerStreams: { ...prev.playerStreams, [playerId]: localStream },
         }));
         navigate(`/waiting-friends/${roomId}`);
       } else {
@@ -54,7 +52,7 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
 
     return () => {
       socket.off("create-room-response");
-      socket.off("join-room-response");
+      socket.off("enter-waiting-room");
     };
   }, [setRoomDetail, roomDetail, navigate]);
 
@@ -69,7 +67,7 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
   };
 
   const handleRoomJoin = () => {
-    socket.emit("join-room", { roomId });
+    socket.emit("enter-waiting-room", { roomId });
   };
 
   const handleLogout = () => {

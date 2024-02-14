@@ -10,5 +10,10 @@ export const connectionStart = (userDetails) => {
     },
   });
 
+  socket.on("connect", () => {
+    console.log("succesfully connected with socket.io server");
+    console.log(socket.id);
+  });
+
   return socket;
 };
