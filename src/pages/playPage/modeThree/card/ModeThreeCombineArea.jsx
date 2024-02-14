@@ -5,7 +5,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import HelpIcon from "@mui/icons-material/Help";
 import LoopIcon from "@mui/icons-material/Loop";
 import { useParams } from "react-router-dom";
-import socket from "../../../../realtimeComunication/socket";
+import { useSocket } from "../../../../realtimeComunication/SocketContext";
 import CombineAnimation from "../combineAni/CombineAnimation";
 
 const ModeThreeCombineArea = ({ roomDetail }) => {
@@ -19,6 +19,8 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
   const [combinedplaceList, setCombinedPlaceList] = useState([]);
 
   const { roomId } = useParams();
+
+  const socket = useSocket();
 
   useEffect(() => {
     if (draggedTagA && draggedTagB) {

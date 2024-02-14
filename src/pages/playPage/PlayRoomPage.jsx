@@ -31,7 +31,6 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     useState(false);
   const [modeOneVoiceRecResult, SetModeOneVoiceRecResult] = useState([]);
   const [modeTwoVoiceRecResult, SetModeTwoVoiceRecResult] = useState([]);
-  
 
   const [playerHand, setPlayerHand] = useState({
     selectedFoodTag: ["일식"], //"한식"
@@ -178,7 +177,6 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
           remoteStrem={roomDetail.userStreams}
           showMic={showModeTwoVoiceRecorder}
           onReady={handleSetReady}
-          
         />
 
         {roomMode === MODE.MODE1 && (

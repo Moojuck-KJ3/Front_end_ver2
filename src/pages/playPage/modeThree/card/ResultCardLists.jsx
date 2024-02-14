@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ResultCard from "./ResultCard";
 import ShowDetailWithLikeModal from "../../../../components/modal/ShowDetailWithLikeModal";
-import socket from "../../../../realtimeComunication/socket";
+import { useSocket } from "../../../../realtimeComunication/SocketContext";
 
 export const DUMMY_PLACE = [
   {
@@ -65,6 +65,7 @@ const ResultCardLists = ({ combinedplaceList, positions }) => {
   const [places, setPlaces] = useState(combinedplaceList); //DUMMY_PLACE
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+  const socket = useSocket();
 
   const handleCardClick = (restaurant) => {
     setSelectedRestaurant(restaurant);

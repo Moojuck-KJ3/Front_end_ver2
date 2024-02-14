@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 import { useParams } from "react-router-dom";
-import socket from "../../realtimeComunication/socket";
+import { useSocket } from "../../realtimeComunication/SocketContext";
 
 const VoiceRecognition = ({
   onSetResultRestaurant,
@@ -9,6 +9,7 @@ const VoiceRecognition = ({
   userSelectedFoodCategories,
   onSetAllUserPlayerHand,
 }) => {
+  const socket = useSocket();
   const recognitionRef = useRef(null);
   const { roomId } = useParams();
 

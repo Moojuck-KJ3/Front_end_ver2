@@ -1,8 +1,9 @@
 import { useParams } from "react-router";
-import socket from "../../realtimeComunication/socket";
+import { useSocket } from "../../realtimeComunication/SocketContext";
 
 const ModeTwoExpainModal = ({ SetShowVoiceRecorder, onShowModal }) => {
   const roomId = useParams();
+  const socket = useSocket();
 
   const handleClick = () => {
     onShowModal(false);
