@@ -75,7 +75,9 @@ export const PlaceListArea = ({
         onClick={() => handleStarClick(star)}
         onMouseEnter={() => setHoveredStarId(star._id)}
         onMouseLeave={() => setHoveredStarId(null)}
-        className={`${star.className} relative animate-fade `}
+        className={`${star.className} relative animate-fade ${
+          !star.showComponentOne ? "animate-opacityPulse moveToBottomRight" : ""
+        }`}
         key={i}
         id={star._id}
         style={{
@@ -83,22 +85,15 @@ export const PlaceListArea = ({
           top: `${star.y}%`,
           left: `${star.x}%`,
           transform: `scale(${star.size})`,
+          opacity: !star.showComponentOne ? 0 : 1,
+          pointerEvents: !star.showComponentOne ? "none" : "auto",
         }}
       >
+        <div className={`absolute w-20.5 h-20.5 bg-white`}></div>
         <div className="text-yellow-400">
-          {star.showComponentOne ? (
-            <div className="w-20 h-20 animate-jump-in">
-              {star.signatureUrl ? (
-                <img src={star.signatureUrl} alt="" />
-              ) : (
-                <img src="/Food.png" alt="" />
-              )}
-            </div>
-          ) : (
-            <div className="w-6 h-6 hover:bg-yellow-200 rounded-full cursor-pointer duration-500 ">
-              {<FontAwesomeIcon icon={faStar} />}
-            </div>
-          )}
+          <div className={`w-20 h-20 animate-jump-in `}>
+            <img src={star.signatureUrl} alt="" />
+          </div>
         </div>
         {hoveredStarId === star._id && (
           <div
@@ -122,36 +117,37 @@ export const PlaceListArea = ({
   }
 
   useEffect(() => {
+    console.log("allUserSelectedFoodTags", allUserSelectedFoodTags);
+    console.log("allUserSelectedMoodTags", allUserSelectedMoodTags);
+
     const starsData = restaurantList.map((restaurant) => {
       const matchesResultTag = allUserSelectedFoodTags.some((tag) =>
         restaurant.food_category.startsWith(tag)
       );
 
-      let imageUrl;
+      let imageUrl = imgUrls.find((img) => img.name === "작은별");
       const targetNames = allUserSelectedFoodTags.filter((tag) =>
         restaurant.food_category.startsWith(tag)
       );
 
       if (targetNames.length > 0) {
-        imageUrl = imgUrls.find((img) =>
-          targetNames.some((name) => img.name === name)
-        );
-
-        if (imageUrl === undefined) {
-          imageUrl = imgUrls.find((img) => img.name === "큰별");
-        }
-      } else {
-        imageUrl = imgUrls.find((img) => img.name === "작은별");
+        imageUrl = imgUrls.find((img) => img.name === "큰별");
       }
 
       let matchesResultMoodTag = true;
       if (roomMode === 2) {
-        //console.log("restaurant : ", restaurant);
-        if (restaurant.moodKeywords !== undefined) {
-          //console.log("resultMoodTags : ", resultMoodTags);
+        if (matchesResultTag && restaurant.moodKeywords !== undefined) {
           matchesResultMoodTag = restaurant.moodKeywords?.some((moodKeyword) =>
             allUserSelectedMoodTags.includes(moodKeyword)
           );
+
+          const tempImgUrl = imgUrls.find((img) =>
+            targetNames.some((name) => img.name === name)
+          );
+
+          if (tempImgUrl) {
+            imageUrl = tempImgUrl;
+          }
         } else {
           matchesResultMoodTag = false;
         }
@@ -162,7 +158,7 @@ export const PlaceListArea = ({
         size: 1,
         x: getRandomInt(5, 90),
         y: getRandomInt(5, 90),
-        showComponentOne: matchesResultTag && matchesResultMoodTag,
+        showComponentOne: matchesResultMoodTag,
         signatureUrl: imageUrl.imgUrl,
       };
     });

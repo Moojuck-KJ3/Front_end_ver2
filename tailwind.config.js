@@ -28,6 +28,16 @@ export default {
       backgroundImage: {
         "space-bg": "url('./BackGroundImg.jpg')",
       },
+      animation: {
+        opacityPulse: "opacityPulse 2s ease-in-out",
+      },
+      keyframes: {
+        opacityPulse: {
+          "0%": { opacity: 0.7, transform: "translate(0, 0)" },
+          "50%": { opacity: 0.3 },
+          "100%": { opacity: 0, transform: "translate(5px, 5px)" },
+        },
+      },
     },
   },
   plugins: [require("tailwindcss-animated"), Myclass],
