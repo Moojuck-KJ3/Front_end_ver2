@@ -31,7 +31,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     useState(false);
   const [modeOneVoiceRecResult, SetModeOneVoiceRecResult] = useState([]);
   const [modeTwoVoiceRecResult, SetModeTwoVoiceRecResult] = useState([]);
-  console.log(roomDetail.userStreams);
+  
 
   const [playerHand, setPlayerHand] = useState({
     selectedFoodTag: ["일식"], //"한식"
@@ -154,7 +154,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
         <LeftSideUserVideoContainer
           playerHand={playerHand}
           localStream={localStream}
-          // remoteStrem={remoteStrem}
+          remoteStrem={roomDetail.userStreams}
           showMic={showModeTwoVoiceRecorder}
         />
 
@@ -174,10 +174,11 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
           imgUrls={imgUrlList}
         />
         <RightSideUserVideoContainer
-          localStream={localStream}
-          // remoteStrem={remoteStrem}
+          // localStream={localStream}
+          remoteStrem={roomDetail.userStreams}
           showMic={showModeTwoVoiceRecorder}
           onReady={handleSetReady}
+          
         />
 
         {roomMode === MODE.MODE1 && (

@@ -36,7 +36,7 @@ const LeftSideUserVideoContainer = ({
         )}
       </div>
       <div className="flex flex-col justify-center bg-white p-4 mx-2 min-h-[300px] rounded-lg shadow-2xl border-2 ">
-        <VideoContainer mediaStream={remoteStrem} />
+        <VideoContainer mediaStream={remoteStrem[1]?.stream} />
       </div>
       <div className="flex flex-col flex-grow justify-between items-center bg-white p-3 mx-2  rounded-lg shadow-2xl border-2">
         <h1 className="text-2xl font-tenada">⭐️나의 선호도</h1>
