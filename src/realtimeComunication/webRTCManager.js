@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
-import socket from "./socket";
+// import socket from "./socket";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useSocket } from "./SocketContext";
 
 export function useLocalCameraStream() {
   const [localStream, setLocalStream] = useState(null);
@@ -22,6 +23,7 @@ export function usePeerConnection(localStream) {
   const { roomId } = useParams();
   const [users, setUsers] = useState([]);
   const pcsRef = useRef({});
+  const socket = useSocket();
 
   const createPeerConnection = useCallback(
     (socketId) => {
@@ -80,6 +82,8 @@ export function usePeerConnection(localStream) {
   );
 
   useEffect(() => {
+    if (!socket) return;
+
     const handleConnection = () => {
       console.log("join-room is called");
       socket.emit("join-room", { roomId });
@@ -170,7 +174,7 @@ export function usePeerConnection(localStream) {
       socket.off("answer", handleReceiveAnswer);
       socket.off("send-candidate", handleReceiveCandidate);
     };
-  }, [createPeerConnection, localStream, roomId]);
+  }, [socket, createPeerConnection, localStream, roomId]);
 
   return {
     users,

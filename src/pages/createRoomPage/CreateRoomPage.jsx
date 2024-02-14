@@ -2,18 +2,21 @@ import { useState, useEffect } from "react";
 import InputWithLabel from "../../components/InputWithLable";
 import { useNavigate } from "react-router-dom";
 import CreateRoomModal from "./modal/CreateRoomModal";
-import socket from "../../realtimeComunication/socket";
+// import socket from "../../realtimeComunication/socket";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { logout } from "../../api";
+import { useSocket } from "../../realtimeComunication/SocketContext";
 
 const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const navigate = useNavigate();
   const [isModal, setIsModal] = useState(false);
   const [roomId, setRoomId] = useState("");
   const [userName, setUserName] = useState("");
+  const socket = useSocket();
 
   useEffect(() => {
+    if (!socket) return;
     const userDetails = localStorage.getItem("user");
 
     if (userDetails) {
@@ -52,7 +55,7 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
       socket.off("create-room-response");
       socket.off("join-room-response");
     };
-  }, [setRoomDetail, roomDetail, navigate]);
+  }, [socket, setRoomDetail, roomDetail, navigate]);
 
   const handleOpenModal = () => {
     setIsModal(true);

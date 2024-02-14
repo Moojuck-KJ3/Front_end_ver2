@@ -4,8 +4,9 @@ import CreateRoomPageFooter from "../createRoomPage/CreateRoomPageFooter";
 import { usePeerConnection } from "../../realtimeComunication/webRTCManager";
 import CopyToClipboardButton from "./ClipboardClipboardCopyButton";
 import { useEffect, useState } from "react";
-import socket from "../../realtimeComunication/socket";
+// import socket from "../../realtimeComunication/socket";
 import Typewriter from "../../components/type/TypeWriter";
+import { useSocket } from "../../realtimeComunication/SocketContext";
 
 const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   // 개발 끝나면, isAllPlayerReady False로 바꾸기
@@ -14,6 +15,7 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const { roomId } = useParams();
   const [progressValue, setProgressValue] = useState(50);
   const { users } = usePeerConnection(localStream);
+  const socket = useSocket();
 
   useEffect(() => {
     console.log("new users!");
@@ -21,6 +23,8 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   }, [users]);
 
   useEffect(() => {
+    if (!socket) return;
+
     const handleAllPlayerReady = () => {
       console.log("All players are ready");
       setIsAllPlayerReady(true);
@@ -48,7 +52,7 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
       socket.off("all-player-ready", handleAllPlayerReady);
       socket.off("start-play-room-response", handleStartPlayRoomResponse);
     };
-  }, [navigator, setRoomDetail, roomId]);
+  }, [socket, navigator, setRoomDetail, roomId]);
 
   useEffect(() => {
     if (isAllPlayerReady) {
