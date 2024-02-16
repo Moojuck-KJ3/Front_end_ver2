@@ -30,12 +30,17 @@ export default {
       },
       animation: {
         opacityPulse: "opacityPulse 2s ease-in-out",
+        twinkling: "twinkling 1s infinite",
       },
       keyframes: {
         opacityPulse: {
           "0%": { opacity: 0.7, transform: "translate(0, 0)" },
           "50%": { opacity: 0.3 },
           "100%": { opacity: 0, transform: "translate(15px, 15px)" },
+        },
+        twinkling: {
+          "0%, 100%": { borderColor: "green" },
+          "50%": { borderColor: "white" },
         },
       },
     },
