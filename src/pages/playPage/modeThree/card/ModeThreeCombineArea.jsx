@@ -97,23 +97,21 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
 
   useEffect(() => {
     if (!socket) return;
-    // { playerId, restaurantData }
-    socket.on("other-user-selected-card", (data) => {
+    socket.on("other-user-selected-card", ({ playerId, restaurantData }) => {
       console.log("other-user-selected-card is called,!");
-      //   console.log(playerId);
-      console.log(data);
-      //   console.log(restaurantData);
-      //   if (playerId === 1) {
-      //     setDraggedTagA(restaurantData);
-      //     console.log(draggedTagA);
-      //   } else if (playerId === 2) {
-      //     setDraggedTagB(restaurantData);
-      //   } else if (playerId === 3) {
-      //     setDraggedTagC(restaurantData);
-      //     console.log(draggedTagA);
-      //   } else if (playerId === 4) {
-      //     setDraggedTagD(restaurantData);
-      //   }
+      console.log(playerId);
+      console.log(restaurantData);
+      if (playerId === 1) {
+        setDraggedTagA(restaurantData);
+        console.log(draggedTagA);
+      } else if (playerId === 2) {
+        setDraggedTagB(restaurantData);
+      } else if (playerId === 3) {
+        setDraggedTagC(restaurantData);
+        console.log(draggedTagA);
+      } else if (playerId === 4) {
+        setDraggedTagD(restaurantData);
+      }
     });
 
     socket.on("combined-result", handleCombineResult);
