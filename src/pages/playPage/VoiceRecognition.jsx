@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSocket } from "../../realtimeComunication/SocketContext";
 
@@ -12,15 +12,29 @@ const VoiceRecognition = ({
   const recognitionRef = useRef(null);
   const { roomId } = useParams();
 
+  // 버퍼 역할을 하는 상태 변수
+  const [buffer, setBuffer] = useState([]);
+
   const handleSetMoodTags = (text) => {
+    // 버퍼에 데이터 추가
+    setBuffer((prevBuffer) => [...prevBuffer, text]);
+  };
+
+  const sendBufferToServer = () => {
+    console.log("sendBufferToServer", buffer);
+    if (buffer.length === 0) return;
+
     const serverSendData = {
       roomId: roomId,
-      speechSentence: text,
+      speechSentence: buffer.join(" "),
       selectedFoodCategories: userSelectedFoodCategories,
     };
 
     console.log("send-speech-keyword serverSendData", serverSendData);
     socket.emit("send-speech-keyword", serverSendData);
+
+    // 버퍼 비우기
+    setBuffer([]);
   };
 
   const handleReceiveSpeechKeyword = (data) => {
@@ -65,35 +79,59 @@ const VoiceRecognition = ({
           console.log("No speech detected or speech was empty.");
         }
       };
-      recognitionRef.current.start();
 
       recognitionRef.current.onerror = (event) => {
         console.error("Speech Recognition Error", event.error);
+        recognitionRef.current.isStarted = false;
       };
 
       recognitionRef.current.onend = () => {
         recognitionRef.current.start();
+        recognitionRef.current.isStarted = true;
       };
+
+      recognitionRef.current.isStarted = false;
+    }
+
+    if (!recognitionRef.current.isStarted) {
+      recognitionRef.current.start();
+      recognitionRef.current.isStarted = true;
     }
   };
 
   useEffect(() => {
     if (!socket) return;
 
-    setupSpeechRecognition();
     socket.on("receive-speech-keyword", handleReceiveSpeechKeyword);
+    setupSpeechRecognition();
+
+    // 5초 간격으로 버퍼의 내용을 서버로 전송
+    const intervalId = setInterval(sendBufferToServer, 5000);
 
     return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+
+      socket.off("receive-speech-keyword", handleReceiveSpeechKeyword);
+      clearInterval(intervalId);
+    };
+  }, [socket, buffer]);
+
+  useEffect(() => {
+    // Component did mount
+    setupSpeechRecognition();
+
+    return () => {
+      // Component will unmount
       if (recognitionRef.current) {
         recognitionRef.current.stop();
         recognitionRef.current.onend = null;
         recognitionRef.current.onresult = null;
         recognitionRef.current.onerror = null;
       }
-
-      socket.off("receive-speech-keyword", handleReceiveSpeechKeyword);
     };
-  }, [socket]);
+  }, []);
 
   return <div></div>;
 };
