@@ -3,14 +3,14 @@ import "./HeartEffect.css";
 
 const ResultCard = ({ place }) => {
   const likesLimit = Math.min(place.likes, 4);
-  const likesArray = Array(place.likes).fill(null);
+  const likesArray = Array(likesLimit).fill(null);
 
   return (
     <div
       className={`w-[160px] h-[180px] bg-transparent cursor-pointer group perspective relative`}
     >
       <div
-        className="absolute z-10 -top-10 grid grid-cols-4 items-center gap-5 w-12/13"
+        className="absolute z-10 -top-4 grid grid-cols-4 items-center gap-8 w-12/13"
         style={{ transform: "translateX(-8px)" }}
       >
         {likesArray.map((_, index) => (
