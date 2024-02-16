@@ -60,15 +60,17 @@ const PlayerHand = ({
             1
           )}`}
         >
-          <div>
-            <h1 className="mt-2 font-tenada text-2xl">선호하는 음식🍔</h1>
+          <h1 className="mt-2 font-tenada text-2xl">선호하는 음식🍔</h1>
+
+          <div className="flex-grow h-full scrollbar-hide overflow-y-auto m-2">
             <ul>
               {[...foodTagCounts]
                 .sort((a, b) => b[1] - a[1]) // Sort by count in descending order
                 .map(([tag, count], index) => (
                   <li
                     key={index}
-                    className="bg-gray-200 flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg font-tenada"
+                    style={{ animationDelay: `${index * 0.2}s` }}
+                    className="bg-gray-200 flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg font-tenada animate-fade-up"
                   >
                     <span className="text-lg font-semibold ml-2">{`${
                       index + 1
@@ -93,31 +95,31 @@ const PlayerHand = ({
 
         <div
           onClick={() => handleClick(2)}
-          className={`w-1/4 p-1 flex flex-col text-center m-2 border-2 rounded-xl justify-between ${getModeStyle(
+          className={`w-1/4 p-1 flex flex-col text-center m-2 border-2 rounded-xl  justify-between ${getModeStyle(
             2
           )}`}
         >
-          <div>
-            <h1 className="mt-1 font-tenada text-2xl ">선호하는 분위기👀</h1>
-            <div className="">
-              {[...moodTagCounts]
-                .sort((a, b) => b[1] - a[1])
-                .map(([tag, count], index) => (
-                  <div
-                    key={index}
-                    className="bg-gray-200 flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg font-tenada"
-                  >
-                    <span className="text-lg font-semibold ml-2">{`${
-                      index + 1
-                    }. `}</span>
-                    <h1 className="flex-grow text-center text-xl">{`#${tag}`}</h1>
-                    <p className="bg-green-400 font-semibold text-white mr-3 w-7 h-7 text-center rounded-full flex items-center justify-center">
-                      {count}
-                    </p>
-                  </div>
-                ))}
-            </div>
-          </div>
+          <h1 className="mt-1 font-tenada text-2xl ">선호하는 분위기👀</h1>
+
+          <ul className="flex-grow h-full scrollbar-hide overflow-y-auto m-2">
+            {[...moodTagCounts]
+              .sort((a, b) => b[1] - a[1])
+              .map(([tag, count], index) => (
+                <li
+                  key={index}
+                  style={{ animationDelay: `${index * 0.2}s` }}
+                  className="bg-gray-200 flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg font-tenada animate-fade-up"
+                >
+                  <span className="text-lg font-semibold ml-2">{`${
+                    index + 1
+                  }. `}</span>
+                  <h1 className="flex-grow text-center text-xl">{`#${tag}`}</h1>
+                  <p className="bg-green-400 font-semibold text-white mr-3 w-7 h-7 text-center rounded-full flex items-center justify-center">
+                    {count}
+                  </p>
+                </li>
+              ))}
+          </ul>
           {roomMode === 2 && (
             <button
               onClick={handleReady}
@@ -133,8 +135,9 @@ const PlayerHand = ({
             3
           )}`}
         >
-          <div>
-            <h1 className="mt-1 font-tenada text-2xl ">가고 싶은 장소💫</h1>
+          <h1 className="mt-1 font-tenada text-2xl ">가고 싶은 장소💫</h1>
+
+          <div className="flex-grow h-full scrollbar-hide overflow-y-auto m-2">
             <div className="grid grid-cols-3 gap-4">
               {allUserPlayerHand.selectedPlace?.map((place, index) => (
                 <div

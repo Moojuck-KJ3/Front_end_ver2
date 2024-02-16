@@ -21,7 +21,7 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
   const { roomId } = useParams();
 
   useEffect(() => {
-    if (draggedTagA && draggedTagB) {
+    if (draggedTagA && draggedTagB && draggedTagC && draggedTagD) {
       setIsSpining(true);
       const delay = setTimeout(() => {
         setShowContent(true);
@@ -31,7 +31,7 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
       setShowContent(false);
       setIsSpining(false);
     }
-  }, [draggedTagA, draggedTagB]);
+  }, [draggedTagA, draggedTagB, draggedTagC, draggedTagD]);
 
   const handleDragOver = (event) => {
     event.preventDefault();
@@ -44,6 +44,7 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
 
     console.log("handleDrop is called ");
     const parsedRestaurantData = JSON.parse(restaurantData);
+    console.log(restaurantData);
     console.log(parsedRestaurantData);
 
     if (parsedRestaurantData) {
@@ -69,7 +70,7 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
   };
 
   useEffect(() => {
-    if (draggedTagA && draggedTagB) {
+    if (draggedTagA && draggedTagB && draggedTagC && draggedTagD) {
       socket.emit("both-users-selected", {
         roomId,
         userSelectedList: [
@@ -81,27 +82,38 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
             playerId: 2,
             restId: draggedTagB.restId,
           },
+          {
+            playerId: 3,
+            restId: draggedTagC.restId,
+          },
+          {
+            playerId: 4,
+            restId: draggedTagD.restId,
+          },
         ],
       });
     }
-  }, [draggedTagA, draggedTagB, roomId, socket]);
+  }, [draggedTagA, draggedTagB, draggedTagC, draggedTagD, roomId, socket]);
 
   useEffect(() => {
     if (!socket) return;
-
-    socket.on("other-user-selected-card", ({ playerId, restaurantData }) => {
+    // { playerId, restaurantData }
+    socket.on("other-user-selected-card", (data) => {
       console.log("other-user-selected-card is called,!");
-      if (playerId === 1) {
-        setDraggedTagA(restaurantData);
-        console.log(draggedTagA);
-      } else if (playerId === 2) {
-        setDraggedTagB(restaurantData);
-      } else if (playerId === 3) {
-        setDraggedTagC(restaurantData);
-        console.log(draggedTagA);
-      } else if (playerId === 4) {
-        setDraggedTagD(restaurantData);
-      }
+      //   console.log(playerId);
+      console.log(data);
+      //   console.log(restaurantData);
+      //   if (playerId === 1) {
+      //     setDraggedTagA(restaurantData);
+      //     console.log(draggedTagA);
+      //   } else if (playerId === 2) {
+      //     setDraggedTagB(restaurantData);
+      //   } else if (playerId === 3) {
+      //     setDraggedTagC(restaurantData);
+      //     console.log(draggedTagA);
+      //   } else if (playerId === 4) {
+      //     setDraggedTagD(restaurantData);
+      //   }
     });
 
     socket.on("combined-result", handleCombineResult);

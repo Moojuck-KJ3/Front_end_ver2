@@ -21,3 +21,13 @@
     animation: orbit 10s infinite linear; /* Adjust timing as needed */
   }
 }
+
+@layer utilities {
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}

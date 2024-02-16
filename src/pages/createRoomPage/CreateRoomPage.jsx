@@ -22,7 +22,6 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
   }, [localStream]);
 
   useEffect(() => {
-    if (!socket) return;
     const userDetails = localStorage.getItem("user");
 
     if (userDetails) {
@@ -30,7 +29,9 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
       setUserName(username);
     }
     console.log("roomDetail", roomDetail);
+  }, [setRoomDetail, roomDetail]);
 
+  useEffect(() => {
     socket.on("create-room-response", (response) => {
       if (response) {
         const { roomId } = response;
@@ -61,8 +62,7 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
       socket.off("create-room-response");
       socket.off("join-room-response");
     };
-  }, [socket, setRoomDetail, roomDetail, navigate]);
-
+  }, [socket, navigate, setRoomDetail, roomDetail]);
   const handleOpenModal = () => {
     setIsModal(true);
   };

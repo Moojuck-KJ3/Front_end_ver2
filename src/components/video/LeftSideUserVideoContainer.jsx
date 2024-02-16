@@ -32,10 +32,10 @@ const LeftSideUserVideoContainer = ({
       <div className="flex flex-col justify-center bg-white p-4 mx-2 min-h-[300px] rounded-lg shadow-2xl border-2 ">
         <VideoContainer mediaStream={remoteStrem[2]?.stream} />
       </div>
-      <div className="flex flex-col flex-grow justify-between items-center bg-white p-3 mx-2  rounded-lg shadow-2xl border-2">
+      <div className="flex flex-col h-full justify-between items-center bg-white p-3 mx-2  rounded-lg shadow-2xl border-2">
         <h1 className="text-2xl font-tenada">⭐️나의 선호도</h1>
 
-        <div className="flex-grow h-full w-full overflow-y-auto m-2">
+        <div className="flex-grow h-full w-full overflow-y-auto scrollbar-hide m-2">
           <div className="grid grid-cols-2 grid-rows-3 gap-3 overflow-y-auto max-h-98">
             {playerHand.selectedFoodTag?.map((tag, index) => (
               <div
@@ -53,17 +53,17 @@ const LeftSideUserVideoContainer = ({
         </div>
         <h1 className="text-2xl font-tenada">✅나의 장소 Pick!</h1>
 
-        <div className="flex flex-col h-full w-full">
+        <div className=" w-full h-full overflow-y-auto scrollbar-hide m-2">
           <div className="grid grid-cols-3 gap-1 justify-between">
             {playerHand.selectedPlace?.map((place, index) => (
               <div
                 key={index}
                 draggable
                 onDragStart={(event) => handleDragStart(event, place)}
-                className="w-full border-2 m-1 rounded-xl border-red-600 cursor-move"
+                className="w-full border-2 m-1 rounded-xl border-red-600 cursor-move animate-fade"
               >
                 <img
-                  className="w-full h-full rounded-lg object-cover"
+                  className="w-full h-24 rounded-lg object-cover"
                   src={place.thumbnailImg}
                   alt=""
                 />
