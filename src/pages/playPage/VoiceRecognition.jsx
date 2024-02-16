@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSocket } from "../../realtimeComunication/SocketContext";
 
+const SERVER_SEND_TIME = 3000;
+
 const VoiceRecognition = ({
   onSetResultRestaurant,
   onSetPlayerResult,
@@ -106,7 +108,7 @@ const VoiceRecognition = ({
     setupSpeechRecognition();
 
     // 5초 간격으로 버퍼의 내용을 서버로 전송
-    const intervalId = setInterval(sendBufferToServer, 5000);
+    const intervalId = setInterval(sendBufferToServer, SERVER_SEND_TIME);
 
     return () => {
       if (recognitionRef.current) {
