@@ -23,7 +23,7 @@ const ResultCard = ({ place }) => {
           </div>
         ))}
       </div>
-      <div className="relative w-full h-full hover:scale-105 transition-all hover:border-2 hover:border-green-400 animate-twinkling">
+      <div className="relative w-full h-full hover:scale-105 transition-all hover:border-2 hover:rounded-lg hover:border-green-400 animate-twinkling">
         <div className="absolute bg-white text-black  shadow-xl w-full h-full rounded-lg">
           <img src={place.thumbnailImg} className="w-full h-full rounded-lg" />
         </div>
