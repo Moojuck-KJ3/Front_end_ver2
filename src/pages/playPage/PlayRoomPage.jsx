@@ -32,15 +32,19 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const [modeTwoVoiceRecResult, SetModeTwoVoiceRecResult] = useState([]);
   const [popupMessage, setPopupMessage] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [attentionData, setAttentionData] = useState({
+    show: false,
+    senderId: null,
+  });
 
   const [playerHand, setPlayerHand] = useState({
-    selectedFoodTag: [], //"한식"
+    selectedFoodTag: [],
     selectedMoodTag: [],
     selectedPlace: [],
   });
   const [allUserPlayerHand, setAllUserPlayerHand] = useState({
-    selectedFoodTag: ["한식", "중식", "일식", "이탈리안"], //
-    selectedMoodTag: ["조용한", "한적한", "ㅇ", "1", "2", "3", "4"],
+    selectedFoodTag: [], //
+    selectedMoodTag: [],
     selectedPlace: [],
     finalPlace: [
       {
@@ -113,9 +117,17 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const handleRightSideAction = useCallback((data) => {
     console.log("handleRightSideAction", data);
     const popupContent = data;
-    if (popupContent) {
-      setPopupMessage(popupContent);
-      setShowPopup(true);
+
+    if (data.action === "잠깐 주목🗣️") {
+      console.log("잠깐 주목🗣️");
+      console.log(data.socketId);
+      setAttentionData({ show: true, senderId: data.socketId });
+      setTimeout(() => setAttentionData({ show: false, senderId: null }), 5000);
+    } else {
+      if (popupContent) {
+        setPopupMessage(popupContent);
+        setShowPopup(true);
+      }
     }
   }, []);
 
@@ -186,6 +198,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
           localStream={localStream}
           remoteStrem={roomDetail.userStreams}
           showMic={showModeTwoVoiceRecorder}
+          attentionData={attentionData}
         />
 
         <PlaceListArea
@@ -207,8 +220,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
         <RightSideUserVideoContainer
           // localStream={localStream}
           remoteStrem={roomDetail.userStreams}
-          showMic={showModeTwoVoiceRecorder}
-          onReady={handleSetReady}
+          attentionData={attentionData}
         />
 
         {roomMode === MODE.MODE1 && (

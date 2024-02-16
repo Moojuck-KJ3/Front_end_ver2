@@ -4,11 +4,12 @@ import RightSideCard from "../../pages/playPage/modeThree/card/RightSideCard";
 import { useSocket } from "../../realtimeComunication/SocketContext";
 import { useParams } from "react-router-dom";
 
-const RightSideUserVideoContainer = ({ remoteStrem }) => {
+const RightSideUserVideoContainer = ({ remoteStrem, attentionData }) => {
   const [activeButton, setActiveButton] = useState(null);
   const [dragItem, setDragItem] = useState(null);
   const { roomId } = useParams();
   const socket = useSocket();
+  const isSender = attentionData.senderId === socket.id;
 
   const handleDragOver = (event) => {
     event.preventDefault();
@@ -66,10 +67,17 @@ const RightSideUserVideoContainer = ({ remoteStrem }) => {
   return (
     <div className=" flex flex-col w-1/5 min-w-[300px] h-full gap-4 ">
       <div className="flex  min-h-[300px] flex-col justify-center bg-white p-4 mx-2  rounded-lg shadow-2xl border-2 relative">
-        <VideoContainer mediaStream={remoteStrem[1]?.stream} />
+        <VideoContainer
+          mediaStream={remoteStrem[1]?.stream}
+          streamOwnerId={remoteStrem[1]}
+          attentionData={attentionData}
+        />
       </div>
       <div className="flex  min-h-[300px] flex-col justify-center bg-white p-4 mx-2  rounded-lg shadow-2xl border-2 ">
-        <VideoContainer mediaStream={remoteStrem[3]?.stream} />
+        <VideoContainer
+          mediaStream={remoteStrem[3]?.stream}
+          attentionData={attentionData}
+        />
       </div>
 
       <div className="flex flex-col flex-grow items-center justify-around bg-white px-10 mx-2 py-1 rounded-lg shadow-2xl border-4 border-red-500">
@@ -78,13 +86,27 @@ const RightSideUserVideoContainer = ({ remoteStrem }) => {
             <div key={button.id} className="w-full flex flex-grow flex-col">
               {/* Message input field */}
               <div className="p-2 mx-2 my-4 flex flex-col flex-1 bg-white border rounded shadow animate-fade">
-                <div
-                  onDrop={handleDrop}
-                  onDragOver={handleDragOver}
-                  className="w-full border-dashed border-2 flex flex-grow p-2 rounded"
-                >
-                  {dragItem && <RightSideCard img={dragItem.thumbnailImg} />}
-                </div>
+                {activeButton === "attention" ? (
+                  <p className="w-full border-dashed border-2 flex flex-grow p-2 rounded">
+                    <div
+                      className={`flex bg-white shadow-md rounded-xl animate-fade `}
+                    >
+                      <img
+                        src="/확성기.png"
+                        alt="확성기"
+                        className="w-full h-full shadow-md overflow-hidden mx-auto bg-gray-200 rounded-lg shrink-0 object-cover object-center"
+                      />
+                    </div>
+                  </p>
+                ) : (
+                  <div
+                    onDrop={handleDrop}
+                    onDragOver={handleDragOver}
+                    className="w-full border-dashed border-2 flex flex-grow p-2 rounded"
+                  >
+                    {dragItem && <RightSideCard img={dragItem.thumbnailImg} />}
+                  </div>
+                )}
                 <button
                   onClick={sendMessage}
                   className="w-1/2  mx-auto font-tenada p-2 bg-blue-400 hover:bg-blue-500 transition-all text-white rounded mt-2"
