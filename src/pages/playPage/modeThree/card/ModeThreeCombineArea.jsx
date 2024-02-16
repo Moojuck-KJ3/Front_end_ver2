@@ -18,13 +18,14 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
   const [showContent, setShowContent] = useState(false);
   const [isSpining, setIsSpining] = useState(false);
   const [combinedplaceList, setCombinedPlaceList] = useState([]);
+  const [limitShowContent, setLimitShowContent] = useState(false);
   const { roomId } = useParams();
 
   useEffect(() => {
     if (draggedTagA && draggedTagB && draggedTagC && draggedTagD) {
       setIsSpining(true);
       const delay = setTimeout(() => {
-        setShowContent(true);
+        setLimitShowContent(true);
       }, 3000);
       return () => clearTimeout(delay);
     } else {
@@ -124,6 +125,7 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
     console.log("Combined result : ", data);
     console.log("Combined result received:", data.restaurantList);
     if (data) {
+      setShowContent(true);
       setCombinedPlaceList(data.restaurantList);
     } else {
       console.log("No results received or empty results array");
@@ -138,7 +140,7 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
   };
   return (
     <div className="w-full h-full flex justify-center items-center">
-      {showContent ? (
+      {showContent && limitShowContent ? (
         <div className="w-full h-full flex flex-col flex-grow justify-center items-center relative">
           {/* 애니메이션에 absolute position 지정 */}
           <CombineAnimation
