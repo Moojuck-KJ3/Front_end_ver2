@@ -22,6 +22,10 @@ const PlayerHand = ({
     const restaurantData = JSON.stringify({
       _id: restaurant._id,
       thumbnailImg: restaurant.thumbnailImg,
+      name: restaurant.name,
+      foodCategories: restaurant.food_category,
+      moodKeywords: restaurant.moodKeywords,
+      rating: restaurant.rating,
     });
 
     event.dataTransfer.setData("restaurant", restaurantData);

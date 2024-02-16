@@ -71,8 +71,12 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
 
   const handleRoomCreate = async (event) => {
     event.preventDefault();
-    socket.emit("create-room");
-    setIsModal(false);
+    if (socket) {
+      socket.emit("create-room");
+      setIsModal(false);
+    } else {
+      console.error("Socket is not initialized.");
+    }
   };
 
   const handleRoomJoin = () => {

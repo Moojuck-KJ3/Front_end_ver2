@@ -13,6 +13,7 @@ import RightSideUserVideoContainer from "../../components/video/RightSideUserVid
 import LeftSideUserVideoContainer from "../../components/video/LeftSideUserVideoContainer";
 import { getRestaurantList } from "../../api";
 import { useSocket } from "../../realtimeComunication/SocketContext";
+import Popup from "../../components/modal/Popup";
 
 const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const socket = useSocket();
@@ -29,6 +30,8 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     useState(false);
   const [modeOneVoiceRecResult, SetModeOneVoiceRecResult] = useState([]);
   const [modeTwoVoiceRecResult, SetModeTwoVoiceRecResult] = useState([]);
+  const [popupMessage, setPopupMessage] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
 
   const [playerHand, setPlayerHand] = useState({
     selectedFoodTag: [], //"한식"
@@ -67,7 +70,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     socket.on("select-foodCategories", handleAddSelectedFoodCategories);
     socket.on("mode-change-response", handleModeChange);
     socket.on("receive-speech-foodCategory", handleReceiveFoodCategory);
-
+    socket.on("right-sidebar-action", handleRightSideAction);
     return () => {
       socket.off("select-restaurant", handleAddSelectedRestaurant);
       socket.off("select-foodCategories", handleAddSelectedFoodCategories);
@@ -105,6 +108,15 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
 
       return updatedHand;
     });
+  }, []);
+
+  const handleRightSideAction = useCallback((data) => {
+    console.log("handleRightSideAction", data);
+    const popupContent = data;
+    if (popupContent) {
+      setPopupMessage(popupContent);
+      setShowPopup(true);
+    }
   }, []);
 
   const handleAddSelectedFoodCategories = useCallback((data) => {
@@ -163,7 +175,9 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     <PlayRoomContainer>
       {/* 스텝바 */}
       <Header roomMode={roomMode} />
-
+      {showPopup && (
+        <Popup message={popupMessage} onClose={() => setShowPopup(false)} />
+      )}
       {/* 컨텐츠 시작 */}
       <GameArea>
         {/* 별 */}

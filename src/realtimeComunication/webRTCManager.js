@@ -27,7 +27,6 @@ export function usePeerConnection(localStream) {
 
   const createPeerConnection = useCallback(
     (socketId) => {
-      // console.log("createPeerConnection is called", socketId);
       try {
         const pc = new RTCPeerConnection({
           iceServers: [
@@ -55,7 +54,6 @@ export function usePeerConnection(localStream) {
         // };
 
         pc.ontrack = (event) => {
-          // console.log("ontrack success");
           setUsers((oldUsers) =>
             oldUsers
               .filter((user) => user.socketId !== socketId)
@@ -93,7 +91,7 @@ export function usePeerConnection(localStream) {
       // console.log("handleAllUsers is called!");
       allUsers.forEach(async (user) => {
         if (!localStream) return;
-        const pc = createPeerConnection(user.socketId);
+        const pc = createPeerConnection(user.socketId, user.playerId);
         if (!pc) return;
         pcsRef.current = { ...pcsRef.current, [user.socketId]: pc };
         try {
@@ -105,7 +103,7 @@ export function usePeerConnection(localStream) {
             sdp: offer,
             offerSendID: socket.id,
             offerReceiveID: user.socketId,
-          }); 
+          });
         } catch (error) {
           console.error("Error handling handleUserJoined data:", error);
         }

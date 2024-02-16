@@ -99,9 +99,6 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
   useEffect(() => {
     if (!socket) return;
     socket.on("other-user-selected-card", ({ playerId, restaurantData }) => {
-      console.log("other-user-selected-card is called,!");
-      console.log(playerId);
-      console.log(restaurantData);
       if (playerId === 1) {
         setDraggedTagA(restaurantData);
         console.log(draggedTagA);
@@ -116,11 +113,20 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
     });
 
     socket.on("combined-result", handleCombineResult);
+
+    socket.on("reset-combined-area", () => {
+      setDraggedTagA(null);
+      setDraggedTagB(null);
+      setDraggedTagC(null);
+      setDraggedTagD(null);
+    });
+
     return () => {
       socket.off("other-user-selected-card");
       socket.off("combined-result", handleCombineResult);
     };
-  }, [socket]);
+  }, [socket, draggedTagA, draggedTagB, draggedTagC, draggedTagD]);
+
   const handleCombineResult = (data) => {
     console.log("Combined result : ", data);
     console.log("Combined result received:", data.restaurantList);
@@ -132,11 +138,9 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
       setCombinedPlaceList([]);
     }
   };
+
   const handleResetTarget = () => {
-    setDraggedTagA(null);
-    setDraggedTagB(null);
-    setDraggedTagC(null);
-    setDraggedTagD(null);
+    socket.emit("reset-combined-area", {roomId});
   };
   return (
     <div className="w-full h-full flex justify-center items-center">

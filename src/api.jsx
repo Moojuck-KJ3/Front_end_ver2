@@ -67,26 +67,6 @@ export const register = async (data) => {
   }
 };
 
-// play-room 진입 시, 식당 리스트들을 받기 위한 요청
-// data : {"purposeCoordinate" : {lat : number, lng : number}}
-/*
-  response : [
-    {
-      restId : string,
-      restName : string, 
-      rating : number,            // 별점
-      foodCategory : string[],
-      moodKeyword : string[],
-      menu : string[], 
-      thumbnailURL : string,
-      position : {number,number}, // 좌표
-      “miniStarUrl” : string,
-      “BigStarUrl” : string,
-      “FoodUrl” : string,
-    }
-  ]
-*/
-
 export const getRestaurantList = async (roomId, data, retries = 3) => {
   const requestFunction = () =>
     apiClient.post(`/restaurants?roomId=${roomId}`, data);

@@ -43,6 +43,7 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
           lat: data.coordinates[0],
           lng: data.coordinates[1],
         },
+        playerId: data.players.playerId,
         roomMemberCount: data.roomMemberCount,
       }));
       navigator(`/play-room/${roomId}`);
