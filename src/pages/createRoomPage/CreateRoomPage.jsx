@@ -32,6 +32,8 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
   }, [setRoomDetail, roomDetail]);
 
   useEffect(() => {
+    if (!socket) return;
+
     socket.on("create-room-response", (response) => {
       if (response) {
         const { roomId } = response;
