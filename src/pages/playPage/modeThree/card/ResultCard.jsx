@@ -1,8 +1,6 @@
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
-//title, imgUrl, id, likesCount
 const ResultCard = ({ place }) => {
-  // console.log("place", place);
   const likesLimit = Math.min(place.likes, 4);
   const likesArray = Array(place.likes).fill(null);
 
@@ -20,7 +18,7 @@ const ResultCard = ({ place }) => {
           </div>
         ))}
       </div>
-      <div className="relative w-full h-full hover:scale-105 hover:border-green-400 transition-all">
+      <div className="relative w-full h-full hover:scale-105 transition-all hover:border-2 hover:border-green-400 animate-twinkling">
         <div className="absolute bg-white text-black  shadow-xl w-full h-full rounded-lg">
           <img src={place.thumbnailImg} className="w-full h-full rounded-lg" />
         </div>

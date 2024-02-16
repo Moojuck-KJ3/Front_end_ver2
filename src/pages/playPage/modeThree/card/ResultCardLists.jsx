@@ -72,13 +72,7 @@ const ResultCardLists = ({ combinedplaceList, positions }) => {
               top: `${positions[i].y * window.innerHeight - 75}px`,
             }}
           >
-            <ResultCard
-              // title={place.name}
-              // imgUrl={place.thumbnailImg}
-              // id={place.id}
-              // likesCount={place.likes}
-              place={place}
-            />
+            <ResultCard place={place} />
           </div>
         ))}
       </div>
