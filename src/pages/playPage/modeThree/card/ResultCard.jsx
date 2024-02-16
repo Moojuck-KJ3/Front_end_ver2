@@ -1,4 +1,5 @@
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import "./HeartEffect.css";
 
 const ResultCard = ({ place }) => {
   const likesLimit = Math.min(place.likes, 4);
@@ -8,13 +9,17 @@ const ResultCard = ({ place }) => {
     <div
       className={`w-[160px] h-[180px] bg-transparent cursor-pointer group perspective relative`}
     >
-      <div className="absolute z-10 -top-10 grid grid-cols-4 items-center ">
+      <div
+        className="absolute z-10 -top-10 grid grid-cols-4 items-center gap-5 w-12/13"
+        style={{ transform: "translateX(-8px)" }}
+      >
         {likesArray.map((_, index) => (
           <div
             key={index}
-            className="w-8 h-8 bg-white rounded-full flex justify-center items-center m-1 animate-jump-in"
+            className="w-8 h-8 flex justify-center items-center m-1 animate-jump-in"
           >
-            <FavoriteIcon style={{ color: "red" }} />
+            {/* <FavoriteIcon style={{ color: "red" }} /> */}
+            <div className="heart"></div>
           </div>
         ))}
       </div>
