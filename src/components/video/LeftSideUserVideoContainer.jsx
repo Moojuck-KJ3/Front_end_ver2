@@ -47,13 +47,16 @@ const LeftSideUserVideoContainer = ({
 
   return (
     <div className=" relative flex flex-col w-1/5 min-w-[300px] h-full gap-4 ">
-      <VideoContainer mediaStream={localStream} />
+      <VideoContainer mediaStream={localStream} isLocalStream={true} />
       {showMic && (
         <button className="w-14 h-14 bg-green-500 rounded-full absolute top-6 right-8 animate-fade">
           <MicIcon />
         </button>
       )}
-      <VideoContainer mediaStream={remoteStrem[2]?.stream} />
+      <VideoContainer
+        mediaStream={remoteStrem[2]?.stream}
+        isLocalStream={false}
+      />
       <div className="flex flex-col h-full justify-between items-center bg-white p-3 mx-2  rounded-lg shadow-2xl border-2">
         <h1 className="text-2xl font-tenada">⭐️나의 선호도</h1>
 

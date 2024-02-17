@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useSocket } from "../../realtimeComunication/SocketContext";
 
-const VideoContainer = ({ mediaStream }) => {
+const VideoContainer = ({ mediaStream, isLocalStream }) => {
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const VideoContainer = ({ mediaStream }) => {
         className="w-full h-full object-cover rounded-lg border-1 bg-gray-400"
         ref={videoRef}
         autoPlay={true}
-        muted
+        muted={isLocalStream}
         playsInline
       />
     </div>
