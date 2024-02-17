@@ -4,12 +4,15 @@ import RightSideCard from "../../pages/playPage/modeThree/card/RightSideCard";
 import { useSocket } from "../../realtimeComunication/SocketContext";
 import { useParams } from "react-router-dom";
 
-const RightSideUserVideoContainer = ({ remoteStrem, attentionData }) => {
+const RightSideUserVideoContainer = ({
+  localStream,
+  remoteStrem,
+  roomDetail,
+}) => {
   const [activeButton, setActiveButton] = useState(null);
   const [dragItem, setDragItem] = useState(null);
   const { roomId } = useParams();
   const socket = useSocket();
-  const isSender = attentionData.senderId === socket.id;
 
   const handleDragOver = (event) => {
     event.preventDefault();
@@ -66,19 +69,12 @@ const RightSideUserVideoContainer = ({ remoteStrem, attentionData }) => {
 
   return (
     <div className=" flex flex-col w-1/5 min-w-[300px] h-full gap-4 ">
-      <div className="flex  min-h-[300px] flex-col justify-center bg-white p-4 mx-2  rounded-lg shadow-2xl border-2 relative">
-        <VideoContainer
-          mediaStream={remoteStrem[1]?.stream}
-          streamOwnerId={remoteStrem[1]}
-          attentionData={attentionData}
-        />
-      </div>
-      <div className="flex  min-h-[300px] flex-col justify-center bg-white p-4 mx-2  rounded-lg shadow-2xl border-2 ">
-        <VideoContainer
-          mediaStream={remoteStrem[3]?.stream}
-          attentionData={attentionData}
-        />
-      </div>
+      <VideoContainer
+        mediaStream={remoteStrem[1]?.stream}
+        streamOwnerId={remoteStrem[1]}
+      />
+
+      <VideoContainer mediaStream={remoteStrem[3]?.stream} />
 
       <div className="flex flex-col flex-grow items-center justify-around bg-white px-10 mx-2 py-1 rounded-lg shadow-2xl border-4 border-red-500">
         {buttons.map((button) =>

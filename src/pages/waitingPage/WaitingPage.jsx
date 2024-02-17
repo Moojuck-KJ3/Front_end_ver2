@@ -22,7 +22,7 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
       userStreams: users,
     }));
     console.log("new userStreams!");
-    console.log(roomDetail.userStreams);
+    console.log(roomDetail);
   }, [users]);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
           lat: data.coordinates[0],
           lng: data.coordinates[1],
         },
-        playerId: data.players.playerId,
+        playerInfo: data.players,
         roomMemberCount: data.roomMemberCount,
       }));
       navigator(`/play-room/${roomId}`);

@@ -14,6 +14,7 @@ import LeftSideUserVideoContainer from "../../components/video/LeftSideUserVideo
 import { getRestaurantList } from "../../api";
 import { useSocket } from "../../realtimeComunication/SocketContext";
 import Popup from "../../components/modal/Popup";
+import Attention from "../../components/modal/Attention";
 
 const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const socket = useSocket();
@@ -32,11 +33,9 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const [modeTwoVoiceRecResult, SetModeTwoVoiceRecResult] = useState([]);
   const [popupMessage, setPopupMessage] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
-  const [attentionData, setAttentionData] = useState({
-    show: false,
-    senderId: null,
-  });
+  const [isAttention, setIsAttention] = useState(false);
 
+  console.log(roomDetail);
   const [playerHand, setPlayerHand] = useState({
     selectedFoodTag: [],
     selectedMoodTag: [],
@@ -120,9 +119,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
 
     if (data.action === "잠깐 주목🗣️") {
       console.log("잠깐 주목🗣️");
-      console.log(data.socketId);
-      setAttentionData({ show: true, senderId: data.socketId });
-      setTimeout(() => setAttentionData({ show: false, senderId: null }), 5000);
+      setIsAttention(true);
     } else {
       if (popupContent) {
         setPopupMessage(popupContent);
@@ -190,6 +187,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
       {showPopup && (
         <Popup message={popupMessage} onClose={() => setShowPopup(false)} />
       )}
+      {isAttention && <Attention onClose={() => setIsAttention(false)} />}
       {/* 컨텐츠 시작 */}
       <GameArea>
         {/* 별 */}
@@ -198,7 +196,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
           localStream={localStream}
           remoteStrem={roomDetail.userStreams}
           showMic={showModeTwoVoiceRecorder}
-          attentionData={attentionData}
+          roomDetail={roomDetail}
         />
 
         <PlaceListArea
@@ -218,9 +216,9 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
           modeTwoResultRestList={modeTwoVoiceRecResult}
         />
         <RightSideUserVideoContainer
-          // localStream={localStream}
+          localStream={localStream}
           remoteStrem={roomDetail.userStreams}
-          attentionData={attentionData}
+          roomDetail={roomDetail}
         />
 
         {roomMode === MODE.MODE1 && (
