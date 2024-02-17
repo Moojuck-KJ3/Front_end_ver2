@@ -206,7 +206,7 @@ const PlayerHand = ({
                   <h1 className="text-xl font-bold truncate">
                     {allUserPlayerHand.finalPlace[currentIndex]?.name}
                   </h1>
-                  <h1 className="bg-gray-300 rounded-lg p-1 w-1/2 mx-auto text-xl">
+                  <h1 className="bg-gray-300 rounded-lg p-1 w-full text-xl">
                     #{allUserPlayerHand.finalPlace[currentIndex]?.food_category}
                   </h1>
                   <h1 className="text-2xl">

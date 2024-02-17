@@ -6,47 +6,14 @@ const FinalRestaurantDetails = ({ allUserPlayerHand, currentIndex }) => {
   const [info, setInfo] = useState();
   const [markers, setMarkers] = useState([]);
   const currentRestaurant = allUserPlayerHand.finalPlace[currentIndex];
-  const options = currentRestaurant.options.split(",");
-  useEffect(() => {
-    console.log(currentRestaurant.address);
-    const ps = new kakao.maps.services.Places();
-
-    // ps.keywordSearch(
-    //   allUserPlayerHand.finalPlace[0].address,
-    //   (data, status, _pagination) => {
-    //     if (status === kakao.maps.services.Status.OK && data.length > 0) {
-    //       const centerPosition = {
-    //         lat: data[0].y,
-    //         lng: data[0].x,
-    //       };
-
-    //       const marker = {
-    //         position: centerPosition,
-    //         content: data[0].place_name,
-    //       };
-
-    //       setMarkers([marker]);
-    //       setInfo(marker);
-
-    //       if (map) {
-    //         map.setCenter(
-    //           new kakao.maps.LatLng(centerPosition.lat, centerPosition.lng)
-    //         );
-    //       }
-    //     } else {
-    //       // Handle no results or other errors (optional)
-    //       console.error("Search failed:", status);
-    //     }
-    //   }
-    // );
-  }, []);
+  const options = currentRestaurant.options?.split(",") || [];
 
   return (
     <div className="w-full h-full grid grid-cols-2 grid-rows-2 p-4 gap-4 text-white font-tenada animate-fade-up">
       {/* Top-left cell for the main image */}
       <div className="flex row-span-1 justify-center items-center">
         <img
-          src={allUserPlayerHand.finalPlace[0].thumbnailImg}
+          src={currentRestaurant.thumbnailImg}
           alt="Main Dish"
           className="w-full max-h-[300px] rounded-md"
         />
