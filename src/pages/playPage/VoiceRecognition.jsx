@@ -17,10 +17,25 @@ const VoiceRecognition = ({
   // 버퍼 역할을 하는 상태 변수
   const [buffer, setBuffer] = useState([]);
 
+  const throttleTimeout = useRef();
+
   const handleSetMoodTags = (text) => {
     // 버퍼에 데이터 추가
+    console.log("handleSetMoodTags : ", text);
     setBuffer((prevBuffer) => [...prevBuffer, text]);
   };
+
+  useEffect(() => {
+    // throttleTimeout.current가 설정되지 않았다면 sendBufferToServer 실행
+    if (!throttleTimeout.current) {
+      sendBufferToServer();
+
+      // 다음 sendBufferToServer 실행까지 일정 시간 대기
+      throttleTimeout.current = setTimeout(() => {
+        throttleTimeout.current = null;
+      }, SERVER_SEND_TIME);
+    }
+  }, [buffer]); // buffer 상태가 변경될 때마다 실행
 
   const sendBufferToServer = () => {
     console.log("sendBufferToServer", buffer);
@@ -40,25 +55,16 @@ const VoiceRecognition = ({
   };
 
   const handleReceiveSpeechKeyword = (data) => {
-    console.log(
-      "receive speech keyword Datas : ",
-      data.keywords[0]?.top_5_moods
-    );
-    if (data.keywords[0]?.top_5_moods.length > 0) {
+    console.log("receive speech keyword Datas : ", data);
+    if (data.keywords.length > 0) {
       onSetPlayerResult((prevPlayerHand) => ({
         ...prevPlayerHand,
-        selectedMoodTag: [
-          ...prevPlayerHand.selectedMoodTag,
-          ...data.keywords[0].top_5_moods,
-        ],
+        selectedMoodTag: [...prevPlayerHand.selectedMoodTag, ...data.keywords],
       }));
 
       onSetAllUserPlayerHand((prevAllUserHand) => ({
         ...prevAllUserHand,
-        selectedMoodTag: [
-          ...prevAllUserHand.selectedMoodTag,
-          ...data.keywords[0].top_5_moods,
-        ],
+        selectedMoodTag: [...prevAllUserHand.selectedMoodTag, ...data.keywords],
       }));
     }
     onSetResultRestaurant(data.restaurantList);
@@ -107,18 +113,14 @@ const VoiceRecognition = ({
     socket.on("receive-speech-keyword", handleReceiveSpeechKeyword);
     setupSpeechRecognition();
 
-    // 5초 간격으로 버퍼의 내용을 서버로 전송
-    const intervalId = setInterval(sendBufferToServer, SERVER_SEND_TIME);
-
     return () => {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
       }
-
       socket.off("receive-speech-keyword", handleReceiveSpeechKeyword);
-      clearInterval(intervalId);
+      clearTimeout(throttleTimeout);
     };
-  }, [socket, buffer]);
+  }, [socket]);
 
   useEffect(() => {
     // Component did mount
@@ -132,6 +134,7 @@ const VoiceRecognition = ({
         recognitionRef.current.onresult = null;
         recognitionRef.current.onerror = null;
       }
+      clearTimeout(throttleTimeout);
     };
   }, []);
 
