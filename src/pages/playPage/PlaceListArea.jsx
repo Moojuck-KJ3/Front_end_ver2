@@ -133,12 +133,14 @@ export const PlaceListArea = ({
         imageUrl = imgUrls.find((img) => img.name === "큰별");
       }
 
-      let matchesResultMoodTag = true;
+      // 어차피 server에서 추천해주는 녀석들만 PNG 로 만들어줄거라
+      // 별도의 mood Keywords 관리 로직 주석처리
+      //let matchesResultMoodTag = true;
       if (roomMode === 2) {
         if (matchesResultTag && restaurant.moodKeywords !== undefined) {
-          matchesResultMoodTag = restaurant.moodKeywords?.some((moodKeyword) =>
-            allUserSelectedMoodTags.includes(moodKeyword)
-          );
+          // matchesResultMoodTag = restaurant.moodKeywords?.some((moodKeyword) =>
+          //   allUserSelectedMoodTags.includes(moodKeyword)
+          // );
 
           const restaurantExistsInModeTwoResult =
             modeTwoResultRestList.includes(restaurant._id);
@@ -152,9 +154,10 @@ export const PlaceListArea = ({
               imageUrl = tempImgUrl;
             }
           }
-        } else {
-          matchesResultMoodTag = false;
         }
+        // else {
+        //   matchesResultMoodTag = false;
+        // }
       }
 
       return {
