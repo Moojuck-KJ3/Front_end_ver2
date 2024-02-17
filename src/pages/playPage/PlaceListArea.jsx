@@ -135,14 +135,13 @@ export const PlaceListArea = ({
 
       let matchesResultMoodTag = true;
       if (roomMode === 2) {
-        // console.log("modeTwoResultRestList", modeTwoResultRestList);
         if (matchesResultTag && restaurant.moodKeywords !== undefined) {
           matchesResultMoodTag = restaurant.moodKeywords?.some((moodKeyword) =>
             allUserSelectedMoodTags.includes(moodKeyword)
           );
 
           const restaurantExistsInModeTwoResult =
-            modeTwoResultRestList.includes(restaurant.id);
+            modeTwoResultRestList.includes(restaurant._id);
 
           if (restaurantExistsInModeTwoResult) {
             const tempImgUrl = imgUrls.find((img) =>
