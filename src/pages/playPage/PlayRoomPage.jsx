@@ -228,7 +228,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
         />
         <RightSideUserVideoContainer
           localStream={localStream}
-          remoteStrem={roomDetail.userStreams}
+          remoteStrem={userStreamsWithPlayerId}
           roomDetail={roomDetail}
         />
 
