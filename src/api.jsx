@@ -67,9 +67,9 @@ export const register = async (data) => {
   }
 };
 
-export const getRestaurantList = async (roomId, data, retries = 3) => {
+export const getRestaurantList = async (roomId, retries = 3) => {
   const requestFunction = () =>
-    apiClient.post(`/restaurants?roomId=${roomId}`, data);
+    apiClient.get(`/restaurants?roomId=${roomId}&page=1`);
   return await retryRequest(requestFunction, retries);
 };
 

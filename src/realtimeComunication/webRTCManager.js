@@ -98,7 +98,7 @@ export function usePeerConnection(localStream) {
       // console.log("handleAllUsers is called!");
       allUsers.forEach(async (user) => {
         if (!localStream) return;
-        const pc = createPeerConnection(user.socketId, user.playerId);
+        const pc = createPeerConnection(user.socketId);
         if (!pc) return;
         pcsRef.current = { ...pcsRef.current, [user.socketId]: pc };
         try {

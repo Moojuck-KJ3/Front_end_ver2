@@ -46,7 +46,6 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     selectedPlace: [],
     finalPlace: [],
   });
-  console.log(allUserPlayerHand);
   const [imgUrlList, setImgUrlList] = useState([]);
 
   useEffect(() => {
@@ -68,12 +67,8 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   }, [socket]);
 
   useEffect(() => {
-    const coordinate = {
-      coordinates: [37.5001716373021, 127.029070884291],
-    };
-    console.log(coordinate);
-    const getRestList = async (roomId, coordinates) => {
-      const response = await getRestaurantList(roomId, coordinates);
+    const getRestList = async (roomId) => {
+      const response = await getRestaurantList(roomId);
 
       if (response.error) {
         console.log(response.exception);
@@ -83,11 +78,10 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
       setImgUrlList(response.data.imgUrls);
     };
 
-    getRestList(roomId, coordinate);
+    getRestList(roomId);
   }, []);
 
   const handleAddSelectedRestaurant = useCallback((selectedRestaurant) => {
-    console.log("select-restaurant", selectedRestaurant);
     setAllUserPlayerHand((prevAllUserHand) => {
       const updatedHand = {
         ...prevAllUserHand,
@@ -100,9 +94,6 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
 
   const handleRemoveSelectedRestaurant = useCallback(
     ({ restaurantToRemoveId }) => {
-      console.log(allUserPlayerHand.selectedPlace);
-      console.log(restaurantToRemoveId);
-
       setAllUserPlayerHand((prevState) => ({
         ...prevState,
         selectedPlace: prevState.selectedPlace.filter(
@@ -110,7 +101,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
         ),
       }));
     },
-    [allUserPlayerHand.selectedPlace]
+    []
   );
 
   const handleRightSideAction = useCallback((data) => {

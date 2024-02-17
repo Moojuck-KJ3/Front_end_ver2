@@ -9,8 +9,16 @@ const CreateRoomModal = ({ onModal, onCreate, setRoomDetail }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = () => {
-    if (!searchQuery) {
-      // Handle empty search query (optional)
+    if (
+      !searchQuery ||
+      typeof kakao === "undefined" ||
+      typeof kakao.maps === "undefined" ||
+      typeof kakao.maps.services === "undefined" ||
+      typeof kakao.maps.services.Places === "undefined"
+    ) {
+      console.error(
+        "Kakao Maps SDK is not loaded or Places service is not available"
+      );
       return;
     }
 

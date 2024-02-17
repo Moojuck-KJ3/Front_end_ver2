@@ -72,7 +72,12 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const handleRoomCreate = async (event) => {
     event.preventDefault();
     if (socket) {
-      socket.emit("create-room");
+      const purposeCoordinate = [
+        roomDetail.purposeCoordinate.lat,
+        roomDetail.purposeCoordinate.lng,
+      ];
+      console.log(purposeCoordinate);
+      socket.emit("create-room", { purposeCoordinate });
       setIsModal(false);
     } else {
       console.error("Socket is not initialized.");

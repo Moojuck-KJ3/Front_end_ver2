@@ -14,6 +14,11 @@ const RightSideUserVideoContainer = ({
   const { roomId } = useParams();
   const socket = useSocket();
 
+  const sortedUserStreams = roomDetail.userStreams.sort((a, b) =>
+    a.socketId.localeCompare(b.socketId)
+  );
+  const streamsToShow = sortedUserStreams.filter((_, index) => index % 2 !== 0);
+
   const handleDragOver = (event) => {
     event.preventDefault();
     setDragItem(null);
@@ -67,16 +72,52 @@ const RightSideUserVideoContainer = ({
     { id: "cantEat", text: "이거 못 먹어😫" },
   ];
 
+  const renderPlaceholders = (count) => {
+    let placeholders = [];
+    for (let i = 0; i < count; i++) {
+      placeholders.push(
+        <div
+          key={`placeholder-${i}`}
+          className="flex  min-h-[300px] flex-col justify-center bg-white p-4 mx-2  rounded-lg shadow-2xl border-2 relative"
+        >
+          <div className="w-full h-full object-cover rounded-lg border-1 bg-gray-400 animate-pulse" />
+        </div>
+      );
+    }
+    return placeholders;
+  };
+
   return (
     <div className=" flex flex-col w-1/5 min-w-[300px] h-full gap-4 ">
-      <VideoContainer
-        mediaStream={remoteStrem[1]?.stream}
-        isLocalStream={false}
-      />
-      <VideoContainer
-        mediaStream={remoteStrem[3]?.stream}
-        isLocalStream={false}
-      />
+      {streamsToShow.length === 0 && renderPlaceholders(2)}
+      {streamsToShow.length === 1 && (
+        <>
+          <VideoContainer
+            key="local-stream"
+            stream={streamsToShow[0].stream}
+            isLocalStream={
+              roomDetail.playerInfo.socketId === streamsToShow[0].socketId
+            }
+          />
+          {renderPlaceholders(1)}
+        </>
+      )}
+      {streamsToShow.length >= 2 &&
+        streamsToShow.map((userStream, index) =>
+          roomDetail.playerInfo.socketId === userStream.socketId ? (
+            <VideoContainer
+              key={`local-stream-${index}`}
+              stream={localStream}
+              isLocalStream={true}
+            />
+          ) : (
+            <VideoContainer
+              key={`remote-stream-${index}`}
+              stream={userStream.stream}
+              isLocalStream={false}
+            />
+          )
+        )}
       <div className="flex flex-col flex-grow items-center justify-around bg-white px-10 mx-2 py-1 rounded-lg shadow-2xl border-4 border-red-500">
         {buttons.map((button) =>
           activeButton === button.id ? (

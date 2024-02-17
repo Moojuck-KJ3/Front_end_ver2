@@ -17,7 +17,7 @@ function App() {
     purposeCoordinate: { lat: null, lng: null },
     roomMemberCount: 0,
     playerInfo: null,
-    userStreams: {},
+    userStreams: [],
   });
 
   useEffect(() => {

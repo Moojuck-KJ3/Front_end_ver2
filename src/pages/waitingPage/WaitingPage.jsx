@@ -15,7 +15,7 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const [progressValue, setProgressValue] = useState(50);
   const { users } = usePeerConnection(localStream);
   const socket = useSocket();
-
+  console.log(users);
   useEffect(() => {
     setRoomDetail((prev) => ({
       ...prev,
