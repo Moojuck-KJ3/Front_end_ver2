@@ -35,6 +35,8 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
     if (!socket) return;
 
     socket.on("create-room-response", (response) => {
+      console.log("create-room-response", response);
+
       if (response) {
         const { roomId } = response;
         setRoomDetail((prev) => ({
@@ -76,7 +78,7 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
         roomDetail.purposeCoordinate.lat,
         roomDetail.purposeCoordinate.lng,
       ];
-      console.log(purposeCoordinate);
+      console.log("create-room is emit");
       socket.emit("create-room", { purposeCoordinate });
       setIsModal(false);
     } else {

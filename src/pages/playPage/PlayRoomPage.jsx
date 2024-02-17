@@ -35,6 +35,17 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [isAttention, setIsAttention] = useState(false);
 
+  const userStreamsWithPlayerId = roomDetail.userStreams.map((stream) => {
+    const playerInfo = roomDetail.playerInfo.find(
+      (info) => info.socketId === stream.socketId
+    );
+    return {
+      ...stream,
+      playerId: playerInfo ? playerInfo.playerId : null,
+    };
+  });
+  userStreamsWithPlayerId.sort((a, b) => a.playerId - b.playerId);
+
   const [playerHand, setPlayerHand] = useState({
     selectedFoodTag: [],
     selectedMoodTag: [],
@@ -193,7 +204,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
           playerHand={playerHand}
           setPlayerHand={setPlayerHand}
           localStream={localStream}
-          remoteStrem={roomDetail.userStreams}
+          remoteStrem={userStreamsWithPlayerId}
           showMic={showModeTwoVoiceRecorder}
           roomDetail={roomDetail}
         />
