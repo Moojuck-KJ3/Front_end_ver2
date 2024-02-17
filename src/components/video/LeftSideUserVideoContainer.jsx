@@ -23,6 +23,32 @@ const LeftSideUserVideoContainer = ({
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const socket = useSocket();
   const { roomId } = useParams();
+  console.log(remoteStrem);
+
+  const renderStreams = (streamIndexArray) => {
+    return streamIndexArray.map((index) => {
+      const streamInfo = remoteStrem[index];
+      if (streamInfo) {
+        const isLocalStream = streamInfo.socketId === socket.id;
+        console.log(isLocalStream);
+        return (
+          <VideoContainer
+            key={`stream-${index}`}
+            mediaStream={isLocalStream ? localStream : streamInfo.stream}
+            isLocalStream={isLocalStream}
+          />
+        );
+      } else {
+        return renderPlaceholder();
+      }
+    });
+  };
+
+  const renderPlaceholder = () => (
+    <div className="flex  min-h-[300px] flex-col justify-center bg-white p-4 mx-2  rounded-lg shadow-2xl border-2 relative animate-pulse">
+      <div className="w-full h-full rounded-lg border-1 bg-gray-400"></div>
+    </div>
+  );
 
   const handleCardClick = (restaurant) => {
     setSelectedRestaurant(restaurant);
@@ -80,16 +106,20 @@ const LeftSideUserVideoContainer = ({
 
   return (
     <div className=" relative flex flex-col w-1/5 min-w-[300px] h-full gap-4 ">
-      <VideoContainer mediaStream={localStream} isLocalStream={true} />
+      {/* <VideoContainer
+        mediaStream={remoteStrem[0]?.stream}
+        isLocalStream={true}
+      /> */}
+      {renderStreams([0, 2])}
       {showMic && (
         <button className="w-14 h-14 bg-green-500 rounded-full absolute top-6 right-8 animate-fade">
           <MicIcon />
         </button>
       )}
-      <VideoContainer
+      {/* <VideoContainer
         mediaStream={remoteStrem[2]?.stream}
         isLocalStream={false}
-      />
+      /> */}
       <div className="flex flex-col h-full justify-between items-center bg-white p-3 mx-2  rounded-lg shadow-2xl border-2">
         <h1 className="text-2xl font-tenada">⭐️나의 선호도</h1>
 

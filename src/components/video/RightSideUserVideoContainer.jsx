@@ -67,16 +67,34 @@ const RightSideUserVideoContainer = ({
     { id: "cantEat", text: "이거 못 먹어😫" },
   ];
 
+  const renderStreams = (streamIndexArray) => {
+    return streamIndexArray.map((index) => {
+      const streamInfo = remoteStrem[index];
+      if (streamInfo) {
+        const isLocalStream = streamInfo.socketId === socket.id;
+        console.log(isLocalStream);
+        return (
+          <VideoContainer
+            key={`stream-${index}`}
+            mediaStream={isLocalStream ? localStream : streamInfo.stream}
+            isLocalStream={isLocalStream}
+          />
+        );
+      } else {
+        return renderPlaceholder();
+      }
+    });
+  };
+
+  const renderPlaceholder = () => (
+    <div className="flex  min-h-[300px] flex-col justify-center bg-white p-4 mx-2  rounded-lg shadow-2xl border-2 relative animate-pulse">
+      <div className="w-full h-full rounded-lg border-1 bg-gray-400"></div>
+    </div>
+  );
+
   return (
     <div className=" flex flex-col w-1/5 min-w-[300px] h-full gap-4 ">
-      <VideoContainer
-        mediaStream={remoteStrem[1]?.stream}
-        isLocalStream={false}
-      />
-      <VideoContainer
-        mediaStream={remoteStrem[3]?.stream}
-        isLocalStream={false}
-      />
+      {renderStreams([1, 3])}
       <div className="flex flex-col flex-grow items-center justify-around bg-white px-10 mx-2 py-1 rounded-lg shadow-2xl border-4 border-red-500">
         {buttons.map((button) =>
           activeButton === button.id ? (
