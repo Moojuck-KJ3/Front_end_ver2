@@ -24,11 +24,6 @@ const LeftSideUserVideoContainer = ({
   const socket = useSocket();
   const { roomId } = useParams();
 
-  const sortedUserStreams = roomDetail.userStreams.sort((a, b) =>
-    a.socketId.localeCompare(b.socketId)
-  );
-  const streamsToShow = sortedUserStreams.filter((_, index) => index % 2 === 0);
-
   const handleCardClick = (restaurant) => {
     setSelectedRestaurant(restaurant);
     setIsModalOpen(true);
@@ -83,42 +78,18 @@ const LeftSideUserVideoContainer = ({
     event.dataTransfer.setData("restaurant", restaurantData);
   };
 
-  const renderPlaceholders = (count) => {
-    let placeholders = [];
-    for (let i = 0; i < count; i++) {
-      placeholders.push(
-        <div
-          key={`placeholder-${i}`}
-          className="flex  min-h-[300px] flex-col justify-center bg-white p-4 mx-2  rounded-lg shadow-2xl border-2 relative"
-        >
-          <div className="w-full h-full object-cover rounded-lg border-1 bg-gray-500 animate-pulse" />
-        </div>
-      );
-    }
-    return placeholders;
-  };
-
   return (
     <div className=" relative flex flex-col w-1/5 min-w-[300px] h-full gap-4 ">
-      {localStream ? (
-        <VideoContainer mediaStream={localStream} isLocalStream={true} />
-      ) : (
-        renderPlaceholders(1)
-      )}
+      <VideoContainer mediaStream={localStream} isLocalStream={true} />
       {showMic && (
         <button className="w-14 h-14 bg-green-500 rounded-full absolute top-6 right-8 animate-fade">
           <MicIcon />
         </button>
       )}
-      {streamsToShow.length > 0
-        ? streamsToShow.map((userStream, index) => (
-            <VideoContainer
-              key={index}
-              stream={userStream.stream}
-              isLocalStream={false}
-            />
-          ))
-        : renderPlaceholders(1)}
+      <VideoContainer
+        mediaStream={remoteStrem[2]?.stream}
+        isLocalStream={false}
+      />
       <div className="flex flex-col h-full justify-between items-center bg-white p-3 mx-2  rounded-lg shadow-2xl border-2">
         <h1 className="text-2xl font-tenada">⭐️나의 선호도</h1>
 
