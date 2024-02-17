@@ -32,7 +32,11 @@ const cardsPositions = [
 
 // 아마 입력 받을때
 // position의 값을 임의의 비율로 변환하므로 적당히 높은 값을 넣을것
-const CombineAnimation = ({ combinedplaceList, onDragOver }) => {
+const CombineAnimation = ({
+  combinedplaceList,
+  onDragOver,
+  handleupdateFinalPlace,
+}) => {
   const [animationFinished, setAnimationFinished] = useState(false);
 
   const handleAnimationFirstEnd = () => {
@@ -98,6 +102,7 @@ const CombineAnimation = ({ combinedplaceList, onDragOver }) => {
           <ResultCardLists
             combinedplaceList={combinedplaceList}
             positions={positions}
+            handleupdateFinalPlace={handleupdateFinalPlace}
           />
         </div>
       )}

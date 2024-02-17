@@ -69,13 +69,8 @@ const RightSideUserVideoContainer = ({
 
   return (
     <div className=" flex flex-col w-1/5 min-w-[300px] h-full gap-4 ">
-      <VideoContainer
-        mediaStream={remoteStrem[1]?.stream}
-        streamOwnerId={remoteStrem[1]}
-      />
-
+      <VideoContainer mediaStream={remoteStrem[1]?.stream} />
       <VideoContainer mediaStream={remoteStrem[3]?.stream} />
-
       <div className="flex flex-col flex-grow items-center justify-around bg-white px-10 mx-2 py-1 rounded-lg shadow-2xl border-4 border-red-500">
         {buttons.map((button) =>
           activeButton === button.id ? (

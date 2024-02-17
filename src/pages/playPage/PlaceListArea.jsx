@@ -26,12 +26,15 @@ export const PlaceListArea = ({
   roomDetail,
   imgUrls,
   modeTwoResultRestList,
+  handleupdateFinalPlace,
 }) => {
   const socket = useSocket();
   const [stars, setStars] = useState([]);
   const [hoveredStarId, setHoveredStarId] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   const { roomId } = useParams();
 
   const handleStarClick = (star) => {
@@ -59,9 +62,20 @@ export const PlaceListArea = ({
 
   let content;
   if (roomMode === 3) {
-    content = <ModeThreeCombineArea roomDetail={roomDetail} />;
+    content = (
+      <ModeThreeCombineArea
+        roomDetail={roomDetail}
+        handleupdateFinalPlace={handleupdateFinalPlace}
+      />
+    );
   } else if (roomMode === 4) {
-    content = <FinalRestaurantDetails allUserPlayerHand={allUserPlayerHand} />;
+    content = (
+      <FinalRestaurantDetails
+        allUserPlayerHand={allUserPlayerHand}
+        currentIndex={currentIndex}
+        setCurrentIndex={setCurrentIndex}
+      />
+    );
   } else {
     // Content for other roomModes
     content = stars.map((star, i) => (
@@ -181,6 +195,8 @@ export const PlaceListArea = ({
         roomMode={roomMode}
         setRoomMode={setRoomMode}
         handleSetReady={handleSetReady}
+        currentIndex={currentIndex}
+        setCurrentIndex={setCurrentIndex}
       />
       {isModalVisible && (
         <ShowDetailModal

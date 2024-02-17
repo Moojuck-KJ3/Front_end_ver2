@@ -4,7 +4,11 @@ import ShowDetailWithLikeModal from "../../../../components/modal/ShowDetailWith
 import { useSocket } from "../../../../realtimeComunication/SocketContext";
 import { useParams } from "react-router-dom";
 
-const ResultCardLists = ({ combinedplaceList, positions }) => {
+const ResultCardLists = ({
+  combinedplaceList,
+  positions,
+  handleupdateFinalPlace,
+}) => {
   const socket = useSocket();
   console.log("ResultCardLists", combinedplaceList);
   const [places, setPlaces] = useState(combinedplaceList);
@@ -29,6 +33,15 @@ const ResultCardLists = ({ combinedplaceList, positions }) => {
           place._id === data.restId ? { ...place, likes: data.likes } : place
         )
       );
+
+      if (data.likes === 4) {
+        const likedRestaurant = places.find(
+          (place) => place._id === data.restId
+        );
+        if (likedRestaurant) {
+          handleupdateFinalPlace(likedRestaurant);
+        }
+      }
     });
 
     return () => {

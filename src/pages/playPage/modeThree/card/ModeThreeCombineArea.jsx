@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import { useSocket } from "../../../../realtimeComunication/SocketContext";
 import CombineAnimation from "../combineAni/CombineAnimation";
 
-const ModeThreeCombineArea = ({ roomDetail }) => {
+const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
   const socket = useSocket();
   const [draggedTagA, setDraggedTagA] = useState(null);
   const [draggedTagB, setDraggedTagB] = useState(null);
@@ -140,7 +140,7 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
   };
 
   const handleResetTarget = () => {
-    socket.emit("reset-combined-area", {roomId});
+    socket.emit("reset-combined-area", { roomId });
   };
   return (
     <div className="w-full h-full flex justify-center items-center">
@@ -150,6 +150,7 @@ const ModeThreeCombineArea = ({ roomDetail }) => {
           <CombineAnimation
             combinedplaceList={combinedplaceList}
             onDragOver={handleResetTarget}
+            handleupdateFinalPlace={handleupdateFinalPlace}
           />
         </div>
       ) : (

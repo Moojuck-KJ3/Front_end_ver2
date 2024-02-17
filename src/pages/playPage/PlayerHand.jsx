@@ -1,4 +1,6 @@
-import PlaceCard from "./modeThree/card/PlaceCard";
+import { useState } from "react";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 
 const PlayerHand = ({
   allUserPlayerHand,
@@ -6,7 +8,21 @@ const PlayerHand = ({
   roomMode,
   setRoomMode,
   handleSetReady,
+  currentIndex,
+  setCurrentIndex,
 }) => {
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === allUserPlayerHand.finalPlace.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const handlePrevious = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? allUserPlayerHand.finalPlace.length - 1 : prevIndex - 1
+    );
+  };
+
   const getModeStyle = (modeValue) => {
     if (modeValue === roomMode) {
       return "transform scale-105 border-4 border-blue-600"; // Current mode: Highlighted
@@ -176,29 +192,50 @@ const PlayerHand = ({
           )}`}
         >
           <div>
-            <h1 className="mt-1 font-tenada text-2xl ">최종 목적지⛳️</h1>
-            <ul className="">
-              {allUserPlayerHand.finalPlace?.map((Place, index) => (
-                <li
-                  key={index}
-                  className="bg-white shadow-2xl flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg font-tenada"
-                >
-                  <span className="text-lg font-semibold ml-2">{`${
-                    index + 1
-                  }. `}</span>
-                  <h1 className="ml-2 p-1 flex-grow text-center text-xl truncate">{`${Place.name}`}</h1>
-                </li>
-              ))}
-            </ul>
+            <h1 className="mt-1 font-tenada text-2xl">최종 목적지⛳️</h1>
+            <div className="text-center flex flex-col gap-4 font-tenada">
+              {allUserPlayerHand.finalPlace.length > 0 && (
+                <>
+                  <img
+                    src={
+                      allUserPlayerHand.finalPlace[currentIndex]?.thumbnailImg
+                    }
+                    alt="PlacePhoto"
+                    className="my-3 w-full max-h-32 shadow-md overflow-hidden mx-auto bg-gray-300 rounded-lg shrink-0 object-cover object-center"
+                  />
+                  <h1 className="text-xl font-bold truncate">
+                    {allUserPlayerHand.finalPlace[currentIndex]?.name}
+                  </h1>
+                  <h1 className="bg-gray-300 rounded-lg p-1 w-1/2 mx-auto text-xl">
+                    #{allUserPlayerHand.finalPlace[currentIndex]?.food_category}
+                  </h1>
+                  <h1 className="text-2xl">
+                    ⭐️{allUserPlayerHand.finalPlace[currentIndex]?.rating}
+                  </h1>
+                  <button
+                    onClick={handlePrevious}
+                    className="bg-white shadow-2xl rounded-full absolute bottom-5 left-2 hover:bg-green-400 transition-all"
+                  >
+                    <NavigateBeforeIcon fontSize="large" />
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    className="bg-white rounded-full absolute bottom-5 right-2 hover:bg-green-400 transition-all"
+                  >
+                    <NavigateNextIcon fontSize="large" />
+                  </button>
+                </>
+              )}
+            </div>
           </div>
-          {roomMode === 4 && (
+          {/* {roomMode === 4 && (
             <button
               onClick={handleReady}
               className="w-2/3 mx-auto mb-2 font-tenada py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700 duration-150 ease-in-ou hover:scale-105 transition-all"
             >
               선택 완료
             </button>
-          )}
+          )} */}
         </div>
       </div>
     </div>

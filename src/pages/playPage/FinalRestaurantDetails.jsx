@@ -1,48 +1,48 @@
 import { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 
-const FinalRestaurantDetails = ({ allUserPlayerHand }) => {
+const FinalRestaurantDetails = ({ allUserPlayerHand, currentIndex }) => {
   const [map, setMap] = useState();
   const [info, setInfo] = useState();
   const [markers, setMarkers] = useState([]);
-  const options = allUserPlayerHand.finalPlace[0].options.split(",");
-
+  const currentRestaurant = allUserPlayerHand.finalPlace[currentIndex];
+  const options = currentRestaurant.options.split(",");
   useEffect(() => {
-    console.log(allUserPlayerHand.finalPlace[0].address);
+    console.log(currentRestaurant.address);
     const ps = new kakao.maps.services.Places();
 
-    ps.keywordSearch(
-      allUserPlayerHand.finalPlace[0].address,
-      (data, status, _pagination) => {
-        if (status === kakao.maps.services.Status.OK && data.length > 0) {
-          const centerPosition = {
-            lat: data[0].y,
-            lng: data[0].x,
-          };
+    // ps.keywordSearch(
+    //   allUserPlayerHand.finalPlace[0].address,
+    //   (data, status, _pagination) => {
+    //     if (status === kakao.maps.services.Status.OK && data.length > 0) {
+    //       const centerPosition = {
+    //         lat: data[0].y,
+    //         lng: data[0].x,
+    //       };
 
-          const marker = {
-            position: centerPosition,
-            content: data[0].place_name,
-          };
+    //       const marker = {
+    //         position: centerPosition,
+    //         content: data[0].place_name,
+    //       };
 
-          setMarkers([marker]);
-          setInfo(marker);
+    //       setMarkers([marker]);
+    //       setInfo(marker);
 
-          if (map) {
-            map.setCenter(
-              new kakao.maps.LatLng(centerPosition.lat, centerPosition.lng)
-            );
-          }
-        } else {
-          // Handle no results or other errors (optional)
-          console.error("Search failed:", status);
-        }
-      }
-    );
+    //       if (map) {
+    //         map.setCenter(
+    //           new kakao.maps.LatLng(centerPosition.lat, centerPosition.lng)
+    //         );
+    //       }
+    //     } else {
+    //       // Handle no results or other errors (optional)
+    //       console.error("Search failed:", status);
+    //     }
+    //   }
+    // );
   }, []);
 
   return (
-    <div className="w-full h-full grid grid-cols-2 grid-rows-2 p-4 gap-4 text-white font-tenada">
+    <div className="w-full h-full grid grid-cols-2 grid-rows-2 p-4 gap-4 text-white font-tenada animate-fade-up">
       {/* Top-left cell for the main image */}
       <div className="flex row-span-1 justify-center items-center">
         <img
@@ -56,31 +56,31 @@ const FinalRestaurantDetails = ({ allUserPlayerHand }) => {
         <div className="flex items-center justify-between ">
           <p className="text-4xl font-bold  font-tenada">식당 이름</p>
           <p className="text-2xl text-white font-bold  font-tenada">
-            ⭐️{allUserPlayerHand.finalPlace[0].name}
+            ⭐️{currentRestaurant.name}
           </p>
         </div>
         <div className="flex items-center justify-between ">
           <p className="text-4xl font-bold  font-tenada">리뷰 갯수</p>
           <p className="text-2xl text-white font-bold  font-tenada">
-            ⭐️{allUserPlayerHand.finalPlace[0].ratingCount}
+            ⭐️{currentRestaurant.ratingCount}
           </p>
         </div>
         <div className="flex items-center justify-between ">
           <p className="text-4xl font-bold  font-tenada">리뷰 점수</p>
           <p className="text-2xl text-white font-bold  font-tenada">
-            ⭐️{allUserPlayerHand.finalPlace[0].rating}
+            ⭐️{currentRestaurant.rating}
           </p>
         </div>
         <div className="flex items-center justify-between ">
           <p className="text-4xl font-bold  font-tenada">전화번호</p>
           <p className="text-2xl font-bold text-emerald-300 underline font-tenada">
-            📞{allUserPlayerHand.finalPlace[0].phone_number}
+            📞{currentRestaurant.phone_number}
           </p>
         </div>
         <div className="flex items-center justify-between ">
           <p className="w-48 text-4xl font-bold font-tenada">식당 주소</p>
           <p className="text-2xl text-white font-bold truncate font-tenada  ">
-            📍{allUserPlayerHand.finalPlace[0].address}
+            📍{currentRestaurant.address}
           </p>
         </div>
       </div>
