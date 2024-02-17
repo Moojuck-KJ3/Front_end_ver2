@@ -8,7 +8,14 @@ export function useLocalCameraStream() {
 
   useEffect(() => {
     navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
+      .getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+        },
+        video: true,
+      })
       .then((stream) => {
         setLocalStream(stream);
       });
