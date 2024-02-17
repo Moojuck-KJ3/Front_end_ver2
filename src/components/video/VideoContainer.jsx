@@ -16,7 +16,7 @@ const VideoContainer = ({ mediaStream }) => {
         className="w-full h-full object-cover rounded-lg border-1 bg-gray-400"
         ref={videoRef}
         autoPlay={true}
-        muted={true}
+        muted={false}
       />
     </div>
   );
