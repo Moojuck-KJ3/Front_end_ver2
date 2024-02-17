@@ -35,7 +35,6 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [isAttention, setIsAttention] = useState(false);
 
-  console.log(roomDetail);
   const [playerHand, setPlayerHand] = useState({
     selectedFoodTag: [],
     selectedMoodTag: [],
@@ -47,16 +46,20 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     selectedPlace: [],
     finalPlace: [],
   });
+  console.log(allUserPlayerHand);
   const [imgUrlList, setImgUrlList] = useState([]);
 
   useEffect(() => {
     if (!socket) return;
+
+    socket.on("remove-selected-place", handleRemoveSelectedRestaurant);
     socket.on("select-restaurant", handleAddSelectedRestaurant);
     socket.on("select-foodCategories", handleAddSelectedFoodCategories);
     socket.on("mode-change-response", handleModeChange);
     socket.on("receive-speech-foodCategory", handleReceiveFoodCategory);
     socket.on("right-sidebar-action", handleRightSideAction);
     return () => {
+      socket.off("remove-selected-place", handleRemoveSelectedRestaurant);
       socket.off("select-restaurant", handleAddSelectedRestaurant);
       socket.off("select-foodCategories", handleAddSelectedFoodCategories);
       socket.off("mode-change-response", handleModeChange);
@@ -94,6 +97,21 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
       return updatedHand;
     });
   }, []);
+
+  const handleRemoveSelectedRestaurant = useCallback(
+    ({ restaurantToRemoveId }) => {
+      console.log(allUserPlayerHand.selectedPlace);
+      console.log(restaurantToRemoveId);
+
+      setAllUserPlayerHand((prevState) => ({
+        ...prevState,
+        selectedPlace: prevState.selectedPlace.filter(
+          (restaurant) => restaurant._id !== restaurantToRemoveId
+        ),
+      }));
+    },
+    [allUserPlayerHand.selectedPlace]
+  );
 
   const handleRightSideAction = useCallback((data) => {
     console.log("handleRightSideAction", data);
@@ -182,6 +200,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
         {/* 별 */}
         <LeftSideUserVideoContainer
           playerHand={playerHand}
+          setPlayerHand={setPlayerHand}
           localStream={localStream}
           remoteStrem={roomDetail.userStreams}
           showMic={showModeTwoVoiceRecorder}

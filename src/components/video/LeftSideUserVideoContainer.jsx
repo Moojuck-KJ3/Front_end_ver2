@@ -5,16 +5,49 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import { useEffect, useState } from "react";
+import { useSocket } from "../../realtimeComunication/SocketContext";
+import { useParams } from "react-router-dom";
+import ShowDetailModalWithDiscard from "../modal/ShowDetailModalWithDiscard";
 
 const LeftSideUserVideoContainer = ({
   localStream,
   remoteStrem,
   showMic,
   playerHand,
+  setPlayerHand,
   roomDetail,
 }) => {
   const [isMicMuted, setIsMicMuted] = useState(false);
   const [isVideoOff, setIsVideoOff] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+  const socket = useSocket();
+  const { roomId } = useParams();
+
+  const handleCardClick = (restaurant) => {
+    setSelectedRestaurant(restaurant);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedRestaurant(null);
+  };
+
+  const removeFromPlayerHand = (restaurantToRemoveId) => {
+    const updatedHand = playerHand.selectedPlace.filter(
+      (restaurant) => restaurant._id !== restaurantToRemoveId
+    );
+
+    setPlayerHand((prevState) => ({
+      ...prevState,
+      selectedPlace: updatedHand,
+    }));
+
+    socket.emit("remove-selected-place", { roomId, restaurantToRemoveId });
+
+    closeModal();
+  };
 
   const toggleMic = () => {
     if (!localStream) return;
@@ -83,6 +116,7 @@ const LeftSideUserVideoContainer = ({
             {playerHand.selectedPlace?.map((place, index) => (
               <div
                 key={index}
+                onClick={() => handleCardClick(place)}
                 draggable
                 onDragStart={(event) => handleDragStart(event, place)}
                 className="w-full border-2 m-1 rounded-xl border-red-600 cursor-move animate-fade"
@@ -114,6 +148,13 @@ const LeftSideUserVideoContainer = ({
             <ExitToAppIcon /> 나가기
           </button>
         </div>
+        {isModalOpen && (
+          <ShowDetailModalWithDiscard
+            restaurant={selectedRestaurant}
+            closeModal={closeModal}
+            removeFromPlayerHand={removeFromPlayerHand}
+          />
+        )}
       </div>
     </div>
   );

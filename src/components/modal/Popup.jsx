@@ -25,15 +25,15 @@ const Popup = ({ message, onClose }) => {
         className={`absolute bottom-5 right-5 shadow-2xl border-2 rounded-lg bg-white p-8 ${
           exit ? "popup-exit" : "popup-enter"
         }`}
-        style={{ width: "400px", height: "500px" }} // Adjust width as needed
+        style={{ width: "450px", height: "550px" }}
       >
         <div className="text-center flex flex-col gap-2 font-tenada">
-          <h1 className="  text-4xl font-bold">{message.action}</h1>
+          <h1 className="text-4xl font-bold">{message.action}</h1>
 
           <img
             src={message.restaurantData.thumbnailImg}
             alt="PlacePhoto"
-            className="w-full h-full shadow-md overflow-hidden mx-auto bg-gray-300 rounded-lg shrink-0 object-cover object-center"
+            className="w-full h-72 shadow-md overflow-hidden mx-auto bg-gray-300 rounded-lg shrink-0 object-cover object-center"
           />
           <h1 className=" text-2xl">#{message.restaurantData.name}</h1>
           <h1 className=" text-2xl">

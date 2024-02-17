@@ -1,6 +1,9 @@
 import { useState } from "react";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import ShowDetailModalWithDiscard from "../../components/modal/ShowDetailModalWithDiscard";
+import { useSocket } from "../../realtimeComunication/SocketContext";
+import { useParams } from "react-router-dom";
 
 const PlayerHand = ({
   allUserPlayerHand,
@@ -11,6 +14,19 @@ const PlayerHand = ({
   currentIndex,
   setCurrentIndex,
 }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+
+  const handleCardClick = (restaurant) => {
+    setSelectedRestaurant(restaurant);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedRestaurant(null);
+  };
+
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === allUserPlayerHand.finalPlace.length - 1 ? 0 : prevIndex + 1
@@ -162,6 +178,7 @@ const PlayerHand = ({
               {allUserPlayerHand.selectedPlace?.map((place, index) => (
                 <div
                   key={index}
+                  onClick={() => handleCardClick(place)}
                   onDragStart={(event) => handleDragStart(event, place)}
                   draggable
                   className="w-full h-full justify-center items-center hover:scale-105 transition-all rounded-xl hover:cursor-pointer  hover: shadow-2xl"
@@ -228,14 +245,6 @@ const PlayerHand = ({
               )}
             </div>
           </div>
-          {/* {roomMode === 4 && (
-            <button
-              onClick={handleReady}
-              className="w-2/3 mx-auto mb-2 font-tenada py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700 duration-150 ease-in-ou hover:scale-105 transition-all"
-            >
-              선택 완료
-            </button>
-          )} */}
         </div>
       </div>
     </div>
@@ -243,43 +252,3 @@ const PlayerHand = ({
 };
 
 export default PlayerHand;
-
-// <div className=" justify-end flex col-span-3 gap-2 ">
-// {playerHand.selectedPlace.map((place, index) => (
-//   <div
-//     className="h-full"
-//     onDragStart={(e) => handleDragStart(e, place)}
-//     onDragEnd={handleDragEnd}
-//     onDragLeave={handleDragLeave}
-//     key={index}
-//   >
-//     <PlaceCard place={place} />
-//   </div>
-// ))}
-// </div>
-
-// const handleDrop = (event) => {
-//   event.preventDefault();
-
-//   const restaurantData = event.dataTransfer.getData("restaurant");
-//   const parsedRestaurantData = JSON.parse(restaurantData);
-//   console.log(parsedRestaurantData);
-//   if (restaurantData) {
-//     setPlayerHand((prevHand) => ({
-//       ...prevHand,
-//       selectedPlace: [...prevHand.selectedPlace, parsedRestaurantData],
-//     }));
-//   }
-// };
-
-// const handleDragEnd = (event) => {
-//   console.log("handleDragEnd");
-// };
-
-// const handleDragOver = (event) => {
-//   event.preventDefault();
-// };
-
-// const handleDragLeave = (event) => {
-//   event.preventDefault();
-// };
