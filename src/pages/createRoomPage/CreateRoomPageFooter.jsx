@@ -2,7 +2,12 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import CircularProgress from "@mui/joy/CircularProgress";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
-const CreateRoomPageFooter = ({ isActivate, onStart, progressValue }) => {
+const CreateRoomPageFooter = ({
+  isActivate,
+  onStart,
+  progressValue,
+  users,
+}) => {
   return (
     <div className="flex mt-4 items-center gap-2">
       <button
@@ -22,8 +27,8 @@ const CreateRoomPageFooter = ({ isActivate, onStart, progressValue }) => {
         <span className="">시작하기</span>
       </button>
       <CircularProgress color="success" value={progressValue}>
-        {progressValue === 50 ? (
-          "1 / 2"
+        {progressValue < 100 ? (
+          `${users.length} / 4`
         ) : (
           <CheckCircleIcon style={{ color: "green" }} />
         )}

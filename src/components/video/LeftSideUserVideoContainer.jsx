@@ -12,11 +12,11 @@ import ShowDetailModalWithDiscard from "../modal/ShowDetailModalWithDiscard";
 const LeftSideUserVideoContainer = ({
   localStream,
   remoteStrem,
-  showMic,
   playerHand,
   setPlayerHand,
   roomDetail,
   highlightedStreamId,
+  readyUserId,
 }) => {
   const [isMicMuted, setIsMicMuted] = useState(false);
   const [isVideoOff, setIsVideoOff] = useState(false);
@@ -32,9 +32,8 @@ const LeftSideUserVideoContainer = ({
       if (streamInfo) {
         const isLocalStream = streamInfo.socketId === socket.id;
         const isHighlighted = streamInfo.socketId === highlightedStreamId;
-        console.log(socket.id);
-        console.log(highlightedStreamId);
-        console.log(isHighlighted);
+        const isUserReady = streamInfo.socketId === readyUserId;
+
         return (
           <div
             key={`stream-${index}`}
@@ -45,6 +44,7 @@ const LeftSideUserVideoContainer = ({
             <VideoContainer
               mediaStream={isLocalStream ? localStream : streamInfo.stream}
               isLocalStream={isLocalStream}
+              isUserReady={isUserReady}
             />
             {isHighlighted && (
               <img
@@ -132,11 +132,11 @@ const LeftSideUserVideoContainer = ({
         isLocalStream={true}
       /> */}
       {renderStreams([0, 2])}
-      {showMic && (
+      {/* {showMic && (
         <button className="w-14 h-14 bg-green-500 rounded-full absolute top-6 right-8 animate-fade">
           <MicIcon />
         </button>
-      )}
+      )} */}
       {/* <VideoContainer
         mediaStream={remoteStrem[2]?.stream}
         isLocalStream={false}

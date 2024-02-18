@@ -26,6 +26,12 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   }, [users]);
 
   useEffect(() => {
+    const newProgressValue = (users.length / 4) * 100;
+    console.log(newProgressValue);
+    setProgressValue(newProgressValue);
+  }, [users]);
+
+  useEffect(() => {
     if (!socket) return;
 
     const handleAllPlayerReady = () => {
@@ -107,6 +113,7 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
             isActivate={isAllPlayerReady}
             onStart={handleStartGame}
             progressValue={progressValue}
+            users={users}
           />
         </div>
       </div>
