@@ -61,7 +61,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
 
   useEffect(() => {
     if (!socket) return;
-    socket.on("restaurant-prepared", handleGetRestaurantList);
+    // socket.on("restaurant-prepared", handleGetRestaurantList);
     socket.on("remove-selected-place", handleRemoveSelectedRestaurant);
     socket.on("select-restaurant", handleAddSelectedRestaurant);
     socket.on("select-foodCategories", handleAddSelectedFoodCategories);
