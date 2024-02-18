@@ -34,6 +34,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const [readyUserIds, setReadyUserIds] = useState([]);
   const [highlightedStreamId, setHighlightedStreamId] = useState(null);
   const [countdown, setCountdown] = useState(null);
+
   const userStreamsWithPlayerId = roomDetail.userStreams.map((stream) => {
     const playerInfo = roomDetail.playerInfo.find(
       (info) => info.socketId === stream.socketId
@@ -76,7 +77,11 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     };
   }, [socket]);
 
-  const handleGetRestaurantList = useCallback(() => {
+  // const handleGetRestaurantList = useCallback(() => {
+
+  // }, []);
+
+  useEffect(() => {
     const getRestList = async (roomId) => {
       const response = await getRestaurantList(roomId);
 
