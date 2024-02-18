@@ -41,34 +41,34 @@ const VoiceRecoder = ({
   useEffect(() => {
     setShowTimer(true);
     startRecording();
-    const start = async () => {
-      await startRecording();
 
-      setTimeout(() => {
-        stopRecording();
-        setShowTimer(false);
-      }, 5000);
-    };
-
-    start();
+    const timer = setTimeout(() => {
+      stopRecording();
+      setShowTimer(false);
+    }, 5000);
 
     return () => {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
+        recognitionRef.current.onend = null;
+        recognitionRef.current.onresult = null;
       }
+      clearTimeout(timer);
     };
   }, []);
 
   const stopRecording = () => {
     setIsRecording(false);
-    sendTranscriptToServer();
     if (recognitionRef.current) {
       recognitionRef.current.stop();
+      recognitionRef.current.onend = () => {
+        sendTranscriptToServer();
+      };
     }
   };
 
   const sendTranscriptToServer = () => {
-    console.log("Sending transcript to server:", serverSendScript);
+    console.log("Sending transcript to server:", serverSendScript.current);
 
     const serverSendData = {
       roomId: roomId,
@@ -137,7 +137,7 @@ const VoiceRecoder = ({
               </p>
             </div>
 
-            <div className="h-[130px] flex flex-wrap p-2 border items-center justify-start rounded-md m-4 gap-2  animate-fade ">
+            <div className="h-[130px] flex flex-wrap p-2 border items-center justify-center rounded-md m-4 gap-2  animate-fade ">
               {(resultList || []).map((tag, i) => (
                 <p
                   className="font-semibold font-tenada text-xl bg-gray-200 rounded-xl px-3 py-2"

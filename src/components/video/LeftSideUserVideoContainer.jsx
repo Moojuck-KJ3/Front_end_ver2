@@ -113,12 +113,18 @@ const LeftSideUserVideoContainer = ({
     videoTracks[0].enabled = !currentState;
     setIsVideoOff(currentState); // Reflects the state before toggling
   };
+
   const handleDragStart = (event, restaurant) => {
-    event.preventDefault();
+    // event.preventDefault();
     const restaurantData = JSON.stringify({
-      id: restaurant._id,
+      _id: restaurant._id,
       thumbnailImg: restaurant.thumbnailImg,
+      name: restaurant.name,
+      foodCategories: restaurant.food_category,
+      moodKeywords: restaurant.moodKeywords,
+      rating: restaurant.rating,
     });
+    console.log(restaurantData);
 
     event.dataTransfer.setData("restaurant", restaurantData);
   };
@@ -166,14 +172,14 @@ const LeftSideUserVideoContainer = ({
               <div
                 key={index}
                 onClick={() => handleCardClick(place)}
-                draggable
                 onDragStart={(event) => handleDragStart(event, place)}
+                draggable="true"
                 className="w-full border-2 m-1 rounded-xl border-red-600 cursor-move animate-fade"
               >
                 <img
                   className="w-full h-24 rounded-lg object-cover"
                   src={place.thumbnailImg}
-                  alt=""
+                  alt="thumbnailImg"
                 />
               </div>
             ))}

@@ -60,7 +60,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
 
   useEffect(() => {
     if (!socket) return;
-
+    socket.on("restaurant-prepared", handleGetRestaurantList);
     socket.on("remove-selected-place", handleRemoveSelectedRestaurant);
     socket.on("select-restaurant", handleAddSelectedRestaurant);
     socket.on("select-foodCategories", handleAddSelectedFoodCategories);
@@ -76,7 +76,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     };
   }, [socket]);
 
-  useEffect(() => {
+  const handleGetRestaurantList = useCallback(() => {
     const getRestList = async (roomId) => {
       const response = await getRestaurantList(roomId);
 
@@ -144,7 +144,10 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
 
   const handleReceiveFoodCategory = useCallback((data) => {
     console.log("Received food categories:", data);
-    SetModeOneVoiceRecResult(data.foodCategories);
+    SetModeOneVoiceRecResult((prevResults) => [
+      ...prevResults,
+      ...data.foodCategories,
+    ]);
   }, []);
 
   const handleModeChange = (data) => {
