@@ -214,18 +214,19 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
 
   return (
     <PlayRoomContainer>
-      {/* 스텝바 */}
-
+      {/* {countdown > 0 && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex justify-center items-center">
+          <img
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-94 animate-fade"
+            src="/NewMode.png"
+            alt="New Mode"
+          />
+        </div>
+      )} */}
       {isVideoHighlighted() && (
         <div className="absolute inset-0 bg-black bg-opacity-70 z-10 animate-fade-up" />
       )}
       {/* 카운트다운 표시 */}
-      {countdown > 0 && (
-        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-black text-white p-5 rounded-lg">
-          <p>모드 변경</p>
-          <p>{countdown}</p>
-        </div>
-      )}
       <Header roomMode={roomMode} />
       {showPopup && (
         <Popup message={popupMessage} onClose={() => setShowPopup(false)} />
