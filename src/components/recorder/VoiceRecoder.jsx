@@ -96,8 +96,8 @@ const VoiceRecoder = ({
   return (
     <VoiceRecoderContainer>
       <img
-        className="w-12 h-12 absolute -top-5 right-[45%] border-4 border-gray-200 rounded-full"
-        src="/avatar.png"
+        className="w-12 h-12 bg-gray-300 absolute -top-5 right-[45%] border-4 border-gray-400 rounded-full"
+        src="/마이크.png"
         alt="avatar"
       />
       {/* 음성 텍스트 버전 */}
@@ -137,7 +137,7 @@ const VoiceRecoder = ({
               </p>
             </div>
 
-            <div className="h-[130px] flex border items-center justify-center rounded-md m-4 gap-2  animate-fade ">
+            <div className="h-[130px] flex flex-wrap p-2 border items-center justify-start rounded-md m-4 gap-2  animate-fade ">
               {(resultList || []).map((tag, i) => (
                 <p
                   className="font-semibold font-tenada text-xl bg-gray-200 rounded-xl px-3 py-2"

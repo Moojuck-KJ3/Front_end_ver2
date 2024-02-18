@@ -23,7 +23,7 @@ const Popup = ({ message, onClose }) => {
         className={`absolute bottom-5 right-5 shadow-2xl border-2 rounded-lg bg-white p-8 ${
           exit ? "popup-exit" : "popup-enter"
         }`}
-        style={{ width: "450px", height: "550px" }}
+        style={{ width: "450px", height: "600px" }}
       >
         <div className="text-center flex flex-col gap-2 font-tenada">
           <h1 className="text-4xl font-bold">{message.action}</h1>
@@ -37,10 +37,13 @@ const Popup = ({ message, onClose }) => {
           <h1 className=" text-2xl">
             #{message?.restaurantData.foodCategories}
           </h1>
-          <h1 className=" text-2xl">⭐️{message?.restaurantData.rating}</h1>
-          <ul className="flex justify-center gap-2  ">
+          <h1 className=" text-2xl">⭐️{message?.restaurantData?.rating}</h1>
+          <ul className="flex flex-wrap justify-center space-x-2 gap-1 p-2">
             {message?.restaurantData.moodKeywords.map((keyword, index) => (
-              <li key={index} className="bg-gray-300 p-1 rounded-lg text-xl">
+              <li
+                key={index}
+                className="whitespace-nowrap bg-gray-200 text-black text-lg font-medium rounded-full px-3 py-2"
+              >
                 #{keyword}
               </li>
             ))}
