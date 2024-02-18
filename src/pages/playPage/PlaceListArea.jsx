@@ -34,6 +34,7 @@ export const PlaceListArea = ({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isCategoryReceive, setIsCateforyReceive] = useState(false);
 
   const { roomId } = useParams();
 
@@ -84,9 +85,7 @@ export const PlaceListArea = ({
         onMouseEnter={() => setHoveredStarId(star._id)}
         onMouseLeave={() => setHoveredStarId(null)}
         className={`${star.className} relative animate-fade ${
-          !star.signatureUrl && roomMode === 2
-            ? "animate-opacityPulse moveToBottomRight"
-            : ""
+          !star.signatureUrl && roomMode === 2 ? "animate-opacityPulse" : ""
         }`}
         key={i}
         id={star._id}
@@ -106,7 +105,12 @@ export const PlaceListArea = ({
               <img src={star.signatureUrl} alt="" />
             </div>
           ) : (
-            <div className="w-6 h-6 hover:bg-yellow-200 rounded-full cursor-pointer duration-500 opacity-70">
+            <div
+              className="w-6 h-6 hover:bg-yellow-200 rounded-full cursor-pointer duration-500"
+              style={{
+                opacity: isCategoryReceive ? 0.7 : 1,
+              }}
+            >
               {<FontAwesomeIcon icon={faStar} />}
             </div>
           )}
@@ -145,17 +149,13 @@ export const PlaceListArea = ({
 
       if (targetNames.length > 0) {
         imageUrl = imgUrls.find((img) => img.name === "큰별");
+        setIsCateforyReceive(true);
       }
 
       // 어차피 server에서 추천해주는 녀석들만 PNG 로 만들어줄거라
       // 별도의 mood Keywords 관리 로직 주석처리
-      //let matchesResultMoodTag = true;
       if (roomMode === 2) {
         if (matchesResultTag && restaurant.moodKeywords !== undefined) {
-          // matchesResultMoodTag = restaurant.moodKeywords?.some((moodKeyword) =>
-          //   allUserSelectedMoodTags.includes(moodKeyword)
-          // );
-
           const restaurantExistsInModeTwoResult =
             modeTwoResultRestList.includes(restaurant._id);
 
@@ -169,9 +169,6 @@ export const PlaceListArea = ({
             }
           }
         }
-        // else {
-        //   matchesResultMoodTag = false;
-        // }
       }
 
       return {
