@@ -31,7 +31,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const [modeTwoVoiceRecResult, SetModeTwoVoiceRecResult] = useState([]);
   const [popupMessage, setPopupMessage] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
-  const [readyUserId, setReadyUserId] = useState(null);
+  const [readyUserIds, setReadyUserIds] = useState([]);
   const [highlightedStreamId, setHighlightedStreamId] = useState(null);
   const [countdown, setCountdown] = useState(null);
   const userStreamsWithPlayerId = roomDetail.userStreams.map((stream) => {
@@ -151,10 +151,20 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     console.log("handleModeChange is called, data : ", data);
     const roomMemberCount = roomDetail.roomMemberCount;
     if (data.roomReadyCount < roomMemberCount) {
-      setReadyUserId(data.socketId);
+      setReadyUserIds((prevIds) => {
+        if (!prevIds.includes(data.socketId)) {
+          return [...prevIds, data.socketId];
+        }
+        return prevIds;
+      });
       setRoomReadyCount(data.roomReadyCount);
     } else if (data.roomReadyCount >= roomMemberCount) {
-      setReadyUserId(data.socketId);
+      setReadyUserIds((prevIds) => {
+        if (!prevIds.includes(data.socketId)) {
+          return [...prevIds, data.socketId];
+        }
+        return prevIds;
+      });
       let counter = 3;
       setCountdown(counter);
       const interval = setInterval(() => {
@@ -163,7 +173,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
         if (counter === 0) {
           clearInterval(interval);
           setRoomMode(data.newMode);
-          setReadyUserId(null);
+          setReadyUserIds([]);
           setRoomReadyCount(0);
           setCountdown(null);
         }
@@ -230,7 +240,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
           remoteStrem={userStreamsWithPlayerId}
           roomDetail={roomDetail}
           highlightedStreamId={highlightedStreamId}
-          readyUserId={readyUserId}
+          readyUserIds={readyUserIds}
         />
 
         <PlaceListArea
@@ -255,7 +265,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
           remoteStrem={userStreamsWithPlayerId}
           roomDetail={roomDetail}
           highlightedStreamId={highlightedStreamId}
-          readyUserId={readyUserId}
+          readyUserIds={readyUserIds}
         />
 
         {roomMode === MODE.MODE1 && (

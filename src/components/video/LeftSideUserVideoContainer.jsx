@@ -16,7 +16,7 @@ const LeftSideUserVideoContainer = ({
   setPlayerHand,
   roomDetail,
   highlightedStreamId,
-  readyUserId,
+  readyUserIds,
 }) => {
   const [isMicMuted, setIsMicMuted] = useState(false);
   const [isVideoOff, setIsVideoOff] = useState(false);
@@ -32,7 +32,7 @@ const LeftSideUserVideoContainer = ({
       if (streamInfo) {
         const isLocalStream = streamInfo.socketId === socket.id;
         const isHighlighted = streamInfo.socketId === highlightedStreamId;
-        const isUserReady = streamInfo.socketId === readyUserId;
+        const isUserReady = readyUserIds.includes(streamInfo.socketId);
 
         return (
           <div
