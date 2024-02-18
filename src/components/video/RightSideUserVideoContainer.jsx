@@ -76,11 +76,9 @@ const RightSideUserVideoContainer = ({
         const isLocalStream = streamInfo.socketId === socket.id;
         const isHighlighted = streamInfo.socketId === highlightedStreamId;
         const isUserReady = readyUserIds.includes(streamInfo.socketId);
-
-        console.log(isLocalStream);
         return (
           <div
-            key={`stream-${index}`}
+            key={index}
             className={`${
               isHighlighted ? " relative z-20 ring-4 ring-red-500" : ""
             }`}
@@ -100,13 +98,16 @@ const RightSideUserVideoContainer = ({
           </div>
         );
       } else {
-        return renderPlaceholder();
+        return renderPlaceholder(index);
       }
     });
   };
 
-  const renderPlaceholder = () => (
-    <div className="flex  min-h-[300px] flex-col justify-center bg-white p-4 mx-2  rounded-lg shadow-2xl border-2 relative animate-pulse">
+  const renderPlaceholder = (index) => (
+    <div
+      key={index}
+      className="flex  min-h-[300px] flex-col justify-center bg-white p-4 mx-2  rounded-lg shadow-2xl border-2 relative animate-pulse"
+    >
       <div className="w-full h-full rounded-lg border-1 bg-gray-400"></div>
     </div>
   );

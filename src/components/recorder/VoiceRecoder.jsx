@@ -137,7 +137,7 @@ const VoiceRecoder = ({
               </p>
             </div>
 
-            <div className="h-[130px] flex border items-center justify-center rounded-md m-4 gap-2">
+            <div className="h-[130px] flex border items-center justify-center rounded-md m-4 gap-2  animate-fade ">
               {(resultList || []).map((tag, i) => (
                 <p
                   className="font-semibold font-tenada text-xl bg-gray-200 rounded-xl px-3 py-2"
