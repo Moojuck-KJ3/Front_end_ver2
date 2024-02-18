@@ -59,3 +59,7 @@
 .popup-exit {
   animation: fadeOut 0.5s forwards;
 }
+
+.flip-horizontal {
+  transform: scaleX(-1);
+}

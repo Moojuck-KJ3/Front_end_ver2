@@ -89,8 +89,8 @@ const RightSideUserVideoContainer = ({
             />
             {isHighlighted && (
               <img
-                className=" w-52 h-52 absolute -top-10 left-72 animate-jump-in"
-                src="/확성기.png"
+                className=" w-52 h-52 -scale-x-100 absolute -top-10 right-72 animate-jump-in "
+                src="/오른쪽확성기.png"
                 alt="확성기"
               />
             )}
