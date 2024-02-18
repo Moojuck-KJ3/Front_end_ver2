@@ -33,6 +33,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [readyUserId, setReadyUserId] = useState(null);
   const [highlightedStreamId, setHighlightedStreamId] = useState(null);
+  const [countdown, setCountdown] = useState(null);
   const userStreamsWithPlayerId = roomDetail.userStreams.map((stream) => {
     const playerInfo = roomDetail.playerInfo.find(
       (info) => info.socketId === stream.socketId
@@ -153,9 +154,20 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
       setReadyUserId(data.socketId);
       setRoomReadyCount(data.roomReadyCount);
     } else if (data.roomReadyCount >= roomMemberCount) {
-      setRoomMode(data.newMode);
-      setReadyUserId(null);
-      setRoomReadyCount(0);
+      setReadyUserId(data.socketId);
+      let counter = 3;
+      setCountdown(counter);
+      const interval = setInterval(() => {
+        counter -= 1;
+        setCountdown(counter);
+        if (counter === 0) {
+          clearInterval(interval);
+          setRoomMode(data.newMode);
+          setReadyUserId(null);
+          setRoomReadyCount(0);
+          setCountdown(null);
+        }
+      }, 1000); //
     }
   };
   const handleSetReady = () => {
@@ -193,8 +205,16 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   return (
     <PlayRoomContainer>
       {/* 스텝바 */}
+
       {isVideoHighlighted() && (
         <div className="absolute inset-0 bg-black bg-opacity-70 z-10 animate-fade-up" />
+      )}
+      {/* 카운트다운 표시 */}
+      {countdown > 0 && (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-black text-white p-5 rounded-lg">
+          <p>모드 변경</p>
+          <p>{countdown}</p>
+        </div>
       )}
       <Header roomMode={roomMode} />
       {showPopup && (
