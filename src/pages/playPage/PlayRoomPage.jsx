@@ -235,6 +235,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
           localStream={localStream}
           remoteStrem={userStreamsWithPlayerId}
           roomDetail={roomDetail}
+          highlightedStreamId={highlightedStreamId}
         />
 
         {roomMode === MODE.MODE1 && (
