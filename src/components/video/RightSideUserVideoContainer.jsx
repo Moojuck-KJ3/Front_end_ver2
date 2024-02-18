@@ -9,6 +9,7 @@ const RightSideUserVideoContainer = ({
   remoteStrem,
   roomDetail,
   highlightedStreamId,
+  readyUserId,
 }) => {
   const [activeButton, setActiveButton] = useState(null);
   const [dragItem, setDragItem] = useState(null);
@@ -74,6 +75,7 @@ const RightSideUserVideoContainer = ({
       if (streamInfo) {
         const isLocalStream = streamInfo.socketId === socket.id;
         const isHighlighted = streamInfo.socketId === highlightedStreamId;
+        const isUserReady = streamInfo.socketId === readyUserId;
 
         console.log(isLocalStream);
         return (
@@ -86,6 +88,7 @@ const RightSideUserVideoContainer = ({
             <VideoContainer
               mediaStream={isLocalStream ? localStream : streamInfo.stream}
               isLocalStream={isLocalStream}
+              isUserReady={isUserReady}
             />
             {isHighlighted && (
               <img

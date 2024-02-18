@@ -166,7 +166,6 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
 
     socket.emit("select-done", {
       roomId,
-      socketId: socket.id,
       roomReadyCount: updatedRoomReadyCount,
       roomMode,
     });

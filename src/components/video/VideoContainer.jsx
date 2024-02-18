@@ -12,8 +12,8 @@ const VideoContainer = ({ mediaStream, isLocalStream, isUserReady }) => {
 
   return (
     <div
-      className={`flex min-h-[300px] flex-col justify-center p-4 mx-2 rounded-lg shadow-2xl border-2 relative ${
-        isUserReady ? "bg-green-500" : "bg-white"
+      className={`flex min-h-[300px] flex-col justify-center p-4 mx-2 rounded-lg shadow-2xl relative ${
+        isUserReady ? "bg-green-400 transition-all" : "bg-white"
       }`}
     >
       <video
