@@ -16,6 +16,7 @@ const LeftSideUserVideoContainer = ({
   playerHand,
   setPlayerHand,
   roomDetail,
+  highlightedStreamId,
 }) => {
   const [isMicMuted, setIsMicMuted] = useState(false);
   const [isVideoOff, setIsVideoOff] = useState(false);
@@ -30,13 +31,29 @@ const LeftSideUserVideoContainer = ({
       const streamInfo = remoteStrem[index];
       if (streamInfo) {
         const isLocalStream = streamInfo.socketId === socket.id;
-        console.log(isLocalStream);
+        const isHighlighted = streamInfo.socketId === highlightedStreamId;
+        console.log(socket.id);
+        console.log(highlightedStreamId);
+        console.log(isHighlighted);
         return (
-          <VideoContainer
+          <div
             key={`stream-${index}`}
-            mediaStream={isLocalStream ? localStream : streamInfo.stream}
-            isLocalStream={isLocalStream}
-          />
+            className={`${
+              isHighlighted ? " relative z-20 ring-4 ring-red-500" : ""
+            }`}
+          >
+            <VideoContainer
+              mediaStream={isLocalStream ? localStream : streamInfo.stream}
+              isLocalStream={isLocalStream}
+            />
+            {isHighlighted && (
+              <img
+                className=" w-52 h-52 absolute -top-10 left-72 animate-jump-in"
+                src="/확성기.png"
+                alt="확성기"
+              />
+            )}
+          </div>
         );
       } else {
         return renderPlaceholder();
@@ -102,6 +119,10 @@ const LeftSideUserVideoContainer = ({
     });
 
     event.dataTransfer.setData("restaurant", restaurantData);
+  };
+
+  const isVideoHighlighted = () => {
+    return highlightedStreamId != null;
   };
 
   return (

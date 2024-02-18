@@ -14,7 +14,6 @@ import LeftSideUserVideoContainer from "../../components/video/LeftSideUserVideo
 import { getRestaurantList } from "../../api";
 import { useSocket } from "../../realtimeComunication/SocketContext";
 import Popup from "../../components/modal/Popup";
-import Attention from "../../components/modal/Attention";
 
 const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const socket = useSocket();
@@ -33,8 +32,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const [modeTwoVoiceRecResult, SetModeTwoVoiceRecResult] = useState([]);
   const [popupMessage, setPopupMessage] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
-  const [isAttention, setIsAttention] = useState(false);
-
+  const [highlightedStreamId, setHighlightedStreamId] = useState(null);
   const userStreamsWithPlayerId = roomDetail.userStreams.map((stream) => {
     const playerInfo = roomDetail.playerInfo.find(
       (info) => info.socketId === stream.socketId
@@ -120,8 +118,9 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     const popupContent = data;
 
     if (data.action === "잠깐 주목🗣️") {
-      console.log("잠깐 주목🗣️");
-      setIsAttention(true);
+      setHighlightedStreamId(data.socketId);
+      console.log("highlightedStreamId", data.socketId);
+      setTimeout(() => setHighlightedStreamId(null), 8000);
     } else {
       if (popupContent) {
         setPopupMessage(popupContent);
@@ -188,15 +187,20 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
       finalPlace: [...prev.finalPlace, restaurant],
     }));
   };
+  const isVideoHighlighted = () => {
+    return highlightedStreamId != null;
+  };
 
   return (
     <PlayRoomContainer>
       {/* 스텝바 */}
+      {isVideoHighlighted() && (
+        <div className="absolute inset-0 bg-black bg-opacity-70 z-10 animate-fade-up" />
+      )}
       <Header roomMode={roomMode} />
       {showPopup && (
         <Popup message={popupMessage} onClose={() => setShowPopup(false)} />
       )}
-      {isAttention && <Attention onClose={() => setIsAttention(false)} />}
       {/* 컨텐츠 시작 */}
       <GameArea>
         {/* 별 */}
@@ -207,6 +211,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
           remoteStrem={userStreamsWithPlayerId}
           showMic={showModeTwoVoiceRecorder}
           roomDetail={roomDetail}
+          highlightedStreamId={highlightedStreamId}
         />
 
         <PlaceListArea

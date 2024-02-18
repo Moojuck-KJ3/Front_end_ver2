@@ -17,8 +17,6 @@ const Popup = ({ message, onClose }) => {
     return () => clearTimeout(timer); // Clear the timer if the component is unmounted
   }, [onClose]);
 
-  if (!message) return null;
-
   return (
     <PopupContainer>
       <div
@@ -31,17 +29,17 @@ const Popup = ({ message, onClose }) => {
           <h1 className="text-4xl font-bold">{message.action}</h1>
 
           <img
-            src={message.restaurantData.thumbnailImg}
+            src={message?.restaurantData?.thumbnailImg}
             alt="PlacePhoto"
             className="w-full h-72 shadow-md overflow-hidden mx-auto bg-gray-300 rounded-lg shrink-0 object-cover object-center"
           />
-          <h1 className=" text-2xl">#{message.restaurantData.name}</h1>
+          <h1 className=" text-2xl">#{message?.restaurantData?.name}</h1>
           <h1 className=" text-2xl">
-            #{message.restaurantData.foodCategories}
+            #{message?.restaurantData.foodCategories}
           </h1>
-          <h1 className=" text-2xl">⭐️{message.restaurantData.rating}</h1>
+          <h1 className=" text-2xl">⭐️{message?.restaurantData.rating}</h1>
           <ul className="flex justify-center gap-2  ">
-            {message.restaurantData.moodKeywords.map((keyword, index) => (
+            {message?.restaurantData.moodKeywords.map((keyword, index) => (
               <li key={index} className="bg-gray-300 p-1 rounded-lg text-xl">
                 #{keyword}
               </li>
