@@ -97,12 +97,12 @@ const PlayerHand = ({
                   <li
                     key={index}
                     style={{ animationDelay: `${index * 0.2}s` }}
-                    className="bg-gray-200 flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg font-tenada animate-customFadeUp"
+                    className="bg-gray-200 flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg text-2xl font-bold font-DalseoHealing animate-customFadeUp"
                   >
-                    <span className="text-lg font-semibold ml-2">{`${
+                    <span className="text-2xl font-semibold ml-2">{`${
                       index + 1
                     }. `}</span>
-                    <h1 className="flex-grow text-center text-xl">{`#${tag}`}</h1>
+                    <h1 className="flex-grow text-center ">{`#${tag}`}</h1>
                     <p className="bg-green-400 font-semibold text-white mr-3 w-7 h-7 text-center rounded-full flex items-center justify-center">
                       {count}
                     </p>
@@ -122,7 +122,7 @@ const PlayerHand = ({
 
         <div
           // onClick={() => handleClick(2)}
-          className={`  w-1/4 p-1 flex flex-col text-center m-2 border-2 rounded-xl  justify-start ${getModeStyle(
+          className={`  w-1/4 p-1 flex flex-col text-center m-2 border-2 rounded-xl  justify-between ${getModeStyle(
             2
           )}`}
         >
@@ -148,20 +148,20 @@ const PlayerHand = ({
               )}
             </div>
           )}
-          <div className="max-h-64 flex-grow h-full overflow-y-auto scrollbar-hide ">
-            <ul className=" m-2">
+          <div className="max-h-70 h-full overflow-y-auto scrollbar-hide ">
+            <ul className="m-2">
               {[...moodTagCounts]
                 .sort((a, b) => b[1] - a[1])
                 .map(([tag, count], index) => (
                   <li
                     key={index}
                     style={{ animationDelay: `${index * 0.2}s` }}
-                    className="bg-gray-200 flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg font-tenada animate-customFadeUp"
+                    className="bg-gray-200 flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg text-2xl font-bold font-DalseoHealing animate-customFadeUp"
                   >
-                    <span className="text-lg font-semibold ml-2">{`${
+                    <span className="font-semibold ml-2">{`${
                       index + 1
                     }. `}</span>
-                    <h1 className="flex-grow text-center text-xl">{`#${tag}`}</h1>
+                    <h1 className="flex-grow text-center ">{`#${tag}`}</h1>
                     <p className="bg-green-400 font-semibold text-white mr-3 w-7 h-7 text-center rounded-full flex items-center justify-center">
                       {count}
                     </p>

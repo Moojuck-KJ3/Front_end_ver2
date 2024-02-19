@@ -150,18 +150,18 @@ const LeftSideUserVideoContainer = ({
           ⭐️나의 선호도
         </h1>
 
-        <div className="flex-grow h-full w-full overflow-y-auto scrollbar-hide m-2">
-          <div className="grid grid-cols-3 grid-rows-3 gap-3 overflow-y-auto max-h-98">
+        <div className="max-h-52 w-full h-full overflow-y-auto scrollbar-hide m-2">
+          <div className="grid grid-cols-2 grid-rows-3 gap-3 overflow-y-auto max-h-98">
             {playerHand.selectedFoodTag?.map((tag, index) => (
               <div
                 key={index}
-                className="bg-gray-200 w-full h-full py-2 text-center items-center justify-center rounded-lg font-tenada"
+                className="bg-gray-200 w-full h-full py-2 text-center items-center justify-center rounded-lg text-xl font-DalseoHealing font-bold"
               >{`#${tag}`}</div>
             ))}
             {playerHand.selectedMoodTag?.map((tag, index) => (
               <div
                 key={index}
-                className="bg-gray-200 w-full h-full py-2 text-center items-center justify-center rounded-lg font-tenada"
+                className="bg-gray-200 w-full h-full py-2 text-center items-center justify-center rounded-lg text-xl font-DalseoHealing font-bold"
               >{`#${tag}`}</div>
             ))}
           </div>

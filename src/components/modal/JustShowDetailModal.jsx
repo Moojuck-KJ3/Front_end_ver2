@@ -2,17 +2,15 @@ import CloseIcon from "@mui/icons-material/Close";
 const JustShowDetailModal = ({ restaurant, closeModal }) => {
   return (
     <div>
-      <div className="fixed w-full h-full -top-10 left-0 flex items-center justify-center  ">
+      <div className="fixed w-full h-full z-10 -top-10 left-0 flex items-center justify-center  ">
         {/* overlay  */}
         <div className=" absolute  w-full h-full opacity-50"></div>
 
         <div className=" bg-white w-11/12 md:max-w-md mx-auto rounded-lg shadow-lg  animate-fade">
           {/* Add modal content here */}
-          <div className=" py-4 text-left px-6">
+          <div className=" py-4 text-left px-6 font-bold font-DalseoHealing">
             <div className="flex justify-between items-center pb-3">
-              <p className="text-4xl font-bold  font-tenada">
-                {restaurant.name}
-              </p>
+              <p className="text-4xl ">{restaurant.name}</p>
             </div>
             <div className="flex justify-center rounded-xl ">
               <img
@@ -23,45 +21,36 @@ const JustShowDetailModal = ({ restaurant, closeModal }) => {
             </div>
             <div className="mt-3 flex flex-col gap-1">
               <div className="flex items-center justify-between ">
-                <p className="text-xl font-bold  font-tenada">리뷰 갯수</p>
-                <p className="text-lg text-black font-bold  font-tenada">
-                  {restaurant.ratingCount}
-                </p>
+                <p className="text-xl ">리뷰 갯수</p>
+                <p className="text-2xl text-black ">{restaurant.ratingCount}</p>
               </div>
               <div className="flex items-center justify-between ">
-                <p className="text-xl font-bold  font-tenada">총 별점</p>
-                <p className="text-lg text-black font-bold  font-tenada">
-                  ⭐️{restaurant.rating}
-                </p>
+                <p className="text-xl ">총 별점</p>
+                <p className="text-2xl text-black">⭐️{restaurant.rating}</p>
               </div>
               <div className="flex items-center justify-between ">
-                <p className="min-w-20 text-xl font-bold  font-tenada">
-                  식당 주소
-                </p>
-                <p className="ml-1 text-lg font-bold  font-tenada">
-                  {restaurant.address}
-                </p>
+                <p className="min-w-20 text-xl">식당 주소</p>
+                <p className="ml-1 text-xl">{restaurant.address}</p>
               </div>
               <div className="flex justify-between items-center">
-                <p className="text-xl font-bold  font-tenada">음식 종류</p>
-                <p className="text-2xl bg-gray-300 rounded-lg p-1 font-bold font-tenada">
+                <p className="text-xl ">음식 종류</p>
+                <p className="text-2xl bg-gray-300 rounded-lg p-1">
                   #{restaurant.food_category}
                 </p>
               </div>
               <div className="flex justify-between items-center pb-3">
-                <p className="text-xl font-bold  font-tenada">전화번호</p>
-                <p className="text-lg  rounded-lg p-1 font-bold text-emerald-500 underline font-tenada">
+                <p className="text-xl ">전화번호</p>
+                <p className="text-2xl  rounded-lg p-1 font-bold text-emerald-500 underline">
                   📞{restaurant.phone_number}
                 </p>
               </div>
               <div className="flex justify-between items-center pb-3">
-                <p className="min-w-20 text-xl font-bold  font-tenada">옵션</p>
-                <p className="text-xl bg-gray-300 rounded-lg p-1 font-bold font-tenada">
+                <p className="min-w-20 text-xl font-bold">옵션</p>
+                <p className="text-2xl bg-gray-300 rounded-lg p-1">
                   {restaurant.options}
                 </p>
               </div>
             </div>
-
             <div className="mt-4 flex justify-end gap-2">
               <button
                 onClick={closeModal}

@@ -119,16 +119,24 @@ export const PlaceListArea = ({
         </div>
         {hoveredStarId === star._id && (
           <div
-            className="animate-fade absolute items-center justify-center inline-block px-3 py-2 font-2xl font-medium text-black bg-white rounded-lg shadow-sm -translate-x-1/2 left-1/2 bottom-full mb-2 "
+            className="animate-fade z-50  w-64 h-68 absolute items-center text-2xl justify-center inline-block px-3 py-4 text-black bg-white rounded-lg shadow-sm -translate-x-1/2 left-1/2 bottom-full mb-2 "
             style={{
               transition: "opacity 300ms",
               opacity: 1,
               whiteSpace: "nowrap",
             }}
           >
-            <h1 className="font-tenada ">{star.name}</h1>
+            <h1 className=" font-DalseoHealing font-bold mb-1 ">{star.name}</h1>
+            <div className="flex gap-2">
+              <h1 className="w-fit p-2 rounded-lg bg-gray-300 font-DalseoHealing text-lg font-bold mb-1 ">
+                #{star.food_category}
+              </h1>
+              <h1 className="w-fit p-2 rounded-lg bg-gray-300 font-DalseoHealing text-lg font-bold mb-1 ">
+                ⭐️{star.rating}
+              </h1>
+            </div>
             <img
-              className="rounded-lg"
+              className="w-full max-h-40 object-cover rounded-lg"
               src={star.thumbnailImg}
               alt="thumbnailImg"
             />

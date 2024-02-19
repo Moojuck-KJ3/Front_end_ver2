@@ -63,10 +63,12 @@ const VoiceRecognition = ({
         selectedMoodTag: [...prevPlayerHand.selectedMoodTag, ...data.keywords],
       }));
 
-      onSetAllUserPlayerHand((prevAllUserHand) => ({
-        ...prevAllUserHand,
-        selectedMoodTag: [...prevAllUserHand.selectedMoodTag, ...data.keywords],
-      }));
+      const sendData = {
+        roomId,
+        keywords: data.keywords,
+      };
+
+      socket.emit("all-usersHand-moodtags", sendData);
     }
   };
 
@@ -77,6 +79,15 @@ const VoiceRecognition = ({
     }
   };
 
+  const handleSetUsersMoodTags = (data) => {
+    console.log("handleSetUsersMoodTags", data.keywords);
+    if (data.keywords.length > 0) {
+      onSetAllUserPlayerHand((prevAllUserHand) => ({
+        ...prevAllUserHand,
+        selectedMoodTag: [...prevAllUserHand.selectedMoodTag, ...data.keywords],
+      }));
+    }
+  };
   const setupSpeechRecognition = () => {
     if (!recognitionRef.current) {
       recognitionRef.current = new window.webkitSpeechRecognition();
@@ -121,6 +132,7 @@ const VoiceRecognition = ({
       "receive-recommended-restaurants",
       handleReceiveRecommendedRestaurants
     );
+    socket.on("all-usersHand-moodtags", handleSetUsersMoodTags);
     socket.on("receive-speech-keyword", handleReceiveSpeechKeyword);
     setupSpeechRecognition();
 
@@ -128,6 +140,10 @@ const VoiceRecognition = ({
       if (recognitionRef.current) {
         recognitionRef.current.stop();
       }
+      socket.off(
+        "receive-recommended-restaurants",
+        handleReceiveRecommendedRestaurants
+      );
       socket.off("receive-speech-keyword", handleReceiveSpeechKeyword);
       clearTimeout(throttleTimeout);
     };
