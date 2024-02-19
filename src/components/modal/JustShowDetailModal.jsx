@@ -1,5 +1,5 @@
 import CloseIcon from "@mui/icons-material/Close";
-const ShowDetailModal = ({ restaurant, closeModal, addToPlayerHand }) => {
+const JustShowDetailModal = ({ restaurant, closeModal }) => {
   return (
     <div>
       <div className="fixed w-full h-full -top-10 left-0 flex items-center justify-center  ">
@@ -64,12 +64,6 @@ const ShowDetailModal = ({ restaurant, closeModal, addToPlayerHand }) => {
 
             <div className="mt-4 flex justify-end gap-2">
               <button
-                onClick={() => addToPlayerHand(restaurant)}
-                className="modal-close px-4 p-3 rounded-lg font-tenada bg-green-400 hover:bg-green-500 transition-all text-white"
-              >
-                PICK!
-              </button>
-              <button
                 onClick={closeModal}
                 className="modal-close px-4 p-3 rounded-lg font-tenada bg-red-400 hover:bg-red-500 transition-all text-white"
               >
@@ -83,4 +77,4 @@ const ShowDetailModal = ({ restaurant, closeModal, addToPlayerHand }) => {
   );
 };
 
-export default ShowDetailModal;
+export default JustShowDetailModal;

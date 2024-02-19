@@ -6,7 +6,17 @@ const FinalRestaurantDetails = ({ allUserPlayerHand, currentIndex }) => {
   const [info, setInfo] = useState();
   const [markers, setMarkers] = useState([]);
   const currentRestaurant = allUserPlayerHand.finalPlace[currentIndex];
-  const options = currentRestaurant.options?.split(",") || [];
+  const options = currentRestaurant?.options?.split(",") || [];
+
+  if (!currentRestaurant) {
+    return (
+      <div className="flex justify-center items-center w-full h-full">
+        <p className="text-white font-tenada text-2xl">
+          선택한 레스토랑이 존재하지 않습니다.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-full grid grid-cols-2 grid-rows-2 p-4 gap-4 text-white font-tenada animate-fade-up">
@@ -15,7 +25,7 @@ const FinalRestaurantDetails = ({ allUserPlayerHand, currentIndex }) => {
         <img
           src={currentRestaurant.thumbnailImg}
           alt="Main Dish"
-          className="w-full max-h-[300px] rounded-md"
+          className=" w-full max-h-[300px] rounded-md ob"
         />
       </div>
       {/* Top-right cell for details */}
@@ -57,7 +67,7 @@ const FinalRestaurantDetails = ({ allUserPlayerHand, currentIndex }) => {
       {/* Map cell */}
 
       <div className="w-full h-full gap-2 col-span-1 row-span-1 justify-center items-center overflow-y-hidden">
-        {options.map((option, index) => (
+        {options?.map((option, index) => (
           <div
             key={index}
             className="bg-white p-2 m-3 text-center rounded-xl"

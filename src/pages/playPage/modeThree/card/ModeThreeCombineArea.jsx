@@ -158,7 +158,7 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
           <div className="w-full justify-between flex p-10 ">
             {/* USER A Target Area */}
             <div
-              className={`w-64 juitems-center py-1 shadow-lg border-dashed border-2 border-white min-h-40 ${
+              className={`w-64 juitems-center py-1 shadow-lg border-dashed border-2 border-white min-h-64 ${
                 isDragging ? "" : ""
               }`}
               onDragOver={(event) => handleDragOver(event, 1)}

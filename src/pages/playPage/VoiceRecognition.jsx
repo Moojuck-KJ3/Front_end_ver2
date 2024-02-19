@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSocket } from "../../realtimeComunication/SocketContext";
 
-const SERVER_SEND_TIME = 3000;
+const SERVER_SEND_TIME = 2000;
 
 const VoiceRecognition = ({
   onSetResultRestaurant,

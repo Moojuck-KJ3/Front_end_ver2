@@ -32,7 +32,6 @@ const RightSideUserVideoContainer = ({
     setDragItem(parsedRestaurantData);
   };
   const handleButtonClick = (buttonId) => {
-    // If the active button is clicked again, hide the message box and reset the active button
     console.log("handleButtonClick", buttonId);
 
     if (activeButton === buttonId) {

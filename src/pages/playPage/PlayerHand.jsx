@@ -4,6 +4,8 @@ import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import ShowDetailModalWithDiscard from "../../components/modal/ShowDetailModalWithDiscard";
 import { useSocket } from "../../realtimeComunication/SocketContext";
 import { useParams } from "react-router-dom";
+import ShowDetailModal from "../../components/modal/ShowDetailModal";
+import JustShowDetailModal from "../../components/modal/JustShowDetailModal";
 
 const PlayerHand = ({
   allUserPlayerHand,
@@ -45,7 +47,7 @@ const PlayerHand = ({
     } else if (modeValue < roomMode) {
       return " border-green-400 border-4 text-gray-600 opacity-50";
     }
-    return "border-dashed text-gray-400 opacity-50 ";
+    return "border-dashed text-gray-40 ";
   };
 
   const handleDragStart = (event, restaurant) => {
@@ -91,12 +93,12 @@ const PlayerHand = ({
     <div className="w-full h-1/3">
       <div className="w-full h-full bg-white rounded-md shadow-inner flex ">
         <div
-          onClick={() => handleClick(1)}
+          // onClick={() => handleClick(1)}
           className={`w-1/4 flex flex-col justify-between text-center m-2 border-2 rounded-xl box ${getModeStyle(
             1
           )}`}
         >
-          <h1 className="mt-2 font-tenada text-2xl">선호하는 음식🍔</h1>
+          <h1 className="mt-3 font-tenada text-3xl">선호하는 음식🍔</h1>
 
           <div className="flex-grow h-full scrollbar-hide overflow-y-auto m-2">
             <ul>
@@ -130,12 +132,12 @@ const PlayerHand = ({
         </div>
 
         <div
-          onClick={() => handleClick(2)}
+          // onClick={() => handleClick(2)}
           className={`w-1/4 p-1 flex flex-col text-center m-2 border-2 rounded-xl  justify-between ${getModeStyle(
             2
           )}`}
         >
-          <h1 className="mt-1 font-tenada text-2xl ">선호하는 분위기👀</h1>
+          <h1 className="mt-3 font-tenada text-3xl ">선호하는 분위기👀</h1>
 
           <ul className="flex-grow h-full scrollbar-hide overflow-y-auto m-2">
             {[...moodTagCounts]
@@ -166,15 +168,15 @@ const PlayerHand = ({
           )}
         </div>
         <div
-          onClick={() => handleClick(3)}
+          // onClick={() => handleClick(3)}
           className={`w-2/4 p-1 flex flex-col text-center m-2 border-2 rounded-xl justify-between ${getModeStyle(
             3
           )}`}
         >
-          <h1 className="mt-1 font-tenada text-2xl ">가고 싶은 장소💫</h1>
+          <h1 className="mt-3 font-tenada text-3xl ">가고 싶은 장소💫</h1>
 
           <div className="flex-grow h-full scrollbar-hide overflow-y-auto m-2">
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-4 gap-4">
               {allUserPlayerHand.selectedPlace?.map((place, index) => (
                 <div
                   key={index}
@@ -202,8 +204,14 @@ const PlayerHand = ({
             </button>
           )}
         </div>
-        <div
-          onClick={() => handleClick(4)}
+        {isModalOpen && (
+          <JustShowDetailModal
+            restaurant={selectedRestaurant}
+            closeModal={closeModal}
+          />
+        )}
+        {/* <div
+          // onClick={() => handleClick(4)}
           className={`w-1/4 p-1 flex flex-col text-center m-2 border-2 rounded-xl justify-between ${getModeStyle(
             4
           )}`}
@@ -244,8 +252,7 @@ const PlayerHand = ({
                 </>
               )}
             </div>
-          </div>
-        </div>
+          </div> */}
       </div>
     </div>
   );
