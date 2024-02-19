@@ -7,11 +7,11 @@ const ModeThreeModal = ({ onShow }) => {
       <div className=" bg-white mx-auto rounded-lg shadow-lg animate-fade">
         <div className=" py-4 text-left px-6  rounded-xl ">
           <div className="flex justify-between items-center pb-6">
-            <p className="text-6xl p-4 font-DalseoHealing font-bold">
+            <p className="text-5xl p-4 font-DalseoHealing font-bold">
               식당을 조합해보세요!
             </p>
           </div>
-          <div className="text-4xl p-2 font-bold font-DalseoHealing flex flex-col justify-center ">
+          <div className="text-3xl p-2 font-bold font-DalseoHealing flex flex-col justify-center ">
             <p>
               나와 상대방의{" "}
               <span className="text-red-400">
@@ -26,7 +26,7 @@ const ModeThreeModal = ({ onShow }) => {
           <div className="mt-8 flex justify-center">
             <button
               onClick={handleClick}
-              className="px-4 bg-purple-500 text-4xl p-5 ml-3 rounded-lg text-white hover:bg-purple-400 font-DalseoHealing font-bold"
+              className="px-4 bg-purple-500 text-2xl p-5 ml-3 rounded-lg text-white hover:bg-purple-400 font-DalseoHealing font-bold"
             >
               시작하기
             </button>

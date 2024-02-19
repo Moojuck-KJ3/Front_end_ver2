@@ -30,7 +30,7 @@ const ShowDetailModal = ({ restaurant, closeModal, addToPlayerHand }) => {
               </div>
               <div className="flex items-center justify-between ">
                 <p className="min-w-20 text-xl">식당 주소</p>
-                <p className="ml-1 text-xl">{restaurant.address}</p>
+                <p className="ml-4 text-xl truncate">{restaurant.address}</p>
               </div>
               <div className="flex justify-between items-center">
                 <p className="text-xl ">음식 종류</p>

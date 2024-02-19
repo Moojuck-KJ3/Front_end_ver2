@@ -45,7 +45,7 @@ const VoiceRecoder = ({
     const timer = setTimeout(() => {
       stopRecording();
       setShowTimer(false);
-    }, 5000);
+    }, 5500);
 
     return () => {
       if (recognitionRef.current) {
@@ -105,16 +105,16 @@ const VoiceRecoder = ({
         {isRecording ? (
           <div className="w-full flex flex-col gap-1">
             <div className="flex justify-between items-center">
-              <p className="text-2xl font-medium leading-none text-start font-tenada">
+              <p className="text-3xl py-2 leading-none text-start font-DalseoHealing font-bold">
                 음성 인식 중
               </p>
               <div className="rounded-full w-3 h-3 bg-red-400 animate-pulse" />
             </div>
-            <p className=" text-lg text-muted-foreground text-start">
+            <p className=" text-xl text-muted-foreground text-start">
               말을 해주세요...
             </p>
             <div className="h-[130px] flex border items-center justify-center rounded-md m-4">
-              <p className="font-tenada text-xl">
+              <p className=" font-DalseoHealing font-bold text-2xl">
                 {transcript ? transcript : "입력 대기 중..."}
               </p>
             </div>
@@ -129,10 +129,10 @@ const VoiceRecoder = ({
         ) : (
           <div className="w-full h-full flex flex-col my-2 rounded-md p-5  bg-white animate-fade">
             <div className="flex flex-col items-center">
-              <p className="font-tenada p-2 w-full text-2xl font-medium leading-none text-center">
+              <p className="font-DalseoHealing font-bold py-2 w-full text-3xl  leading-none text-center">
                 음성 분석 완료
               </p>
-              <p className="text-lg text-muted-foreground text-start">
+              <p className="text-xl py-2 text-muted-foreground text-start">
                 선택 완료 버튼을 눌러주세요.
               </p>
             </div>
@@ -140,7 +140,7 @@ const VoiceRecoder = ({
             <div className="h-[130px] flex flex-wrap p-2 border items-center justify-center rounded-md m-4 gap-2  animate-fade ">
               {(resultList || []).map((tag, i) => (
                 <p
-                  className="font-semibold font-tenada text-xl bg-gray-200 rounded-xl px-3 py-2"
+                  className="font-DalseoHealing font-bold text-xl bg-gray-200 rounded-xl px-3 py-2"
                   key={i}
                 >
                   {`#${tag}`}
@@ -150,7 +150,7 @@ const VoiceRecoder = ({
             <div className="flex justify-center">
               <button
                 onClick={handleReady}
-                className="p-2 w-32 bg-green-400 shadow-xl rounded-2xl hover:scale-105 transition-all"
+                className="p-2 w-32 bg-green-400 font-DalseoHealing font-bold shadow-xl rounded-2xl hover:scale-105 transition-all"
               >
                 선택 완료
               </button>

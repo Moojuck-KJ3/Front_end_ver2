@@ -98,6 +98,7 @@ export const PlaceListArea = ({
           transform: `scale(${star.size})`,
           opacity: !star.signatureUrl && roomMode === 2 ? 0 : 1,
           pointerEvents: !star.signatureUrl && roomMode === 2 ? "none" : "auto",
+          zIndex: hoveredStarId === star._id ? 51 : 50,
         }}
       >
         <div className={`absolute w-20.5 h-20.5 bg-white`}></div>

@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useSocket } from "../../realtimeComunication/SocketContext";
 import { useParams } from "react-router-dom";
 import ShowDetailModalWithDiscard from "../modal/ShowDetailModalWithDiscard";
+import { logout } from "../../api";
 
 const LeftSideUserVideoContainer = ({
   localStream,
@@ -59,7 +60,9 @@ const LeftSideUserVideoContainer = ({
       }
     });
   };
-
+  const handleLogout = () => {
+    logout();
+  };
   const renderPlaceholder = (index) => (
     <div
       key={index}
@@ -203,7 +206,10 @@ const LeftSideUserVideoContainer = ({
           >
             {isMicMuted ? <MicOffIcon /> : <MicIcon />} Mic
           </button>
-          <button className=" mx-auto font-DalseoHealing font-bold py-2 px-2 bg-green-500 text-white rounded hover:bg-green-600 duration-150 ease-in-out hover:scale-105 transition-all">
+          <button
+            onClick={handleLogout}
+            className=" mx-auto font-DalseoHealing font-bold py-2 px-2 bg-green-500 text-white rounded hover:bg-green-600 duration-150 ease-in-out hover:scale-105 transition-all"
+          >
             <ExitToAppIcon /> 나가기
           </button>
         </div>

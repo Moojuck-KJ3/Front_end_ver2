@@ -1,6 +1,7 @@
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import CircularProgress from "@mui/joy/CircularProgress";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { logout } from "../../api";
 
 const CreateRoomPageFooter = ({
   isActivate,
@@ -9,10 +10,13 @@ const CreateRoomPageFooter = ({
   users,
   isRestaurantListsReady,
 }) => {
+  const handleLogout = () => {
+    logout();
+  };
   return (
     <div className="flex mt-4 items-center gap-2">
       <button
-        onClick={onStart}
+        onClick={handleLogout}
         className="tracking-wide font-semibold bg-gray-200 text-black text-lg p-2 rounded-lg hover:bg-gray-300 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
       >
         <ChevronLeftIcon />

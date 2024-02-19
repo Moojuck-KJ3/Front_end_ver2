@@ -27,7 +27,7 @@ const ResisterPage = () => {
   };
 
   return (
-    <div className="bg-[url('/BackGroundImg_2.jpg')] min-h-screen text-gray-900 flex justify-center">
+    <div className="bg-[url('/BackGroundImg_2.jpg')] min-h-screen text-gray-900 flex justify-center items-center">
       <div className="m-20 p-6 bg-white shadow-lg rounded-lg flex justify-center animate-fade-up">
         <div className="mt-5 flex flex-col items-center">
           <h1 className="font-bold text-2xl font-[Tenada]">회원가입</h1>
