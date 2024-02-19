@@ -62,6 +62,13 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   useEffect(() => {
     if (!socket) return;
     // socket.on("restaurant-prepared", handleGetRestaurantList);
+    socket.on("restaurant-prepared", () => {
+      console.log("restaurant-prepared is called");
+      setRoomDetail((prev) => ({
+        ...prev,
+        isRestaurantListsReady: true,
+      }));
+    });
     socket.on("remove-selected-place", handleRemoveSelectedRestaurant);
     socket.on("select-restaurant", handleAddSelectedRestaurant);
     socket.on("select-foodCategories", handleAddSelectedFoodCategories);
@@ -83,6 +90,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
 
   useEffect(() => {
     const getRestList = async (roomId) => {
+      console.log("getRestList is called");
       const response = await getRestaurantList(roomId);
 
       if (response.error) {
@@ -93,8 +101,10 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
       setImgUrlList(response.data.imgUrls);
     };
 
-    getRestList(roomId);
-  }, []);
+    if (roomDetail.isRestaurantListsReady) {
+      getRestList(roomId);
+    }
+  }, [roomDetail, roomId]);
 
   const handleAddSelectedRestaurant = useCallback((selectedRestaurant) => {
     setAllUserPlayerHand((prevAllUserHand) => {

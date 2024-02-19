@@ -18,6 +18,7 @@ function App() {
     roomMemberCount: 0,
     playerInfo: null,
     userStreams: [],
+    isRestaurantListsReady: false,
   });
 
   useEffect(() => {

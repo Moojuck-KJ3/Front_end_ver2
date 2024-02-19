@@ -54,6 +54,13 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
       }));
       navigator(`/play-room/${roomId}`);
     };
+    socket.on("restaurant-prepared", () => {
+      console.log("restaurant-prepared is called");
+      setRoomDetail((prev) => ({
+        ...prev,
+        isRestaurantListsReady: true,
+      }));
+    });
 
     socket.on("all-player-ready", handleAllPlayerReady);
     socket.on("start-play-room-response", handleStartPlayRoomResponse);
