@@ -32,18 +32,6 @@ const PlayerHand = ({
     setSelectedRestaurant(null);
   };
 
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === allUserPlayerHand.finalPlace.length - 1 ? 0 : prevIndex + 1
-    );
-  };
-
-  const handlePrevious = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? allUserPlayerHand.finalPlace.length - 1 : prevIndex - 1
-    );
-  };
-
   const getModeStyle = (modeValue) => {
     if (modeValue === roomMode) {
       return "transform scale-105 border-4 border-blue-600"; // Current mode: Highlighted
@@ -66,10 +54,6 @@ const PlayerHand = ({
     });
 
     event.dataTransfer.setData("restaurant", restaurantData);
-  };
-
-  const handleClick = (i) => {
-    setRoomMode(i);
   };
 
   const handleReady = () => {
@@ -138,7 +122,7 @@ const PlayerHand = ({
 
         <div
           // onClick={() => handleClick(2)}
-          className={`  w-1/4 p-1 flex flex-col text-center m-2 border-2 rounded-xl  justify-between ${getModeStyle(
+          className={`  w-1/4 p-1 flex flex-col text-center m-2 border-2 rounded-xl  justify-start ${getModeStyle(
             2
           )}`}
         >
@@ -147,7 +131,7 @@ const PlayerHand = ({
           </h1>
           {showModeTwoVoiceRecorder && (
             <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
-              <div className="bg-white border-4 border-blue-500 p-2 rounded-full">
+              <div className="bg-white border-4 border-blue-500 p-2 rounded-full  animate-fade">
                 <MicIcon style={{ color: "black", fontSize: "2rem" }} />
               </div>
               {speechText && (
@@ -164,25 +148,27 @@ const PlayerHand = ({
               )}
             </div>
           )}
-          <ul className="flex-grow h-full scrollbar-hide overflow-y-auto m-2">
-            {[...moodTagCounts]
-              .sort((a, b) => b[1] - a[1])
-              .map(([tag, count], index) => (
-                <li
-                  key={index}
-                  style={{ animationDelay: `${index * 0.2}s` }}
-                  className="bg-gray-200 flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg font-tenada animate-customFadeUp"
-                >
-                  <span className="text-lg font-semibold ml-2">{`${
-                    index + 1
-                  }. `}</span>
-                  <h1 className="flex-grow text-center text-xl">{`#${tag}`}</h1>
-                  <p className="bg-green-400 font-semibold text-white mr-3 w-7 h-7 text-center rounded-full flex items-center justify-center">
-                    {count}
-                  </p>
-                </li>
-              ))}
-          </ul>
+          <div className="max-h-64 flex-grow h-full overflow-y-auto scrollbar-hide ">
+            <ul className=" m-2">
+              {[...moodTagCounts]
+                .sort((a, b) => b[1] - a[1])
+                .map(([tag, count], index) => (
+                  <li
+                    key={index}
+                    style={{ animationDelay: `${index * 0.2}s` }}
+                    className="bg-gray-200 flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg font-tenada animate-customFadeUp"
+                  >
+                    <span className="text-lg font-semibold ml-2">{`${
+                      index + 1
+                    }. `}</span>
+                    <h1 className="flex-grow text-center text-xl">{`#${tag}`}</h1>
+                    <p className="bg-green-400 font-semibold text-white mr-3 w-7 h-7 text-center rounded-full flex items-center justify-center">
+                      {count}
+                    </p>
+                  </li>
+                ))}
+            </ul>
+          </div>
           {roomMode === 2 && (
             <button
               onClick={handleReady}

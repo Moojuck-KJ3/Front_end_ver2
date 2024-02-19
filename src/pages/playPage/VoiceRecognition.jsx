@@ -68,7 +68,13 @@ const VoiceRecognition = ({
         selectedMoodTag: [...prevAllUserHand.selectedMoodTag, ...data.keywords],
       }));
     }
-    onSetResultRestaurant(data.restaurantList);
+  };
+
+  const handleReceiveRecommendedRestaurants = (data) => {
+    console.log("handleReceiveRecommendedRestaurants", data);
+    if (data.restaurantList.length > 0) {
+      onSetResultRestaurant(data.restaurantList);
+    }
   };
 
   const setupSpeechRecognition = () => {
@@ -111,7 +117,10 @@ const VoiceRecognition = ({
 
   useEffect(() => {
     if (!socket) return;
-
+    socket.on(
+      "receive-recommended-restaurants",
+      handleReceiveRecommendedRestaurants
+    );
     socket.on("receive-speech-keyword", handleReceiveSpeechKeyword);
     setupSpeechRecognition();
 
