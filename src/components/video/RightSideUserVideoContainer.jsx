@@ -46,6 +46,11 @@ const RightSideUserVideoContainer = ({
     // activeButton의 ID를 사용하여 현재 활성화된 버튼의 텍스트 찾기
     const action = buttons.find((button) => button.id === activeButton)?.text;
 
+    if (!dragItem) {
+      console.log("No item selected to drag.");
+      return;
+    }
+
     const data = {
       roomId: roomId,
       socketId: socket.id,
@@ -61,6 +66,7 @@ const RightSideUserVideoContainer = ({
     setActiveButton(null);
     setDragItem(null);
   };
+
   const buttons = [
     { id: "thumbsUp", text: "여기 어때👍" },
     { id: "attention", text: "잠깐 주목🗣️" },
@@ -114,7 +120,7 @@ const RightSideUserVideoContainer = ({
   return (
     <div className=" flex flex-col w-1/5 min-w-[300px] h-full gap-4 ">
       {renderStreams([1, 3])}
-      <div className="flex flex-col flex-grow items-center justify-around bg-white px-10 mx-2 py-1 rounded-lg shadow-2xl border-4 border-red-500">
+      <div className="flex flex-col  flex-grow items-center justify-around bg-white px-10 mx-2 py-1 rounded-lg shadow-2xl border-4 border-red-500">
         {buttons.map((button) =>
           activeButton === button.id ? (
             <div key={button.id} className="w-full flex flex-grow flex-col">
@@ -143,7 +149,7 @@ const RightSideUserVideoContainer = ({
                 )}
                 <button
                   onClick={sendMessage}
-                  className="w-1/2  mx-auto font-tenada p-2 bg-blue-400 hover:bg-blue-500 transition-all text-white rounded mt-2"
+                  className="w-1/2  mx-auto font-DalseoHealing font-bold p-2 bg-blue-400 hover:bg-blue-500 transition-all text-white rounded mt-2"
                 >
                   보내기
                 </button>
@@ -151,7 +157,7 @@ const RightSideUserVideoContainer = ({
               {/* Active button */}
               <button
                 onClick={() => handleButtonClick(button.id)}
-                className="mb-4 mx-auto w-full font-tenada text-4xl py-4 px-2 text-black bg-orange-400 hover:bg-orange-500 duration-150 ease-in-out hover:scale-105 transition-all rounded-full"
+                className="mb-4 mx-auto w-full font-DalseoHealin font-bold text-4xl py-4 px-2 text-black bg-orange-400 hover:bg-orange-500 duration-150 ease-in-out hover:scale-105 transition-all rounded-lg"
               >
                 {button.text}
               </button>
@@ -163,7 +169,7 @@ const RightSideUserVideoContainer = ({
             <button
               key={button.id}
               onClick={() => handleButtonClick(button.id)}
-              className="mx-auto w-full font-tenada text-4xl py-4 px-2 text-black bg-orange-400 rounded-full hover:bg-orange-500 duration-150 ease-in-out hover:scale-105 transition-all"
+              className="mx-auto w-full font-DalseoHealing font-bold text-4xl py-4 px-2 text-black bg-orange-400 rounded-lg hover:bg-orange-500 duration-150 ease-in-out hover:scale-105 transition-all"
             >
               {button.text}
             </button>

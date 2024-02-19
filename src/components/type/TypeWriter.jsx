@@ -20,7 +20,9 @@ const Typewriter = ({ text, delay, infinite }) => {
     return () => clearTimeout(timeout);
   }, [currentIndex, delay, infinite, text]);
 
-  return <span>{currentText}</span>;
+  return (
+    <span className="font-DalseoHealing text-xl font-bold">{currentText}</span>
+  );
 };
 
 export default Typewriter;

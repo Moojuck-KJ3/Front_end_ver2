@@ -27,6 +27,7 @@ export const PlaceListArea = ({
   imgUrls,
   modeTwoResultRestList,
   handleupdateFinalPlace,
+  showModeTwoVoiceRecorder,
 }) => {
   const socket = useSocket();
   const [stars, setStars] = useState([]);
@@ -196,6 +197,7 @@ export const PlaceListArea = ({
         handleSetReady={handleSetReady}
         currentIndex={currentIndex}
         setCurrentIndex={setCurrentIndex}
+        showModeTwoVoiceRecorder={showModeTwoVoiceRecorder}
       />
       {isModalVisible && (
         <ShowDetailModal

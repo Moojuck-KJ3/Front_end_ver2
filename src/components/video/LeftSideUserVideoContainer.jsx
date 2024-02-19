@@ -146,7 +146,9 @@ const LeftSideUserVideoContainer = ({
         isLocalStream={false}
       /> */}
       <div className="flex flex-col h-full justify-between items-center bg-white p-3 mx-2  rounded-lg shadow-2xl border-2">
-        <h1 className="mt-1 text-2xl font-tenada">⭐️나의 선호도</h1>
+        <h1 className="mt-1 text-3xl font-bold font-DalseoHealing">
+          ⭐️나의 선호도
+        </h1>
 
         <div className="flex-grow h-full w-full overflow-y-auto scrollbar-hide m-2">
           <div className="grid grid-cols-3 grid-rows-3 gap-3 overflow-y-auto max-h-98">
@@ -164,7 +166,9 @@ const LeftSideUserVideoContainer = ({
             ))}
           </div>
         </div>
-        <h1 className="mt-1 text-2xl font-tenada">✅나의 장소 Pick!</h1>
+        <h1 className="mt-1 text-3xl font-bold font-DalseoHealing">
+          ✅나의 장소 Pick!
+        </h1>
 
         <div className=" w-full h-full overflow-y-auto scrollbar-hide m-2">
           <div className="grid grid-cols-5 gap-1 justify-between">
@@ -189,17 +193,17 @@ const LeftSideUserVideoContainer = ({
         <div className="flex w-full mt-3">
           <button
             onClick={toggleVideo}
-            className=" mx-auto font-tenada py-2 px-2 bg-green-500  text-white rounded hover:bg-green-600 duration-150 ease-in-out hover:scale-105 transition-all"
+            className=" mx-auto font-DalseoHealing font-bold py-2 px-2 bg-green-500  text-white rounded hover:bg-green-600 duration-150 ease-in-out hover:scale-105 transition-all"
           >
             {isVideoOff ? <VideocamOffIcon /> : <VideocamIcon />} Video
           </button>
           <button
             onClick={toggleMic}
-            className="font-tenada py-2 px-2 bg-green-500  text-white rounded hover:bg-green-600 duration-150 ease-in-out hover:scale-105 transition-all"
+            className="font-DalseoHealing font-bold py-2 px-2 bg-green-500  text-white rounded hover:bg-green-600 duration-150 ease-in-out hover:scale-105 transition-all"
           >
             {isMicMuted ? <MicOffIcon /> : <MicIcon />} Mic
           </button>
-          <button className=" mx-auto font-tenada py-2 px-2 bg-green-500 text-white rounded hover:bg-green-600 duration-150 ease-in-out hover:scale-105 transition-all">
+          <button className=" mx-auto font-DalseoHealing font-bold py-2 px-2 bg-green-500 text-white rounded hover:bg-green-600 duration-150 ease-in-out hover:scale-105 transition-all">
             <ExitToAppIcon /> 나가기
           </button>
         </div>

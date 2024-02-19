@@ -6,6 +6,7 @@ import { useSocket } from "../../realtimeComunication/SocketContext";
 import { useParams } from "react-router-dom";
 import ShowDetailModal from "../../components/modal/ShowDetailModal";
 import JustShowDetailModal from "../../components/modal/JustShowDetailModal";
+import MicIcon from "@mui/icons-material/Mic";
 
 const PlayerHand = ({
   allUserPlayerHand,
@@ -15,6 +16,7 @@ const PlayerHand = ({
   handleSetReady,
   currentIndex,
   setCurrentIndex,
+  showModeTwoVoiceRecorder,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
@@ -98,7 +100,9 @@ const PlayerHand = ({
             1
           )}`}
         >
-          <h1 className="mt-3 font-tenada text-3xl">선호하는 음식🍔</h1>
+          <h1 className="mt-3 font-bold font-DalseoHealing text-4xl">
+            선호하는 음식🍔
+          </h1>
 
           <div className="flex-grow h-full scrollbar-hide overflow-y-auto m-2">
             <ul>
@@ -124,7 +128,7 @@ const PlayerHand = ({
           {roomMode === 1 && (
             <button
               onClick={handleReady}
-              className="w-2/3 mx-auto mb-2 font-tenada py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700 duration-150 ease-in-out hover:scale-105 transition-all"
+              className="w-2/3 mx-auto mb-2 font-DalseoHealing font-bold py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700 duration-150 ease-in-out hover:scale-105 transition-all"
             >
               선택 완료
             </button>
@@ -133,12 +137,18 @@ const PlayerHand = ({
 
         <div
           // onClick={() => handleClick(2)}
-          className={`w-1/4 p-1 flex flex-col text-center m-2 border-2 rounded-xl  justify-between ${getModeStyle(
+          className={`  w-1/4 p-1 flex flex-col text-center m-2 border-2 rounded-xl  justify-between ${getModeStyle(
             2
           )}`}
         >
-          <h1 className="mt-3 font-tenada text-3xl ">선호하는 분위기👀</h1>
-
+          <h1 className="mt-3 font-bold font-DalseoHealing text-4xl relative ">
+            선호하는 분위기👀
+          </h1>
+          {showModeTwoVoiceRecorder && (
+            <div className="absolute -top-9 left-1/2 transform -translate-x-1/2 border-4 border-blue-400 bg-white p-2 rounded-full animate-fade">
+              <MicIcon style={{ color: "black", fontSize: "2rem" }} />
+            </div>
+          )}
           <ul className="flex-grow h-full scrollbar-hide overflow-y-auto m-2">
             {[...moodTagCounts]
               .sort((a, b) => b[1] - a[1])
@@ -161,7 +171,7 @@ const PlayerHand = ({
           {roomMode === 2 && (
             <button
               onClick={handleReady}
-              className="w-2/3 mx-auto mb-2 font-tenada py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700 duration-150 ease-in-ou hover:scale-105 transition-all"
+              className="w-2/3 mx-auto font-DalseoHealing font-bold mb-2 py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700 duration-150 ease-in-ou hover:scale-105 transition-all"
             >
               선택 완료
             </button>
@@ -173,7 +183,9 @@ const PlayerHand = ({
             3
           )}`}
         >
-          <h1 className="mt-3 font-tenada text-3xl ">가고 싶은 장소💫</h1>
+          <h1 className="mt-3 font-bold font-DalseoHealing text-4xl ">
+            가고 싶은 장소💫
+          </h1>
 
           <div className="flex-grow h-full scrollbar-hide overflow-y-auto m-2">
             <div className="grid grid-cols-4 gap-4">
@@ -198,7 +210,7 @@ const PlayerHand = ({
           {roomMode === 3 && (
             <button
               onClick={handleReady}
-              className="w-2/3 mx-auto mb-2 font-tenada py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700 duration-150 ease-in-ou hover:scale-105 transition-all"
+              className="w-2/3 mx-auto mb-2 font-DalseoHealing font-bold py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700 duration-150 ease-in-ou hover:scale-105 transition-all"
             >
               선택 완료
             </button>

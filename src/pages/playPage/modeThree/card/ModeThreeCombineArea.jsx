@@ -182,15 +182,31 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
           <div className="flex">
             <div className=" flex justify-center items-center mt-2 ">
               <div>
-                <MoreHorizIcon fontSize="large" style={{ color: "white" }} />
+                <MoreHorizIcon
+                  fontSize="inherit"
+                  style={{ color: "white", fontSize: "3rem" }}
+                />
               </div>
               <button
                 className={`hover:scale-105 text-white font-semibold rounded-full p-2
       px-2 ${isSpining && "animate-spin animate-infinite"}`}
               >
-                {isSpining ? <LoopIcon /> : <HelpIcon />}
+                {isSpining ? (
+                  <LoopIcon
+                    fontSize="inherit"
+                    style={{ color: "white", fontSize: "5rem" }}
+                  />
+                ) : (
+                  <HelpIcon
+                    fontSize="inherit"
+                    style={{ color: "white", fontSize: "5rem" }}
+                  />
+                )}
               </button>
-              <MoreHorizIcon fontSize="large" style={{ color: "white" }} />
+              <MoreHorizIcon
+                fontSize="inherit"
+                style={{ color: "white", fontSize: "3rem" }}
+              />
             </div>
           </div>
           <div className=" w-full flex justify-between p-10">

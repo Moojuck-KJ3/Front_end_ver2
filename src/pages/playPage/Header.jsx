@@ -16,13 +16,13 @@ export function Header({ roomMode }) {
     case MODE.MODE4:
       headerContent = "최종 결과 확인";
       break;
-    default :
-    headerContent = "끝"
+    default:
+      headerContent = "끝";
   }
 
   return (
     <div className="mt-2 w-1/3 bg-white flex flex-col border-1 shadow-inner rounded-xl  mx-auto p-3 border-8">
-      <div className="flex justify-center items-center  font-tenada ">
+      <div className="flex justify-center items-center  font-DalseoHealing font-bold ">
         <h1 className=" text-4xl">{headerContent}</h1>
         <div>
           <Typewriter text="...." delay={300} infinite />
