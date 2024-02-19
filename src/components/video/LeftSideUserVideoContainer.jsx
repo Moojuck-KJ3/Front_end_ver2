@@ -204,8 +204,8 @@ const LeftSideUserVideoContainer = ({
           ✅나의 장소 Pick!
         </h1>
 
-        <div className=" w-full h-full overflow-y-auto scrollbar-hide m-2">
-          <div className="grid grid-cols-5 gap-1 justify-between">
+        <div className=" w-full h-full  overflow-y-auto scrollbar-hide m-2">
+          <div className="max-h-52 grid grid-cols-5 gap-1 justify-between">
             {playerHand.selectedPlace?.map((place, index) => (
               <div
                 key={index}

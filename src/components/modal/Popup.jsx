@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 const PopupContainer = ({ children }) => {
-  return <div className="fixed inset-0 z-50 overflow-hidden">{children}</div>;
+  return <div className="fixed inset-0 z-10  overflow-hidden">{children}</div>;
 };
 
 const Popup = ({ message, onClose }) => {

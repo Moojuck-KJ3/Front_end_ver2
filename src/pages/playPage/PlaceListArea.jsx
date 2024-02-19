@@ -108,14 +108,7 @@ export const PlaceListArea = ({
             <div
               className="w-20 h-20 animate-jump-in"
               style={{
-                transform:
-                  hoveredStarId === star._id ? "scale(1.2)" : "scale(1)",
-                opacity:
-                  hoveredStarId === star._id ? 1 : hoveredStarId ? 0.3 : 1,
                 zIndex: hoveredStarId === star._id ? 1 : 0,
-                transition: "transform 0.3s ease, opacity 0.3s ease",
-                pointerEvents:
-                  !star.signatureUrl && roomMode === 2 ? "none" : "auto",
               }}
             >
               <img src={star.signatureUrl} alt="" />

@@ -21,7 +21,7 @@ export function Header({ roomMode }) {
   }
 
   return (
-    <div className="mt-2 w-1/3 bg-white flex flex-col border-1 shadow-inner rounded-xl  mx-auto p-3 border-8">
+    <div className="mt-2 w-1/3 bg-white flex flex-col shadow-inner rounded-t-xl mx-auto p-3 border-t-8 border-r-8 border-l-8">
       <div className="flex justify-center items-center  font-DalseoHealing font-bold ">
         <h1 className=" text-4xl">{headerContent}</h1>
         <div>
