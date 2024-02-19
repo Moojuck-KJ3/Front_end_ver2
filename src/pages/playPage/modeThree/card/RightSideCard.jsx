@@ -1,12 +1,12 @@
 const RightSideCard = ({ img }) => {
   return (
     <div
-      className={`w-full h-72 flex bg-white shadow-md rounded-xl animate-fade `}
+      className={`w-full max-h-82 p-2 flex bg-white shadow-md rounded-xl animate-fade `}
     >
       <img
         src={img}
         alt="PlacePhoto"
-        className="w-full h-ull shadow-md overflow-hidden mx-auto bg-gray-300 rounded-lg shrink-0 object-cover object-center"
+        className="w-full h-full  shadow-md overflow-hidden mx-auto bg-gray-300 rounded-lg shrink-0 object-cover object-center"
       />
     </div>
   );

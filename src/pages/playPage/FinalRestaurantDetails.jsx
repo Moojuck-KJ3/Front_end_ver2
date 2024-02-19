@@ -7,7 +7,6 @@ const FinalRestaurantDetails = ({ allUserPlayerHand, currentIndex }) => {
   const [markers, setMarkers] = useState([]);
   const currentRestaurant = allUserPlayerHand.finalPlace[currentIndex];
   const options = currentRestaurant?.options?.split(",") || [];
-
   if (!currentRestaurant) {
     return (
       <div className="flex justify-center items-center w-full h-full">
@@ -19,46 +18,54 @@ const FinalRestaurantDetails = ({ allUserPlayerHand, currentIndex }) => {
   }
 
   return (
-    <div className="w-full h-full grid grid-cols-2 grid-rows-2 p-4 gap-4 text-white font-tenada animate-fade-up">
+    <div className="w-full h-full grid grid-cols-2 grid-rows-2 p-3 gap-2 text-white font-DalseoHealing font-bold animate-fade-up">
       {/* Top-left cell for the main image */}
       <div className="flex row-span-1 justify-center items-center">
         <img
           src={currentRestaurant.thumbnailImg}
           alt="Main Dish"
-          className=" w-full max-h-[300px] rounded-md ob"
+          className=" w-full max-h-[300px] rounded-md object-cover"
         />
       </div>
       {/* Top-right cell for details */}
       <div className="p-2 flex justify-center flex-col gap-4">
         <div className="flex items-center justify-between ">
-          <p className="text-4xl font-bold  font-tenada">식당 이름</p>
+          <p className="text-2xl ">식당 이름</p>
           <p className="text-2xl text-white font-bold  font-tenada">
             ⭐️{currentRestaurant.name}
           </p>
         </div>
         <div className="flex items-center justify-between ">
-          <p className="text-4xl font-bold  font-tenada">리뷰 갯수</p>
-          <p className="text-2xl text-white font-bold  font-tenada">
+          <p className="text-2xl ">리뷰 갯수</p>
+          <p className="text-2xl text-white">
             ⭐️{currentRestaurant.ratingCount}
           </p>
         </div>
         <div className="flex items-center justify-between ">
-          <p className="text-4xl font-bold  font-tenada">리뷰 점수</p>
-          <p className="text-2xl text-white font-bold  font-tenada">
-            ⭐️{currentRestaurant.rating}
-          </p>
+          <p className="text-2xl">리뷰 점수</p>
+          <p className="text-2xl text-white">⭐️{currentRestaurant.rating}</p>
         </div>
         <div className="flex items-center justify-between ">
-          <p className="text-4xl font-bold  font-tenada">전화번호</p>
-          <p className="text-2xl font-bold text-emerald-300 underline font-tenada">
+          <p className="text-2xl ">전화번호</p>
+          <p className="text-2xl text-emerald-300 underline ">
             📞{currentRestaurant.phone_number}
           </p>
         </div>
         <div className="flex items-center justify-between ">
-          <p className="w-48 text-4xl font-bold font-tenada">식당 주소</p>
-          <p className="text-2xl text-white font-bold truncate font-tenada  ">
+          <p className="w-48 text-2xl">식당 주소</p>
+          <p className="text-2xl text-white truncate">
             📍{currentRestaurant.address}
           </p>
+        </div>
+        <div className="flex flex-wrap gap-2 items-center justify-center ">
+          {options?.map((option, index) => (
+            <div
+              key={index}
+              className="bg-gray-300 text-black p-2 text-center font-bold rounded-xl"
+            >
+              #{option}
+            </div>
+          ))}
         </div>
       </div>
       {/* Bottom-right cell for reviews */}
@@ -67,18 +74,7 @@ const FinalRestaurantDetails = ({ allUserPlayerHand, currentIndex }) => {
       {/* Map cell */}
 
       <div className="w-full h-full gap-2 col-span-1 row-span-1 justify-center items-center overflow-y-hidden">
-        {options?.map((option, index) => (
-          <div
-            key={index}
-            className="bg-white p-2 m-3 text-center rounded-xl"
-            style={{
-              color: `hsl(${Math.random() * 360}, 100%, 30%)`, // Random color
-              fontSize: `${Math.random() * (32 - 16) + 16}px`, // Random font size between 16px and 32px
-            }}
-          >
-            #{option}
-          </div>
-        ))}
+        리뷰리뷰
       </div>
       <div className="w-full h-full gap-2 col-span-1 row-span-1 justify-center items-center overflow-y-hidden">
         <Map // 로드뷰를 표시할 Container
