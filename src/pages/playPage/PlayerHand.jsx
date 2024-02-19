@@ -215,7 +215,7 @@ const PlayerHand = ({
           {roomMode === 3 && (
             <button
               onClick={handleReady}
-              className="w-2/3 mx-auto mb-2 font-DalseoHealing font-bold py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700 duration-150 ease-in-ou hover:scale-105 transition-all"
+              className="w-44 mx-auto mb-2 font-DalseoHealing font-bold py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700 duration-150 ease-in-ou hover:scale-105 transition-all"
             >
               선택 완료
             </button>
