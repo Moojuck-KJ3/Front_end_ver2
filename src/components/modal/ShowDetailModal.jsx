@@ -2,7 +2,7 @@ import CloseIcon from "@mui/icons-material/Close";
 const ShowDetailModal = ({ restaurant, closeModal, addToPlayerHand }) => {
   return (
     <div>
-      <div className="fixed w-full h-full -top-10 left-0 flex items-center justify-center  ">
+      <div className="fixed w-full h-full z-10 -top-10 left-0 flex items-center justify-center  ">
         {/* overlay  */}
         <div className=" absolute  w-full h-full opacity-50"></div>
 

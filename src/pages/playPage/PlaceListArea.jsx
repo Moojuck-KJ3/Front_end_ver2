@@ -98,13 +98,26 @@ export const PlaceListArea = ({
           transform: `scale(${star.size})`,
           opacity: !star.signatureUrl && roomMode === 2 ? 0 : 1,
           pointerEvents: !star.signatureUrl && roomMode === 2 ? "none" : "auto",
-          zIndex: hoveredStarId === star._id ? 51 : 50,
+          zIndex: hoveredStarId === star._id ? 1 : 0,
+          transition: "transform 0.3s ease, opacity 0.3s ease",
         }}
       >
         <div className={`absolute w-20.5 h-20.5 bg-white`}></div>
         <div className="text-yellow-400">
           {star.signatureUrl ? (
-            <div className="w-20 h-20 animate-jump-in">
+            <div
+              className="w-20 h-20 animate-jump-in"
+              style={{
+                transform:
+                  hoveredStarId === star._id ? "scale(1.2)" : "scale(1)",
+                opacity:
+                  hoveredStarId === star._id ? 1 : hoveredStarId ? 0.3 : 1,
+                zIndex: hoveredStarId === star._id ? 1 : 0,
+                transition: "transform 0.3s ease, opacity 0.3s ease",
+                pointerEvents:
+                  !star.signatureUrl && roomMode === 2 ? "none" : "auto",
+              }}
+            >
               <img src={star.signatureUrl} alt="" />
             </div>
           ) : (
