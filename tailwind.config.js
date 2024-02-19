@@ -33,6 +33,7 @@ export default {
       animation: {
         opacityPulse: "opacityPulse 2s ease-in-out",
         twinkling: "twinkling 1s infinite",
+        customFadeUp: "customFadeUp 1s both",
       },
       keyframes: {
         opacityPulse: {
@@ -43,6 +44,20 @@ export default {
         twinkling: {
           "0%, 100%": { borderColor: "green" },
           "50%": { borderColor: "white" },
+        },
+        customFadeUp: {
+          "0%": {
+            opacity: 0,
+            transform: "translateY(1rem/* 32px */) scale(1.2)",
+          },
+          "50%": {
+            opacity: 0.5,
+            transform: "translateY(-0.5rem) scale(0.8)",
+          },
+          "100%": {
+            opacity: 1,
+            transform: "translateY(0) scale(1.0)",
+          },
         },
       },
     },

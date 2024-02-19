@@ -112,7 +112,7 @@ const PlayerHand = ({
                   <li
                     key={index}
                     style={{ animationDelay: `${index * 0.2}s` }}
-                    className="bg-gray-200 flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg font-tenada animate-fade-up"
+                    className="bg-gray-200 flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg font-tenada animate-customFadeUp"
                   >
                     <span className="text-lg font-semibold ml-2">{`${
                       index + 1
@@ -156,7 +156,7 @@ const PlayerHand = ({
                 <li
                   key={index}
                   style={{ animationDelay: `${index * 0.2}s` }}
-                  className="bg-gray-200 flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg font-tenada animate-fade-up"
+                  className="bg-gray-200 flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg font-tenada animate-customFadeUp"
                 >
                   <span className="text-lg font-semibold ml-2">{`${
                     index + 1
