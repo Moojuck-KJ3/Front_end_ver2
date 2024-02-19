@@ -34,6 +34,8 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const [readyUserIds, setReadyUserIds] = useState([]);
   const [highlightedStreamId, setHighlightedStreamId] = useState(null);
   const [countdown, setCountdown] = useState(null);
+  const [speechText, setSpeechText] = useState("");
+  console.log("The user said:", speechText);
 
   const userStreamsWithPlayerId = roomDetail.userStreams.map((stream) => {
     const playerInfo = roomDetail.playerInfo.find(
@@ -279,6 +281,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
           modeTwoResultRestList={modeTwoVoiceRecResult}
           handleupdateFinalPlace={handleupdateFinalPlace}
           showModeTwoVoiceRecorder={showModeTwoVoiceRecorder}
+          speechText={speechText}
         />
         <RightSideUserVideoContainer
           localStream={localStream}
@@ -322,6 +325,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
                 userSelectedFoodCategories={playerHand.selectedFoodTag}
                 onSetPlayerResult={setPlayerHand}
                 onSetAllUserPlayerHand={setAllUserPlayerHand}
+                setSpeechText={setSpeechText}
               />
             )}
           </>

@@ -2,13 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSocket } from "../../realtimeComunication/SocketContext";
 
-const SERVER_SEND_TIME = 2000;
+const SERVER_SEND_TIME = 3000;
 
 const VoiceRecognition = ({
   onSetResultRestaurant,
   onSetPlayerResult,
   userSelectedFoodCategories,
   onSetAllUserPlayerHand,
+  setSpeechText,
 }) => {
   const socket = useSocket();
   const recognitionRef = useRef(null);
@@ -83,6 +84,7 @@ const VoiceRecognition = ({
         console.log("Voice Input:", text);
         if (text) {
           handleSetMoodTags(text);
+          setSpeechText(text);
         } else {
           console.log("No speech detected or speech was empty.");
         }

@@ -28,6 +28,7 @@ export const PlaceListArea = ({
   modeTwoResultRestList,
   handleupdateFinalPlace,
   showModeTwoVoiceRecorder,
+  speechText,
 }) => {
   const socket = useSocket();
   const [stars, setStars] = useState([]);
@@ -198,6 +199,7 @@ export const PlaceListArea = ({
         currentIndex={currentIndex}
         setCurrentIndex={setCurrentIndex}
         showModeTwoVoiceRecorder={showModeTwoVoiceRecorder}
+        speechText={speechText}
       />
       {isModalVisible && (
         <ShowDetailModal
