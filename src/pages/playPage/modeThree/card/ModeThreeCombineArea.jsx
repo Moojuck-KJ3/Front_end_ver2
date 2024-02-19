@@ -222,7 +222,7 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
             </div>
             {/* USER D Target Area */}
             <div
-              className={`w-52 h-52items-center py-1 shadow-lg border-dashed border-2 border-white ${
+              className={`w-52 h-52 items-center py-1 shadow-lg border-dashed border-2 border-white ${
                 isDragging ? "" : ""
               }`}
               onDragOver={handleDragOver}
