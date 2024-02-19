@@ -7,6 +7,7 @@ const CreateRoomPageFooter = ({
   onStart,
   progressValue,
   users,
+  isRestaurantListsReady,
 }) => {
   return (
     <div className="flex mt-4 items-center gap-2">
@@ -19,10 +20,17 @@ const CreateRoomPageFooter = ({
 
       <button
         onClick={onStart}
-        disabled={!isActivate} // This disables the button when isActivate is false
-        className={`tracking-wide font-semibold bg-blue-300 text-gray-100 py-2 px-12 rounded-lg transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none 
-          ${!isActivate ? "cursor-not-allowed" : "bg-blue-500"}`}
-        // The above line adds 'cursor-not-allowed' when the button is disabled, and removes the hover effect.
+        disabled={!isActivate || !isRestaurantListsReady}
+        className={`tracking-wide font-semibold ${
+          !isActivate || !isRestaurantListsReady
+            ? "bg-blue-300"
+            : "bg-blue-500 hover:bg-blue-600"
+        } text-gray-100 py-2 px-12 rounded-lg transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none 
+        ${
+          !isActivate || !isRestaurantListsReady
+            ? "cursor-not-allowed opacity-50"
+            : ""
+        }`}
       >
         <span className="">시작하기</span>
       </button>

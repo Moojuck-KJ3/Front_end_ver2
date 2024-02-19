@@ -17,7 +17,7 @@ const ModeTwoExpainModal = ({ SetShowVoiceRecorder, onShowModal }) => {
         {/* Add modal content here */}
         <div className=" py-4 text-left px-6  rounded-xl ">
           <div className="flex justify-between items-center pb-6">
-            <p className="text-7xl p-4 font-DalseoHealing font-bold">
+            <p className="text-6xl p-4 font-DalseoHealing font-bold">
               오늘 어떤 분위기의 장소를 원하세요?
             </p>
           </div>

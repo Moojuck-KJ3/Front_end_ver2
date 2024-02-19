@@ -103,9 +103,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
       setImgUrlList(response.data.imgUrls);
     };
 
-    if (roomDetail.isRestaurantListsReady) {
-      getRestList(roomId);
-    }
+    getRestList(roomId);
   }, [roomDetail, roomId]);
 
   const handleAddSelectedRestaurant = useCallback((selectedRestaurant) => {

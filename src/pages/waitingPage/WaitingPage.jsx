@@ -10,12 +10,14 @@ import { useSocket } from "../../realtimeComunication/SocketContext";
 const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   // 개발 끝나면, isAllPlayerReady False로 바꾸기
   const [isAllPlayerReady, setIsAllPlayerReady] = useState(true);
+  const [isRestaurantListsReady, setIsRestaurantListsReady] = useState(false);
   const navigator = useNavigate();
   const { roomId } = useParams();
   const [progressValue, setProgressValue] = useState(50);
   const { users } = usePeerConnection(localStream);
   const socket = useSocket();
   console.log(users);
+
   useEffect(() => {
     setRoomDetail((prev) => ({
       ...prev,
@@ -54,12 +56,10 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
       }));
       navigator(`/play-room/${roomId}`);
     };
+
     socket.on("restaurant-prepared", () => {
       console.log("restaurant-prepared is called");
-      setRoomDetail((prev) => ({
-        ...prev,
-        isRestaurantListsReady: true,
-      }));
+      setIsRestaurantListsReady(true);
     });
 
     socket.on("all-player-ready", handleAllPlayerReady);
@@ -78,7 +78,7 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   }, [isAllPlayerReady]);
 
   const handleStartGame = () => {
-    if (isAllPlayerReady) {
+    if (isAllPlayerReady && isRestaurantListsReady) {
       const data = {
         roomId: roomId,
         coordinates: [
@@ -121,6 +121,7 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
             onStart={handleStartGame}
             progressValue={progressValue}
             users={users}
+            isRestaurantListsReady={isRestaurantListsReady}
           />
         </div>
       </div>

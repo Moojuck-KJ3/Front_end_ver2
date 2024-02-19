@@ -7,7 +7,7 @@ const ModeThreeModal = ({ onShow }) => {
       <div className=" bg-white mx-auto rounded-lg shadow-lg animate-fade">
         <div className=" py-4 text-left px-6  rounded-xl ">
           <div className="flex justify-between items-center pb-6">
-            <p className="text-7xl p-4 font-DalseoHealing font-bold">
+            <p className="text-6xl p-4 font-DalseoHealing font-bold">
               식당을 조합해보세요!
             </p>
           </div>
