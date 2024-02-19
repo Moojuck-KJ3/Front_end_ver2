@@ -145,6 +145,7 @@ const VoiceRecognition = ({
         handleReceiveRecommendedRestaurants
       );
       socket.off("receive-speech-keyword", handleReceiveSpeechKeyword);
+      socket.off("all-usersHand-moodtags", handleSetUsersMoodTags);
       clearTimeout(throttleTimeout);
     };
   }, [socket]);

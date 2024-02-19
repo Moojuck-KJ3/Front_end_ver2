@@ -184,14 +184,19 @@ export const PlaceListArea = ({
       return {
         ...restaurant,
         size: 1,
-        x: getRandomInt(5, 90),
-        y: getRandomInt(5, 90),
+        x: restaurant.coodX,
+        y: restaurant.coodY,
         signatureUrl: imageUrl?.imgUrl,
       };
     });
 
     setStars(starsData);
-  }, [restaurantList, allUserSelectedFoodTags, allUserSelectedMoodTags]);
+  }, [
+    restaurantList,
+    allUserSelectedFoodTags,
+    allUserSelectedMoodTags,
+    modeTwoResultRestList,
+  ]);
 
   return (
     <div className="flex flex-col flex-grow bg-white border-8 rounded-2xl">
