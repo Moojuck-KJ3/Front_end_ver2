@@ -3,7 +3,7 @@ const BigPlaceCard = ({ img }) => {
     <div
       className={` w-full h-full items-center justify-center it bg-white shadow-md rounded-xl animate-jump `}
     >
-      <div className=" w-full max-h-64  flex px-4 py-4 ">
+      <div className=" w-full h-full  flex px-4 py-4 ">
         <img
           src={img}
           alt="PlacePhoto"

@@ -36,7 +36,7 @@ const PlayerHand = ({
     if (modeValue === roomMode) {
       return "transform scale-105 border-4 border-blue-600"; // Current mode: Highlighted
     } else if (modeValue < roomMode) {
-      return " border-green-400 border-4 text-gray-600 opacity-50";
+      return " border-green-400 max-h-[420px] border-4 text-gray-600 opacity-50";
     }
     return "border-dashed text-gray-40 ";
   };

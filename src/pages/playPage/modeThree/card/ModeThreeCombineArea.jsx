@@ -158,7 +158,7 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
           <div className="w-full justify-between flex p-10 ">
             {/* USER A Target Area */}
             <div
-              className={`w-64 juitems-center py-1 shadow-lg border-dashed border-2 border-white min-h-64 ${
+              className={`w-52 h-52 juitems-center py-1 shadow-lg border-dashed border-2 border-white ${
                 isDragging ? "" : ""
               }`}
               onDragOver={(event) => handleDragOver(event, 1)}
@@ -169,7 +169,7 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
 
             {/* USER B Target Area */}
             <div
-              className={`w-64 items-center py-1 shadow-lg border-dashed border-2 min-h-64 border-white ${
+              className={`w-52 h-52 items-center py-1 shadow-lg border-dashed border-2 border-white ${
                 isDragging ? "" : ""
               }`}
               onDragOver={handleDragOver}
@@ -212,7 +212,7 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
           <div className=" w-full flex justify-between p-10">
             {/* USER C Target Area */}
             <div
-              className={`w-64 juitems-center py-1 shadow-lg border-dashed border-2 border-white min-h-64 ${
+              className={`w-52 h-52 juitems-center py-1 shadow-lg border-dashed border-2 border-white ${
                 isDragging ? "" : ""
               }`}
               onDragOver={handleDragOver}
@@ -222,7 +222,7 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
             </div>
             {/* USER D Target Area */}
             <div
-              className={`w-64 items-center py-1 shadow-lg border-dashed border-2 min-h-64 border-white ${
+              className={`w-52 h-52items-center py-1 shadow-lg border-dashed border-2 border-white ${
                 isDragging ? "" : ""
               }`}
               onDragOver={handleDragOver}
