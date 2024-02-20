@@ -95,7 +95,7 @@ const PlayerHand = ({
                 .sort((a, b) => b[1] - a[1]) // Sort by count in descending order
                 .map(([tag, count], index) => (
                   <li
-                    key={index + count}
+                    key={index + count * 1000}
                     style={{ animationDelay: `${index * 0.2}s` }}
                     className={`bg-gray-200 flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg text-2xl font-bold font-DalseoHealing ${
                       index < 5 ? "animate-customFadeUp" : ""
@@ -159,7 +159,7 @@ const PlayerHand = ({
                 .sort((a, b) => b[1] - a[1])
                 .map(([tag, count], index) => (
                   <li
-                    key={tag + count} // key를 태그와 카운트의 조합으로 설정
+                    key={index + count * 1000} // key 값이 겹치지 않도록 * 100 하여 설정
                     style={{ animationDelay: `${index * 0.2}s` }}
                     className={`bg-gray-200 flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg text-2xl font-bold font-DalseoHealing ${
                       index < 5 ? "animate-customFadeUp" : ""
