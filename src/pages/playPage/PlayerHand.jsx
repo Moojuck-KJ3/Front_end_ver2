@@ -227,49 +227,6 @@ const PlayerHand = ({
             closeModal={closeModal}
           />
         )}
-        {/* <div
-          // onClick={() => handleClick(4)}
-          className={`w-1/4 p-1 flex flex-col text-center m-2 border-2 rounded-xl justify-between ${getModeStyle(
-            4
-          )}`}
-        >
-          <div>
-            <h1 className="mt-1 font-tenada text-2xl">최종 목적지⛳️</h1>
-            <div className="text-center flex flex-col gap-4 font-tenada">
-              {allUserPlayerHand.finalPlace.length > 0 && (
-                <>
-                  <img
-                    src={
-                      allUserPlayerHand.finalPlace[currentIndex]?.thumbnailImg
-                    }
-                    alt="PlacePhoto"
-                    className="my-3 w-full max-h-32 shadow-md overflow-hidden mx-auto bg-gray-300 rounded-lg shrink-0 object-cover object-center"
-                  />
-                  <h1 className="text-xl font-bold truncate">
-                    {allUserPlayerHand.finalPlace[currentIndex]?.name}
-                  </h1>
-                  <h1 className="bg-gray-300 rounded-lg p-1 w-full text-xl">
-                    #{allUserPlayerHand.finalPlace[currentIndex]?.food_category}
-                  </h1>
-                  <h1 className="text-2xl">
-                    ⭐️{allUserPlayerHand.finalPlace[currentIndex]?.rating}
-                  </h1>
-                  <button
-                    onClick={handlePrevious}
-                    className="bg-white shadow-2xl rounded-full absolute bottom-5 left-2 hover:bg-green-400 transition-all"
-                  >
-                    <NavigateBeforeIcon fontSize="large" />
-                  </button>
-                  <button
-                    onClick={handleNext}
-                    className="bg-white rounded-full absolute bottom-5 right-2 hover:bg-green-400 transition-all"
-                  >
-                    <NavigateNextIcon fontSize="large" />
-                  </button>
-                </>
-              )}
-            </div>
-          </div> */}
       </div>
     </div>
   );

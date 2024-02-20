@@ -12,7 +12,7 @@ const ModeTwoExpainModal = ({ SetShowVoiceRecorder, onShowModal }) => {
     socket.emit("start-speech", roomId);
   };
   return (
-    <div className="modal fixed top-1/3 left-0 w-full flex items-center justify-center">
+    <div className="modal z-10 fixed top-1/3 left-0 w-full flex items-center justify-center">
       <div className=" bg-white mx-auto rounded-lg shadow-lg animate-fade">
         {/* Add modal content here */}
         <div className=" py-4 text-left px-6  rounded-xl ">
@@ -24,12 +24,13 @@ const ModeTwoExpainModal = ({ SetShowVoiceRecorder, onShowModal }) => {
           <div className="text-3xl p-2 font-bold font-DalseoHealing flex flex-col justify-center ">
             <p>
               버튼을 누른 뒤, 오늘{" "}
-              <span className="text-red-400">어떤 분위기의 장소</span>를
-              원하는지 말해보세요.
+              <span className="text-4xl  text-red-400">어떤 분위기의 장소</span>
+              를 원하는지 말해보세요.
             </p>
             <p>
               여러분에게 딱 맞는 식당들이{" "}
-              <span className="text-red-400">실시간</span>으로 나타납니다.
+              <span className="text-4xl  text-red-400">실시간</span>으로
+              나타납니다.
             </p>
           </div>
           <div className="mt-8 flex justify-center">

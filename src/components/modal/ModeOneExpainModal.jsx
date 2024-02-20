@@ -12,7 +12,7 @@ const ModeOneExpainModal = ({ SetShowVoiceRecorder, onShowModal }) => {
     socket.emit("start-speech", roomId);
   };
   return (
-    <div className="fixed top-1/3 left-0 w-full flex items-center justify-center ">
+    <div className="fixed z-10 top-1/3 left-0 w-full flex items-center justify-center ">
       <div className=" bg-white mx-auto rounded-lg shadow-lg animate-fade">
         {/* Add modal content here */}
         <div className=" py-4 text-left px-6  rounded-xl ">
