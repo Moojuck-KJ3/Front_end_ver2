@@ -8,6 +8,8 @@ import ShowDetailModal from "../../components/modal/ShowDetailModal";
 import JustShowDetailModal from "../../components/modal/JustShowDetailModal";
 import MicIcon from "@mui/icons-material/Mic";
 
+const SHOW_ANIM_LIMIT = 7;
+
 const PlayerHand = ({
   allUserPlayerHand,
   onSetAllUserPlayerHand,
@@ -98,7 +100,7 @@ const PlayerHand = ({
                     key={index + count * 1000}
                     style={{ animationDelay: `${index * 0.2}s` }}
                     className={`bg-gray-200 flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg text-2xl font-bold font-DalseoHealing ${
-                      index < 5 ? "animate-customFadeUp" : ""
+                      index < SHOW_ANIM_LIMIT ? "animate-customFadeUp" : ""
                     }`}
                   >
                     <span className="text-2xl font-semibold ml-2">{`${
@@ -162,7 +164,7 @@ const PlayerHand = ({
                     key={index + count * 1000} // key 값이 겹치지 않도록 * 100 하여 설정
                     style={{ animationDelay: `${index * 0.2}s` }}
                     className={`bg-gray-200 flex justify-between items-center w-5/6 mx-auto my-2 py-2 rounded-lg text-2xl font-bold font-DalseoHealing ${
-                      index < 5 ? "animate-customFadeUp" : ""
+                      index < SHOW_ANIM_LIMIT ? "animate-customFadeUp" : ""
                     }`}
                   >
                     <span className="font-semibold ml-2">{`${
