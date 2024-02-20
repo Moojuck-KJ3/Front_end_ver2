@@ -125,7 +125,10 @@ export const PlaceListArea = ({
             transform: `scale(${star.size})`,
             opacity: !star.signatureUrl && roomMode === 2 ? 0 : 1,
             pointerEvents:
-              !star.signatureUrl && roomMode === 2 ? "none" : "auto",
+              (!star.signatureUrl && roomMode === 2) ||
+              !(isMatchingTag || isMoodMatchingTag)
+                ? "none"
+                : "auto",
             zIndex: hoveredStarId === star._id ? 1 : 0,
             transition: "transform 0.3s ease, opacity 0.3s ease",
           }}
