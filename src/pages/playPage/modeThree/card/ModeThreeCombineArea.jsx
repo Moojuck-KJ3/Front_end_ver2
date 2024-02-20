@@ -77,19 +77,19 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
         userSelectedList: [
           {
             playerId: 1,
-            restId: draggedTagA.restId,
+            restId: draggedTagA._id,
           },
           {
             playerId: 2,
-            restId: draggedTagB.restId,
+            restId: draggedTagB._id,
           },
           {
             playerId: 3,
-            restId: draggedTagC.restId,
+            restId: draggedTagC._id,
           },
           {
             playerId: 4,
-            restId: draggedTagD.restId,
+            restId: draggedTagD._id,
           },
         ],
       });
