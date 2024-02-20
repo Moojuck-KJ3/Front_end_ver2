@@ -143,6 +143,9 @@ const PlayerHand = ({
                     transition: "opacity 300ms",
                     opacity: 1,
                     whiteSpace: "nowrap",
+                    maxWidth: "250px",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
                   }}
                 >
                   {speechText}
