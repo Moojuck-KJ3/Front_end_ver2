@@ -11,6 +11,9 @@ import { useParams } from "react-router-dom";
 const getRandomInt = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
 
+const PNG_SIZE = 1.5;
+const HALF_SIZE = 0.5;
+
 export const PlaceListArea = ({
   restaurantList,
   allUserSelectedFoodTags,
@@ -38,6 +41,7 @@ export const PlaceListArea = ({
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isCategoryReceive, setIsCateforyReceive] = useState(false);
+  const [isRestListReceive, setIsRestListReceive] = useState(false);
 
   const { roomId } = useParams();
 
@@ -108,6 +112,11 @@ export const PlaceListArea = ({
       const starStyle =
         isMatchingTag || isMoodMatchingTag ? "opacity-100" : "opacity-20";
 
+      const size =
+        roomMode === 2 && !star.isChangeAnimOn && isRestListReceive
+          ? HALF_SIZE
+          : 1;
+
       return (
         <div
           onClick={() => handleStarClick(star)}
@@ -122,7 +131,6 @@ export const PlaceListArea = ({
             position: "absolute",
             top: `${star.y}%`,
             left: `${star.x}%`,
-            transform: `scale(${star.size})`,
             opacity: !star.signatureUrl && roomMode === 2 ? 0 : 1,
             pointerEvents:
               (!star.signatureUrl && roomMode === 2) ||
@@ -144,7 +152,15 @@ export const PlaceListArea = ({
                   zIndex: hoveredStarId === star._id ? 1 : 0,
                 }}
               >
-                <img src={star.signatureUrl} alt="" />
+                <img
+                  src={star.signatureUrl}
+                  alt=""
+                  style={{
+                    transform: star.isMode2HasFoodURL
+                      ? `scale(${PNG_SIZE})`
+                      : `scale(${size})`,
+                  }}
+                />
               </div>
             ) : (
               <div
@@ -196,8 +212,8 @@ export const PlaceListArea = ({
       );
 
       let isChangeAnimOn = false;
-
       let imageUrl = null;
+      let isMode2HasFoodURL = false;
       const targetNames = allUserSelectedFoodTags.filter((tag) =>
         restaurant.food_category.startsWith(tag)
       );
@@ -224,6 +240,8 @@ export const PlaceListArea = ({
             if (tempImgUrl) {
               imageUrl = tempImgUrl;
               isChangeAnimOn = true;
+              isMode2HasFoodURL = true;
+              setIsRestListReceive(true);
             }
           }
         }
@@ -231,11 +249,11 @@ export const PlaceListArea = ({
 
       return {
         ...restaurant,
-        size: 1,
-        x: restaurant.coodX,
-        y: restaurant.coodY,
+        x: restaurant.coordX,
+        y: restaurant.coordY,
         signatureUrl: imageUrl?.imgUrl,
         isChangeAnimOn: isChangeAnimOn,
+        isMode2HasFoodURL: isMode2HasFoodURL,
       };
     });
 
