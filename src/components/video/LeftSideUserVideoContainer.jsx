@@ -203,7 +203,7 @@ const LeftSideUserVideoContainer = ({
               <div
                 onClick={() => handleTagClick(tag)}
                 key={index}
-                className={`bg-gray-200 cursor-pointer border-4 w-full h-full py-2 text-center items-center justify-center rounded-lg text-xl font-DalseoHealing font-bold ${
+                className={`bg-gray-200 cursor-pointer border-4 w-full h-full py-2 text-center items-center justify-center rounded-lg text-xl font-DalseoHealing font-bold animate-fade-up ${
                   activeTags.includes(tag)
                     ? " shadow-2xl border-emerald-300"
                     : ""
@@ -214,7 +214,7 @@ const LeftSideUserVideoContainer = ({
               <div
                 onClick={() => handleTagClick(tag)}
                 key={index}
-                className={`bg-gray-200 w-full cursor-pointer  border-4 h-full py-2 text-center items-center justify-center rounded-lg text-xl font-DalseoHealing font-bold ${
+                className={`bg-gray-200 w-full cursor-pointer border-4 h-full py-2 text-center items-center justify-center rounded-lg text-xl font-DalseoHealing font-bold animate-fade-up ${
                   activeTags.includes(tag)
                     ? "border-4 shadow-2xl border-emerald-300"
                     : ""
