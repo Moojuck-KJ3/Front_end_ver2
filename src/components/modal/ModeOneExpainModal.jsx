@@ -1,5 +1,6 @@
 import { useParams } from "react-router";
 import { useSocket } from "../../realtimeComunication/SocketContext";
+import Typewriter from "../type/TypeWriter";
 
 const ModeOneExpainModal = ({ SetShowVoiceRecorder, onShowModal }) => {
   const roomId = useParams();
@@ -12,8 +13,8 @@ const ModeOneExpainModal = ({ SetShowVoiceRecorder, onShowModal }) => {
     socket.emit("start-speech", roomId);
   };
   return (
-    <div className="fixed z-10 top-1/3 left-0 w-full flex items-center justify-center ">
-      <div className=" bg-white mx-auto rounded-lg shadow-lg animate-fade">
+    <div className="fixed z-10 top-1/4 left-0 w-full flex items-center justify-center ">
+      <div className=" bg-white mx-auto rounded-lg shadow-2xl animated-modal">
         {/* Add modal content here */}
         <div className=" py-4 text-left px-6  rounded-xl ">
           <div className="flex justify-between items-center pb-6">
@@ -21,15 +22,31 @@ const ModeOneExpainModal = ({ SetShowVoiceRecorder, onShowModal }) => {
               오늘 어떤 종류의 음식을 먹고 싶으세요?
             </p>
           </div>
-          <div className="text-3xl p-2 font-bold font-DalseoHealing flex flex-col justify-center ">
-            <p>
+          <div className="text-3xl p-2 font-bold font-DalseoHealing flex flex-col  ">
+            <div className="flex flex-col justify-center items-center mb-4  relative">
+              <p className="text-3xl h-18 p-4 bg-gray-200  rounded-xl font-DalseoHealing font-bold animate-fade-up">
+                나는
+                <Typewriter
+                  fontSize={"text-3xl"}
+                  text=" 오늘 한식먹고 싶어..."
+                  delay={400}
+                  infinite
+                />
+              </p>
+              <img
+                className="w-48 h-48 "
+                src="/모달원마이크.gif"
+                alt="모달원마이크"
+              />
+            </div>
+            <p className="text-2xl">
               버튼을 누른 뒤,{" "}
               <span className="text-4xl text-red-400">
                 5초 동안 어떤 음식을 먹고 싶은지
               </span>{" "}
               말을 해보세요.
             </p>
-            <p>
+            <p className="text-2xl">
               해당 <span className="text-4xl text-red-400">음성을 기반</span>
               으로 추천 음식 카테고리가 생성됩니다.
             </p>

@@ -96,7 +96,7 @@ const VoiceRecoder = ({
   return (
     <VoiceRecoderContainer>
       <img
-        className="w-12 h-12 bg-gray-300 absolute -top-5 right-[45%] border-4 border-gray-400 rounded-full"
+        className="w-12 h-12 bg-white border-blue-400 absolute -top-5 right-[45%] border-4 rounded-full"
         src="/마이크.png"
         alt="avatar"
       />

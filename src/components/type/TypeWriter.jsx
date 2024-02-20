@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const Typewriter = ({ text, delay, infinite }) => {
+const Typewriter = ({ text, delay, infinite, fontSize }) => {
   const [currentText, setCurrentText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -21,7 +21,9 @@ const Typewriter = ({ text, delay, infinite }) => {
   }, [currentIndex, delay, infinite, text]);
 
   return (
-    <span className="font-DalseoHealing text-xl font-bold">{currentText}</span>
+    <span className={`font-DalseoHealing ${fontSize} font-bold`}>
+      {currentText}
+    </span>
   );
 };
 

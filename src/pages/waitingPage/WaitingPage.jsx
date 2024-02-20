@@ -97,11 +97,16 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
       <div className=" animate-fade-up">
         <div className="sm-m-10 bg-white shadow-2xl py-4 px-10 rounded-2xl flex flex-col jus justify-center items-center">
           <div className="flex">
-            <h1 className=" font-bold justify-center font-tenada text-2xl">
+            <h1 className=" font-bold justify-center font-DalseoHealing text-2xl">
               친구를 기다리는 중
             </h1>
             <div>
-              <Typewriter text="...." delay={300} infinite />
+              <Typewriter
+                fontSize={"text-2xl"}
+                text="...."
+                delay={300}
+                infinite
+              />
             </div>
           </div>
           <CopyToClipboardButton roomId={roomId} />
