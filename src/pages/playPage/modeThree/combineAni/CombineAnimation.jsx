@@ -19,14 +19,14 @@ function compressValue(value) {
 
 // 최대 기준 1000일때 0.2로 치환된다
 const cardsPositions = [
-  { x: -1000, y: -900 },
-  { x: -500, y: -850 },
-  { x: 1000, y: -900 },
-  { x: 500, y: -600 },
-  { x: -1000, y: 650 },
-  { x: -500, y: 300 },
-  { x: 1000, y: 750 },
-  { x: 500, y: 500 },
+  { x: -1000, y: -900 }, // 좌측 상단 (이전 0) (현재 0)
+  { x: 1000, y: -900 }, // 우측 상단 (이전 2) (현재 1)
+  { x: -1000, y: 650 }, // 좌측 하단 (이전 4) (현재 2)
+  { x: 1000, y: 750 }, // 우측 하단 (이전 6) (현재 3)
+  { x: -500, y: -850 }, // 좌측 상단 2 (이전 1) (현재 4)
+  { x: 500, y: -600 }, // 우측 상단 2 (이전 3) (현재 5)
+  { x: -500, y: 300 }, // 좌측 하단 2 (이전 5) (현재 6)
+  { x: 500, y: 500 }, // 우측 하단 2 (이전 7) (현재 7)
   { x: 0, y: 0 }, // Center
 ];
 
@@ -55,14 +55,14 @@ const CombineAnimation = ({
     <div className="relative">
       <div style={{ position: "absolute", zIndex: 1 }}>
         {positions.map((position, i) => {
-          if (i % 2 === 0 && positions[i + 1]) {
+          if (i < 4) {
             return (
               <LineAnimation
                 key={i}
                 startX={position.x}
                 startY={position.y}
-                endX={positions[i + 1].x}
-                endY={positions[i + 1].y}
+                endX={positions[i + 4].x}
+                endY={positions[i + 4].y}
                 onAnimationFirstEnd={handleAnimationFirstEnd}
               />
             );
@@ -85,9 +85,9 @@ const CombineAnimation = ({
             y={position.y}
             size={position.size}
             delay={`${
-              [0, 2, 4, 6].includes(i)
+              [0, 1, 2, 3].includes(i)
                 ? 0.5
-                : [1, 3, 5, 7].includes(i)
+                : [4, 5, 6, 7].includes(i)
                 ? 1
                 : 1.5
             }s`}

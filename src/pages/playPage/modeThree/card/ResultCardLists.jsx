@@ -70,13 +70,13 @@ const ResultCardLists = ({
             key={place._id}
             onClick={() => handleCardClick(place)}
             className={`animate-fade animate-ease-in ${
-              [0, 2, 4, 6].includes(i) ? "col-start-1" : "col-start-2"
+              [0, 1, 2, 3].includes(i) ? "col-start-1" : "col-start-2"
             }`}
             style={{
               animationDelay: `${
-                [0, 2, 4, 6].includes(i)
+                [0, 1, 2, 3].includes(i)
                   ? 0
-                  : [1, 3, 5, 7].includes(i)
+                  : [4, 5, 6, 7].includes(i)
                   ? 0.5
                   : 1
               }s`,
