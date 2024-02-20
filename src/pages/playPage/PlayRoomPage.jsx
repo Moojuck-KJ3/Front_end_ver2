@@ -36,6 +36,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const [countdown, setCountdown] = useState(null);
   const [speechText, setSpeechText] = useState("");
   console.log("The user said:", speechText);
+  const [activeTags, setActiveTags] = useState([]);
 
   const userStreamsWithPlayerId = roomDetail.userStreams.map((stream) => {
     const playerInfo = roomDetail.playerInfo.find(
@@ -260,6 +261,8 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
           roomDetail={roomDetail}
           highlightedStreamId={highlightedStreamId}
           readyUserIds={readyUserIds}
+          setActiveTags={setActiveTags}
+          activeTags={activeTags}
         />
 
         <PlaceListArea
@@ -280,6 +283,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
           handleupdateFinalPlace={handleupdateFinalPlace}
           showModeTwoVoiceRecorder={showModeTwoVoiceRecorder}
           speechText={speechText}
+          activeTags={activeTags}
         />
         <RightSideUserVideoContainer
           localStream={localStream}

@@ -29,6 +29,7 @@ export const PlaceListArea = ({
   handleupdateFinalPlace,
   showModeTwoVoiceRecorder,
   speechText,
+  activeTags,
 }) => {
   const socket = useSocket();
   const [stars, setStars] = useState([]);
@@ -80,77 +81,107 @@ export const PlaceListArea = ({
       />
     );
   } else {
-    // Content for other roomModes
-    content = stars.map((star, i) => (
-      <div
-        onClick={() => handleStarClick(star)}
-        onMouseEnter={() => setHoveredStarId(star._id)}
-        onMouseLeave={() => setHoveredStarId(null)}
-        className={`${star.className} relative animate-fade ${
-          !star.signatureUrl && roomMode === 2 ? "animate-opacityPulse" : ""
-        }`}
-        key={i}
-        id={star._id}
-        style={{
-          position: "absolute",
-          top: `${star.y}%`,
-          left: `${star.x}%`,
-          transform: `scale(${star.size})`,
-          opacity: !star.signatureUrl && roomMode === 2 ? 0 : 1,
-          pointerEvents: !star.signatureUrl && roomMode === 2 ? "none" : "auto",
-          zIndex: hoveredStarId === star._id ? 1 : 0,
-          transition: "transform 0.3s ease, opacity 0.3s ease",
-        }}
-      >
-        <div className={`absolute w-20.5 h-20.5 bg-white`}></div>
-        <div className="text-yellow-400">
-          {star.signatureUrl ? (
+    content = stars.map((star, i) => {
+      const isMatchingTag =
+        activeTags.length === 0 ||
+        activeTags.some(
+          (tag) =>
+            star.food_category &&
+            typeof star.food_category === "string" &&
+            star.food_category.startsWith(tag)
+        );
+
+      const isMoodMatchingTag =
+        activeTags.length === 0 ||
+        activeTags.every(
+          (tag) =>
+            (star.food_category &&
+              typeof star.food_category === "string" &&
+              star.food_category.includes(tag)) ||
+            (star.moodKeywords &&
+              Array.isArray(star.moodKeywords) &&
+              star.moodKeywords.includes(tag))
+        );
+
+      console.log(activeTags);
+      console.log(star.moodKeywords);
+      const starStyle =
+        isMatchingTag || isMoodMatchingTag ? "opacity-100" : "opacity-20";
+
+      return (
+        <div
+          onClick={() => handleStarClick(star)}
+          onMouseEnter={() => setHoveredStarId(star._id)}
+          onMouseLeave={() => setHoveredStarId(null)}
+          className={`${star.className} ${starStyle} relative animate-fade ${
+            !star.signatureUrl && roomMode === 2 ? "animate-opacityPulse" : ""
+          }`}
+          key={i}
+          id={star._id}
+          style={{
+            position: "absolute",
+            top: `${star.y}%`,
+            left: `${star.x}%`,
+            transform: `scale(${star.size})`,
+            opacity: !star.signatureUrl && roomMode === 2 ? 0 : 1,
+            pointerEvents:
+              !star.signatureUrl && roomMode === 2 ? "none" : "auto",
+            zIndex: hoveredStarId === star._id ? 1 : 0,
+            transition: "transform 0.3s ease, opacity 0.3s ease",
+          }}
+        >
+          <div className={`absolute w-20.5 h-20.5 bg-white`}></div>
+          <div className="text-yellow-400">
+            {star.signatureUrl ? (
+              <div
+                className={`${starStyle} w-20 h-20 animate-jump-in`}
+                style={{
+                  zIndex: hoveredStarId === star._id ? 1 : 0,
+                }}
+              >
+                <img src={star.signatureUrl} alt="" />
+              </div>
+            ) : (
+              <div
+                className={`${starStyle}  w-6 h-6 hover:bg-yellow-200 rounded-full cursor-pointer duration-500`}
+                style={{
+                  opacity: isCategoryReceive ? 0.4 : 1,
+                }}
+              >
+                {<FontAwesomeIcon icon={faStar} />}
+              </div>
+            )}
+          </div>
+          {hoveredStarId === star._id && (
             <div
-              className="w-20 h-20 animate-jump-in"
+              className="animate-fade z-50  w-64 h-68 absolute items-center text-2xl justify-center inline-block px-3 py-4 text-black bg-white rounded-lg shadow-sm -translate-x-1/2 left-1/2 bottom-full mb-2 "
               style={{
-                zIndex: hoveredStarId === star._id ? 1 : 0,
+                transition: "opacity 300ms",
+                opacity: 1,
+                whiteSpace: "nowrap",
               }}
             >
-              <img src={star.signatureUrl} alt="" />
-            </div>
-          ) : (
-            <div
-              className="w-6 h-6 hover:bg-yellow-200 rounded-full cursor-pointer duration-500"
-              style={{
-                opacity: isCategoryReceive ? 0.7 : 1,
-              }}
-            >
-              {<FontAwesomeIcon icon={faStar} />}
+              <h1 className=" font-DalseoHealing font-bold mb-1 ">
+                {star.name}
+              </h1>
+              <div className="flex gap-2">
+                <h1 className="w-fit p-2 rounded-lg bg-gray-300 font-DalseoHealing text-lg font-bold mb-1 ">
+                  #{star.food_category}
+                </h1>
+                <h1 className="w-fit p-2 rounded-lg bg-gray-300 font-DalseoHealing text-lg font-bold mb-1 ">
+                  ⭐️{star.rating}
+                </h1>
+              </div>
+              <img
+                className="w-full max-h-40 object-cover rounded-lg"
+                src={star.thumbnailImg}
+                alt="thumbnailImg"
+              />
             </div>
           )}
         </div>
-        {hoveredStarId === star._id && (
-          <div
-            className="animate-fade z-50  w-64 h-68 absolute items-center text-2xl justify-center inline-block px-3 py-4 text-black bg-white rounded-lg shadow-sm -translate-x-1/2 left-1/2 bottom-full mb-2 "
-            style={{
-              transition: "opacity 300ms",
-              opacity: 1,
-              whiteSpace: "nowrap",
-            }}
-          >
-            <h1 className=" font-DalseoHealing font-bold mb-1 ">{star.name}</h1>
-            <div className="flex gap-2">
-              <h1 className="w-fit p-2 rounded-lg bg-gray-300 font-DalseoHealing text-lg font-bold mb-1 ">
-                #{star.food_category}
-              </h1>
-              <h1 className="w-fit p-2 rounded-lg bg-gray-300 font-DalseoHealing text-lg font-bold mb-1 ">
-                ⭐️{star.rating}
-              </h1>
-            </div>
-            <img
-              className="w-full max-h-40 object-cover rounded-lg"
-              src={star.thumbnailImg}
-              alt="thumbnailImg"
-            />
-          </div>
-        )}
-      </div>
-    ));
+      );
+    });
   }
 
   useEffect(() => {

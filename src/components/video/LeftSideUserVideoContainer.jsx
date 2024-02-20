@@ -18,6 +18,8 @@ const LeftSideUserVideoContainer = ({
   roomDetail,
   highlightedStreamId,
   readyUserIds,
+  setActiveTags,
+  activeTags,
 }) => {
   const [isMicMuted, setIsMicMuted] = useState(false);
   const [isVideoOff, setIsVideoOff] = useState(false);
@@ -108,6 +110,17 @@ const LeftSideUserVideoContainer = ({
     setIsModalOpen(true);
   };
 
+  const handleTagClick = (tag) => {
+    console.log("handleTagClick", tag);
+    setActiveTags((prevTags) => {
+      if (prevTags.includes(tag)) {
+        return prevTags.filter((t) => t !== tag);
+      } else {
+        return [...prevTags, tag];
+      }
+    });
+  };
+
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedRestaurant(null);
@@ -188,14 +201,24 @@ const LeftSideUserVideoContainer = ({
           <div className="grid grid-cols-2 grid-rows-3 gap-3 overflow-y-auto max-h-98">
             {selectedFoodTag?.map((tag, index) => (
               <div
+                onClick={() => handleTagClick(tag)}
                 key={index}
-                className="bg-gray-200 w-full h-full py-2 text-center items-center justify-center rounded-lg text-xl font-DalseoHealing font-bold"
+                className={`bg-gray-200 cursor-pointer border-4 w-full h-full py-2 text-center items-center justify-center rounded-lg text-xl font-DalseoHealing font-bold ${
+                  activeTags.includes(tag)
+                    ? " shadow-2xl border-emerald-300"
+                    : ""
+                }`}
               >{`#${tag}`}</div>
             ))}
             {selectedMoodTag?.map((tag, index) => (
               <div
+                onClick={() => handleTagClick(tag)}
                 key={index}
-                className="bg-gray-200 w-full h-full py-2 text-center items-center justify-center rounded-lg text-xl font-DalseoHealing font-bold"
+                className={`bg-gray-200 w-full cursor-pointer  border-4 h-full py-2 text-center items-center justify-center rounded-lg text-xl font-DalseoHealing font-bold ${
+                  activeTags.includes(tag)
+                    ? "border-4 shadow-2xl border-emerald-300"
+                    : ""
+                }`}
               >{`#${tag}`}</div>
             ))}
           </div>

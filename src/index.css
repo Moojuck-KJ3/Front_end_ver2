@@ -107,3 +107,7 @@
   max-height: 300px;
   animation: shine 2s infinite ease-in-out; /* 애니메이션을 적용합니다 */
 }
+
+.animated-tag {
+  animation: shine 2s infinite ease-in-out;
+}
