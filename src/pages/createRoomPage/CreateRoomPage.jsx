@@ -115,7 +115,7 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
                   className="w-full h-[250px] items-center border-4 bg-gray-300 border-white shadow-xl rounded-lg object-fill"
                   ref={videoRef}
                   autoPlay={true}
-                  muted={false}
+                  muted={true}
                 />
               </div>
               <button

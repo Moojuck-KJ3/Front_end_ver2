@@ -28,7 +28,7 @@ const FinalRestaurantDetails = ({ allUserPlayerHand, currentIndex }) => {
         />
       </div>
       {/* Top-right cell for details */}
-      <div className="p-2 flex justify-center flex-col gap-4">
+      <div className="p-2 flex justify-center flex-col gap-4 ">
         <div className="flex items-center justify-between ">
           <p className="text-2xl ">식당 이름</p>
           <p className="text-2xl text-white">⭐️{currentRestaurant.name}</p>
@@ -55,7 +55,7 @@ const FinalRestaurantDetails = ({ allUserPlayerHand, currentIndex }) => {
             📍{currentRestaurant.address}
           </p>
         </div>
-        <div className="flex flex-wrap gap-2 items-center justify-center ">
+        <div className="flex mx-auto flex-wrap gap-2 items-center justify-center overflow-hidden max-h-38 scrollbar-hide max-w-[650px]">
           {options?.map((option, index) => (
             <div
               key={index}

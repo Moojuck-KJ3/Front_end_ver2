@@ -245,8 +245,8 @@ export const PlaceListArea = ({
   ]);
 
   return (
-    <div className="flex flex-col flex-grow bg-white border-8 rounded-2xl">
-      <div className="w-full h-2/3 justify-center items-center bg-black rounded-2xl relative">
+    <div className=" flex flex-col flex-grow bg-white border-8 rounded-2xl">
+      <div className=" h-2/3 justify-center items-center bg-black rounded-2xl relative">
         {content}
       </div>
       <PlayerHand
