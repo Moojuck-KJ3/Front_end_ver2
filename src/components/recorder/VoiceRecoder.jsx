@@ -138,14 +138,20 @@ const VoiceRecoder = ({
             </div>
 
             <div className="h-[130px] flex flex-wrap p-2 border items-center justify-center rounded-md m-4 gap-2  animate-fade ">
-              {(resultList || []).map((tag, i) => (
-                <p
-                  className="font-DalseoHealing font-bold text-xl bg-gray-200 rounded-xl px-3 py-2"
-                  key={i}
-                >
-                  {`#${tag}`}
+              {resultList && resultList.length > 0 ? (
+                (resultList || []).map((tag, i) => (
+                  <p
+                    className="font-DalseoHealing font-bold text-xl bg-gray-200 rounded-xl px-3 py-2"
+                    key={i}
+                  >
+                    {`#${tag}`}
+                  </p>
+                ))
+              ) : (
+                <p className="font-DalseoHealing font-bold text-xl bg-gray-200 rounded-xl px-3 py-2">
+                  분석 중입니다...
                 </p>
-              ))}
+              )}
             </div>
             <div className="flex justify-center">
               <button
