@@ -103,8 +103,8 @@ export const PlaceListArea = ({
               star.moodKeywords.includes(tag))
         );
 
-      console.log(activeTags);
-      console.log(star.moodKeywords);
+      // console.log(activeTags);
+      // console.log(star.moodKeywords);
       const starStyle =
         isMatchingTag || isMoodMatchingTag ? "opacity-100" : "opacity-20";
 
@@ -134,7 +134,9 @@ export const PlaceListArea = ({
           <div className="text-yellow-400">
             {star.signatureUrl ? (
               <div
-                className={`${starStyle} w-20 h-20 animate-jump-in`}
+                className={`${starStyle} w-20 h-20 ${
+                  star.isChangeAnimOn ? "animate-jump-in" : ""
+                }`}
                 style={{
                   zIndex: hoveredStarId === star._id ? 1 : 0,
                 }}
@@ -190,6 +192,8 @@ export const PlaceListArea = ({
         restaurant.food_category.startsWith(tag)
       );
 
+      let isChangeAnimOn = false;
+
       let imageUrl = null;
       const targetNames = allUserSelectedFoodTags.filter((tag) =>
         restaurant.food_category.startsWith(tag)
@@ -198,11 +202,13 @@ export const PlaceListArea = ({
       if (targetNames.length > 0) {
         imageUrl = imgUrls.find((img) => img.name === "큰별");
         setIsCateforyReceive(true);
+        isChangeAnimOn = true;
       }
 
       // 어차피 server에서 추천해주는 녀석들만 PNG 로 만들어줄거라
       // 별도의 mood Keywords 관리 로직 주석처리
       if (roomMode === 2) {
+        isChangeAnimOn = false;
         if (matchesResultTag && restaurant.moodKeywords !== undefined) {
           const restaurantExistsInModeTwoResult =
             modeTwoResultRestList.includes(restaurant._id);
@@ -214,6 +220,7 @@ export const PlaceListArea = ({
 
             if (tempImgUrl) {
               imageUrl = tempImgUrl;
+              isChangeAnimOn = true;
             }
           }
         }
@@ -225,6 +232,7 @@ export const PlaceListArea = ({
         x: restaurant.coodX,
         y: restaurant.coodY,
         signatureUrl: imageUrl?.imgUrl,
+        isChangeAnimOn: isChangeAnimOn,
       };
     });
 
