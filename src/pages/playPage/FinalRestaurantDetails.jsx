@@ -28,7 +28,7 @@ const FinalRestaurantDetails = ({ allUserPlayerHand, currentIndex }) => {
         />
       </div>
       {/* Top-right cell for details */}
-      <div className="p-2 flex justify-center flex-col gap-4 ">
+      <div className="p-2 flex justify-center flex-col gap-4 overflow-hidden">
         <div className="flex items-center justify-between ">
           <p className="text-2xl ">식당 이름</p>
           <p className="text-2xl text-white">⭐️{currentRestaurant.name}</p>
@@ -71,10 +71,24 @@ const FinalRestaurantDetails = ({ allUserPlayerHand, currentIndex }) => {
       {/* Additional cells can go here, e.g., for a map or other images */}
       {/* Map cell */}
 
-      <div className="w-full h-full gap-2 col-span-1 row-span-1 justify-center items-center overflow-y-hidden">
-        리뷰리뷰
+      <div className="w-full h-full max-w-[600px] max-h-[400px] gap-2 col-span-1 row-span-1 justify-center items-center overflow-auto overflow-y-auto scrollbar-hide p-4 mx-auto">
+        {currentRestaurant.reviews && currentRestaurant.reviews.length > 0 ? (
+          currentRestaurant.reviews.map((review, index) => (
+            <div
+              key={index}
+              className="bg-white p-4 my-2 rounded hover:scale-105 transition-all"
+            >
+              <p className="text-black text-lg line-clamp-2">{review}</p>
+            </div>
+          ))
+        ) : (
+          <div className="flex justify-center items-center h-full">
+            <p className="text-white text-2xl">리뷰가 없습니다.</p>
+          </div>
+        )}
       </div>
-      <div className="w-full h-full gap-2 col-span-1 row-span-1 justify-center items-center overflow-y-hidden p-4">
+
+      <div className="w-full h-full gap-2 col-span-1 row-span-1 justify-center items-center overflow-hidden overflow-y-hidden p-4">
         <Map // 로드뷰를 표시할 Container
           center={{
             lat: 37.498,
