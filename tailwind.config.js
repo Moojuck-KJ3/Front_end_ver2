@@ -18,6 +18,20 @@ const Myclass = plugin(function ({ addUtilities }) {
   });
 });
 
+const ScrollbarHide = plugin(function ({ addUtilities }) {
+  const newUtilities = {
+    ".scrollbar-hide": {
+      scrollbarWidth: "none",
+      "-ms-overflow-style": "none",
+      "&::-webkit-scrollbar": {
+        width: "0px",
+        background: "transparent",
+      },
+    },
+  };
+  addUtilities(newUtilities);
+});
+
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
@@ -62,5 +76,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animated"), Myclass],
+  plugins: [require("tailwindcss-animated"), Myclass, ScrollbarHide],
 };

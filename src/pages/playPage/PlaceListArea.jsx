@@ -90,25 +90,25 @@ export const PlaceListArea = ({
         activeTags.length === 0 ||
         activeTags.some(
           (tag) =>
-            star.food_category &&
-            typeof star.food_category === "string" &&
-            star.food_category.startsWith(tag)
+            star.foodCategory &&
+            typeof star.foodCategory === "string" &&
+            star.foodCategory.startsWith(tag)
         );
 
       const isMoodMatchingTag =
         activeTags.length === 0 ||
         activeTags.every(
           (tag) =>
-            (star.food_category &&
-              typeof star.food_category === "string" &&
-              star.food_category.includes(tag)) ||
-            (star.moodKeywords &&
-              Array.isArray(star.moodKeywords) &&
-              star.moodKeywords.includes(tag))
+            (star.foodCategory &&
+              typeof star.foodCategory === "string" &&
+              star.foodCategory.includes(tag)) ||
+            (star.newMoods &&
+              Array.isArray(star.newMoods) &&
+              star.newMoods.includes(tag))
         );
 
       // console.log(activeTags);
-      // console.log(star.moodKeywords);
+      // console.log(star.newMoods);
       const starStyle =
         isMatchingTag || isMoodMatchingTag ? "opacity-100" : "opacity-20";
 
@@ -187,7 +187,7 @@ export const PlaceListArea = ({
               </h1>
               <div className="flex gap-2">
                 <h1 className="w-fit p-2 rounded-lg bg-gray-300 font-DalseoHealing text-lg font-bold mb-1 ">
-                  #{star.food_category}
+                  #{star.foodCategory}
                 </h1>
                 <h1 className="w-fit p-2 rounded-lg bg-gray-300 font-DalseoHealing text-lg font-bold mb-1 ">
                   ⭐️{star.rating}
@@ -208,14 +208,14 @@ export const PlaceListArea = ({
   useEffect(() => {
     const starsData = restaurantList.map((restaurant) => {
       const matchesResultTag = allUserSelectedFoodTags.some((tag) =>
-        restaurant.food_category.startsWith(tag)
+        restaurant.foodCategory.startsWith(tag)
       );
 
       let isChangeAnimOn = false;
       let imageUrl = null;
       let isMode2HasFoodURL = false;
       const targetNames = allUserSelectedFoodTags.filter((tag) =>
-        restaurant.food_category.startsWith(tag)
+        restaurant.foodCategory.startsWith(tag)
       );
 
       if (targetNames.length > 0) {
@@ -228,7 +228,7 @@ export const PlaceListArea = ({
       // 별도의 mood Keywords 관리 로직 주석처리
       if (roomMode === 2) {
         isChangeAnimOn = false;
-        if (matchesResultTag && restaurant.moodKeywords !== undefined) {
+        if (matchesResultTag && restaurant.newMoods !== undefined) {
           const restaurantExistsInModeTwoResult =
             modeTwoResultRestList.includes(restaurant._id);
 

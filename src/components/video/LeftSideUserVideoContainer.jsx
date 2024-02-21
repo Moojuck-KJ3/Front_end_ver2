@@ -167,8 +167,8 @@ const LeftSideUserVideoContainer = ({
       _id: restaurant._id,
       thumbnailImg: restaurant.thumbnailImg,
       name: restaurant.name,
-      foodCategories: restaurant.food_category,
-      moodKeywords: restaurant.moodKeywords,
+      foodCategories: restaurant.foodCategory,
+      newMoods: restaurant.newMoods,
       rating: restaurant.rating,
     });
     console.log(restaurantData);

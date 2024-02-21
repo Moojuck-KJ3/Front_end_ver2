@@ -1,6 +1,4 @@
 import { useState } from "react";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import ShowDetailModalWithDiscard from "../../components/modal/ShowDetailModalWithDiscard";
 import { useSocket } from "../../realtimeComunication/SocketContext";
 import { useParams } from "react-router-dom";
@@ -50,8 +48,8 @@ const PlayerHand = ({
       _id: restaurant._id,
       thumbnailImg: restaurant.thumbnailImg,
       name: restaurant.name,
-      foodCategories: restaurant.food_category,
-      moodKeywords: restaurant.moodKeywords,
+      foodCategories: restaurant.foodCategory,
+      newMoods: restaurant.newMoods,
       rating: restaurant.rating,
     });
 

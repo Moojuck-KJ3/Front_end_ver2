@@ -35,13 +35,13 @@ const ShowDetailModal = ({ restaurant, closeModal, addToPlayerHand }) => {
               <div className="flex justify-between items-center">
                 <p className="text-xl ">음식 종류</p>
                 <p className="text-2xl bg-gray-300 rounded-lg p-1">
-                  #{restaurant.food_category}
+                  #{restaurant.foodCategory}
                 </p>
               </div>
               <div className="flex justify-between items-center pb-3">
                 <p className="text-xl ">전화번호</p>
                 <p className="text-2xl  rounded-lg p-1 font-bold text-emerald-500 underline">
-                  📞{restaurant.phone_number}
+                  📞{restaurant.phoneNumber}
                 </p>
               </div>
               <div className="flex justify-between items-center pb-3">
