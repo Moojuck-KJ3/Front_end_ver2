@@ -67,7 +67,7 @@ const ResultCardLists = ({
       <div className="grid grid-cols-3 grid-rows-3 gap-4">
         {places.map((place, i) => (
           <div
-            key={place._id}
+            key={i}
             onClick={() => handleCardClick(place)}
             className={`animate-fade animate-ease-in ${
               [0, 1, 2, 3].includes(i) ? "col-start-1" : "col-start-2"
