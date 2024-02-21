@@ -31,7 +31,7 @@ const FinalRestaurantDetails = ({
 
   useEffect(() => {
     console.log("current Rest : ", currentRestaurant);
-    setSearchQuery(currentRestaurant.name);
+    setSearchQuery(currentRestaurant?.name);
   }, [currentRestaurant]);
 
   useEffect(() => {
