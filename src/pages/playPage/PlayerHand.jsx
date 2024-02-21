@@ -48,7 +48,7 @@ const PlayerHand = ({
       _id: restaurant._id,
       thumbnailImg: restaurant.thumbnailImg,
       name: restaurant.name,
-      foodCategories: restaurant.food_category,
+      foodCategories: restaurant.foodCategory,
       moodKeywords: restaurant.moodKeywords,
       rating: restaurant.rating,
     });

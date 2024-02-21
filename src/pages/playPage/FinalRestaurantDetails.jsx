@@ -119,7 +119,7 @@ const FinalRestaurantDetails = ({
         <div className="flex items-center justify-between ">
           <p className="text-2xl ">전화번호</p>
           <p className="text-2xl text-emerald-300 underline ">
-            📞{currentRestaurant.phone_number}
+            📞{currentRestaurant.phoneNumber}
           </p>
         </div>
         <div className="flex items-center justify-between ">
