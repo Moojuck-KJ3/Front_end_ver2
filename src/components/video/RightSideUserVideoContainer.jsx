@@ -46,10 +46,10 @@ const RightSideUserVideoContainer = ({
     // activeButton의 ID를 사용하여 현재 활성화된 버튼의 텍스트 찾기
     const action = buttons.find((button) => button.id === activeButton)?.text;
 
-    // if (!dragItem) {
-    //   console.log("No item selected to drag.");
-    //   return;
-    // }
+    if (!dragItem && activeButton !== "attention") {
+      console.log("No item selected to drag.");
+      return;
+    }
 
     const data = {
       roomId: roomId,
