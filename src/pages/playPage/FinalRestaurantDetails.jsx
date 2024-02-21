@@ -93,7 +93,7 @@ const FinalRestaurantDetails = ({
   return (
     <div className="final-restaurant-details text-white font-DalseoHealing font-bold p-14">
       {/* Top-left cell for the main image */}
-      <div className="image-container max-w-[650px]">
+      <div className="image-container max-w-[750px]">
         <img
           src={currentRestaurant.thumbnailImg}
           alt="Main Dish"
@@ -144,7 +144,7 @@ const FinalRestaurantDetails = ({
       {/* Additional cells can go here, e.g., for a map or other images */}
       {/* Map cell */}
 
-      <div className="w-full h-full max-w-[600px] max-h-[400px] gap-2 col-span-1 row-span-1 justify-center items-center overflow-auto overflow-y-auto scrollbar-hide p-4 mx-auto">
+      <div className="w-full h-full max-w-[500px] max-h-[400px] gap-2 col-span-1 row-span-1 justify-center items-center overflow-auto overflow-y-auto scrollbar-hide p-4 mx-auto">
         {currentRestaurant.reviews && currentRestaurant.reviews.length > 0 ? (
           currentRestaurant.reviews.map((review, index) => (
             <div
