@@ -184,7 +184,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
         }
         return prevIds;
       });
-      let counter = 3;
+      let counter = 2;
       setCountdown(counter);
       const interval = setInterval(() => {
         counter -= 1;
