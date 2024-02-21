@@ -1,11 +1,36 @@
 import { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 
-const FinalRestaurantDetails = ({ allUserPlayerHand, currentIndex }) => {
+const FinalRestaurantDetails = ({
+  allUserPlayerHand,
+  currentIndex,
+  setCurrentIndex,
+}) => {
   const [map, setMap] = useState();
   const [info, setInfo] = useState();
   const [markers, setMarkers] = useState([]);
-  const currentRestaurant = allUserPlayerHand.finalPlace[currentIndex];
+  //const currentRestaurant = allUserPlayerHand.finalPlace[currentIndex]; // 이거 state로 바꿔야 할듯
+  const [currentRestaurant, setCurrentRestaurant] = useState(
+    allUserPlayerHand.finalPlace[currentIndex]
+  );
+
+  const handleBefore = () => {
+    setCurrentIndex((prev) => (prev === 0 ? prev : prev - 1));
+  };
+
+  const handleAfter = () => {
+    setCurrentIndex((prev) =>
+      prev >= allUserPlayerHand.finalPlace.length - 1 ? prev : prev + 1
+    );
+  };
+
+  useEffect(() => {
+    setCurrentRestaurant(allUserPlayerHand.finalPlace[currentIndex]);
+  }, [currentIndex]);
+
+  // 가벼운 화살표 만들어서 currentIndex 수정하기
   const options = currentRestaurant?.options?.split(",") || [];
   if (!currentRestaurant) {
     return (
@@ -114,6 +139,19 @@ const FinalRestaurantDetails = ({ allUserPlayerHand, currentIndex }) => {
           )}
         </Map>
       </div>
+
+      <button
+        onClick={handleBefore}
+        className="bg-green-400 shadow-2xl rounded-full absolute top-1/2 -translate-y-1/2 left-2 hover:bg-blue-400 transition-all"
+      >
+        <NavigateBeforeIcon fontSize="large" />
+      </button>
+      <button
+        onClick={handleAfter}
+        className="bg-green-400 shadow-2xl rounded-full absolute top-1/2 -translate-y-1/2 right-2 hover:bg-blue-400 transition-all"
+      >
+        <NavigateNextIcon fontSize="large" />
+      </button>
     </div>
   );
 };

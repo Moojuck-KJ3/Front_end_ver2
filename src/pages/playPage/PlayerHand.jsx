@@ -1,6 +1,4 @@
 import { useState } from "react";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import ShowDetailModalWithDiscard from "../../components/modal/ShowDetailModalWithDiscard";
 import { useSocket } from "../../realtimeComunication/SocketContext";
 import { useParams } from "react-router-dom";
