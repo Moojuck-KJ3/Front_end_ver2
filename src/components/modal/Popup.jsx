@@ -39,7 +39,7 @@ const Popup = ({ message, onClose }) => {
           </h1>
           <h1 className=" text-2xl">⭐️{message?.restaurantData?.rating}</h1>
           <ul className="flex flex-wrap justify-center space-x-2 gap-1 p-2">
-            {message?.restaurantData.moodKeywords
+            {message?.restaurantData.newMoods
               .slice(0, 5)
               .map((keyword, index) => (
                 <li

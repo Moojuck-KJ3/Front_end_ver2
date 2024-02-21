@@ -102,13 +102,13 @@ export const PlaceListArea = ({
             (star.foodCategory &&
               typeof star.foodCategory === "string" &&
               star.foodCategory.includes(tag)) ||
-            (star.moodKeywords &&
-              Array.isArray(star.moodKeywords) &&
-              star.moodKeywords.includes(tag))
+            (star.newMoods &&
+              Array.isArray(star.newMoods) &&
+              star.newMoods.includes(tag))
         );
 
       // console.log(activeTags);
-      // console.log(star.moodKeywords);
+      // console.log(star.newMoods);
       const starStyle =
         isMatchingTag || isMoodMatchingTag ? "opacity-100" : "opacity-20";
 
@@ -228,7 +228,7 @@ export const PlaceListArea = ({
       // 별도의 mood Keywords 관리 로직 주석처리
       if (roomMode === 2) {
         isChangeAnimOn = false;
-        if (matchesResultTag && restaurant.moodKeywords !== undefined) {
+        if (matchesResultTag && restaurant.newMoods !== undefined) {
           const restaurantExistsInModeTwoResult =
             modeTwoResultRestList.includes(restaurant._id);
 
