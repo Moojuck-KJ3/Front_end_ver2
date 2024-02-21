@@ -8,13 +8,12 @@ const FinalRestaurantDetails = ({
   currentIndex,
   setCurrentIndex,
 }) => {
-  const [map, setMap] = useState();
   const [info, setInfo] = useState();
   const [markers, setMarkers] = useState([]);
-  //const currentRestaurant = allUserPlayerHand.finalPlace[currentIndex]; // 이거 state로 바꿔야 할듯
   const [currentRestaurant, setCurrentRestaurant] = useState(
     allUserPlayerHand.finalPlace[currentIndex]
   );
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleBefore = () => {
     setCurrentIndex((prev) => (prev === 0 ? prev : prev - 1));
@@ -29,6 +28,55 @@ const FinalRestaurantDetails = ({
   useEffect(() => {
     setCurrentRestaurant(allUserPlayerHand.finalPlace[currentIndex]);
   }, [currentIndex]);
+
+  useEffect(() => {
+    console.log("current Rest : ", currentRestaurant);
+    setSearchQuery(currentRestaurant.name);
+  }, [currentRestaurant]);
+
+  useEffect(() => {
+    if (
+      !searchQuery ||
+      typeof kakao === "undefined" ||
+      typeof kakao.maps === "undefined" ||
+      typeof kakao.maps.services === "undefined" ||
+      typeof kakao.maps.services.Places === "undefined"
+    ) {
+      console.error(
+        "Kakao Maps SDK is not loaded or Places service is not available"
+      );
+      return;
+    }
+
+    console.log("se Q : ", searchQuery);
+
+    const ps = new kakao.maps.services.Places();
+
+    ps.keywordSearch(searchQuery, (data, status, _pagination) => {
+      if (status === kakao.maps.services.Status.OK) {
+        if (data.length > 0) {
+          const centerPosition = {
+            lat: data[0].y,
+            lng: data[0].x,
+          };
+
+          const marker = {
+            position: centerPosition,
+            content: data[0].place_name,
+          };
+
+          setMarkers([marker]);
+          setInfo(marker);
+        } else {
+          setMarkers([]);
+        }
+      } else {
+        // Handle no results or other errors (optional)
+        console.error("Search failed:", status);
+        setMarkers([]);
+      }
+    });
+  }, [searchQuery]);
 
   // 가벼운 화살표 만들어서 currentIndex 수정하기
   const options = currentRestaurant?.options?.split(",") || [];
@@ -45,7 +93,7 @@ const FinalRestaurantDetails = ({
   return (
     <div className="final-restaurant-details text-white font-DalseoHealing font-bold p-14">
       {/* Top-left cell for the main image */}
-      <div className="image-container ">
+      <div className="image-container max-w-[650px]">
         <img
           src={currentRestaurant.thumbnailImg}
           alt="Main Dish"
@@ -53,7 +101,7 @@ const FinalRestaurantDetails = ({
         />
       </div>
       {/* Top-right cell for details */}
-      <div className="p-2 flex justify-center flex-col gap-4 overflow-hidden">
+      <div className="p-2 flex justify-center flex-col gap-4 overflow-hidden max-w-[650px]">
         <div className="flex items-center justify-between ">
           <p className="text-2xl ">식당 이름</p>
           <p className="text-2xl text-white">⭐️{currentRestaurant.name}</p>
@@ -113,11 +161,13 @@ const FinalRestaurantDetails = ({
         )}
       </div>
 
-      <div className="w-full h-full gap-2 col-span-1 row-span-1 justify-center items-center overflow-hidden overflow-y-hidden p-4">
+      <div className="w-full h-full gap-2 col-span-1 row-span-1 justify-center items-center overflow-hidden overflow-y-hidden p-4 max-w-[650px]">
         <Map // 로드뷰를 표시할 Container
           center={{
-            lat: 37.498,
-            lng: 127.028,
+            lat:
+              markers && markers.length > 0 ? markers[0].position.lat : 37.498,
+            lng:
+              markers && markers.length > 0 ? markers[0].position.lng : 127.028,
           }}
           style={{
             width: "100%",
