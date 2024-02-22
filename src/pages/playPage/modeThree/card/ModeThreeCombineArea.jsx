@@ -28,7 +28,7 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
       setIsSpining(true);
       const delay = setTimeout(() => {
         setLimitShowContent(true);
-      }, 40000000);
+      }, 3000);
       return () => clearTimeout(delay);
     } else {
       setShowContent(false);
