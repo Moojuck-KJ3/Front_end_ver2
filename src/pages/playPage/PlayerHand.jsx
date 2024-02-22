@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ShowDetailModalWithDiscard from "../../components/modal/ShowDetailModalWithDiscard";
 import { useSocket } from "../../realtimeComunication/SocketContext";
 import { useParams } from "react-router-dom";
@@ -18,9 +18,45 @@ const PlayerHand = ({
   setCurrentIndex,
   showModeTwoVoiceRecorder,
   speechText,
+  setModeTwoVoiceRecResult,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+
+  const socket = useSocket();
+  const roomId = useParams();
+
+  useEffect(() => {
+    if (!socket) return;
+    socket.on(
+      "receive-recommended-restaurants-forced",
+      handleRecommendRestForced
+    );
+
+    return () => {
+      socket.off(
+        "receive-recommended-restaurants-forced",
+        handleRecommendRestForced
+      );
+    };
+  }, [socket]);
+
+  const handleRecommendRestForced = (data) => {
+    if (data && data.restaurantList && data.restaurantList.length > 0) {
+      setModeTwoVoiceRecResult(data.restaurantList);
+    }
+  };
+
+  const handleMikeClick = () => {
+    console.log("handle Mike Click!!");
+    if (!socket) return;
+
+    const serverSendData = {
+      roomId: roomId,
+    };
+
+    socket.emit("receive-recommended-restaurants-forced", serverSendData);
+  };
 
   const handleCardClick = (restaurant) => {
     setSelectedRestaurant(restaurant);
@@ -133,7 +169,10 @@ const PlayerHand = ({
           </h1>
           {showModeTwoVoiceRecorder && (
             <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
-              <div className="bg-white border-4 border-blue-500 p-2 rounded-full  animate-fade">
+              <div
+                className="bg-white border-4 border-blue-500 p-2 rounded-full  animate-fade"
+                onClick={handleMikeClick}
+              >
                 <MicIcon style={{ color: "black", fontSize: "2rem" }} />
               </div>
               {speechText && (

@@ -280,6 +280,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
           showModeTwoVoiceRecorder={showModeTwoVoiceRecorder}
           speechText={speechText}
           activeTags={activeTags}
+          setModeTwoVoiceRecResult={SetModeTwoVoiceRecResult}
         />
         <RightSideUserVideoContainer
           localStream={localStream}
