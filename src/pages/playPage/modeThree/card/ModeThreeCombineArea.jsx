@@ -19,6 +19,8 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
   const [isSpining, setIsSpining] = useState(false);
   const [combinedplaceList, setCombinedPlaceList] = useState([]);
   const [limitShowContent, setLimitShowContent] = useState(false);
+  const [isLastPutUser, setIsLastPutUser] = useState(false); // 4개째의 조합 아이템을 놓은 user인가?
+
   const { roomId } = useParams();
 
   useEffect(() => {
@@ -48,6 +50,8 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
     console.log(restaurantData);
     console.log(parsedRestaurantData);
 
+    setIsLastPutUser(true);
+
     if (parsedRestaurantData) {
       if (playerId === 1) {
         setDraggedTagA(parsedRestaurantData);
@@ -68,10 +72,45 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
       restaurantData: parsedRestaurantData,
     });
     setIsDragging(false);
+    //setIsLastPutUser(false);
   };
 
+  // useEffect(() => {
+  //   if (draggedTagA && draggedTagB && draggedTagC && draggedTagD) {
+  //     socket.emit("both-users-selected", {
+  //       roomId,
+  //       userSelectedList: [
+  //         {
+  //           playerId: 1,
+  //           restId: draggedTagA._id,
+  //         },
+  //         {
+  //           playerId: 2,
+  //           restId: draggedTagB._id,
+  //         },
+  //         {
+  //           playerId: 3,
+  //           restId: draggedTagC._id,
+  //         },
+  //         {
+  //           playerId: 4,
+  //           restId: draggedTagD._id,
+  //         },
+  //       ],
+  //     });
+  //   }
+  // }, [draggedTagA, draggedTagB, draggedTagC, draggedTagD, roomId, socket]);
+
   useEffect(() => {
-    if (draggedTagA && draggedTagB && draggedTagC && draggedTagD) {
+    if (
+      draggedTagA &&
+      draggedTagB &&
+      draggedTagC &&
+      draggedTagD &&
+      isLastPutUser
+    ) {
+      console.log("both socket shoot!");
+      setIsLastPutUser(false);
       socket.emit("both-users-selected", {
         roomId,
         userSelectedList: [
@@ -94,19 +133,29 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
         ],
       });
     }
-  }, [draggedTagA, draggedTagB, draggedTagC, draggedTagD, roomId, socket]);
+  }, [
+    draggedTagA,
+    draggedTagB,
+    draggedTagC,
+    draggedTagD,
+    roomId,
+    socket,
+    isLastPutUser,
+  ]);
 
   useEffect(() => {
     if (!socket) return;
     socket.on("other-user-selected-card", ({ playerId, restaurantData }) => {
+      setIsLastPutUser(false);
+
       if (playerId === 1) {
         setDraggedTagA(restaurantData);
-        console.log(draggedTagA);
+        //console.log(draggedTagA);
       } else if (playerId === 2) {
         setDraggedTagB(restaurantData);
       } else if (playerId === 3) {
         setDraggedTagC(restaurantData);
-        console.log(draggedTagA);
+        //console.log(draggedTagA);
       } else if (playerId === 4) {
         setDraggedTagD(restaurantData);
       }
