@@ -28,6 +28,7 @@ const PlayerHand = ({
 
   useEffect(() => {
     if (!socket) return;
+    console.log("socket Test");
     socket.on(
       "receive-recommended-restaurants-forced",
       handleRecommendRestForced
@@ -42,8 +43,9 @@ const PlayerHand = ({
   }, [socket]);
 
   const handleRecommendRestForced = (data) => {
-    if (data && data.restaurantList && data.restaurantList.length > 0) {
-      setModeTwoVoiceRecResult(data.restaurantList);
+    console.log("Mike Data :", data);
+    if (data && data.length > 0) {
+      setModeTwoVoiceRecResult(data);
     }
   };
 
@@ -51,11 +53,7 @@ const PlayerHand = ({
     console.log("handle Mike Click!!");
     if (!socket) return;
 
-    const serverSendData = {
-      roomId: roomId,
-    };
-
-    socket.emit("receive-recommended-restaurants-forced", serverSendData);
+    socket.emit("send-recommended-restaurants-forced", roomId);
   };
 
   const handleCardClick = (restaurant) => {
