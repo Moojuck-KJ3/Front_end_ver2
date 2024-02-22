@@ -10,7 +10,7 @@ const ResultCardLists = ({
   handleupdateFinalPlace,
 }) => {
   const socket = useSocket();
-  console.log("ResultCardLists", combinedplaceList);
+  //console.log("ResultCardLists", combinedplaceList);
   const [places, setPlaces] = useState(combinedplaceList);
   const { roomId } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
