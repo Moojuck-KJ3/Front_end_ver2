@@ -1,9 +1,14 @@
 import { useParams } from "react-router";
 import { useSocket } from "../../realtimeComunication/SocketContext";
 import Typewriter from "../type/TypeWriter";
+import { getRestaurantList } from "../../api";
 
-const ModeOneExpainModal = ({ SetShowVoiceRecorder, onShowModal }) => {
-  const roomId = useParams();
+const ModeOneExpainModal = ({
+  SetShowVoiceRecorder,
+  onShowModal,
+  setRestaurantList,
+}) => {
+  const { roomId } = useParams();
   const socket = useSocket();
 
   const handleClick = () => {
@@ -12,6 +17,24 @@ const ModeOneExpainModal = ({ SetShowVoiceRecorder, onShowModal }) => {
     console.log("start-speech");
     socket.emit("start-speech", roomId);
   };
+
+  const getRestList = async (roomId) => {
+    console.log("getRestList is called");
+    const response = await getRestaurantList(roomId);
+    console.log(response);
+    if (response.error) {
+      console.log(response.exception);
+      return;
+    }
+    setRestaurantList(response.data.restaurantList);
+  };
+
+  const handleRequestStars = () => {
+    console.log("안녕");
+    console.log(roomId);
+    getRestList(roomId);
+  };
+
   return (
     <div className="fixed z-10 top-1/4 left-0 w-full flex items-center justify-center ">
       <div className=" bg-white mx-auto rounded-lg shadow-2xl animated-modal">
@@ -34,6 +57,7 @@ const ModeOneExpainModal = ({ SetShowVoiceRecorder, onShowModal }) => {
                 />
               </p>
               <img
+                onClick={handleRequestStars}
                 className="w-48 h-48 "
                 src="/모달원마이크.gif"
                 alt="모달원마이크"

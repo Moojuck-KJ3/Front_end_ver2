@@ -28,7 +28,7 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
       setIsSpining(true);
       const delay = setTimeout(() => {
         setLimitShowContent(true);
-      }, 3000);
+      }, 40000000);
       return () => clearTimeout(delay);
     } else {
       setShowContent(false);
@@ -39,6 +39,11 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
   const handleDragOver = (event) => {
     event.preventDefault();
     setIsDragging(true);
+  };
+
+  const handleRequestCombinedResult = () => {
+    console.log("handleReceiveCombinedResult is called");
+    socket.emit("send-combined-result-forced", { roomId });
   };
 
   const handleDrop = (event, playerId) => {
@@ -123,19 +128,17 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
 
       if (playerId === 1) {
         setDraggedTagA(restaurantData);
-        //console.log(draggedTagA);
       } else if (playerId === 2) {
         setDraggedTagB(restaurantData);
       } else if (playerId === 3) {
         setDraggedTagC(restaurantData);
-        //console.log(draggedTagA);
       } else if (playerId === 4) {
         setDraggedTagD(restaurantData);
       }
     });
 
+    socket.on("receive-combined-result-forced", handleReceiveCombinedResult);
     socket.on("combined-result", handleCombineResult);
-
     socket.on("reset-combined-area", () => {
       setDraggedTagA(null);
       setDraggedTagB(null);
@@ -144,14 +147,30 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
     });
 
     return () => {
+      socket.off("receive-combined-result-forced", handleReceiveCombinedResult);
       socket.off("other-user-selected-card");
       socket.off("combined-result", handleCombineResult);
     };
   }, [socket, draggedTagA, draggedTagB, draggedTagC, draggedTagD]);
 
+  const handleReceiveCombinedResult = (data) => {
+    console.log("비상 handleReceiveCombinedResult : ", data);
+    console.log("비상 Combined result received:", data.restaurantList);
+    if (data) {
+      setShowContent(true);
+      setCombinedPlaceList(data.restaurantList);
+    } else {
+      console.log("No results received or empty results array");
+      setCombinedPlaceList([]);
+    }
+  };
+
   const handleCombineResult = (data) => {
     console.log("Combined result : ", data);
     console.log("Combined result received:", data.restaurantList);
+    if (showContent) {
+      return;
+    }
     if (data) {
       setShowContent(true);
       setCombinedPlaceList(data.restaurantList);
@@ -210,6 +229,7 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
                 />
               </div>
               <button
+                onClick={handleRequestCombinedResult}
                 className={`hover:scale-105 text-white font-semibold rounded-full p-2
       px-2 ${isSpining && "animate-spin animate-infinite"}`}
               >

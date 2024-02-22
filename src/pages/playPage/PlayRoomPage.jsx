@@ -87,15 +87,11 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     };
   }, [socket]);
 
-  // const handleGetRestaurantList = useCallback(() => {
-
-  // }, []);
-
   useEffect(() => {
     const getRestList = async (roomId) => {
       console.log("getRestList is called");
       const response = await getRestaurantList(roomId);
-
+      console.log(response);
       if (response.error) {
         console.log(response.exception);
         return;
@@ -300,6 +296,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
               <ModeOneExpainModal
                 onShowModal={setShowModal}
                 SetShowVoiceRecorder={setShowVoiceRecorder}
+                setRestaurantList={setRestaurantList}
               />
             )}
             {/* 음성 인식 모달 */}
