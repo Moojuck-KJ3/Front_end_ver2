@@ -118,14 +118,19 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
     socket.on("other-user-selected-card", ({ playerId, restaurantData }) => {
       if (playerId === 1) {
         setDraggedTagA(restaurantData);
-        console.log(draggedTagA);
+        //console.log(draggedTagA);
       } else if (playerId === 2) {
         setDraggedTagB(restaurantData);
       } else if (playerId === 3) {
         setDraggedTagC(restaurantData);
-        console.log(draggedTagA);
+        //console.log(draggedTagA);
       } else if (playerId === 4) {
         setDraggedTagD(restaurantData);
+      }
+
+      // 이미 자기 자신
+      if (draggedTagA && draggedTagB && draggedTagC && draggedTagD) {
+        setIsCombineResultShoot(true);
       }
     });
 
