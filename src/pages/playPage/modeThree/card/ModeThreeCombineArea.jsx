@@ -72,34 +72,7 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
       restaurantData: parsedRestaurantData,
     });
     setIsDragging(false);
-    //setIsLastPutUser(false);
   };
-
-  // useEffect(() => {
-  //   if (draggedTagA && draggedTagB && draggedTagC && draggedTagD) {
-  //     socket.emit("both-users-selected", {
-  //       roomId,
-  //       userSelectedList: [
-  //         {
-  //           playerId: 1,
-  //           restId: draggedTagA._id,
-  //         },
-  //         {
-  //           playerId: 2,
-  //           restId: draggedTagB._id,
-  //         },
-  //         {
-  //           playerId: 3,
-  //           restId: draggedTagC._id,
-  //         },
-  //         {
-  //           playerId: 4,
-  //           restId: draggedTagD._id,
-  //         },
-  //       ],
-  //     });
-  //   }
-  // }, [draggedTagA, draggedTagB, draggedTagC, draggedTagD, roomId, socket]);
 
   useEffect(() => {
     if (
