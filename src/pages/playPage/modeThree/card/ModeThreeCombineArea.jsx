@@ -19,6 +19,7 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
   const [isSpining, setIsSpining] = useState(false);
   const [combinedplaceList, setCombinedPlaceList] = useState([]);
   const [limitShowContent, setLimitShowContent] = useState(false);
+  const [isCombineResultShoot, setIsCombineResultShoot] = useState(false);
   const { roomId } = useParams();
 
   useEffect(() => {
@@ -71,7 +72,15 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
   };
 
   useEffect(() => {
-    if (draggedTagA && draggedTagB && draggedTagC && draggedTagD) {
+    if (
+      draggedTagA &&
+      draggedTagB &&
+      draggedTagC &&
+      draggedTagD &&
+      !isCombineResultShoot
+    ) {
+      console.log("both socket shooting!");
+      setIsCombineResultShoot(true);
       socket.emit("both-users-selected", {
         roomId,
         userSelectedList: [
@@ -94,7 +103,15 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
         ],
       });
     }
-  }, [draggedTagA, draggedTagB, draggedTagC, draggedTagD, roomId, socket]);
+  }, [
+    draggedTagA,
+    draggedTagB,
+    draggedTagC,
+    draggedTagD,
+    roomId,
+    socket,
+    isCombineResultShoot,
+  ]);
 
   useEffect(() => {
     if (!socket) return;
@@ -132,6 +149,7 @@ const ModeThreeCombineArea = ({ roomDetail, handleupdateFinalPlace }) => {
     console.log("Combined result received:", data.restaurantList);
     if (data) {
       setShowContent(true);
+      setIsCombineResultShoot(true);
       setCombinedPlaceList(data.restaurantList);
     } else {
       console.log("No results received or empty results array");
