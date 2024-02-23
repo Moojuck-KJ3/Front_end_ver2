@@ -28,7 +28,7 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
       const username = JSON.parse(userDetails).username;
       setUserName(username);
     }
-    console.log("roomDetail", roomDetail);
+    // console.log("roomDetail", roomDetail);
   }, [setRoomDetail, roomDetail]);
 
   useEffect(() => {
@@ -78,7 +78,7 @@ const CreateRoomPage = ({ localStream, roomDetail, setRoomDetail }) => {
         roomDetail.purposeCoordinate.lat,
         roomDetail.purposeCoordinate.lng,
       ];
-      console.log("create-room is emit");
+      // console.log("create-room is emit");
       socket.emit("create-room", { purposeCoordinate });
       setIsModal(false);
     } else {

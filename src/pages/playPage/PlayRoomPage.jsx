@@ -35,7 +35,6 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const [highlightedStreamId, setHighlightedStreamId] = useState(null);
   const [countdown, setCountdown] = useState(null);
   const [speechText, setSpeechText] = useState("");
-  console.log("The user said:", speechText);
   const [activeTags, setActiveTags] = useState([]);
 
   const userStreamsWithPlayerId = roomDetail.userStreams.map((stream) => {
@@ -64,7 +63,6 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
 
   useEffect(() => {
     if (!socket) return;
-    // socket.on("restaurant-prepared", handleGetRestaurantList);
     socket.on("restaurant-prepared", () => {
       console.log("restaurant-prepared is called");
       setRoomDetail((prev) => ({
@@ -72,6 +70,12 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
         isRestaurantListsReady: true,
       }));
     });
+    socket.on(
+      "receive-recommended-restaurants",
+      handleReceiveRecommendedRestaurants
+    );
+    socket.on("all-usersHand-moodtags", handleSetUsersMoodTags);
+    socket.on("receive-speech-keyword", handleReceiveSpeechKeyword);
     socket.on("remove-selected-place", handleRemoveSelectedRestaurant);
     socket.on("select-restaurant", handleAddSelectedRestaurant);
     socket.on("select-foodCategories", handleAddSelectedFoodCategories);
@@ -79,6 +83,12 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
     socket.on("receive-speech-foodCategory", handleReceiveFoodCategory);
     socket.on("right-sidebar-action", handleRightSideAction);
     return () => {
+      socket.off(
+        "receive-recommended-restaurants",
+        handleReceiveRecommendedRestaurants
+      );
+      socket.off("receive-speech-keyword", handleReceiveSpeechKeyword);
+      socket.off("all-usersHand-moodtags", handleSetUsersMoodTags);
       socket.off("remove-selected-place", handleRemoveSelectedRestaurant);
       socket.off("select-restaurant", handleAddSelectedRestaurant);
       socket.off("select-foodCategories", handleAddSelectedFoodCategories);
@@ -86,10 +96,6 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
       socket.off("receive-speech-foodCategory", handleReceiveFoodCategory);
     };
   }, [socket]);
-
-  // const handleGetRestaurantList = useCallback(() => {
-
-  // }, []);
 
   useEffect(() => {
     const getRestList = async (roomId) => {
@@ -106,6 +112,49 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
 
     getRestList(roomId);
   }, [roomDetail, roomId]);
+
+  const handleReceiveSpeechKeyword = useCallback(
+    (data) => {
+      console.log("receive speech keyword Datas : ", data);
+
+      if (data.keywords.length > 0) {
+        setPlayerHand((prevPlayerHand) => ({
+          ...prevPlayerHand,
+          selectedMoodTag: [
+            ...prevPlayerHand.selectedMoodTag,
+            ...data.keywords,
+          ],
+        }));
+
+        const sendData = {
+          roomId,
+          keywords: data.keywords,
+        };
+
+        socket.emit("all-usersHand-moodtags", sendData);
+      }
+    },
+    [roomId, socket]
+  );
+
+  const handleSetUsersMoodTags = useCallback((data) => {
+    console.log("handleSetUsersMoodTags", data.keywords);
+
+    if (data.keywords.length > 0) {
+      setAllUserPlayerHand((prevAllUserHand) => ({
+        ...prevAllUserHand,
+        selectedMoodTag: [...prevAllUserHand.selectedMoodTag, ...data.keywords],
+      }));
+    }
+  }, []);
+
+  const handleReceiveRecommendedRestaurants = useCallback((data) => {
+    console.log("handleReceiveRecommendedRestaurants", data);
+
+    if (data.restaurantList.length > 0) {
+      SetModeTwoVoiceRecResult(data.restaurantList);
+    }
+  }, []);
 
   const handleAddSelectedRestaurant = useCallback((selectedRestaurant) => {
     setAllUserPlayerHand((prevAllUserHand) => {
@@ -233,15 +282,6 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
 
   return (
     <PlayRoomContainer>
-      {/* {countdown > 0 && (
-        <div className="fixed inset-0 z-50 flex justify-center items-center">
-          <img
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-94 animate-fade"
-            src="/NewMode.png"
-            alt="New Mode"
-          />
-        </div>
-      )} */}
       {isVideoHighlighted() && (
         <div className="absolute inset-0 bg-black bg-opacity-70 z-10 animate-fade-up" />
       )}
@@ -323,10 +363,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
             )}
             {showModeTwoVoiceRecorder && (
               <VoiceRecognition
-                onSetResultRestaurant={SetModeTwoVoiceRecResult}
                 userSelectedFoodCategories={playerHand.selectedFoodTag}
-                onSetPlayerResult={setPlayerHand}
-                onSetAllUserPlayerHand={setAllUserPlayerHand}
                 setSpeechText={setSpeechText}
               />
             )}
