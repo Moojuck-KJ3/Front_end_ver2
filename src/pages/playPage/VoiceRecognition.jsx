@@ -55,39 +55,40 @@ const VoiceRecognition = ({
     setBuffer([]);
   };
 
-  const handleReceiveSpeechKeyword = (data) => {
-    console.log("receive speech keyword Datas : ", data);
-    if (data.keywords.length > 0) {
-      onSetPlayerResult((prevPlayerHand) => ({
-        ...prevPlayerHand,
-        selectedMoodTag: [...prevPlayerHand.selectedMoodTag, ...data.keywords],
-      }));
+  // const handleReceiveSpeechKeyword = (data) => {
+  //   console.log("receive speech keyword Datas : ", data);
+  //   if (data.keywords.length > 0) {
+  //     onSetPlayerResult((prevPlayerHand) => ({
+  //       ...prevPlayerHand,
+  //       selectedMoodTag: [...prevPlayerHand.selectedMoodTag, ...data.keywords],
+  //     }));
 
-      const sendData = {
-        roomId,
-        keywords: data.keywords,
-      };
+  //     const sendData = {
+  //       roomId,
+  //       keywords: data.keywords,
+  //     };
 
-      socket.emit("all-usersHand-moodtags", sendData);
-    }
-  };
+  //     socket.emit("all-usersHand-moodtags", sendData);
+  //   }
+  // };
 
-  const handleReceiveRecommendedRestaurants = (data) => {
-    console.log("handleReceiveRecommendedRestaurants", data);
-    if (data.restaurantList.length > 0) {
-      onSetResultRestaurant(data.restaurantList);
-    }
-  };
+  // const handleReceiveRecommendedRestaurants = (data) => {
+  //   console.log("handleReceiveRecommendedRestaurants", data);
+  //   if (data.restaurantList.length > 0) {
+  //     onSetResultRestaurant(data.restaurantList);
+  //   }
+  // };
 
-  const handleSetUsersMoodTags = (data) => {
-    console.log("handleSetUsersMoodTags", data.keywords);
-    if (data.keywords.length > 0) {
-      onSetAllUserPlayerHand((prevAllUserHand) => ({
-        ...prevAllUserHand,
-        selectedMoodTag: [...prevAllUserHand.selectedMoodTag, ...data.keywords],
-      }));
-    }
-  };
+  // const handleSetUsersMoodTags = (data) => {
+  //   console.log("handleSetUsersMoodTags", data.keywords);
+  //   if (data.keywords.length > 0) {
+  //     onSetAllUserPlayerHand((prevAllUserHand) => ({
+  //       ...prevAllUserHand,
+  //       selectedMoodTag: [...prevAllUserHand.selectedMoodTag, ...data.keywords],
+  //     }));
+  //   }
+  // };
+
   const setupSpeechRecognition = () => {
     if (!recognitionRef.current) {
       recognitionRef.current = new window.webkitSpeechRecognition();
@@ -127,28 +128,28 @@ const VoiceRecognition = ({
   };
 
   useEffect(() => {
-    if (!socket) return;
-    socket.on(
-      "receive-recommended-restaurants",
-      handleReceiveRecommendedRestaurants
-    );
-    socket.on("all-usersHand-moodtags", handleSetUsersMoodTags);
-    socket.on("receive-speech-keyword", handleReceiveSpeechKeyword);
+    // if (!socket) return;
+    // socket.on(
+    //   "receive-recommended-restaurants",
+    //   handleReceiveRecommendedRestaurants
+    // );
+    // socket.on("all-usersHand-moodtags", handleSetUsersMoodTags);
+    // socket.on("receive-speech-keyword", handleReceiveSpeechKeyword);
     setupSpeechRecognition();
 
     return () => {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
       }
-      socket.off(
-        "receive-recommended-restaurants",
-        handleReceiveRecommendedRestaurants
-      );
-      socket.off("receive-speech-keyword", handleReceiveSpeechKeyword);
-      socket.off("all-usersHand-moodtags", handleSetUsersMoodTags);
+      // socket.off(
+      //   "receive-recommended-restaurants",
+      //   handleReceiveRecommendedRestaurants
+      // );
+      // socket.off("receive-speech-keyword", handleReceiveSpeechKeyword);
+      // socket.off("all-usersHand-moodtags", handleSetUsersMoodTags);
       clearTimeout(throttleTimeout);
     };
-  }, [socket]);
+  }, []);
 
   useEffect(() => {
     // Component did mount

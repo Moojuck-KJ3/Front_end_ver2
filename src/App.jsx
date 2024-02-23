@@ -20,9 +20,9 @@ function App() {
     userStreams: [],
   });
 
-  useEffect(() => {
-    console.log(roomDetail);
-  }, [roomDetail]);
+  // useEffect(() => {
+  //   console.log(roomDetail);
+  // }, [roomDetail]);
 
   return (
     <BrowserRouter>
