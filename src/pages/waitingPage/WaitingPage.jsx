@@ -16,16 +16,15 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
   const [progressValue, setProgressValue] = useState(50);
   const { users } = usePeerConnection(localStream);
   const socket = useSocket();
-  console.log(users);
+  // console.log(users);
 
   useEffect(() => {
     setRoomDetail((prev) => ({
       ...prev,
       userStreams: users,
     }));
-    console.log("new userStreams!");
-    console.log(roomDetail);
-  }, [users]);
+    // console.log("new userStreams!");
+  }, [users, setRoomDetail]);
 
   useEffect(() => {
     const newProgressValue = (users.length / 4) * 100;
@@ -43,7 +42,7 @@ const WaitingPage = ({ localStream, roomDetail, setRoomDetail }) => {
     };
 
     const handleStartPlayRoomResponse = (data) => {
-      console.log("Starting the play-room", data);
+      // console.log("Starting the play-room", data);
 
       setRoomDetail((prev) => ({
         ...prev,
