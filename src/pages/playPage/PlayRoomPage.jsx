@@ -35,7 +35,6 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
   const [highlightedStreamId, setHighlightedStreamId] = useState(null);
   const [countdown, setCountdown] = useState(null);
   const [speechText, setSpeechText] = useState("");
-  // console.log("The user said:", speechText);
   const [activeTags, setActiveTags] = useState([]);
 
   const userStreamsWithPlayerId = roomDetail.userStreams.map((stream) => {
@@ -64,7 +63,6 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
 
   useEffect(() => {
     if (!socket) return;
-    // socket.on("restaurant-prepared", handleGetRestaurantList);
     socket.on("restaurant-prepared", () => {
       console.log("restaurant-prepared is called");
       setRoomDetail((prev) => ({
@@ -284,15 +282,6 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
 
   return (
     <PlayRoomContainer>
-      {/* {countdown > 0 && (
-        <div className="fixed inset-0 z-50 flex justify-center items-center">
-          <img
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-94 animate-fade"
-            src="/NewMode.png"
-            alt="New Mode"
-          />
-        </div>
-      )} */}
       {isVideoHighlighted() && (
         <div className="absolute inset-0 bg-black bg-opacity-70 z-10 animate-fade-up" />
       )}
@@ -374,10 +363,7 @@ const PlayRoomPage = ({ roomDetail, setRoomDetail, localStream }) => {
             )}
             {showModeTwoVoiceRecorder && (
               <VoiceRecognition
-                onSetResultRestaurant={SetModeTwoVoiceRecResult}
                 userSelectedFoodCategories={playerHand.selectedFoodTag}
-                onSetPlayerResult={setPlayerHand}
-                onSetAllUserPlayerHand={setAllUserPlayerHand}
                 setSpeechText={setSpeechText}
               />
             )}
