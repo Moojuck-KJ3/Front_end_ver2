@@ -38,7 +38,6 @@ export default {
     extend: {
       fontFamily: {
         tenada: ["Tenada"],
-        nanumsquare: ["NanumSquare", "sans-serif"],
         DalseoHealing: "DalseoHealing",
       },
       backgroundImage: {
