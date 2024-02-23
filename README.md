@@ -4,7 +4,7 @@
 
 - [⚡개요](#outline)
 - [⛳기획 배경](#purpose)
-- [🎇핵심 기능](#mainFunction)
+- [🎇핵심 기능](#mainFunc)
 - [🎯결과물](#result)
 - [🏅기술적 챌린지](#technicalChallenge)
 - [🗼기술스택](#techStack)
@@ -26,7 +26,7 @@
 
 ### 맛 스 페 이 스 !!!!
 
-## 🎇핵심 기능<a name = "mainFunction"></a>
+## 🎇핵심 기능<a name = "mainFunc"></a>
 
 ### 맛집 추천
 
