@@ -66,7 +66,8 @@
 
 ## 🎯결과물<a name = "result"></a>
 
-(영상 찍은 후 추가)
+[![시연 영상](https://img.youtube.com/vi/2M5mylkvO1Q/default.jpg)](https://www.youtube.com/watch?v=2M5mylkvO1Q)
+(클릭 시, Youtube로 이동)
 
 ## 🏅기술적 챌린지<a name = "technicalChallenge"></a>
 
